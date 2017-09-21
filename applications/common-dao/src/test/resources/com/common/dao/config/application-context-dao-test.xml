@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+
+	<context:annotation-config />
+	<!-- Scan project annotation -->
+	<context:component-scan base-package="com.common.dao"/>
+	
+	<tx:annotation-driven/>
+	
+	<!-- Property files -->
+	<context:property-placeholder location="classpath:com/common/dao/resource/database.properties" />
+
+	<!-- Application Datasource and Dao -->
+	<import resource="classpath:/com/common/dao/config/dbaccess-config.xml"/>
+<!-- 	<import resource="classpath:/com/security/dao/config/transaction-config.xml"/> -->
+</beans>

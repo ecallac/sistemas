@@ -1,0 +1,84 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.security</groupId>
+  <artifactId>security-dao</artifactId>
+  <version>1.0.0.0</version>
+  
+  <properties>
+        <springframework.version>4.3.5.RELEASE</springframework.version>
+        <hibernate.version>4.3.11.Final</hibernate.version>
+        <mysql.connector.version>5.1.40</mysql.connector.version>
+        <joda-time.version>2.3</joda-time.version>
+        <security.domain.version>1.0.0.0</security.domain.version>
+        <security.utils.version>1.0.0.0</security.utils.version>
+        <common.utils.version>1.0.0.0</common.utils.version>
+        <junit.version>4.12</junit.version>
+	</properties>
+	
+	<dependencies>
+		<dependency>
+            <groupId>com.security</groupId>
+            <artifactId>security-domain</artifactId>
+            <version>${security.domain.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.security</groupId>
+            <artifactId>security-utils</artifactId>
+            <version>${security.utils.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.common</groupId>
+            <artifactId>common-utils</artifactId>
+            <version>${common.utils.version}</version>
+        </dependency>
+        <dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit.version}</version>
+			<type>jar</type>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+	    	<groupId>org.springframework</groupId>
+		    <artifactId>spring-test</artifactId>
+		    <version>${springframework.version}</version>
+		</dependency>
+		<dependency>
+	      <groupId>org.hibernate</groupId>
+	      <artifactId>hibernate-entitymanager</artifactId>
+	      <version>${hibernate.version}</version>
+	      <exclusions>
+                <exclusion>
+                    <groupId>org.javassist</groupId>
+                    <artifactId>javassist</artifactId>
+                </exclusion>
+            </exclusions>
+	    </dependency>
+ 
+		 <dependency>
+		    <groupId>com.fasterxml</groupId>
+		    <artifactId>classmate</artifactId>
+		    <version>0.5.2</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>dom4j</groupId>
+		    <artifactId>dom4j</artifactId>
+		    <version>1.6.1</version>
+		</dependency>
+
+        <!-- MySQL -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>${mysql.connector.version}</version>
+        </dependency>
+        
+        <dependency>
+		    <groupId>javassist</groupId>
+		    <artifactId>javassist</artifactId>
+		    <version>3.12.1.GA</version>
+		</dependency>
+        
+	</dependencies>
+</project>

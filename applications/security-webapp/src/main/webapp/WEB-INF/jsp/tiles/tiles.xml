@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC  "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"  "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">  
+ 
+<tiles-definitions>  
+  
+  <definition name="login" template="/WEB-INF/jsp/login/login.jsp"/>  
+   
+   <!-- Base Definition -->
+   <definition name="template" template="/WEB-INF/jsp/tiles/layouts/defaultLayout.jsp">  
+       <put-attribute name="title" value="System" />  
+       <put-attribute name="header" value="/WEB-INF/jsp/tiles/template/defaultHeader.jsp" />  
+       <put-attribute name="menu" value="/WEB-INF/jsp/tiles/template/defaultMenu.jsp" />
+       <put-attribute name="footer" value="/WEB-INF/jsp/tiles/template/defaultFooter.jsp" />  
+   </definition>  
+   
+	<definition name="403Page" extends="template">
+       <put-attribute name="body" value="/WEB-INF/jsp/login/403page.jsp" />  
+   </definition>
+   <definition name="home" extends="template"> 
+       <put-attribute name="body" value="/WEB-INF/jsp/internal/home.jsp" />  
+   </definition>
+   <definition name="module" extends="template"> 
+       <put-attribute name="body" value="/WEB-INF/jsp/internal/module.jsp" />  
+   </definition>
+   <definition name="userList" extends="template">
+       <put-attribute name="body" value="/WEB-INF/jsp/internal/userList.jsp" />  
+   </definition>
+   <definition name="userForm" extends="template">
+       <put-attribute name="body" value="/WEB-INF/jsp/internal/userForm.jsp" />  
+   </definition>
+   <definition name="userEditForm" extends="template">
+       <put-attribute name="body" value="/WEB-INF/jsp/internal/userEditForm.jsp" />  
+   </definition>
+   <definition name="resetPasswordForm" extends="template">
+       <put-attribute name="body" value="/WEB-INF/jsp/internal/resetPasswordForm.jsp" />  
+   </definition>
+   
+  
+</tiles-definitions>

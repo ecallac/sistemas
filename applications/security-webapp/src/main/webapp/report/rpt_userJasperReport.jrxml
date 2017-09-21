@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
+<!-- 2017-04-24T18:02:56 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rpt_userJasperReport" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" whenResourceMissingType="Error" uuid="3adb95fe-e915-4548-ba51-46bd8246cdfe">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<import value="net.sf.jasperreports.engine.*"/>
+	<import value="java.util.*"/>
+	<import value="net.sf.jasperreports.engine.data.*"/>
+	<field name="id" class="java.lang.Long"/>
+	<field name="userName" class="java.lang.String"/>
+	<field name="status" class="java.lang.String"/>
+	<field name="question" class="java.lang.String"/>
+	<field name="answer" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="61" splitType="Stretch">
+			<staticText>
+				<reportElement x="20" y="15" width="100" height="30" uuid="16c50a28-0168-4a56-8635-03892d201aaf"/>
+				<text><![CDATA[id]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="120" y="15" width="100" height="30" uuid="a95ce15d-543a-46d1-98a2-e12d687cbd2a"/>
+				<text><![CDATA[userName]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="230" y="15" width="100" height="30" uuid="98a0761f-c15a-460b-af91-fa286cbfa4c7"/>
+				<text><![CDATA[status]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="350" y="15" width="100" height="30" uuid="78f05a97-e0f2-45b3-9eb2-b32ac4c12c86"/>
+				<text><![CDATA[question]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="470" y="15" width="100" height="30" uuid="bd6c4a32-6b14-4865-a004-30b1dceadcc8"/>
+				<text><![CDATA[answer]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="54" splitType="Stretch">
+			<textField>
+				<reportElement x="21" y="11" width="100" height="30" uuid="dd30e149-0152-42fe-948b-a28c0267ea8a"/>
+				<textFieldExpression><![CDATA[$F{id}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="130" y="11" width="100" height="30" uuid="0716fc2c-794e-469b-a9b8-68b85b2d9c47"/>
+				<textFieldExpression><![CDATA[$F{userName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="234" y="10" width="100" height="30" uuid="8d71651c-5a02-4eeb-b70b-f6855d36443a"/>
+				<textFieldExpression><![CDATA[$F{status}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="350" y="10" width="100" height="30" uuid="46b48e60-beac-47b6-877b-b0f23aa52974"/>
+				<textFieldExpression><![CDATA[$F{question}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="470" y="10" width="100" height="30" uuid="665ec70c-342d-4bfb-ae0f-b7a5a071a2cc"/>
+				<textFieldExpression><![CDATA[$F{answer}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>
