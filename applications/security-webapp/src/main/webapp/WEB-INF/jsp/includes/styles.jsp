@@ -3,6 +3,8 @@
 <link href="<c:url value='/resources/bootstrap/css/bootstrap.css' />"  rel="stylesheet"></link>
 <%-- <link href="<c:url value='/resources/css/jquery-ui.css' />"  rel="stylesheet"></link> --%>
 <link href="<c:url value='/resources/css/global.css' />"  rel="stylesheet"></link>
-<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.css" />
+
+	<script src="<c:url value='/resources/js/jquery.1.10.2.min.js' />"></script>
+	<script src="<c:url value='/resources/js/jquery-scrolltofixed.js' />"></script>
 
 

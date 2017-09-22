@@ -5,12 +5,43 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Insert title here</title>
+
+<script type="text/javascript">
+$(document).ready(function() {
+    $('.footer').scrollToFixed( {
+        bottom: 0,
+        limit: $('.footer').offset().top
+    });
+});
+
+</script>
+
+<style type="text/css">
+ .footer { 
+     background-color: #FFFFFF; 
+     color: #B4B4B4; 
+     font: bold; 
+     font-family: Verdana; 
+     font-size: 10px; 
+     border-top: 4px solid #929292; 
+     padding: 100%; 
+     width: 100%; 
+     height: 50px; 
+     /* font-family: Verdana, Arial, Helvetica, sans-serif; */ 
+ } 
+</style>
 </head>
 <body>
-<table style="width:100%;height:100%">
+
+
+<table  style="width:100%;height:50%" border="0">
+<tbody>
 <tr>
-	<td align="center">Copyright &copy; 2017 ECC</td>
+	<td align="center">Copyright © 2017 - Ecallac</td>
 </tr>
+</tbody>
 </table>
+
+
 </body>
 </html>

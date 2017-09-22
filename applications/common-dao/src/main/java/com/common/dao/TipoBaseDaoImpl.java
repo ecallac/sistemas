@@ -29,13 +29,11 @@ public class TipoBaseDaoImpl extends BaseDaoSupport implements TipoBaseDao {
 	}
 	
 	@SuppressWarnings("unchecked")
-	@Override
 	public List<TipoBase> findByTiposBaseXCategorias(String categoria) {
 		// TODO Auto-generated method stub
 		return (List<TipoBase>) getHibernateTemplate().find("FROM TipoBase WHERE categoria = ?", categoria);
 	}
 	@SuppressWarnings("unchecked")
-	@Override
 	public List<TipoBase> findByTiposBaseXCategoriasActivas(String categoria) {
 		// TODO Auto-generated method stub
 		return (List<TipoBase>) getHibernateTemplate().find("FROM TipoBase WHERE activo = ? and categoria = ?", CommonConstants.YES,categoria);

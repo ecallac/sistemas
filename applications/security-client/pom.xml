@@ -13,7 +13,8 @@
   <properties>
   	<xstream.version>1.4.7</xstream.version>
     <unirest.version>1.3.27</unirest.version>
-    <jackson.version>2.6.3</jackson.version>
+<!--     <jackson.version>2.6.3</jackson.version> -->
+	<jackson.version>2.7.1</jackson.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 

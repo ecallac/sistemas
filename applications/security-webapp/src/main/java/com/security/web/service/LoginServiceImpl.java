@@ -26,10 +26,9 @@ import com.security.client.service.UserClientService;
 import com.security.client.service.UserClientServiceImpl;
 import com.security.domain.Module;
 import com.security.domain.Permission;
-import com.security.domain.RolePermission;
+import com.security.domain.Role;
 import com.security.service.ModuleService;
 import com.security.service.PermissionService;
-import com.security.utils.SecurityConstants;
 
 /**
  * @author EFRAIN
@@ -84,10 +83,11 @@ public class LoginServiceImpl implements UserDetailsService {
 		Map<String,List<String>> permissionBeans = new HashMap<>();
 		
 		for (Permission permission : permissions) {
-			List<RolePermission> rolePermissions = permission.getRolePermissions();
+			List<Role> rolesDB = permission.getRoles();
+			
 			List<String> roles = new ArrayList<>();
-			for (RolePermission rolePermission : rolePermissions) {
-				roles.add(rolePermission.getRole().getNameWithPrefix());
+			for (Role role : rolesDB) {
+				roles.add(role.getNameWithPrefix());
 			}
 			permissionBeans.put(permission.getPath(), roles);	
 		}

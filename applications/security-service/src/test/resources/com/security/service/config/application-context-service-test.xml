@@ -15,7 +15,7 @@
 	<tx:annotation-driven/>
 	
 	<!-- Property files -->
-	<context:property-placeholder location="classpath:com/security/dao/resource/database.properties" />
+	<context:property-placeholder location="classpath:com/security/service/resource/database.properties" />
 <!-- 	<context:property-placeholder location="classpath:com/security/dao/resource/database.properties, -->
 <!-- 		classpath:com/security/service/resource/service.properties" /> -->
 	

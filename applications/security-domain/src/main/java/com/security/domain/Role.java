@@ -11,7 +11,6 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Cascade;
@@ -38,7 +37,7 @@ public class Role extends BaseEntity{
 //	@Cascade({CascadeType.SAVE_UPDATE, CascadeType.DELETE})
 	
 	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = "roluser", joinColumns = {
+	@JoinTable(name = "roleuser", joinColumns = {
 			@JoinColumn(name = "role_id", nullable = false, updatable = false) },
 			inverseJoinColumns = { @JoinColumn(name = "user_id",
 					nullable = false, updatable = false) })
@@ -51,8 +50,8 @@ public class Role extends BaseEntity{
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "rolepermission", joinColumns = {
 			@JoinColumn(name = "role_id", nullable = false, updatable = false) },
-			inverseJoinColumns = { @JoinColumn(name = "permission_id",
-					nullable = false, updatable = false) })
+			inverseJoinColumns = { 
+					@JoinColumn(name = "permission_id", nullable = false, updatable = false) })
 	@Cascade({CascadeType.SAVE_UPDATE, CascadeType.DELETE})
 	private List<Permission> permissions;
 	

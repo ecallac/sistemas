@@ -5,9 +5,33 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Insert title here</title>
+
+
+<script type="text/javascript">
+$(document).ready(function() {
+    $('.header').scrollToFixed();
+});
+
+</script>
+
+<style type="text/css">
+.header {
+    background-color: #000000;
+    color: #FFFFFF;
+    height: 50px;
+    padding: 5px;
+    width: 100%;
+}
+</style>
+
+
 </head>
 <body>
-<table style="width: 100%;">
+
+
+
+
+<table style="width: 100%;" class="header">
 <tr>
 <td>
 
@@ -35,5 +59,9 @@ Welcome : ${pageContext.request.userPrincipal.name} |
 </td>
 </tr>
 </table>
+
+
+
+
 </body>
 </html>

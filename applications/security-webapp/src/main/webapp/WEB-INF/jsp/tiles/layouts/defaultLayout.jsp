@@ -8,6 +8,11 @@
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
     <title><tiles:getAsString name="title" /></title>
     <jsp:include page="../../includes/styles.jsp" />
+    <style type="text/css">
+    table{
+    	font-size: small;
+    }
+    </style>
 </head>
   
 <body>

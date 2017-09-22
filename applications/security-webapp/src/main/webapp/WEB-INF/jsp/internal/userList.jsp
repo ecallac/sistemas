@@ -12,7 +12,7 @@
     
 <%-- <jsp:include page="../includes/styles.jsp" /> --%>
 
-<!-- 	<script src="/resources/js/jquery.1.10.2.min.js"></script> -->
+
 <!--     <script src="/resources/bootstrap/js/bootstrap.min.js"></script> -->
 <title>${title}</title>
 
@@ -21,6 +21,7 @@
     margin-left: auto;
     margin-right: auto;
 }
+.table-striped tr:hover{background-color:#f5f5f5}
 </style>
 
 </head>
@@ -30,59 +31,73 @@
 <h1>User List</h1>  
 
 
-<div class="panel panel-default col-xs-9 PADDER-CENTER">
-<!-- <div class="panel-heading">User List</div> -->
-  <div class="panel-body">
+<!-- <div class="panel panel-default col-xs-9 PADDER-CENTER"> -->
+<!--  <div class="panel-heading">User List</div> -->
+<!--   <div class="panel-body"> -->
 
-<table border="2" width="70%" cellpadding="2" align="center" class="table table-striped">  
-<tr><th>Id</th><th>Username</th><th>status</th><th>question</th><th>answer</th><th>Edit</th><th>Change pass</th><th>Delete</th><th>Roles</th></tr>  
-   <c:forEach var="user" items="${list}">   
-   <tr>  
-   <td>${user.id}</td>  
-   <td>${user.userName}</td>  
-   <td>${user.status}</td>  
-   <td>${user.question}</td>
-   <td>${user.answer}</td>
-   <td><a href="editUser/${user.id}">Edit</a></td> 
-   <td><a href="resetPasswordForm/${user.id}">Change</a></td>
-   <td><a href="deleteUser/${user.id}">Delete</a></td>
-   <td><a href="assigneRoleUser/${user.id}">Assign Roles</a></td>  
-   </tr>  
-   </c:forEach>  
-   </table>  
-   <br/>  
-   <sec:authorize access="hasRole('ROLE_ADMIN')">
-   <a href="userForm">Add New User</a> 
-   <a href="resetPasswordForm">Change Password</a>
-   </sec:authorize>
-   <br>Custom Export in : 
-   <a href="reportUserList/pdf">pdf</a>
-   <a href="reportUserListXls">xlsx</a>
+
+<!-- <table border="1" width="70%" cellpadding="2" align="center" class="table table-striped" bordercolor="#f2f2f2">   -->
+<!-- <tr><th>Id</th><th>Username</th><th>status</th><th>question</th><th>answer</th><th>Edit</th><th>Change pass</th><th>Delete</th><th>Roles</th></tr>   -->
+<%--    <c:forEach var="user" items="${list}">    --%>
+<!--    <tr>   -->
+<%--    <td>${user.id}</td>   --%>
+<%--    <td>${user.userName}</td>   --%>
+<%--    <td>${user.status}</td>   --%>
+<%--    <td>${user.question}</td> --%>
+<%--    <td>${user.answer}</td> --%>
+<%--    <td><a href="editUser/${user.id}">Edit</a></td>  --%>
+<%--    <td><a href="resetPasswordForm/${user.id}">Change</a></td> --%>
+<%--    <td><a href="deleteUser/${user.id}">Delete</a></td> --%>
+<%--    <td><a href="assigneRoleUser/${user.id}">Assign Roles</a></td>   --%>
+<!--    </tr>   -->
+<%--    </c:forEach>   --%>
+<!--    </table>   -->
    
-</div></div>
    
-   <br/><br/><br/>
+   
+<!-- </div></div> -->
+   
    
    
 <div class="panel panel-default col-xs-9">
 <!-- <div class="panel-heading">User List Display tag</div> -->
   <div class="panel-body">   
    
+   <sec:authorize access="hasRole('ROLE_ADMIN')">
+   <a href="userForm">Add New User</a> 
+   <a href="resetPasswordForm">Change Password</a>
+   </sec:authorize>
+    <br/> <br/>
+    
    <spring:url value="userList" var="listURL"/>
-   <display:table name="list" sort="list" requestURI="${listURL}" export="true" pagesize="10" defaultsort="1" defaultorder="descending" class="table table-striped">
+   <display:table name="list" id="user" sort="list" requestURI="${listURL}" export="true" pagesize="10" defaultsort="1" defaultorder="descending" class="table table-striped">
       <display:column property="id" title="ID" sortable="true"/>
       <display:column property="userName" sortable="true"/>
       <display:column property="status" sortable="true"/>
       <display:column property="question"/>
       <display:column property="answer"/>
+      <display:column media="html" title="Select">
+         <input type="checkbox" name="select" name="select" value="Y" >
+
+      </display:column>
+      <display:column media="html" title="Actions">
+        <a href="editUser/${user.id}">Edit</a>
+        <a href="resetPasswordForm/${user.id}">Change</a>
+        <a href="deleteUser/${user.id}">Delete</a>
+        <a href="assigneRoleUser/${user.id}">Assign Roles</a>
+      </display:column>
       <display:setProperty name="export.pdf" value="true" />
       <display:setProperty name="export.xml" value="false" />
       <display:setProperty name="export.pdf.filename" value="userList.pdf"/>
 		<display:setProperty name="export.excel.filename" value="userList.xls"/>
 		<display:setProperty name="export.csv.filename" value="userList.csv"/>
     </display:table>
-    
+    <br/> 
+   Custom Export:  
+   <a href="reportUserList/pdf">PDF</a> | <a href="reportUserListXls">Excel</a>
 </div></div>
+    
+<!--     asd<br> asd<br> asd<br> asd<br> asd<br> asd<br> asd<br> asd<br> asd<br> asd<br> asd<br> asd<br> asd<br> asd<br> asd<br> asd<br> asd<br> asd<br> asd<br> asd<br> asd<br> asd<br> asd<br> asd<br> asd<br> asd<br> asd<br> asd<br> asd<br> asd<br> asd<br> asd<br> asd<br> asd<br> asd<br> asd<br> asd<br> -->
     
 </body>
 </html>
