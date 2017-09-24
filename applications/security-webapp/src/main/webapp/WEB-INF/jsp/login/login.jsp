@@ -53,7 +53,6 @@
 <div class="jumbotron">
 
 
-
 <form name='loginForm' action='<c:url value="j_spring_security_check"/>' method='POST' class="form-horizontal">
 	<table align="center" border="0">
 		<tbody>
