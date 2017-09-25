@@ -4,7 +4,13 @@
 <%-- <link href="<c:url value='/resources/css/jquery-ui.css' />"  rel="stylesheet"></link> --%>
 <link href="<c:url value='/resources/css/global.css' />"  rel="stylesheet"></link>
 
+	
 	<script src="<c:url value='/resources/js/jquery.1.10.2.min.js' />"></script>
 	<script src="<c:url value='/resources/js/jquery-scrolltofixed.js' />"></script>
+	<!-- script src="<c:url value='/resources/bootstrap/js/npm.js' />"></script>
+	<script src="<c:url value='/resources/bootstrap/js/bootstrap.min.js' />"></script -->
+	
+	<!-- Latest compiled and minified CSS -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
 

@@ -10,8 +10,9 @@
 <script type="text/javascript">
 $(document).ready(function() {
     $('.header').scrollToFixed();
+    $('[data-toggle="tooltip"]').tooltip();
+    $('.toltip').tooltip({placement : 'bottom'});
 });
-
 </script>
 
 <style type="text/css">
@@ -41,7 +42,7 @@ $(document).ready(function() {
   
    <a href="${pageContext.request.contextPath}/userList">User Management</a>
   | &nbsp;
-   <a href="${pageContext.request.contextPath}/module/">Module Management</a>
+   <a href="${pageContext.request.contextPath}/module">Module Management</a>
 <%--    <a href="${pageContext.request.contextPath}/loadJasper">User Report</a> --%>
    
 
@@ -53,7 +54,7 @@ $(document).ready(function() {
 </form>
 <c:if test="${pageContext.request.userPrincipal.name != null}">
 Welcome : ${pageContext.request.userPrincipal.name} | 
-	<a href="javascript:document.getElementById('logout').submit()">Logout</a>
+	<a href="javascript:document.getElementById('logout').submit()" title="Logout" class="toltip" data-toggle="tooltip"><img src="<c:url value='/resources/img/icons/white/on-off_icon&16.png' />"> </a>
 </c:if>
 
 </td>

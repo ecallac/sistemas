@@ -1,51 +1,25 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1" isELIgnored="false" session="true"%>
 <%@ taglib prefix ="c" uri="http://java.sun.com/jsp/jstl/core" %> 
-<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
+<%@ taglib prefix="display" uri="http://displaytag.sf.net"%>
+<%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<jsp:include page="../includes/styles.jsp" />
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Insert title here</title>
-<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script> -->
-<script type='text/javascript' src='<c:url value='/resources/js/jquery.1.10.2.min.js' />'></script>
-<meta name="_csrf" content="${_csrf.token}"/>
-	<!-- default header name is X-CSRF-TOKEN -->
+
+	<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="_csrf" content="${_csrf.token}"/>
 	<meta name="_csrf_header" content="${_csrf.headerName}"/>
-</head>
-<body onload="load();">
-<%-- <jsp:include page="../includes/menu.jsp" /> --%>
-
-<%-- <form:form modelAttribute="moduleView" method="post" action="save" > --%>
-		<input type="hidden" id="id">
-        Name: <input type="text" id="name" required="required" name="name"><br>
-        description: <input type="text" id="description" required="required" name="description"><br>
-        status: <input type="text" id="status" required="required" name="status"><br>
-        
-        <button type="button" onclick="submit();">Submit</button>
-<%-- </form:form>      --%>
-     
- 
-        <table id="table" border=1>
-            <tr> <th> Name </th> <th> Description </th> <th> status </th> <th> Edit </th> <th> Delete </th> </tr>
-         
-        </table>
-        
-        https://www.youtube.com/watch?v=8Gq-fEsN80U
-        http://sindhitutorials.com/blog/spring-mvc-hibernate-eclipse-maven/
-		http://fruzenshtein.com/spring-mvc-ajax-jquery/
-        
-<script type="text/javascript">
-//         $(function() {
-//         	init();
-//         });
-
-//         function init() {
-//         	$('input:button').button();
-//         	$('#submit').button();
-//         }
-        
-        var contexPath = "<%=request.getContextPath() %>";
+	<title></title>
+	<script type="text/javascript">
+		$('#Add').on('shown.bs.modal', function () {
+		  
+		})
+		
+		
+	var contexPath = "<%=request.getContextPath() %>";
     data = "";
     submit = function(){
 	    	$(function () {
@@ -58,65 +32,115 @@
             $.ajax({
                 url:contexPath+'/module/save.json',
                 type:'POST',
-                data:"id=" + $("#id").val() + "&name=" + $('#name').val()+ "&description=" + $('#description').val()+ "&status=" + $('#status').val(),
+                data:
+                	"id=" + $("#id").val() + 
+                	"&name=" + $('#name').val()+ 
+                	"&description=" + $('#description').val()+ 
+                	"&status=" + $('#status').val()+
+                	"&author=" + $('#author').val()+
+                	"&moduleVersion=" + $('#moduleVersion').val(),
                 success: function(response){
                         alert(response.message);
-                        load();    
+                        document.location.href = "/module?status=&message=";
                 }              
             });        
     }
-     
-    delete_ = function(id){
-    	$(function () {
-    		var token = $("meta[name='_csrf']").attr("content");
-    		var header = $("meta[name='_csrf_header']").attr("content");
-    		$(document).ajaxSend(function(e, xhr, options) {
-    			xhr.setRequestHeader(header, token);
-    		});
-		});
-         $.ajax({
-            url:contexPath+'/module/delete.json',
-            type:'POST',
-            data:"id="+id,
-            success: function(response){
-                    alert(response.message);
-                    load();
-            }              
-        });
-	}
-     
- 
-    edit = function (index){
-        $("#id").val(data[index].id);
-        $("#name").val(data[index].name);
-        $("#description").val(data[index].description);
-        $("#status").val(data[index].status);
-    }
-     
-     
-    load = function(){
-    	$(function () {
-    		var token = $("meta[name='_csrf']").attr("content");
-    		var header = $("meta[name='_csrf_header']").attr("content");
-    		$(document).ajaxSend(function(e, xhr, options) {
-    			xhr.setRequestHeader(header, token);
-    		});
-		});
-//     	alert("aqui "+contexPath);
-        $.ajax({
-            url: contexPath+'/module/list.json',
-            type:'GET',
-            success: function(response){
-                    data = response.data;
-                    $('.tr').remove();
-                    for(i=0; i<response.data.length; i++){                  
-                        $("#table").append("<tr class='tr'> <td> "+response.data[i].name+" </td> <td> "+response.data[i].description+" </td> <td> "+response.data[i].status+" </td> <td> <a href='#' onclick= edit("+i+");> Edit </a>  </td> </td> <td> <a href='#' onclick='delete_("+response.data[i].id+");'> Delete </a>  </td> </tr>");
-                    }          
-            }              
-        });
-         
-    }
-         
-    </script>
+    
+    
+	</script>
+	<style type="text/css">
+	
+	</style>
+
+</head>
+<body>
+
+<h1>User List ${_csrf.token} ${_csrf.headerName}</h1>
+
+<div class="panel panel-default col-xs-9">
+<!-- <div class="panel-heading">User List Display tag</div> -->
+  <div class="panel-body">   
+   
+   <sec:authorize access="hasRole('ROLE_ADMIN')">
+   <button data-target="#Add" title="Add New" type="button" class="btn btn-default toltip" data-toggle="modal">
+		<img src="<c:url value='/resources/img/icons/black/user_icon&16.png' />"> Add New
+	</button>
+   </sec:authorize>
+    <br/> <br/>
+    
+   <spring:url value="module" var="listURL"/>
+   <display:table name="list" id="module" sort="list" requestURI="${listURL}" export="true" pagesize="10" defaultsort="1" defaultorder="descending" class="table table-striped">
+      <display:column property="id" title="ID" sortable="true"/>
+      <display:column property="name" sortable="true"/>
+      <display:column property="description" sortable="true"/>
+      <display:column property="status" sortable="true"/>
+      <display:column property="author" sortable="true"/>
+      <display:column property="moduleVersion" sortable="true"/>
+      <display:column media="html" title="Select">
+         <input type="checkbox" name="select" name="select" value="Y" >
+      </display:column>
+      <display:column media="html" title="Actions">
+      <button  title="Edit" type="button" class="btn btn-link btn-xs toltip" data-toggle="tooltip"><img src="<c:url value='/resources/img/icons/black/doc_edit_icon&16.png' />"></button> | 
+      <button  title="Delete" type="button" class="btn btn-link btn-xs toltip" data-toggle="tooltip"><img src="<c:url value='/resources/img/icons/black/trash_icon&16.png' />"></button>
+      </display:column>
+      <display:setProperty name="export.xml" value="false" />
+      <display:setProperty name="export.pdf.filename" value="userList.pdf"/>
+		<display:setProperty name="export.excel.filename" value="userList.xls"/>
+		<display:setProperty name="export.csv.filename" value="userList.csv"/>
+    </display:table>
+</div></div>
+
+
+
+
+<div class="modal fade" id="Add" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">New</h4>
+      </div>
+      <div class="modal-body">
+
+
+
+		<div class="form-container">
+		  
+		        <table >   
+		         <tr>    
+		          <td>Name : </td>   
+		          <td><input type="text" id="name" class="form-control"/></td>  
+		         </tr>    
+		         <tr>    
+		          <td>Description :</td>    
+		          <td><input type="text" id="description" class="form-control"/></td>  
+		         </tr>   
+		         <tr>    
+		          <td>Status :</td>    
+		          <td><input type="text" id="status" class="form-control"/></td>  
+		         </tr>   
+		         <tr>    
+		          <td>Author :</td>    
+		          <td><input type="text" id="author" class="form-control"/></td>  
+		         </tr>
+		         <tr>    
+		          <td>Module Version :</td>    
+		          <td><input type="text" id="moduleVersion" class="form-control"/></td>  
+		         </tr>    
+		        </table>    
+		       
+		</div>
+
+
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" onclick="submit();">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>

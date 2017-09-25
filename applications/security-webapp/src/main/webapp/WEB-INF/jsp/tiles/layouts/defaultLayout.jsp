@@ -13,6 +13,13 @@
     	font-size: small;
     }
     </style>
+    
+    <script type="text/javascript">
+    $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip();
+        $('.toltip').tooltip({placement : 'bottom'});
+    });
+    </script>
 </head>
   
 <body>

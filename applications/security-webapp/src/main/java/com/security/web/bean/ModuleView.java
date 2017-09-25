@@ -3,6 +3,8 @@
  */
 package com.security.web.bean;
 
+import javax.persistence.Column;
+
 /**
  * @author efrain.calla
  *
@@ -12,6 +14,21 @@ public class ModuleView {
 	private String name;
 	private String description;
 	private String status;
+	private String author;
+	private String moduleVersion;
+	
+	public String getAuthor() {
+		return author;
+	}
+	public void setAuthor(String author) {
+		this.author = author;
+	}
+	public String getModuleVersion() {
+		return moduleVersion;
+	}
+	public void setModuleVersion(String moduleVersion) {
+		this.moduleVersion = moduleVersion;
+	}
 	public Long getId() {
 		return id;
 	}
