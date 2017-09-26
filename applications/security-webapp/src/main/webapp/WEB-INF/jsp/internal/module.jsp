@@ -1,13 +1,16 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1" isELIgnored="false" session="true"%>
 <%@ taglib prefix ="c" uri="http://java.sun.com/jsp/jstl/core" %> 
 <%@ taglib prefix="display" uri="http://displaytag.sf.net"%>
-<%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-
-	<meta charset="utf-8">
+<%-- <jsp:include page="../includes/styles.jsp" /> --%>
+<%-- <script type='text/javascript' src='<c:url value='/resources/js/jquery.1.10.2.min.js' />'></script> --%>
+	<meta charset="utf-8" />
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="_csrf" content="${_csrf.token}"/>
@@ -22,27 +25,42 @@
 	var contexPath = "<%=request.getContextPath() %>";
     data = "";
     submit = function(){
-	    	$(function () {
-	    		var token = $("meta[name='_csrf']").attr("content");
-	    		var header = $("meta[name='_csrf_header']").attr("content");
-	    		$(document).ajaxSend(function(e, xhr, options) {
-	    			xhr.setRequestHeader(header, token);
-	    		});
-    		});
+// 	    	$(function () {
+// 	    		var token = $("meta[name='_csrf']").attr("content");
+// 	    		var header = $("meta[name='_csrf_header']").attr("content");
+// 	    		$(document).ajaxSend(function(e, xhr, options) {
+// 	    			xhr.setRequestHeader("Accept", "application/json");
+// 	    	        xhr.setRequestHeader("Content-Type", "application/json");
+// 	    			xhr.setRequestHeader(header, token);
+// 	    		});
+//     		});
+			var formData= {
+					id: $("#id").val(), 
+                	name: $('#name').val(),
+                	description: $('#description').val(),
+                	status: $('#status').val(),
+                	author: $('#author').val(),
+                	moduleVersion: $('#moduleVersion').val()
+			}
             $.ajax({
                 url:contexPath+'/module/save.json',
                 type:'POST',
-                data:
-                	"id=" + $("#id").val() + 
-                	"&name=" + $('#name').val()+ 
-                	"&description=" + $('#description').val()+ 
-                	"&status=" + $('#status').val()+
-                	"&author=" + $('#author').val()+
-                	"&moduleVersion=" + $('#moduleVersion').val(),
+                dataType: 'json',
+                contentType: 'application/json',
+                data:JSON.stringify(formData),
+//                 	"id=" + $("#id").val() + 
+//                 	"&name=" + $('#name').val()+ 
+//                 	"&description=" + $('#description').val()+ 
+//                 	"&status=" + $('#status').val()+
+//                 	"&author=" + $('#author').val()+
+//                 	"&moduleVersion=" + $('#moduleVersion').val(),
                 success: function(response){
                         alert(response.message);
-                        document.location.href = "/module?status=&message=";
-                }              
+                        document.location.href = contexPath+"/module?status=&message=";
+                } ,
+            	error: function(e){  
+				  alert('Error: ' + e);  
+			  }  
             });        
     }
     
@@ -95,6 +113,9 @@
 
 <div class="modal fade" id="Add" tabindex="-1" role="dialog">
   <div class="modal-dialog" role="document">
+  
+  <form:form modelAttribute="moduleView" method="post" action="module/save" >
+  
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -102,30 +123,30 @@
       </div>
       <div class="modal-body">
 
-
+		
 
 		<div class="form-container">
 		  
 		        <table >   
 		         <tr>    
 		          <td>Name : </td>   
-		          <td><input type="text" id="name" class="form-control"/></td>  
+		          <td><input type="text" id="name" name="name" class="form-control"/></td>  
 		         </tr>    
 		         <tr>    
 		          <td>Description :</td>    
-		          <td><input type="text" id="description" class="form-control"/></td>  
+		          <td><input type="text" id="description" name="description" class="form-control"/></td>  
 		         </tr>   
 		         <tr>    
 		          <td>Status :</td>    
-		          <td><input type="text" id="status" class="form-control"/></td>  
+		          <td><input type="text" id="status" name="status" class="form-control"/></td>  
 		         </tr>   
 		         <tr>    
 		          <td>Author :</td>    
-		          <td><input type="text" id="author" class="form-control"/></td>  
+		          <td><input type="text" id="author" name="author" class="form-control"/></td>  
 		         </tr>
 		         <tr>    
 		          <td>Module Version :</td>    
-		          <td><input type="text" id="moduleVersion" class="form-control"/></td>  
+		          <td><input type="text" id="moduleVersion" name="moduleVersion" class="form-control"/></td>  
 		         </tr>    
 		        </table>    
 		       
@@ -138,7 +159,10 @@
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
         <button type="button" class="btn btn-primary" onclick="submit();">Save</button>
       </div>
+      
     </div>
+    
+    </form:form>
   </div>
 </div>
 

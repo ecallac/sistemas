@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -28,7 +29,7 @@ public class ModuleController {
 	@Autowired
 	ModuleService moduleService;
 	
-	@RequestMapping(value={"/module"}, method=RequestMethod.GET)
+	@RequestMapping(value={"/module"}, method={RequestMethod.GET,RequestMethod.POST})
 	public ModelAndView userInfo(
 			@RequestParam(value = "status", required = false) String status,
 			@RequestParam(value = "message", required = false) String message){
@@ -40,12 +41,12 @@ public class ModuleController {
 		return modelAndView;
 	}
 	
-	@RequestMapping(value = "/module/save", method = RequestMethod.POST)
-    public @ResponseBody  Map<String, Object> getSavedPost(ModuleView moduleView) {
-        Map<String, Object> map = new HashMap<String, Object>();
-        moduleService.save((Module) BeanParser.parseObjectToNewClass(moduleView, Module.class, null));
-        map.put("status", "200");
-        map.put("message", "Your record have been saved successfully");
-        return map;
-    }
+//	@RequestMapping(value = "/module/save", method = {RequestMethod.GET,RequestMethod.POST})
+//    public @ResponseBody  Map<String, Object> getSavedPost(ModuleView moduleView) {
+//        Map<String, Object> map = new HashMap<String, Object>();
+//        moduleService.save((Module) BeanParser.parseObjectToNewClass(moduleView, Module.class, null));
+//        map.put("status", "200");
+//        map.put("message", "Your record have been saved successfully");
+//        return map;
+//    }
 }
