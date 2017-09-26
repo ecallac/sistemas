@@ -54,7 +54,7 @@ $(document).ready(function() {
 </form>
 <c:if test="${pageContext.request.userPrincipal.name != null}">
 Welcome : ${pageContext.request.userPrincipal.name} | 
-	<a href="javascript:document.getElementById('logout').submit()" title="Logout" class="toltip" data-toggle="tooltip"><img src="<c:url value='/resources/img/icons/white/on-off_icon&16.png' />"> </a>
+	<a href="javascript:document.getElementById('logout').submit()" title="Logout" class="toltip"><img src="<c:url value='/resources/img/icons/white/on-off_icon&16.png' />"> </a>
 </c:if>
 
 </td>

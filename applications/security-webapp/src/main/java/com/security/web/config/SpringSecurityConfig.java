@@ -51,7 +51,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception{
-		http.csrf().disable();
+//		http.csrf().disable();
 		Map<String,String> map= loginServiceImpl.getPermissionByRole();
 		for (Map.Entry<String,String> entry : map.entrySet()){
 			http.authorizeRequests().antMatchers(entry.getKey()).access("hasAnyRole("+entry.getValue()+")");
