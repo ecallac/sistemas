@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -27,7 +28,7 @@ public class ModuleRestController {
 	ModuleService moduleService;
 	
 	@RequestMapping(value = "/module/save", method = {RequestMethod.GET,RequestMethod.POST})
-    public @ResponseBody  Map<String, Object> getSavedPost(ModuleView moduleView) {
+    public @ResponseBody  Map<String, Object> getSavedPost(@RequestBody ModuleView moduleView) {
         Map<String, Object> map = new HashMap<String, Object>();
         moduleService.save((Module) BeanParser.parseObjectToNewClass(moduleView, Module.class, null));
         map.put("status", "200");

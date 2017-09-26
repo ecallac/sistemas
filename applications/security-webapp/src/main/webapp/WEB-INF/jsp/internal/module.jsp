@@ -43,10 +43,10 @@
                 	moduleVersion: $('#moduleVersion').val()
 			}
             $.ajax({
-                url:contexPath+'/module/save.json',
-                type:'POST',
+            	type:'POST',
                 dataType: 'json',
                 contentType: 'application/json',
+                url:contexPath+'/module/save.json',
                 data:JSON.stringify(formData),
 //                 	"id=" + $("#id").val() + 
 //                 	"&name=" + $('#name').val()+ 
@@ -54,12 +54,18 @@
 //                 	"&status=" + $('#status').val()+
 //                 	"&author=" + $('#author').val()+
 //                 	"&moduleVersion=" + $('#moduleVersion').val(),
+				beforeSend: function(xhr) {
+			        // setting a timeout
+			        xhr.setRequestHeader("Accept", "application/json");
+ 	    	        xhr.setRequestHeader("Content-Type", "application/json");
+			    },
                 success: function(response){
                         alert(response.message);
-                        document.location.href = contexPath+"/module?status=&message=";
+                        document.location.href = contexPath+"/module?status="+response.status+"&message="+response.message;
                 } ,
-            	error: function(e){  
-				  alert('Error: ' + e);  
+                error: function (jqXHR, exception) {
+                  console.log(jqXHR);
+				  alert('Error: ' + jqXHR);
 			  }  
             });        
     }
@@ -73,7 +79,7 @@
 </head>
 <body>
 
-<h1>User List ${_csrf.token} ${_csrf.headerName}</h1>
+<h1>User List ${_csrf.token} ${_csrf.headerName} ${status}${message}</h1>
 
 <div class="panel panel-default col-xs-9">
 <!-- <div class="panel-heading">User List Display tag</div> -->
@@ -114,7 +120,7 @@
 <div class="modal fade" id="Add" tabindex="-1" role="dialog">
   <div class="modal-dialog" role="document">
   
-  <form:form modelAttribute="moduleView" method="post" action="module/save" >
+ <%--  <form id="moduleView" method="post" > --%>
   
     <div class="modal-content">
       <div class="modal-header">
@@ -162,7 +168,7 @@
       
     </div>
     
-    </form:form>
+    <%-- </form> --%>
   </div>
 </div>
 
