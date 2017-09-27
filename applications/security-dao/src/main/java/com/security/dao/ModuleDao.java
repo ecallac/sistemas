@@ -13,6 +13,6 @@ import com.security.domain.Module;
  * @dateCreated 26 mar. 2017 9:16:05
  */
 public interface ModuleDao extends BaseDao {
-	List<Module> findByStatusId(Long id);
+	List<Module> findByEnabled(String enabled);
 	Module findByName(String name);
 }

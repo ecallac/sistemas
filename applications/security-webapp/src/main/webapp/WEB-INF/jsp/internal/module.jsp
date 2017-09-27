@@ -56,7 +56,7 @@
 				id: parseInt($("#id").val()), 
                	name: $('#name').val(),
                	description: $('#description').val(),
-               	status: $('#status').val(),
+               	enabled: $('#enabled').val(),
                	author: $('#author').val(),
                	moduleVersion: $('#moduleVersion').val()
 		}
@@ -124,7 +124,7 @@
                			$("#id").val(response.module.id);
                			$("#name").val(response.module.name);
                			$("#description").val(response.module.description);
-               			$("#status").val(response.module.status);
+               			$("#enabled").val(response.module.enabled);
                			$("#author").val(response.module.author);
                			$("#moduleVersion").val(response.module.moduleVersion);
                		}
@@ -140,7 +140,7 @@
     		$("#id").val("");
 			$("#name").val("");
 			$("#description").val("");
-			$("#status").val("");
+			$("#enabled").val("");
 			$("#author").val("");
 			$("#moduleVersion").val("");
     }
@@ -195,7 +195,7 @@
       <display:column property="id" title="ID" sortable="true"/>
       <display:column property="name" sortable="true"/>
       <display:column property="description" sortable="true"/>
-      <display:column property="status" sortable="true"/>
+      <display:column property="enabled" sortable="true"/>
       <display:column property="author" sortable="true"/>
       <display:column property="moduleVersion" sortable="true"/>
       <display:column media="html" title="Enabled">
@@ -243,7 +243,7 @@
 		         </tr>   
 		         <tr>    
 		          <td>Status :</td>    
-		          <td><input type="text" id="status" name="status" class="form-control"/></td>  
+		          <td><input type="text" id="enabled" name="enabled" class="form-control"/></td>  
 		         </tr>   
 		         <tr>    
 		          <td>Author :</td>    

@@ -30,8 +30,8 @@ public class Role extends BaseEntity{
 	@Column(name = "description")
 	private String description;
 	
-	@Column(name = "status",nullable = false)
-	private String status;
+	@Column(name = "enabled",nullable = false)
+	private String enabled;
 	
 //	@OneToMany(mappedBy="role",fetch=FetchType.LAZY)
 //	@Cascade({CascadeType.SAVE_UPDATE, CascadeType.DELETE})
@@ -71,12 +71,7 @@ public class Role extends BaseEntity{
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public String getStatus() {
-		return status;
-	}
-	public void setStatus(String status) {
-		this.status = status;
-	}
+	
 //	public List<RoleUser> getRolUsers() {
 //		return rolUsers;
 //	}
@@ -96,6 +91,14 @@ public class Role extends BaseEntity{
 //		this.rolePermissions = rolePermissions;
 //	}
 //	
+
+	public String getEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(String enabled) {
+		this.enabled = enabled;
+	}
 
 	/**
 	 * @return the users

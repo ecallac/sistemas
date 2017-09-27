@@ -29,11 +29,11 @@ public class PermissionDaoImpl extends BaseDaoSupport implements PermissionDao {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Permission> findByStatusId(Long id) {
+	public List<Permission> findByEnabled(String enabled) {
 //		Session session = getHibernateTemplate().getSessionFactory().getCurrentSession();
 //		Query qry = session.createQuery("FROM Permission WHERE status = ?");
 //		qry.setParameter(0, id);
-		return (List<Permission>) getHibernateTemplate().find("FROM Permission WHERE status = ?", id);
+		return (List<Permission>) getHibernateTemplate().find("FROM Permission WHERE enabled = ?", enabled);
 	}
 
 	@SuppressWarnings("unchecked")

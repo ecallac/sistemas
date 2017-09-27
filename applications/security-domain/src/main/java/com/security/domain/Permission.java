@@ -33,8 +33,8 @@ public class Permission extends BaseEntity {
 	@Column(name = "path")
 	private String path;
 	
-	@Column(name = "status",nullable = false)
-	private String status;
+	@Column(name = "enabled",nullable = false)
+	private String enabled;
 	
 	@ManyToOne
 	@JoinColumn(name="module_Id")
@@ -96,18 +96,14 @@ public class Permission extends BaseEntity {
 		this.path = path;
 	}
 
-	/**
-	 * @return the status
-	 */
-	public String getStatus() {
-		return status;
+	
+
+	public String getEnabled() {
+		return enabled;
 	}
 
-	/**
-	 * @param status the status to set
-	 */
-	public void setStatus(String status) {
-		this.status = status;
+	public void setEnabled(String enabled) {
+		this.enabled = enabled;
 	}
 
 	/**

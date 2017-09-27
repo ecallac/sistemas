@@ -28,8 +28,8 @@ public class Module extends BaseEntity{
 	@Column(name = "description")
 	private String description;
 	
-	@Column(name = "status",nullable = false)
-	private String status;
+	@Column(name = "enabled",nullable = false)
+	private String enabled;
 	
 	@Column
 	private String author;
@@ -69,19 +69,15 @@ public class Module extends BaseEntity{
 	public void setDescription(String description) {
 		this.description = description;
 	}
+	
+	
 
-	/**
-	 * @return the status
-	 */
-	public String getStatus() {
-		return status;
+	public String getEnabled() {
+		return enabled;
 	}
 
-	/**
-	 * @param status the status to set
-	 */
-	public void setStatus(String status) {
-		this.status = status;
+	public void setEnabled(String enabled) {
+		this.enabled = enabled;
 	}
 
 	/**

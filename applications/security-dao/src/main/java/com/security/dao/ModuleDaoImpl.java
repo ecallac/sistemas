@@ -29,11 +29,11 @@ public class ModuleDaoImpl extends BaseDaoSupport implements ModuleDao {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Module> findByStatusId(Long id) {
+	public List<Module> findByEnabled(String enabled){
 //		Session session = getHibernateTemplate().getSessionFactory().getCurrentSession();
 //		Query qry = session.createQuery("FROM Module WHERE status = ?");
 //		qry.setParameter(0, id);
-		return (List<Module>) getHibernateTemplate().find("FROM Module WHERE status = ?", id);
+		return (List<Module>) getHibernateTemplate().find("FROM Module WHERE enabled = ?", enabled);
 	}
 
 	@SuppressWarnings("unchecked")

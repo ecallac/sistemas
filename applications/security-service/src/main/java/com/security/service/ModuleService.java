@@ -16,6 +16,6 @@ public interface ModuleService {
 	void delete(Module module);
 	Module findModuleById(Long id);
 	List<Module> findAllModules();
-	List<Module> findModulesByStatusId(Long id);
+	List<Module> findModulesByEnabled(String enabled);
 	Module findByName(String name);
 }

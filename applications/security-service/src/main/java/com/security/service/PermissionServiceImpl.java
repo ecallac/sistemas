@@ -60,9 +60,9 @@ public class PermissionServiceImpl implements PermissionService {
 	/* (non-Javadoc)
 	 * @see com.security.service.ModuleService#findByStatusId(java.lang.Long)
 	 */
-	public List<Permission> findPermissionsByStatusId(Long id) {
+	public List<Permission> findPermissionsByEnabled(String enabled) {
 		// TODO Auto-generated method stub
-		return permissionDao.findByStatusId(id);
+		return permissionDao.findByEnabled(enabled);
 	}
 
 	public List<Permission> findPermissionsByModuleId(Long id) {

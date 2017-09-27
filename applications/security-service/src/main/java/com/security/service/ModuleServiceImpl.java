@@ -59,9 +59,9 @@ public class ModuleServiceImpl implements ModuleService {
 	/* (non-Javadoc)
 	 * @see com.security.service.ModuleService#findByStatusId(java.lang.Long)
 	 */
-	public List<Module> findModulesByStatusId(Long id) {
+	public List<Module> findModulesByEnabled(String enabled) {
 		// TODO Auto-generated method stub
-		return moduleDao.findByStatusId(id);
+		return moduleDao.findByEnabled(enabled);
 	}
 
 	public Module findByName(String name) {

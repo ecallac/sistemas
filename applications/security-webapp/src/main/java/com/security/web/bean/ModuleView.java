@@ -13,7 +13,7 @@ public class ModuleView {
 	private Long id;
 	private String name;
 	private String description;
-	private String status;
+	private String enabled;
 	private String author;
 	private String moduleVersion;
 	
@@ -47,11 +47,12 @@ public class ModuleView {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public String getStatus() {
-		return status;
+	public String getEnabled() {
+		return enabled;
 	}
-	public void setStatus(String status) {
-		this.status = status;
+	public void setEnabled(String enabled) {
+		this.enabled = enabled;
 	}
+	
 	
 }

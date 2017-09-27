@@ -16,7 +16,7 @@ public interface PermissionService {
 	void delete(Permission permission);
 	Permission findPermissionById(Long id);
 	List<Permission> findAllPermissions();
-	List<Permission> findPermissionsByStatusId(Long id);
+	List<Permission> findPermissionsByEnabled(String enabled);
 	List<Permission> findPermissionsByModuleId(Long id);
 	List<Permission> findPermissionByRoleId(Long id);
 }

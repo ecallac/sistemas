@@ -13,7 +13,7 @@ import com.security.domain.Permission;
  * @dateCreated 26 mar. 2017 9:16:05
  */
 public interface PermissionDao extends BaseDao {
-	List<Permission> findByStatusId(Long id);
+	List<Permission> findByEnabled(String enabled);
 	List<Permission> findByModuleId(Long id);
 	List<Permission> findPermissionByRoleId(Long id);
 }
