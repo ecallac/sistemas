@@ -30,8 +30,6 @@ $(document).ready(function() {
 <body>
 
 
-
-
 <table style="width: 100%;" class="header">
 <tr>
 <td>

@@ -6,11 +6,22 @@
 
 <%-- <link href="<c:url value='/resources/css/notifications.min.css' />"  rel="stylesheet"></link> --%>
 <%-- <script src="<c:url value='/resources/js/notifications.js' />"></script> --%>
+
+
+
 	
-	<script src="<c:url value='/resources/js/jquery.1.10.2.min.js' />"></script>
+	<script src="<c:url value='/resources/js/jquery-3.2.1.js' />"></script>
+	
+<%-- 	<script src="<c:url value='/resources/js/jquery.1.10.2.min.js' />"></script> --%>
 	<script src="<c:url value='/resources/js/jquery-scrolltofixed.js' />"></script>
 	<!-- script src="<c:url value='/resources/bootstrap/js/npm.js' />"></script>
 	<script src="<c:url value='/resources/bootstrap/js/bootstrap.min.js' />"></script -->
+	
+	<script src="<c:url value='/resources/js/datatables.min.js' />"></script>
+<%-- 	<link href="<c:url value='/resources/css/datatables.css' />"  rel="stylesheet"></link> --%>
+	<script src="<c:url value='/resources/js/dataTables.bootstrap4.min.js' />"></script>
+	<link href="<c:url value='/resources/css/dataTables.bootstrap4.css' />"  rel="stylesheet"></link>
+	
 	
 	<!-- Latest compiled and minified CSS -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>

@@ -26,18 +26,23 @@
 
 
 <table width="100%" height="100%" cellpadding="0" cellspacing="0" border="0">
+		<tr>
+        <td valign="top" rowspan='5' style="width:1px">
+          <tiles:insertAttribute name="menu" />
+        </td>
+      </tr>
       <tr>
-        <td style="height:20px">
+        <td style="height:50px">
           <tiles:insertAttribute name="header" />
         </td>
       </tr>
       <tr>
         <td style="height:15px">
-          <tiles:insertAttribute name="menu" />
+          <tiles:insertAttribute name="navigation" />
         </td>
       </tr>
       <tr>
-        <td valign="top">
+        <td valign="top" style="height:100%">
           <tiles:insertAttribute name="body" />
         </td>
       </tr>

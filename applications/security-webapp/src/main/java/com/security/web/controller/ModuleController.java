@@ -51,8 +51,13 @@ public class ModuleController {
         	moduleService.save((Module) BeanParser.parseObjectToNewClass(moduleView, Module.class, null));
 		}else{
 			Module module = moduleService.findModuleById(moduleView.getId());
-			module = (Module) BeanParser.parseBetweenObjects(moduleView, module, null);
-			moduleService.save(module);
+			if (module!=null) {
+				module = (Module) BeanParser.parseBetweenObjects(moduleView, module, null);
+				moduleService.save(module);
+			}else{
+				map.put(SecurityConstants.STATUS, SecurityConstants.ERROR);
+		        map.put(SecurityConstants.MESSAGE, "Your record couldn't be saved");
+			}
 		}
         map.put(SecurityConstants.STATUS, SecurityConstants.OK);
         map.put(SecurityConstants.MESSAGE, "Your record have been saved successfully at "+CommonUtil.dateToString(new Date(), "yyyy-MM-dd HH:mm:ss"));
@@ -73,6 +78,23 @@ public class ModuleController {
         Module module = moduleService.findModuleById(moduleView.getId());
         map.put(SecurityConstants.STATUS, SecurityConstants.OK);
         map.put("module", (ModuleView)BeanParser.parseObjectToNewClass(module, ModuleView.class, null));
+        return map;
+    }
+	
+	@RequestMapping(value = "/module/enableDisable", method = {RequestMethod.POST})
+    public @ResponseBody  Map<String, Object> enableDisable(@RequestBody ModuleView moduleView) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        Module module = moduleService.findModuleById(moduleView.getId());
+        if (module!=null) {
+			module = (Module) BeanParser.parseBetweenObjects(moduleView, module, null);
+			moduleService.save(module);
+			map.put(SecurityConstants.STATUS, SecurityConstants.OK);
+	        map.put(SecurityConstants.MESSAGE, "Your record have been saved successfully at "+CommonUtil.dateToString(new Date(), "yyyy-MM-dd HH:mm:ss"));
+		}else{
+			map.put(SecurityConstants.STATUS, SecurityConstants.ERROR);
+	        map.put(SecurityConstants.MESSAGE, "Your status couldn't be updated");
+		}
+        
         return map;
     }
 }

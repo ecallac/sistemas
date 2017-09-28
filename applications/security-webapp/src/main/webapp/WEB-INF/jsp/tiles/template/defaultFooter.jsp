@@ -18,12 +18,12 @@ $(document).ready(function() {
 
 <style type="text/css">
  .footer { 
-     background-color: #FFFFFF; 
-     color: #B4B4B4; 
+/*      background-color: #000000;  */
+/*      color: #B4B4B4;   */
      font: bold; 
      font-family: Verdana; 
      font-size: 10px; 
-     border-top: 4px solid #929292; 
+     border-top: 1px solid #929292;  
      padding: 100%; 
      width: 100%; 
      height: 50px; 
@@ -34,7 +34,7 @@ $(document).ready(function() {
 <body>
 
 
-<table  style="width:100%;height:50%" border="0">
+<table class="footer" style="width:100%;height:50%" border="0">
 <tbody>
 <tr>
 	<td align="center">Copyright © 2017 - Ecallac</td>

@@ -7,7 +7,6 @@
 <title>Access Denied</title>
 </head>
 <body>
-<jsp:include page="../includes/menu.jsp"/>
  
     <h3 style="color:red;">${message}</h3>
 </body>
