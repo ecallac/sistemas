@@ -18,35 +18,36 @@
 	<meta name="_csrf_name" content="${_csrf.parameterName}"/>
 	<title></title>
 	<script type="text/javascript">
+	
 	$('#Add').on('shown.bs.modal', function () {
 	  
 	})
 	
 
-	function post(path, params, method) {
-        method = method || "post"; // Set method to post by default if not specified.
+// 	function post(path, params, method) {
+//         method = method || "post"; // Set method to post by default if not specified.
 
-        // The rest of this code assumes you are not using a library.
-        // It can be made less wordy if you use one.
-        var form = document.createElement("form");
-        form.setAttribute("method", method);
-        form.setAttribute("action", path);
+//         // The rest of this code assumes you are not using a library.
+//         // It can be made less wordy if you use one.
+//         var form = document.createElement("form");
+//         form.setAttribute("method", method);
+//         form.setAttribute("action", path);
 
-        for(var key in params) {
-            if(params.hasOwnProperty(key)) {
-//             	alert(key + " - " +params[key]);
-                var hiddenField = document.createElement("input");
-                hiddenField.setAttribute("type", "hidden");
-                hiddenField.setAttribute("name", key);
-                hiddenField.setAttribute("value", params[key]);
+//         for(var key in params) {
+//             if(params.hasOwnProperty(key)) {
+// //             	alert(key + " - " +params[key]);
+//                 var hiddenField = document.createElement("input");
+//                 hiddenField.setAttribute("type", "hidden");
+//                 hiddenField.setAttribute("name", key);
+//                 hiddenField.setAttribute("value", params[key]);
 
-                form.appendChild(hiddenField);
-             }
-        }
+//                 form.appendChild(hiddenField);
+//              }
+//         }
 
-        document.body.appendChild(form);
-        form.submit();
-    }
+//         document.body.appendChild(form);
+//         form.submit();
+//     }
 		
 		
 	var contexPath = "<%=request.getContextPath() %>";
@@ -64,6 +65,7 @@
                	author: $('#author').val(),
                	moduleVersion: $('#moduleVersion').val()
 		}
+		$('.bindingError').remove();
         $.ajax({
            	type:'POST',
                dataType: 'json',
@@ -79,13 +81,22 @@
 				xhr.setRequestHeader(header, token);
 		    },
                success: function(response){
-               	var token = $("meta[name='_csrf']").attr("content");
-           	    post(
-           	    		contexPath+"/module", {
-           	    			status: response.status,
-           	    			message: response.message,
-           	    			_csrf:token
-           	    });
+            	   if(response.validated){
+                       //Set response
+            		   if(response.status=="OK"){
+                 			showSuccessMessage(response.message);
+                 			load();
+                 			$('#Form').modal('hide');
+                 		}else{
+                 			showErrorMessage(response.message);
+                 		}
+                    }else{
+                      //Set error messages
+                      $.each(response.messages,function(key,value){
+          	            $('input[id='+key+']').after('<span class="bindingError" style="color:red;font-weight: bold;">'+value+'</span>');
+                      });
+                    }
+            	   
                } ,
                error: function (jqXHR, exception) {
                  console.log(jqXHR);
@@ -96,19 +107,50 @@
     
     
     
-    function remove(id){
-    	var token = $("meta[name='_csrf']").attr("content");
-	    post(
-	    		contexPath+"/module/delete", {
-	    			id: id,
-	    			_csrf:token
-	    });
+    function remove(idVal){
+//     	var token = $("meta[name='_csrf']").attr("content");
+// 	    post(
+// 	    		contexPath+"/module/delete", {
+// 	    			id: id,
+// 	    			_csrf:token
+// 	    });
+    	var formData= {
+				id: idVal
+		}
+        $.ajax({
+           	type:'POST',
+               dataType: 'json',
+               contentType: 'application/json',
+               url:contexPath+'/module/delete.json',
+               data:JSON.stringify(formData),
+			beforeSend: function(xhr) {
+		        // setting a timeout
+		        var token = $("meta[name='_csrf']").attr("content");
+				var header = $("meta[name='_csrf_header']").attr("content");
+		        xhr.setRequestHeader("Accept", "application/json");
+				xhr.setRequestHeader("Content-Type", "application/json");
+				xhr.setRequestHeader(header, token);
+		    },
+               success: function(response){
+               		if(response.status=="OK"){
+               			showSuccessMessage(response.message);
+               			load();
+               		}else{
+               			showErrorMessage(response.message);
+               		}
+               } ,
+               error: function (jqXHR, exception) {
+                 console.log(jqXHR);
+			  alert('Error: ' + jqXHR);
+		  }  
+        });
     }
     
     function edit(idVal){
     	var formData= {
 				id: idVal
 		}
+    	$('.bindingError').remove();
         $.ajax({
            	type:'POST',
                dataType: 'json',
@@ -145,10 +187,11 @@
     }
     
     function clearFields(){
+    		$('.bindingError').remove();
     		$("#id").val("");
 			$("#name").val("");
 			$("#description").val("");
-			$('#enabled').attr('checked', false);
+			$('#enabled').prop('checked', false);
 			$("#author").val("");
 			$("#moduleVersion").val("");
     }
@@ -182,15 +225,9 @@
 		    },
                success: function(response){
                		if(response.status=="OK"){
-               			$('#success').css({'display': ''});
-               			$('#error').css({'display': 'none'});
-               			$("#successMessage").text(response.message);
-               			$("#success").delay( 2000 ).fadeOut( 500, "linear");
+               			showSuccessMessage(response.message);
                		}else{
-               			$('#success').css({'display': 'none'});
-               			$('#error').css({'display': ''});
-               			$("#errorMessage").text(response.message);
-               			$("#error").delay( 2000 ).fadeOut( 500, "linear");
+               			showErrorMessage(response.message);
                		}
                } ,
                error: function (jqXHR, exception) {
@@ -202,7 +239,41 @@
     	
     }
     
+    function showSuccessMessage(message){
+    	$('#success').css({'display': ''});
+			$('#error').css({'display': 'none'});
+			$("#successMessage").text(message);
+			$("#success").delay( 2000 ).fadeOut( 500, "linear");
+    }
+    function showErrorMessage(message){
+    	$('#success').css({'display': 'none'});
+			$('#error').css({'display': ''});
+			$("#errorMessage").text(message);
+			$("#error").delay( 2000 ).fadeOut( 500, "linear");
+    }
+    
+    
+    
+    
+    
     function load(){
+    	var exportTittle="Module List";
+    	var buttonCommon = {
+    	        exportOptions: {
+    	            format: {
+    	                body: function ( data, row, column, node ) {
+    	                    // Strip $ from salary column to make it numeric
+//     	                    return column === 5 ?
+//     	                        data.replace( /[$,]/g, '' ) :
+//     	                        data;
+    	                        return data;
+    	                }
+    	            },
+    	            columns: [ 0, 1, 2, 3, 4 ]
+    	        },
+	            title: exportTittle
+    	    };
+    	
         $.ajax({
            	type:'POST',
                dataType: 'json',
@@ -217,33 +288,81 @@
 				xhr.setRequestHeader(header, token);
 		    },
                success: function(response){
-               		if(response.status=="OK"){
-               			data = response.list;
-               			alert("Aqui");
-               			var newRows;
-                        for(i=0; i<response.list.length; i++){ 
-                        	alert(response.list[i].id);
-                        	alert(response.list[i].author);
-                        	alert(response.list[i].moduleVersion);
-                        	newRows += "<tr>";
-                        	newRows += "<td>" + response.list[i].id + "</td>";
-                            newRows += "<td>" + response.list[i].name + "</td>";
-                            newRows += "<td>" + response.list[i].description + "</td>";
-                            newRows += "<td>" + response.list[i].author + "</td>";
-                            newRows += "<td>" + response.list[i].moduleVersion + "</td>";
-                            var checkedActive='';
-                            if (response.list[i].enabled == 'Y'){
-                            	checkedActive = "checked='true";
-                            }
-                            newRows += "<td><input type='checkbox' name='select' id='select' "+checkedActive+" onclick='enableAndDisable(this,"+response.list[i].id+");'></td>";
-                            /* newRows += "<td><button title='Edit' onclick='edit("+response.list[i].id+")' type='button' class='btn btn-link btn-xs toltip' data-toggle='modal' data-target='#Form'><img src='<c:url value='/resources/img/icons/black/doc_edit_icon&16.png' />'></button> | ";
-                            newRows += "<button title='Delete' onclick='remove("+response.list[i].id+")' type='button' class='btn btn-link btn-xs toltip'><img src='<c:url value='/resources/img/icons/black/trash_icon&16.png' />'></button> | ";
-                            newRows += "<button title='Permissions by Module' onclick='getPermissions("+response.list[i].id+")' type='button' class='btn btn-link btn-xs toltip' data-toggle='modal' data-target='#Permissions'><img src='<c:url value='/resources/img/icons/black/cogs_icon&16.png' />'></button></td>";
-                             */newRows += "</tr>";
-                             alert(newRows);
-                        } 
-                        alert("final - "+newRows);
-                        $("#data-update").html(newRows);
+               		if(response.data.length>0){
+               			data = response.data;
+               			
+               			var printCounter = 0;
+               			$('#table').DataTable( {
+//                				"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+               				dom: 'Bfrtip',
+               				"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+               				destroy: true,
+//                				"bProcessing" : true,
+               				"data": response.data,
+               		        
+               		        buttons: [
+               		        	'pageLength',
+               		            $.extend( true, {}, buttonCommon, {
+               		                extend: 'copyHtml5'
+               		            } ),
+               		            $.extend( true, {}, buttonCommon, {
+               		                extend: 'excelHtml5'
+               		            } ),
+               		            $.extend( true, {}, buttonCommon, {
+               		                extend: 'pdfHtml5',
+		               	             download: 'open'
+               		            } ),
+               		         	$.extend( true, {}, buttonCommon, {
+            		                extend: 'csvHtml5',
+            		                text: 'CSV',
+            		                fieldSeparator: '\t',
+            		                extension: '.csv',
+            		            } ),
+            		            $.extend( true, {}, buttonCommon, {
+               		                extend: 'print',
+               		             	messageTop: function () {
+                	                    printCounter++;
+                	 
+                	                    if ( printCounter === 1 ) {
+                	                        return 'This is the first time you have printed this document.';
+                	                    }
+                	                    else {
+                	                        return 'You have printed this document '+printCounter+' times';
+                	                    }
+                	                },
+                	                messageBottom: null,
+                	                autoPrint: true
+               		            } )
+               		        ],
+               		        "columns": [
+               		            { "data": "id" },
+               		            { "data": "name" },
+               		            { "data": "description" },
+               		            { "data": "author" },
+               		            { "data": "moduleVersion" }
+               		        ],
+               		     	"columnDefs": [
+               	            {
+               	            	"targets": 5,
+               	                "render": function ( data, type, row ) {
+               	                	var checkedActive='';
+	                                 if (row.enabled == 'Y'){
+	                                 	checkedActive = "checked='true'";
+	                                 }
+               	                    return "<td><input type='checkbox' name='select' id='select' "+checkedActive+" onclick='enableAndDisable(this,"+row.id+");'></td>";
+               	                }
+               	            },
+               	        	{
+               	            	"targets": 6,
+               	                "render": function ( data, type, row ) {
+               	                	
+               	                    return "<td><button title='Edit' onclick='edit("+row.id+")' type='button' class='btn btn-link btn-xs toltip' data-toggle='modal' data-target='#Form'><img src='<c:url value='/resources/img/icons/black/doc_edit_icon&16.png' />'></button> | "+
+	               	                 "<button title='Delete' onclick='remove("+row.id+")' type='button' class='btn btn-link btn-xs toltip'><img src='<c:url value='/resources/img/icons/black/trash_icon&16.png' />'></button> | "+
+	               	              		"<button title='Permissions by Module' onclick='getPermissions("+row.id+")' type='button' class='btn btn-link btn-xs toltip' data-toggle='modal' data-target='#Permissions'><img src='<c:url value='/resources/img/icons/black/cogs_icon&16.png' />'></button></td>";
+               	                }
+               	            }
+               	        ]
+               		    } );
                		}
                } ,
                error: function (jqXHR, exception) {
@@ -252,15 +371,6 @@
 		  }  
         });
     }
-    
-    function cli(){
-    	$('#Permissions').modal('hide');
-    }
-    
-    
-    $(document).ready(function() {
-	    $('#datatable').DataTable();
-	} );
 	</script>
 	<style type="text/css">
 	
@@ -278,18 +388,6 @@
 		<strong>Error!</strong> <span id="errorMessage"></span>.
 	</div>
 
-<c:if test="${status eq 'OK'}">
-	<div class="alert alert-success alert-dismissible" role="alert">
-		<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-		<strong>Success!</strong> ${message}.
-	</div>
-</c:if>
-<c:if test="${status eq 'ERROR'}">
-	<div class="alert alert-danger alert-dismissible" role="alert">
-		<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-		<strong>Error!</strong> ${message}.
-	</div>
-</c:if>
 
 
 <div class="panel panel-default col-xs-9">
@@ -304,78 +402,12 @@
     <br/> <br/>
     
 
-
  <table id="table" align="center" class="table table-striped table-hover table-bordered">  
 <thead>
 <tr><th>Id</th><th>Name</th><th>Description</th><th>Author</th><th>Version</th><th>Enabled</th><th>Actions</th></tr>  
 </thead>
-<tbody id="data-update">
-</tbody>
 </table>
-    
-    <table id="datatable" align="center" class="table table-striped table-hover table-bordered">  
-<thead>
-<tr><th>Id</th><th>Name</th><th>Description</th><th>Author</th><th>Version</th><th>Enabled</th><th>Actions</th></tr>  
-</thead>
-<tbody>
-   <c:forEach var="module" items="${list}">   
-   <tr>  
-   <td>${module.id}</td>  
-   <td>${module.name}</td>  
-   <td>${module.description}</td>  
-   <td>${module.author}</td>
-   <td>${module.moduleVersion}</td>
-   <td>
-   
-   <c:set var="checkedActive" value=""></c:set>
-		<c:if test="${'Y' eq module.enabled}">
-			<c:set var="checkedActive" value="checked='true'"></c:set>
-		</c:if>
-         <input type="checkbox" name="select" id="select" ${checkedActive} onclick="enableAndDisable(this,${module.id});">
-   
-   </td>
-   <td>
-   
-   <button title="Edit" onclick="edit(${module.id})" type="button" class="btn btn-link btn-xs toltip" data-toggle="modal" data-target="#Form"><img src="<c:url value='/resources/img/icons/black/doc_edit_icon&16.png' />"></button> | 
-      <button title="Delete" onclick="remove(${module.id})" type="button" class="btn btn-link btn-xs toltip"><img src="<c:url value='/resources/img/icons/black/trash_icon&16.png' />"></button> | 
-      <button title="Permissions by Module" onclick="getPermissions(${module.id})" type="button" class="btn btn-link btn-xs toltip" data-toggle="modal" data-target="#Permissions"><img src="<c:url value='/resources/img/icons/black/cogs_icon&16.png' />"></button>
-      
-   </td>
-   </tr>  
-   </c:forEach>  
-   </tbody>
-   </table>
-   
-   
-   
-   
-    
-    
-    
-<%--    <spring:url value="module" var="listURL"/> --%>
-<%--    <display:table name="list" id="module" sort="list" requestURI="${listURL}" export="true" pagesize="10" defaultsort="1" defaultorder="descending" class="table table-striped"> --%>
-<%--       <display:column property="id" title="ID" sortable="true"/> --%>
-<%--       <display:column property="name" sortable="true"/> --%>
-<%--       <display:column property="description" sortable="true"/> --%>
-<%--       <display:column property="author" sortable="true"/> --%>
-<%--       <display:column property="moduleVersion" sortable="true"/> --%>
-<%--       <display:column media="html" title="Enabled"> --%>
-<%--       	<c:set var="checkedActive" value=""></c:set> --%>
-<%-- 		<c:if test="${'Y' eq module.enabled}"> --%>
-<%-- 			<c:set var="checkedActive" value="checked='true'"></c:set> --%>
-<%-- 		</c:if> --%>
-<%--          <input type="checkbox" name="select" id="select" ${checkedActive} onclick="enableAndDisable(this,${module.id});"> --%>
-<%--       </display:column> --%>
-<%--       <display:column media="html" title="Actions"> --%>
-<%--       <button title="Edit" onclick="edit(${module.id})" type="button" class="btn btn-link btn-xs toltip" data-toggle="modal" data-target="#Form"><img src="<c:url value='/resources/img/icons/black/doc_edit_icon&16.png' />"></button> |  --%>
-<%--       <button title="Delete" onclick="remove(${module.id})" type="button" class="btn btn-link btn-xs toltip"><img src="<c:url value='/resources/img/icons/black/trash_icon&16.png' />"></button> |  --%>
-<%--       <button title="Permissions by Module" onclick="getPermissions(${module.id})" type="button" class="btn btn-link btn-xs toltip" data-toggle="modal" data-target="#Permissions"><img src="<c:url value='/resources/img/icons/black/cogs_icon&16.png' />"></button> --%>
-<%--       </display:column> --%>
-<%--       <display:setProperty name="export.xml" value="false" /> --%>
-<%--       <display:setProperty name="export.pdf.filename" value="userList.pdf"/> --%>
-<%-- 		<display:setProperty name="export.excel.filename" value="userList.xls"/> --%>
-<%-- 		<display:setProperty name="export.csv.filename" value="userList.csv"/> --%>
-<%--     </display:table> --%>
+
 </div></div>
 
 
@@ -487,7 +519,6 @@ http://www.jqueryscript.net/other/Folding-Tree-Structures-jQuery-file-explore.ht
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" onclick="cli();">hide</button>
         <button type="button" class="btn btn-primary" onclick="save();">Save</button>
       </div>
       

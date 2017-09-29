@@ -3,7 +3,7 @@
  */
 package com.security.web.bean;
 
-import javax.persistence.Column;
+import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  * @author efrain.calla
@@ -11,12 +11,17 @@ import javax.persistence.Column;
  */
 public class ModuleView {
 	private Long id;
+	@NotEmpty(message="Enter Name.")
 	private String name;
+	@NotEmpty
 	private String description;
 	private String enabled;
 	private String author;
 	private String moduleVersion;
 	
+	public String getIdString() {
+		return String.valueOf(id);
+	}
 	public String getAuthor() {
 		return author;
 	}
@@ -53,6 +58,5 @@ public class ModuleView {
 	public void setEnabled(String enabled) {
 		this.enabled = enabled;
 	}
-	
 	
 }
