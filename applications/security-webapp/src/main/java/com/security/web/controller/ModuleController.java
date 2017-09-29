@@ -3,8 +3,10 @@
  */
 package com.security.web.controller;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +45,21 @@ public class ModuleController {
 		modelAndView.addObject(SecurityConstants.MESSAGE, message);
 		return modelAndView;
 	}
+	
+  @RequestMapping(value = "/module/list", method = {RequestMethod.GET,RequestMethod.POST})
+  public @ResponseBody Map<String, Object> getAll() {
+      Map<String, Object> map = new HashMap<String, Object>();
+      List<ModuleView> list = castModuleToModuleViewList(moduleService.findAllModules());
+      if (list != null) {
+          map.put(SecurityConstants.STATUS, SecurityConstants.OK);
+          map.put(SecurityConstants.MESSAGE, "Data found");
+          map.put("list", list);
+      } else {
+          map.put(SecurityConstants.STATUS, SecurityConstants.ERROR);
+          map.put(SecurityConstants.MESSAGE, "Data not found");
+      }
+      return map;
+  }
 	
 	@RequestMapping(value = "/module/save", method = {RequestMethod.POST})
     public @ResponseBody  Map<String, Object> save(@RequestBody ModuleView moduleView) {
@@ -97,4 +114,12 @@ public class ModuleController {
         
         return map;
     }
+	
+	public List<ModuleView> castModuleToModuleViewList(List<Module> modules){
+		List<ModuleView> moduleViews = new ArrayList<ModuleView>();
+		for (Module module : modules) {
+			moduleViews.add((ModuleView)BeanParser.parseObjectToNewClass(module, ModuleView.class, null));
+		}
+		return moduleViews;
+	}
 }

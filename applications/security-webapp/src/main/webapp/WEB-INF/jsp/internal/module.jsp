@@ -202,7 +202,56 @@
     	
     }
     
-    
+    function load(){
+        $.ajax({
+           	type:'POST',
+               dataType: 'json',
+               contentType: 'application/json',
+               url:contexPath+'/module/list.json',
+			beforeSend: function(xhr) {
+		        // setting a timeout
+		        var token = $("meta[name='_csrf']").attr("content");
+				var header = $("meta[name='_csrf_header']").attr("content");
+		        xhr.setRequestHeader("Accept", "application/json");
+				xhr.setRequestHeader("Content-Type", "application/json");
+				xhr.setRequestHeader(header, token);
+		    },
+               success: function(response){
+               		if(response.status=="OK"){
+               			data = response.list;
+               			alert("Aqui");
+               			var newRows;
+                        for(i=0; i<response.list.length; i++){ 
+                        	alert(response.list[i].id);
+                        	alert(response.list[i].author);
+                        	alert(response.list[i].moduleVersion);
+                        	newRows += "<tr>";
+                        	newRows += "<td>" + response.list[i].id + "</td>";
+                            newRows += "<td>" + response.list[i].name + "</td>";
+                            newRows += "<td>" + response.list[i].description + "</td>";
+                            newRows += "<td>" + response.list[i].author + "</td>";
+                            newRows += "<td>" + response.list[i].moduleVersion + "</td>";
+                            var checkedActive='';
+                            if (response.list[i].enabled == 'Y'){
+                            	checkedActive = "checked='true";
+                            }
+                            newRows += "<td><input type='checkbox' name='select' id='select' "+checkedActive+" onclick='enableAndDisable(this,"+response.list[i].id+");'></td>";
+                            /* newRows += "<td><button title='Edit' onclick='edit("+response.list[i].id+")' type='button' class='btn btn-link btn-xs toltip' data-toggle='modal' data-target='#Form'><img src='<c:url value='/resources/img/icons/black/doc_edit_icon&16.png' />'></button> | ";
+                            newRows += "<button title='Delete' onclick='remove("+response.list[i].id+")' type='button' class='btn btn-link btn-xs toltip'><img src='<c:url value='/resources/img/icons/black/trash_icon&16.png' />'></button> | ";
+                            newRows += "<button title='Permissions by Module' onclick='getPermissions("+response.list[i].id+")' type='button' class='btn btn-link btn-xs toltip' data-toggle='modal' data-target='#Permissions'><img src='<c:url value='/resources/img/icons/black/cogs_icon&16.png' />'></button></td>";
+                             */newRows += "</tr>";
+                             alert(newRows);
+                        } 
+                        alert("final - "+newRows);
+                        $("#data-update").html(newRows);
+               		}
+               } ,
+               error: function (jqXHR, exception) {
+                 console.log(jqXHR);
+			  alert('Error: ' + jqXHR);
+		  }  
+        });
+    }
     
     function cli(){
     	$('#Permissions').modal('hide');
@@ -218,7 +267,7 @@
 	</style>
 
 </head>
-<body>
+<body onload="load();">
 
 <h1>Modules</h1>
 
@@ -254,7 +303,15 @@
    </sec:authorize>
     <br/> <br/>
     
-    
+
+
+ <table id="table" align="center" class="table table-striped table-hover table-bordered">  
+<thead>
+<tr><th>Id</th><th>Name</th><th>Description</th><th>Author</th><th>Version</th><th>Enabled</th><th>Actions</th></tr>  
+</thead>
+<tbody id="data-update">
+</tbody>
+</table>
     
     <table id="datatable" align="center" class="table table-striped table-hover table-bordered">  
 <thead>
