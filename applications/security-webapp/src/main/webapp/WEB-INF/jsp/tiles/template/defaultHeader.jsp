@@ -41,6 +41,8 @@ $(document).ready(function() {
    <a href="${pageContext.request.contextPath}/userList">User Management</a>
   | &nbsp;
    <a href="${pageContext.request.contextPath}/module">Module Management</a>
+   | &nbsp;
+   <a href="${pageContext.request.contextPath}/role">Role Management</a>
 <%--    <a href="${pageContext.request.contextPath}/loadJasper">User Report</a> --%>
    
 

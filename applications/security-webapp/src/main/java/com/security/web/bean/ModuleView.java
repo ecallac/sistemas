@@ -11,7 +11,7 @@ import org.hibernate.validator.constraints.NotEmpty;
  */
 public class ModuleView {
 	private Long id;
-	@NotEmpty(message="Enter Name.")
+	@NotEmpty
 	private String name;
 	@NotEmpty
 	private String description;

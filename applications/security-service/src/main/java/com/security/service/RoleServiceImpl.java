@@ -53,4 +53,14 @@ public class RoleServiceImpl implements RoleService {
 		return (List<Role>) roleDao.findAll(Role.class);
 	}
 
+	public void save(Role role) {
+		// TODO Auto-generated method stub
+		roleDao.save(role);
+	}
+
+	public void delete(Role role) {
+		// TODO Auto-generated method stub
+		roleDao.delete(role);
+	}
+
 }

@@ -113,7 +113,7 @@ public class ModuleController {
         Map<String, Object> map = new HashMap<String, Object>();
         Module module = moduleService.findModuleById(moduleView.getId());
         map.put(SecurityConstants.STATUS, SecurityConstants.OK);
-        map.put("module", (ModuleView)BeanParser.parseObjectToNewClass(module, ModuleView.class, null));
+        map.put("viewBean", (ModuleView)BeanParser.parseObjectToNewClass(module, ModuleView.class, null));
         return map;
     }
 	

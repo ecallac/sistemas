@@ -97,16 +97,16 @@
     	var ajaxUrl = contexPath+'/module/load.json';
     	var successFunction = function(response){
        		if(response.status=="OK"){
-       			$("#id").val(response.module.id);
-       			$("#name").val(response.module.name);
-       			$("#description").val(response.module.description);
-       			if (response.module.enabled == 'Y'){
+       			$("#id").val(response.viewBean.id);
+       			$("#name").val(response.viewBean.name);
+       			$("#description").val(response.viewBean.description);
+       			if (response.viewBean.enabled == 'Y'){
        				$('#enabled').prop('checked', true);
        			}else{
        				$('#enabled').prop('checked', false);
        			}
-       			$("#author").val(response.module.author);
-       			$("#moduleVersion").val(response.module.moduleVersion);
+       			$("#author").val(response.viewBean.author);
+       			$("#moduleVersion").val(response.viewBean.moduleVersion);
        		}
        };
        
