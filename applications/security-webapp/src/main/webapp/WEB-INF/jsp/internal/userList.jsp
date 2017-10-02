@@ -51,7 +51,10 @@
 
 
  <sec:authorize access="hasRole('ROLE_ADMIN')">
-   <!-- <a href="userForm">Add New User</a> -->
+ 
+ <div id="button_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4 no-footer">
+<div class="dt-buttons btn-group">              
+<!-- <a href="userForm">Add New User</a> -->
    <button data-target="#AddUser" title="Add a new user" type="button" class="btn btn-default toltip" data-toggle="modal">
 		<img src="<c:url value='/resources/img/icons/black/user_icon&16.png' />"> Add New User
 	</button>
@@ -60,17 +63,16 @@
    <button data-target="#AllChangePassword" title="Change Unknown User Password" type="button" class="btn btn-default toltip" data-toggle="modal">
 		<img src="<c:url value='/resources/img/icons/black/key_icon&16.png' />"> Change Password
    </button>
+</div>
+</div>
+<br>
    </sec:authorize>
-    <br/> <br/>
     
 
 <table id="example" align="center" class="table table-striped table-hover table-bordered">  
 <thead>
 <tr><th>Id</th><th>Username</th><th>status</th><th>question</th><th>answer</th><th>Actions</th></tr>  
 </thead>
-<!-- <tfoot> -->
-<!-- <tr><th>Id</th><th>Username</th><th>status</th><th>question</th><th>answer</th><th>Actions</th></tr>   -->
-<!-- </tfoot> -->
 <tbody>
    <c:forEach var="user" items="${list}">   
    <tr>  
@@ -99,51 +101,6 @@
 </div></div>
    
    
-   
-<!-- <div class="panel panel-default col-xs-9"> -->
-<!-- <!-- <div class="panel-heading">User List Display tag</div> -->
-<!--   <div class="panel-body">    -->
-   
-<%--    <sec:authorize access="hasRole('ROLE_ADMIN')"> --%>
-<!--    <!-- <a href="userForm">Add New User</a> --> 
-<!--    <button data-target="#AddUser" title="Add a new user" type="button" class="btn btn-default toltip" data-toggle="modal"> -->
-<%-- 		<img src="<c:url value='/resources/img/icons/black/user_icon&16.png' />"> Add New User --%>
-<!-- 	</button> -->
-<!--    <!-- <a href="resetPasswordForm">Change Password</a> -->
-   
-<!--    <button data-target="#AllChangePassword" title="Change Unknown User Password" type="button" class="btn btn-default toltip" data-toggle="modal"> -->
-<%-- 		<img src="<c:url value='/resources/img/icons/black/key_icon&16.png' />"> Change Password --%>
-<!--    </button> -->
-<%--    </sec:authorize> --%>
-<!--     <br/> <br/> -->
-    
-<%--    <spring:url value="userList" var="listURL"/> --%>
-<%--    <display:table name="list" id="user" sort="list" requestURI="${listURL}" export="true" pagesize="10" defaultsort="1" defaultorder="descending" class="table table-striped"> --%>
-<%--       <display:column property="id" title="ID" sortable="true"/> --%>
-<%--       <display:column property="userName" sortable="true"/> --%>
-<%--       <display:column property="status" sortable="true"/> --%>
-<%--       <display:column property="question"/> --%>
-<%--       <display:column property="answer"/> --%>
-<%--       <display:column media="html" title="Select"> --%>
-<!--          <input type="checkbox" name="select" name="select" value="Y" > -->
-<%--       </display:column> --%>
-<%--       <display:column media="html" title="Actions"> --%>
-<%--       <button  title="Edit" type="button" class="btn btn-link btn-xs" data-toggle="tooltip" data-placement="bottom"><img src="<c:url value='/resources/img/icons/black/doc_edit_icon&16.png' />"></button> --%>
-<%--         <a href="editUser/${user.id}" title="Edit"  data-toggle="tooltip" data-placement="bottom"><img src="<c:url value='/resources/img/icons/black/doc_edit_icon&16.png' />"></a> --%>
-<%--         | <a href="resetPasswordForm/${user.id}" title="Reset Password"  data-toggle="tooltip" data-placement="bottom" ><img src="<c:url value='/resources/img/icons/black/key_icon&16.png' />"></a> --%>
-<%--         | <a href="deleteUser/${user.id}" title="Delete"  data-toggle="tooltip" data-placement="bottom" ><img src="<c:url value='/resources/img/icons/black/trash_icon&16.png"' />"></a> --%>
-<%--         | <a href="assigneRoleUser/${user.id}" title="Assing Roles"  data-toggle="tooltip" data-placement="bottom" ><img src="<c:url value='/resources/img/icons/black/users_icon&16.png"' />"></a> --%>
-<%--       </display:column> --%>
-<%--       <display:setProperty name="export.pdf" value="true" /> --%>
-<%--       <display:setProperty name="export.xml" value="false" /> --%>
-<%--       <display:setProperty name="export.pdf.filename" value="userList.pdf"/> --%>
-<%-- 		<display:setProperty name="export.excel.filename" value="userList.xls"/> --%>
-<%-- 		<display:setProperty name="export.csv.filename" value="userList.csv"/> --%>
-<%--     </display:table> --%>
-<!--     <br/>  -->
-<!--    Custom Export:   -->
-<!--    <a href="reportUserList/pdf">PDF</a> | <a href="reportUserListXls">Excel</a> -->
-<!-- </div></div> -->
 
 
 

@@ -23,35 +23,8 @@
 	  
 	})
 	
-
-// 	function post(path, params, method) {
-//         method = method || "post"; // Set method to post by default if not specified.
-
-//         // The rest of this code assumes you are not using a library.
-//         // It can be made less wordy if you use one.
-//         var form = document.createElement("form");
-//         form.setAttribute("method", method);
-//         form.setAttribute("action", path);
-
-//         for(var key in params) {
-//             if(params.hasOwnProperty(key)) {
-// //             	alert(key + " - " +params[key]);
-//                 var hiddenField = document.createElement("input");
-//                 hiddenField.setAttribute("type", "hidden");
-//                 hiddenField.setAttribute("name", key);
-//                 hiddenField.setAttribute("value", params[key]);
-
-//                 form.appendChild(hiddenField);
-//              }
-//         }
-
-//         document.body.appendChild(form);
-//         form.submit();
-//     }
-		
-		
 	var contexPath = "<%=request.getContextPath() %>";
-    data = "";
+	
     function save(){
     	var elabled = "N";
     	if ($('#enabled').is(':checked')) {
@@ -66,43 +39,29 @@
                	moduleVersion: $('#moduleVersion').val()
 		}
 		$('.bindingError').remove();
-        $.ajax({
-           	type:'POST',
-               dataType: 'json',
-               contentType: 'application/json',
-               url:contexPath+'/module/save.json',
-               data:JSON.stringify(formData),
-			beforeSend: function(xhr) {
-		        // setting a timeout
-		        var token = $("meta[name='_csrf']").attr("content");
-				var header = $("meta[name='_csrf_header']").attr("content");
-		        xhr.setRequestHeader("Accept", "application/json");
-				xhr.setRequestHeader("Content-Type", "application/json");
-				xhr.setRequestHeader(header, token);
-		    },
-               success: function(response){
-            	   if(response.validated){
-                       //Set response
-            		   if(response.status=="OK"){
-                 			showSuccessMessage(response.message);
-                 			load();
-                 			$('#Form').modal('hide');
-                 		}else{
-                 			showErrorMessage(response.message);
-                 		}
-                    }else{
-                      //Set error messages
-                      $.each(response.messages,function(key,value){
-          	            $('input[id='+key+']').after('<span class="bindingError" style="color:red;font-weight: bold;">'+value+'</span>');
-                      });
-                    }
-            	   
-               } ,
-               error: function (jqXHR, exception) {
-                 console.log(jqXHR);
-			  alert('Error: ' + jqXHR);
-		  }  
-        });        
+		
+    	var ajaxUrl = contexPath+'/module/save.json';
+    	var successFunction = function(response){
+     	   if(response.validated){
+               //Set response
+    		   if(response.status=="OK"){
+         			showSuccessMessage(response.message);
+         			load();
+         			$('#Form').modal('hide');
+         		}else{
+         			showErrorMessage(response.message);
+         		}
+            }else{
+              //Set error messages
+              $.each(response.messages,function(key,value){
+  	            $('input[id='+key+']').after('<span class="bindingError" style="color:red;font-weight: bold;">'+value+'</span>');
+              });
+            }
+    	   
+       };
+       
+       ajaxPost(ajaxUrl,formData,successFunction);
+              
     }
     
     
@@ -117,33 +76,17 @@
     	var formData= {
 				id: idVal
 		}
-        $.ajax({
-           	type:'POST',
-               dataType: 'json',
-               contentType: 'application/json',
-               url:contexPath+'/module/delete.json',
-               data:JSON.stringify(formData),
-			beforeSend: function(xhr) {
-		        // setting a timeout
-		        var token = $("meta[name='_csrf']").attr("content");
-				var header = $("meta[name='_csrf_header']").attr("content");
-		        xhr.setRequestHeader("Accept", "application/json");
-				xhr.setRequestHeader("Content-Type", "application/json");
-				xhr.setRequestHeader(header, token);
-		    },
-               success: function(response){
-               		if(response.status=="OK"){
-               			showSuccessMessage(response.message);
-               			load();
-               		}else{
-               			showErrorMessage(response.message);
-               		}
-               } ,
-               error: function (jqXHR, exception) {
-                 console.log(jqXHR);
-			  alert('Error: ' + jqXHR);
-		  }  
-        });
+    	var ajaxUrl = contexPath+'/module/delete.json';
+    	var successFunction = function(response){
+       		if(response.status=="OK"){
+       			showSuccessMessage(response.message);
+       			load();
+       		}else{
+       			showErrorMessage(response.message);
+       		}
+       };
+       
+       ajaxPost(ajaxUrl,formData,successFunction);
     }
     
     function edit(idVal){
@@ -151,53 +94,23 @@
 				id: idVal
 		}
     	$('.bindingError').remove();
-        $.ajax({
-           	type:'POST',
-               dataType: 'json',
-               contentType: 'application/json',
-               url:contexPath+'/module/load.json',
-               data:JSON.stringify(formData),
-			beforeSend: function(xhr) {
-		        // setting a timeout
-		        var token = $("meta[name='_csrf']").attr("content");
-				var header = $("meta[name='_csrf_header']").attr("content");
-		        xhr.setRequestHeader("Accept", "application/json");
-				xhr.setRequestHeader("Content-Type", "application/json");
-				xhr.setRequestHeader(header, token);
-		    },
-               success: function(response){
-               		if(response.status=="OK"){
-               			$("#id").val(response.module.id);
-               			$("#name").val(response.module.name);
-               			$("#description").val(response.module.description);
-               			if (response.module.enabled == 'Y'){
-               				$('#enabled').prop('checked', true);
-               			}else{
-               				$('#enabled').prop('checked', false);
-               			}
-               			$("#author").val(response.module.author);
-               			$("#moduleVersion").val(response.module.moduleVersion);
-               		}
-               } ,
-               error: function (jqXHR, exception) {
-                 console.log(jqXHR);
-			  alert('Error: ' + jqXHR);
-		  }  
-        });
-    }
-    
-    function clearFields(){
-    		$('.bindingError').remove();
-    		$("#id").val("");
-			$("#name").val("");
-			$("#description").val("");
-			$('#enabled').prop('checked', false);
-			$("#author").val("");
-			$("#moduleVersion").val("");
-    }
-    
-    function getPermissions(idVal){
-    	
+    	var ajaxUrl = contexPath+'/module/load.json';
+    	var successFunction = function(response){
+       		if(response.status=="OK"){
+       			$("#id").val(response.module.id);
+       			$("#name").val(response.module.name);
+       			$("#description").val(response.module.description);
+       			if (response.module.enabled == 'Y'){
+       				$('#enabled').prop('checked', true);
+       			}else{
+       				$('#enabled').prop('checked', false);
+       			}
+       			$("#author").val(response.module.author);
+       			$("#moduleVersion").val(response.module.moduleVersion);
+       		}
+       };
+       
+       ajaxPost(ajaxUrl,formData,successFunction);
     }
     
     function enableAndDisable(object,idVal){
@@ -209,36 +122,79 @@
 				id: idVal,
 				enabled:elabled
 		}
-        $.ajax({
-           	type:'POST',
-               dataType: 'json',
-               contentType: 'application/json',
-               url:contexPath+'/module/enableDisable.json',
-               data:JSON.stringify(formData),
-			beforeSend: function(xhr) {
-		        // setting a timeout
-		        var token = $("meta[name='_csrf']").attr("content");
-				var header = $("meta[name='_csrf_header']").attr("content");
-		        xhr.setRequestHeader("Accept", "application/json");
-				xhr.setRequestHeader("Content-Type", "application/json");
-				xhr.setRequestHeader(header, token);
-		    },
-               success: function(response){
-               		if(response.status=="OK"){
-               			showSuccessMessage(response.message);
-               		}else{
-               			showErrorMessage(response.message);
-               		}
-               } ,
-               error: function (jqXHR, exception) {
-                 console.log(jqXHR);
-			  alert('Error: ' + jqXHR);
-		  }  
-        });
+    	var ajaxUrl = contexPath+'/module/enableDisable.json';
+    	var successFunction = function(response){
+       		if(response.status=="OK"){
+       			showSuccessMessage(response.message);
+       		}else{
+       			showErrorMessage(response.message);
+       		}
+       };
+       
+       ajaxPost(ajaxUrl,formData,successFunction);
     	
     	
     }
     
+    function load(){
+    	var ajaxUrl = contexPath+'/module/list.json';
+    	var successFunction = function(response){
+       		if(response.data.length>0){
+       			
+       			var tableId = "#table";
+       			var fileTitle = "Module List";
+       			var jsonData = response.data;
+       			var jsonColumns = [
+   		            { "data": "id" },
+   		            { "data": "name" },
+   		            { "data": "description" },
+   		            { "data": "author" },
+   		            { "data": "moduleVersion" }
+   		        ];
+       			var columnsExport = [ 0, 1, 2, 3, 4 ];
+       			var jsonColumnDefs = [
+       	            {
+       	            	"targets": 5,
+       	                "render": function ( data, type, row ) {
+      	                var checkedActive='';
+                         if (row.enabled == 'Y'){
+                         	checkedActive = "checked='true'";
+                         }
+      	                    return "<td><input type='checkbox' name='select' id='select' "+checkedActive+" onclick='enableAndDisable(this,"+row.id+");'></td>";
+       	                }
+       	            },
+       	        	{
+       	            	"targets": 6,
+       	                "render": function ( data, type, row ) {
+       	                    return "<td><button title='Edit' onclick='edit("+row.id+")' type='button' class='btn btn-link btn-xs toltip' data-toggle='modal' data-target='#Form'><img src='<c:url value='/resources/img/icons/black/doc_edit_icon&16.png' />'></button> | "+
+           	                 "<button title='Delete' onclick='remove("+row.id+")' type='button' class='btn btn-link btn-xs toltip'><img src='<c:url value='/resources/img/icons/black/trash_icon&16.png' />'></button> | "+
+           	              		"<button title='Permissions by Module' onclick='getPermissions("+row.id+")' type='button' class='btn btn-link btn-xs toltip' data-toggle='modal' data-target='#Permissions'><img src='<c:url value='/resources/img/icons/black/cogs_icon&16.png' />'></button></td>";
+       	                }
+       	            }
+       	        ];
+       			
+       			createTable(tableId,fileTitle,jsonData,jsonColumns,jsonColumnDefs,columnsExport);
+       			
+       		}
+       };
+       
+       ajaxPostWithoutForm(ajaxUrl,successFunction);
+       
+    }
+    
+	function getPermissions(idVal){
+    	
+    }
+    
+    function clearFields(){
+		$('.bindingError').remove();
+		$("#id").val("");
+		$("#name").val("");
+		$("#description").val("");
+		$('#enabled').prop('checked', false);
+		$("#author").val("");
+		$("#moduleVersion").val("");
+	}
     function showSuccessMessage(message){
     	$('#success').css({'display': ''});
 			$('#error').css({'display': 'none'});
@@ -251,126 +207,6 @@
 			$("#errorMessage").text(message);
 			$("#error").delay( 2000 ).fadeOut( 500, "linear");
     }
-    
-    
-    
-    
-    
-    function load(){
-    	var exportTittle="Module List";
-    	var buttonCommon = {
-    	        exportOptions: {
-    	            format: {
-    	                body: function ( data, row, column, node ) {
-    	                    // Strip $ from salary column to make it numeric
-//     	                    return column === 5 ?
-//     	                        data.replace( /[$,]/g, '' ) :
-//     	                        data;
-    	                        return data;
-    	                }
-    	            },
-    	            columns: [ 0, 1, 2, 3, 4 ]
-    	        },
-	            title: exportTittle
-    	    };
-    	
-        $.ajax({
-           	type:'POST',
-               dataType: 'json',
-               contentType: 'application/json',
-               url:contexPath+'/module/list.json',
-			beforeSend: function(xhr) {
-		        // setting a timeout
-		        var token = $("meta[name='_csrf']").attr("content");
-				var header = $("meta[name='_csrf_header']").attr("content");
-		        xhr.setRequestHeader("Accept", "application/json");
-				xhr.setRequestHeader("Content-Type", "application/json");
-				xhr.setRequestHeader(header, token);
-		    },
-               success: function(response){
-               		if(response.data.length>0){
-               			data = response.data;
-               			
-               			var printCounter = 0;
-               			$('#table').DataTable( {
-//                				"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
-               				dom: 'Bfrtip',
-               				"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
-               				destroy: true,
-//                				"bProcessing" : true,
-               				"data": response.data,
-               		        
-               		        buttons: [
-               		        	'pageLength',
-               		            $.extend( true, {}, buttonCommon, {
-               		                extend: 'copyHtml5'
-               		            } ),
-               		            $.extend( true, {}, buttonCommon, {
-               		                extend: 'excelHtml5'
-               		            } ),
-               		            $.extend( true, {}, buttonCommon, {
-               		                extend: 'pdfHtml5',
-		               	             download: 'open'
-               		            } ),
-               		         	$.extend( true, {}, buttonCommon, {
-            		                extend: 'csvHtml5',
-            		                text: 'CSV',
-            		                fieldSeparator: '\t',
-            		                extension: '.csv',
-            		            } ),
-            		            $.extend( true, {}, buttonCommon, {
-               		                extend: 'print',
-               		             	messageTop: function () {
-                	                    printCounter++;
-                	 
-                	                    if ( printCounter === 1 ) {
-                	                        return 'This is the first time you have printed this document.';
-                	                    }
-                	                    else {
-                	                        return 'You have printed this document '+printCounter+' times';
-                	                    }
-                	                },
-                	                messageBottom: null,
-                	                autoPrint: true
-               		            } )
-               		        ],
-               		        "columns": [
-               		            { "data": "id" },
-               		            { "data": "name" },
-               		            { "data": "description" },
-               		            { "data": "author" },
-               		            { "data": "moduleVersion" }
-               		        ],
-               		     	"columnDefs": [
-               	            {
-               	            	"targets": 5,
-               	                "render": function ( data, type, row ) {
-               	                	var checkedActive='';
-	                                 if (row.enabled == 'Y'){
-	                                 	checkedActive = "checked='true'";
-	                                 }
-               	                    return "<td><input type='checkbox' name='select' id='select' "+checkedActive+" onclick='enableAndDisable(this,"+row.id+");'></td>";
-               	                }
-               	            },
-               	        	{
-               	            	"targets": 6,
-               	                "render": function ( data, type, row ) {
-               	                	
-               	                    return "<td><button title='Edit' onclick='edit("+row.id+")' type='button' class='btn btn-link btn-xs toltip' data-toggle='modal' data-target='#Form'><img src='<c:url value='/resources/img/icons/black/doc_edit_icon&16.png' />'></button> | "+
-	               	                 "<button title='Delete' onclick='remove("+row.id+")' type='button' class='btn btn-link btn-xs toltip'><img src='<c:url value='/resources/img/icons/black/trash_icon&16.png' />'></button> | "+
-	               	              		"<button title='Permissions by Module' onclick='getPermissions("+row.id+")' type='button' class='btn btn-link btn-xs toltip' data-toggle='modal' data-target='#Permissions'><img src='<c:url value='/resources/img/icons/black/cogs_icon&16.png' />'></button></td>";
-               	                }
-               	            }
-               	        ]
-               		    } );
-               		}
-               } ,
-               error: function (jqXHR, exception) {
-                 console.log(jqXHR);
-			  alert('Error: ' + jqXHR);
-		  }  
-        });
-    }
 	</script>
 	<style type="text/css">
 	
@@ -378,6 +214,13 @@
 
 </head>
 <body onload="load();">
+
+
+<div class="container">
+
+
+
+
 
 <h1>Modules</h1>
 
@@ -390,16 +233,21 @@
 
 
 
-<div class="panel panel-default col-xs-9">
+<div class="panel panel-default">
 <!-- <div class="panel-heading">User List Display tag</div> -->
   <div class="panel-body">   
    
    <sec:authorize access="hasRole('ROLE_ADMIN')">
-   <button data-target="#Form" title="Add New" type="button" class="btn btn-default toltip" data-toggle="modal" onclick="clearFields();">
+<div id="button_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4 no-footer">
+<div class="dt-buttons btn-group">              
+<button data-target="#Form" title="Add New" type="button" class="btn btn-default toltip" data-toggle="modal" onclick="clearFields();">
 		<img src="<c:url value='/resources/img/icons/black/doc_new_icon&16.png' />"> Add New
 	</button>
+</div>
+</div>
+<br>
+   
    </sec:authorize>
-    <br/> <br/>
     
 
  <table id="table" align="center" class="table table-striped table-hover table-bordered">  
@@ -411,7 +259,7 @@
 </div></div>
 
 
-
+</div>
 
 <div class="modal fade" id="Form" tabindex="-1" role="dialog">
   <div class="modal-dialog" role="document">
