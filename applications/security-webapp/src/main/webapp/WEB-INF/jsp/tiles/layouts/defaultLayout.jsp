@@ -25,8 +25,8 @@
 <body>
 
 
-<table width="100%" height="100%" cellpadding="0" cellspacing="0" border="0">
-		<tr>
+<%-- <table width="100%" height="100%" cellpadding="0" cellspacing="0" border="0">
+	<tr>
         <td valign="top" rowspan='5' style="width:1px">
           <tiles:insertAttribute name="menu" />
         </td>
@@ -51,6 +51,26 @@
           <tiles:insertAttribute name="footer" />
         </td>
       </tr>
-    </table>
+    </table> --%>
+    
+    <table border="0" width="100%" height=100%;" cellspacing="0" cellpadding="0">
+<tbody>
+<tr>
+  <td style="height: 50px;" colspan="2"><tiles:insertAttribute name="header" /></td>
+</tr>
+<tr>
+<td style="width: 150px;height: 100%;"  valign="top" rowspan = "3"><tiles:insertAttribute name="menu" /></td>
+</tr>
+<tr>
+<td style="height: 15px;"><tiles:insertAttribute name="navigation" /></td>
+</tr>
+<tr>
+<td style="height: 100%;" valign="top"><tiles:insertAttribute name="body" /></td>
+</tr>
+<tr>
+<td style="height: 15px;" colspan="2"><tiles:insertAttribute name="footer" /></td>
+</tr>
+</tbody>
+</table>
 </body>
 </html>

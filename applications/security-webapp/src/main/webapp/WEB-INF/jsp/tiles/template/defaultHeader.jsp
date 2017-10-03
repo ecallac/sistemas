@@ -4,6 +4,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Insert title here</title>
 
 
@@ -33,16 +34,8 @@ $(document).ready(function() {
 <table style="width: 100%;" class="header">
 <tr>
 <td>
+<button >Menu</button>
 
-<a href="${pageContext.request.contextPath}/home">Home</a>
- 
-  | &nbsp;
-  
-   <a href="${pageContext.request.contextPath}/userList">User Management</a>
-  | &nbsp;
-   <a href="${pageContext.request.contextPath}/module">Module Management</a>
-   | &nbsp;
-   <a href="${pageContext.request.contextPath}/role">Role Management</a>
 <%--    <a href="${pageContext.request.contextPath}/loadJasper">User Report</a> --%>
    
 

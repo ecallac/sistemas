@@ -8,6 +8,21 @@
 
 </head>
 <body>
-
+<table>
+<tbody>
+<tr>
+<td><a href="${pageContext.request.contextPath}/home">Home</a></td>
+</tr>
+<tr>
+<td><a href="${pageContext.request.contextPath}/module">Module Management</a></td>
+</tr>
+<tr>
+<td><a href="${pageContext.request.contextPath}/role">Role Management</a></td>
+</tr>
+<tr>
+<td><a href="${pageContext.request.contextPath}/userList">User Management</a></td>
+</tr>
+</tbody>
+</table>
 </body>
 </html>

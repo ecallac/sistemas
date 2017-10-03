@@ -18,14 +18,11 @@
 	<meta name="_csrf_name" content="${_csrf.parameterName}"/>
 	<title></title>
 	<script type="text/javascript">
-	$(document).ready(function(){
-		$("#tags").autocomplete({
-	        source: availableTags
-	    });
+/* 	$(document).ready(function(){
 		$('#Add').on('shown.bs.modal', function () {
 			  
 		})
-    });
+    }); */
 	
     
 	
@@ -212,69 +209,95 @@
 			$("#error").delay( 2000 ).fadeOut( 500, "linear");
     }
 
-    var availableTags = ["ActionScript", "AppleScript", "Asp", "BASIC", "C", "C++", "Clojure", "COBOL", "ColdFusion", "Erlang", "Fortran", "Groovy", "Haskell", "Java", "JavaScript", "Lisp", "Perl", "PHP", "Python", "Ruby", "Scala", "Scheme"];
+    $(function() {
+    	  var availableTags = [
+    	    "ActionScript",
+    	    "AppleScript",
+    	    "Asp",
+    	    "BASIC",
+    	    "C",
+    	    "C++",
+    	    "Clojure",
+    	    "COBOL",
+    	    "ColdFusion",
+    	    "Erlang",
+    	    "Fortran",
+    	    "Groovy",
+    	    "Haskell",
+    	    "Java",
+    	    "JavaScript",
+    	    "Lisp",
+    	    "Perl",
+    	    "PHP",
+    	    "Python",
+    	    "Ruby",
+    	    "Scala",
+    	    "Scheme"
+    	  ];
+    	  $("#tags").autocomplete({
+    	    source: availableTags
+    	  });
+    	});
 
-    
 	</script>
 	<style type="text/css">
-/*jQuery UI autocomplete for bootstrap*/
 .ui-autocomplete {
   position: absolute;
   top: 100%;
   left: 0;
-  z-index: 1000;
-  float: left;
+/*   z-index: 1000; -- normal*/
   display: none;
+  float: left;
   min-width: 160px;
-  _width: 160px;
-  padding: 4px 0;
-  margin: 2px 0 0 0;
+  padding: 5px 0;
+  margin: 2px 0 0;
   list-style: none;
+  font-size: 14px;
+  text-align: left;
   background-color: #ffffff;
-  border-color: #ccc;
-  border-color: rgba(0, 0, 0, 0.2);
-  border-style: solid;
-  border-width: 1px;
-  -webkit-border-radius: 5px;
-  -moz-border-radius: 5px;
-  border-radius: 5px;
-  -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-  -moz-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-  -webkit-background-clip: padding-box;
-  -moz-background-clip: padding;
+  border: 1px solid #cccccc;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 4px;
+  -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
   background-clip: padding-box;
-  *border-right-width: 2px;
-  *border-bottom-width: 2px;
-}
-.ui-autocomplete .ui-menu-item > a.ui-corner-all {
-  display: block;
-  padding: 3px 15px;
-  clear: both;
-  font-weight: normal;
-  line-height: 18px;
-  color: #555555;
-  white-space: nowrap;
-}
-.ui-autocomplete .ui-menu-item > a.ui-corner-all.ui-state-hover, .ui-autocomplete .ui-menu-item > a.ui-corner-all.ui-state-active, .ui-autocomplete .ui-menu-item > a.ui-corner-all.ui-state-focus {
-  color: #ffffff;
-  text-decoration: none;
-  background-color: #0088cc;
-  border-radius: 0px;
-  -webkit-border-radius: 0px;
-  -moz-border-radius: 0px;
-  background-image: none;
+  z-index:2147483647; /* -- for modal */
 }
 
-#container_tags {
-    display: block; 
-    position:relative
+.ui-autocomplete > li > div {
+  display: block;
+  padding: 3px 20px;
+  clear: both;
+  font-weight: normal;
+  line-height: 1.42857143;
+  color: #333333;
+  white-space: nowrap;
 }
+
+.ui-state-hover,
+.ui-state-active,
+.ui-state-focus {
+  text-decoration: none;
+  color: #262626;
+  background-color: #f5f5f5;
+  cursor: pointer;
+}
+
+.ui-helper-hidden-accessible {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+
 	</style>
 
 </head>
 <body onload="load();">
-
 
 <div class="container">
 
@@ -297,9 +320,7 @@
 <!-- <div class="panel-heading">User List Display tag</div> -->
   <div class="panel-body">   
    
-   <input id="tags" type="text" required  AutoComplete="off" placeholder="Search..." class="inputMed inline form-control input-med"  />
-<div id="container_tags">
-</div>
+
    
    <sec:authorize access="hasRole('ROLE_ADMIN')">
 <div id="button_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4 no-footer">
@@ -411,6 +432,7 @@
 
 
 
+
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -436,6 +458,24 @@
 
 
 
+<div class="form-container">
+		        
+		        
+		        
+		        
+		        <form class="form-horizontal">
+				  <div class="form-group">
+				      <label for="tags" class="col-sm-3 control-label">Username</label>
+				      <div class="col-sm-7">
+						<input type="text" class="form-control" id="tags" placeholder="Username">
+						</div>
+				    </div>
+				  
+			  </form>
+		        
+		        
+		        
+		       
 
       </div>
       <div class="modal-footer">

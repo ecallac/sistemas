@@ -36,8 +36,8 @@
 	<script src="<c:url value='/resources/js/buttons.html5.min.js' />"></script>
 	<script src="<c:url value='/resources/js/buttons.print.min.js' />"></script>
 	
-<%-- 	<script src="<c:url value='/resources/js/jquery-ui.js' />"></script> --%>
-<%-- 	<script src="<c:url value='/resources/js/jquery-ui-1.9.2.custom.min.js' />"></script> --%>
+ 	<script src="<c:url value='/resources/js/jquery-ui.min.js' />"></script>
+ 	
 	
 	<link href="<c:url value='/resources/css/dataTables.bootstrap4.css' />"  rel="stylesheet"></link>
 	<link href="<c:url value='/resources/css/buttons.bootstrap4.min.css' />"  rel="stylesheet"></link>
