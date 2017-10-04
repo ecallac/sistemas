@@ -34,7 +34,7 @@ $(document).ready(function() {
 <table style="width: 100%;" class="header">
 <tr>
 <td>
-<button >Menu</button>
+<a href="javascript:runEffect();" title="Menu" class="toltip"><img src="<c:url value='/resources/img/icons/white/menu-icon.png'/>" width="40px"></a>
 
 <%--    <a href="${pageContext.request.contextPath}/loadJasper">User Report</a> --%>
    
