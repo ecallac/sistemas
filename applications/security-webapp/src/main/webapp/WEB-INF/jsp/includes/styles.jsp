@@ -11,6 +11,7 @@
 
 	
 	<script src="<c:url value='/resources/js/jquery-3.2.1.js' />"></script>
+	<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 <%-- 	<script src="<c:url value='/resources/js/r.js' />"></script> --%>
 <%-- 	<script src="<c:url value='/resources/js/js.cookie-2.1.4.min.js' />"></script> --%>
 <!-- 	<script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.1.4/js.cookie.min.js"></script> -->
@@ -41,6 +42,15 @@
 	
 	<link href="<c:url value='/resources/css/dataTables.bootstrap4.css' />"  rel="stylesheet"></link>
 	<link href="<c:url value='/resources/css/buttons.bootstrap4.min.css' />"  rel="stylesheet"></link>
+	
+	
+	<script src="<c:url value='/resources/js/hummingbird-treeview-1.4.js' />"></script>
+
+<!-- 	<link href="https://bootswatch.com/cosmo/bootstrap.min.css" rel="stylesheet" type="text/css"> -->
+	<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link href="<c:url value='/resources/css/hummingbird-treeview-1.4.css' />" rel="stylesheet" type="text/css">
+	
+	
 	
 	
 	<script src="<c:url value='/resources/js/business/securityCommon.js' />"></script>

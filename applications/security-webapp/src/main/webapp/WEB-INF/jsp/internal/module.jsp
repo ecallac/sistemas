@@ -357,6 +357,77 @@
       <div class="modal-body">
 
 
+
+
+
+
+
+<div id="treeview_container" class="hummingbird-treeview well h-scroll-large">
+          <!-- <div id="treeview_container" class="hummingbird-treeview"> -->
+          <ul id="treeview" class="hummingbird-base">
+
+        <li><i class="fa fa-minus"></i> <label> <input id="node-0" data-id="custom-0" type="checkbox"> node-0</label>
+            <ul style="display: block;">
+          <li><i class="fa fa-plus"></i> <label> <input id="node-0-1" data-id="custom-1" type="checkbox">  node-0-1</label>
+<ul><li><i class="fa fa-plus"></i> <label> <input id="node-0-1-1" data-id="custom-1-1" type="checkbox"> node-0-1-1</label>
+<ul><li><label> <input class="hummingbirdNoParent" id="node-0-1-1-1" data-id="custom-1-1-1" type="checkbox"> node-0-1-1-1</label>
+</li><li><label> <input class="hummingbirdNoParent" id="node-0-1-1-2" data-id="custom-1-1-2" type="checkbox"> node-0-1-1-2</label>
+</li><li><label> <input class="hummingbirdNoParent" id="node-0-1-1-3" data-id="custom-1-1-3" type="checkbox"> node-0-1-1-3</label>
+</li><li><label> <input class="hummingbirdNoParent" id="double1" data-id="custom-1-1-3" type="checkbox">  node-0-1-1-3</label>
+</li><li><label> <input class="hummingbirdNoParent" id="double2" data-id="custom-1-1-3" type="checkbox">  node-0-1-1-3</label>
+</li></ul></li><li><i class="fa fa-plus"></i> <label> <input id="node-0-1-2" data-id="custom-1-2" type="checkbox"> node-0-1-2</label>
+<ul><li style="color: rgb(200, 200, 200);"><label> <input class="hummingbirdNoParent" id="node-0-1-2-1" data-id="custom-1-2-1" type="checkbox" disabled=""> node-0-1-2-1</label>
+</li><li><label> <input class="hummingbirdNoParent" id="node-0-1-2-2" data-id="custom-1-2-2" type="checkbox"> node-0-1-2-2</label>
+</li><li><label> <input class="hummingbirdNoParent" id="node-0-1-2-3" data-id="custom-1-2-3" type="checkbox"> node-0-1-2-3</label>
+</li><li><label> <input class="hummingbirdNoParent" id="double3" data-id="custom-1-1-3" type="checkbox">  node-0-1-1-3</label>
+</li></ul></li></ul></li><li><i class="fa fa-plus"></i> <label> <input id="node-0-2" data-id="custom-2" type="checkbox">  node-0-2</label>
+<ul><li><i class="fa fa-plus"></i> <label> <input id="node-0-2-1" data-id="custom-2-1" type="checkbox"> node-0-2-1</label>
+<ul><li><label> <input class="hummingbirdNoParent" id="node-0-2-1-1" data-id="custom-2-1-1" type="checkbox"> node-0-2-1-1</label>
+</li><li><label> <input class="hummingbirdNoParent" id="node-0-2-1-2" data-id="custom-2-1-2" type="checkbox"> node-0-2-1-2</label>
+</li><li><label> <input class="hummingbirdNoParent" id="node-0-2-1-3" data-id="custom-2-1-3" type="checkbox"> node-0-2-1-3</label>
+</li></ul></li><li><i class="fa fa-plus"></i> <label> <input id="node-0-2-2" data-id="custom-2-2" type="checkbox"> node-0-2-2</label>
+<ul><li><label> <input class="hummingbirdNoParent" id="node-0-2-2-1" data-id="custom-2-2-1" type="checkbox"> node-0-2-2-1</label>
+</li><li><label> <input class="hummingbirdNoParent" id="node-0-2-2-2" data-id="custom-2-2-2" type="checkbox"> node-0-2-2-2</label>
+</li><li><label> <input class="hummingbirdNoParent" id="node-0-2-2-3" data-id="custom-2-2-3" type="checkbox"> node-0-2-2-3</label>
+</li></ul></li></ul></li>
+            </ul>
+        </li>
+		
+        <li><i class="fa fa-plus"></i> <label> <input id="node-1" data-id="custom-1" type="checkbox"> node-1</label>
+            <ul>
+          <li><label> <input class="hummingbirdNoParent" id="node-1-1" data-id="custom-1-1" type="checkbox">  node-1-1</label>
+</li><li><label> <input class="hummingbirdNoParent" id="node-1-2" data-id="custom-1-2" type="checkbox">  node-1-2</label>
+</li>
+            </ul>
+        </li>
+          </ul>
+      </div>
+  <button class="btn btn-primary" id="checkAll">Check All</button>
+  <button class="btn btn-primary" id="uncheckAll">Uncheck All</button>
+  <button class="btn btn-danger" id="checkNode">Check Node 0-2-2</button>
+
+
+<script>
+$("#treeview").hummingbird();
+$( "#checkAll" ).click(function() {
+  $("#treeview").hummingbird("checkAll");
+});
+$( "#uncheckAll" ).click(function() {
+  $("#treeview").hummingbird("uncheckAll");
+});
+$( "#collapseAll" ).click(function() {
+  $("#treeview").hummingbird("collapseAll");
+});
+$( "#checkNode" ).click(function() {
+  $("#treeview").hummingbird("checkNode",{attr:"id",name: "node-0-2-2",expandParents:false});
+});
+</script>
+
+
+
+
+
+
 http://www.jqueryscript.net/other/Searchable-Multi-selectable-Tree-jQuery-SearchAreaControl.html
 http://www.jqueryscript.net/other/Collapsible-Tree-View-Checkboxes-jQuery-hummingbird.html
 http://www.jqueryscript.net/other/Ajax-File-Tree-Plugin-jQuery-jsFiler.html
