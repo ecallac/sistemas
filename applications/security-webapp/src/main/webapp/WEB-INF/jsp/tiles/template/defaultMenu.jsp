@@ -68,6 +68,14 @@
 	        Anim pariatur.
 	      </div>
 	    </div> -->
+	    <div class="panel panel-default">
+	    <div class="panel-heading" role="tab" id="headingFour">
+	      <h4 class="panel-title">
+	        <a class="collapsed" role="button" href="${pageContext.request.contextPath}/permission" >
+	          Permission Management
+	        </a>
+	      </h4>
+	    </div>
 	  </div>
 	  <div class="panel panel-default">
 	    <div class="panel-heading" role="tab" id="headingFive">

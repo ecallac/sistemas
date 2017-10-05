@@ -27,6 +27,9 @@
    <definition name="role" extends="template"> 
        <put-attribute name="body" value="/WEB-INF/jsp/internal/role.jsp" />  
    </definition>
+   <definition name="permission" extends="template"> 
+       <put-attribute name="body" value="/WEB-INF/jsp/internal/permission.jsp" />  
+   </definition>
    <definition name="userList" extends="template">
        <put-attribute name="body" value="/WEB-INF/jsp/internal/userList.jsp" />  
    </definition>
