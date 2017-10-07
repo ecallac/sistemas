@@ -44,7 +44,7 @@
 <h1>User List</h1>  
 
 
-<div class="panel panel-default col-xs-9 PADDER-CENTER">
+<div class="panel panel-default col-xs-9">
 <!--  <div class="panel-heading">User List</div> -->
   <div class="panel-body">
 

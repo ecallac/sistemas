@@ -3,6 +3,7 @@
  */
 package com.security.web.bean;
 
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.validator.constraints.NotEmpty;
 
 /**
@@ -15,14 +16,42 @@ public class PermissionView {
 	private String name;
 	@NotEmpty
 	private String description;
-	
+	@NotEmpty
 	private String path;
 	
 	private String enabled;
 	
 	private ModuleView module;
+	@NotEmpty
+	private String moduleId;
 	
 	private PermissionView parentPermission;
+	
+	private String parentPermissionId;
+	
+	
+
+	public String getModuleId() {
+		return moduleId;
+	}
+
+	public void setModuleId(String moduleId) {
+		ModuleView view = new ModuleView();
+		view.setId(Long.valueOf(moduleId));
+		this.module = view;
+		this.moduleId = moduleId;
+	}
+
+	public String getParentPermissionId() {
+		return parentPermissionId;
+	}
+
+	public void setParentPermissionId(String parentPermissionId) {
+		PermissionView view = new  PermissionView();
+		view.setId(Long.valueOf(parentPermissionId));
+		this.parentPermission = view;
+		this.parentPermissionId = parentPermissionId;
+	}
 
 	public String getName() {
 		return name;
@@ -65,6 +94,11 @@ public class PermissionView {
 	}
 
 	public ModuleView getModule() {
+		if (this.module==null && StringUtils.isNotBlank(moduleId)) {
+			ModuleView view = new ModuleView();
+			view.setId(Long.valueOf(this.moduleId));
+			this.module = view;
+		}
 		return module;
 	}
 
@@ -73,6 +107,11 @@ public class PermissionView {
 	}
 
 	public PermissionView getParentPermission() {
+		if (this.parentPermission==null && StringUtils.isNotBlank(parentPermissionId)) {
+			PermissionView view = new  PermissionView();
+			view.setId(Long.valueOf(this.parentPermissionId));
+			this.parentPermission = view;
+		}
 		return parentPermission;
 	}
 

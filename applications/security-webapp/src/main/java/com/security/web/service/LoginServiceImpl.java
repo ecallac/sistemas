@@ -78,7 +78,7 @@ public class LoginServiceImpl implements UserDetailsService {
 	public Map<String,String> getPermissionByRole(){
 		
 		Module module = moduleService.findByName(MODULE_SECURITY);
-		List<Permission> permissions = permissionService.findPermissionsByModuleId(module.getId());
+		List<Permission> permissions = permissionService.findEnabledPermissionsByModuleId(module.getId());
 		
 		Map<String,List<String>> permissionBeans = new HashMap<>();
 		

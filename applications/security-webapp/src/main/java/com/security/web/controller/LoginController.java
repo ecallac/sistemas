@@ -4,12 +4,18 @@
 package com.security.web.controller;
 
 import java.security.Principal;
+import java.util.ArrayList;
+
+import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.security.domain.Permission;
+import com.security.web.bean.PermissionView;
 
 /**
  * @author EFRAIN
@@ -45,9 +51,11 @@ public class LoginController {
 	}
 	
 	@RequestMapping(value={"/","/home"}, method=RequestMethod.GET)
-	public ModelAndView home(){
+	public ModelAndView home(HttpSession session){
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("home");
+		
+		session.setAttribute("permissionByModule", new ArrayList<PermissionView>());
 		return modelAndView;
 	}
 	

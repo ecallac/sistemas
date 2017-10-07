@@ -35,8 +35,10 @@ public class UserServiceImpl implements UserService {
 			userDao.save(user);
 		}else{
 			User userStored = findUserById(user.getId());
-			userStored = (User) BeanParser.parseBetweenObjects(user, userStored, null);
-			userDao.save(userStored);
+			if (userStored!=null) {
+				userStored = (User) BeanParser.parseBetweenObjects(user, userStored, null);
+				userDao.save(userStored);
+			}
 		}
 		
 	}

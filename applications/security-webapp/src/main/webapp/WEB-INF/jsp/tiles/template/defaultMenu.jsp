@@ -5,7 +5,14 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Insert title here</title>
-
+<style type="text/css">
+.panel-title{
+font-size: small;
+}
+.panel-collapse{
+font-size: small;
+}
+</style>
 </head>
 <body>
 
@@ -68,7 +75,8 @@
 	        Anim pariatur.
 	      </div>
 	    </div> -->
-	    <div class="panel panel-default">
+	   </div>
+	   <div class="panel panel-default">
 	    <div class="panel-heading" role="tab" id="headingFour">
 	      <h4 class="panel-title">
 	        <a class="collapsed" role="button" href="${pageContext.request.contextPath}/permission" >

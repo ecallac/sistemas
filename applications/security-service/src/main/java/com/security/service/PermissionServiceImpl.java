@@ -10,7 +10,9 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.common.utils.BeanParser;
 import com.security.dao.PermissionDao;
+import com.security.domain.Module;
 import com.security.domain.Permission;
 
 /**
@@ -23,12 +25,34 @@ public class PermissionServiceImpl implements PermissionService {
 
 	@Autowired
 	PermissionDao permissionDao;
+	@Autowired
+	ModuleService moduleService;
 	/* (non-Javadoc)
 	 * @see com.security.service.ModuleService#save(com.security.domain.Module)
 	 */
 	
 	public void save(Permission permission) {
-		permissionDao.save(permission);
+		if (permission.getId()==null) {
+			permissionDao.save(permission);
+		}else{
+			Permission permissionStored = findPermissionById(permission.getId());
+			if (permissionStored!=null) {
+				permissionStored = (Permission) BeanParser.parseBetweenObjects(permission, permissionStored, null);
+				
+				if (permission.getParentPermission()!=null) {
+					Permission parentPermissionStored = findPermissionById(permission.getParentPermission().getId());
+					permissionStored.setParentPermission(parentPermissionStored);
+				}else{
+					permissionStored.setParentPermission(null);
+				}
+				
+				if (permission.getModule()!=null) {
+					Module moduleStored = moduleService.findModuleById(permission.getModule().getId());
+					permissionStored.setModule(moduleStored);
+				}
+				permissionDao.save(permissionStored);
+			}
+		}
 
 	}
 
@@ -73,6 +97,12 @@ public class PermissionServiceImpl implements PermissionService {
 	public List<Permission> findPermissionByRoleId(Long id) {
 		// TODO Auto-generated method stub
 		return permissionDao.findPermissionByRoleId(id);
+	}
+
+	@Override
+	public List<Permission> findEnabledPermissionsByModuleId(Long id) {
+		// TODO Auto-generated method stub
+		return permissionDao.findEnabledPermissionsByModuleId(id);
 	}
 
 }

@@ -10,6 +10,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.common.utils.BeanParser;
 import com.security.dao.ModuleDao;
 import com.security.domain.Module;
 
@@ -27,8 +28,15 @@ public class ModuleServiceImpl implements ModuleService {
 	 * @see com.security.service.ModuleService#save(com.security.domain.Module)
 	 */
 	public void save(Module module) {
-		moduleDao.save(module);
-
+		if (module.getId()==null) {
+			moduleDao.save(module);
+		}else{
+			Module moduleStored = (Module) findModuleById(module.getId());
+			if (moduleStored!=null) {
+				moduleStored = (Module) BeanParser.parseBetweenObjects(module, moduleStored, null);
+				moduleDao.save(moduleStored);
+			}
+		}
 	}
 
 	/* (non-Javadoc)

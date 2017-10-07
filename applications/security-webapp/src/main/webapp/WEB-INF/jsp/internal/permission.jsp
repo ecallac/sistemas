@@ -35,7 +35,9 @@
                	name: $('#name').val(),
                	description: $('#description').val(),
                	enabled: elabled,
-               	path: $('#path').val()
+               	path: $('#path').val(),
+               	moduleId: $('#moduleId').val(),
+               	parentPermissionId: $('#parentPermissionId').val()
 		}
 		$('.bindingError').remove();
 		
@@ -54,6 +56,7 @@
               //Set error messages
               $.each(response.messages,function(key,value){
   	            $('input[id='+key+']').after('<span class="bindingError" style="color:red;font-weight: bold;">'+value+'</span>');
+  	          	$('select[id='+key+']').after('<span class="bindingError" style="color:red;font-weight: bold;">'+value+'</span>');
               });
             }
     	   
@@ -105,6 +108,8 @@
        				$('#enabled').prop('checked', false);
        			}
        			$("#path").val(response.viewBean.path);
+       			$("#moduleId").val(response.viewBean.module.id);
+       			$("#parentPermissionId").val(response.viewBean.parentPermission.id);
        		}
        };
        
@@ -144,14 +149,16 @@
        			var jsonData = response.data;
        			var jsonColumns = [
    		            { "data": "id" },
+   		         	{ "data": "module.name"},
+   		         	{ "data": "parentPermission.name" ,"defaultContent": ""},
    		            { "data": "name" },
    		            { "data": "description" },
    		            { "data": "path" }
    		        ];
-       			var columnsExport = [ 0, 1, 2, 3];
+       			var columnsExport = [ 0, 1, 2, 3, 4, 5];
        			var jsonColumnDefs = [
        	            {
-       	            	"targets": 4,
+       	            	"targets": 6,
        	                "render": function ( data, type, row ) {
       	                var checkedActive='';
                          if (row.enabled == 'Y'){
@@ -161,10 +168,10 @@
        	                }
        	            },
        	        	{
-       	            	"targets": 5,
+       	            	"targets": 7,
        	                "render": function ( data, type, row ) {
        	                    return "<td><button title='Edit' onclick='edit("+row.id+")' type='button' class='btn btn-link btn-xs toltip' data-toggle='modal' data-target='#Form'><img src='<c:url value='/resources/img/icons/black/doc_edit_icon&16.png' />'></button> | "+
-           	                 "<button title='Delete' onclick='remove("+row.id+")' type='button' class='btn btn-link btn-xs toltip'><img src='<c:url value='/resources/img/icons/black/trash_icon&16.png' />'></button> | ";
+           	                 "<button title='Delete' onclick='remove("+row.id+")' type='button' class='btn btn-link btn-xs toltip'><img src='<c:url value='/resources/img/icons/black/trash_icon&16.png' />'></button> ";
            	              
        	                }
        	            }
@@ -180,6 +187,31 @@
     }
     
     
+    function populateModulesSelect(){
+    	var ajaxUrl = contexPath+'/module/enabledModules.json';
+    	var successFunction = function(response){
+       		if(response.data.length>0){
+       			$.each(response.data, function(i, row) {
+                    $('#moduleId').append('<option value="' + row.id + '">' + row.name + '</option>');
+                });
+       		}
+       };
+       ajaxPostWithoutForm(ajaxUrl,successFunction);
+    }
+    
+    function populateParentPermissionSelect(){
+    	var ajaxUrl = contexPath+'/permission/enabledPermissions.json';
+    	var successFunction = function(response){
+       		if(response.data.length>0){
+       			$.each(response.data, function(i, row) {
+                    $('#parentPermissionId').append('<option value="' + row.id + '">' + row.name + '</option>');
+                });
+       		}
+       };
+       ajaxPostWithoutForm(ajaxUrl,successFunction);
+    }
+    
+    
     function clearFields(){
 		$('.bindingError').remove();
 		$("#id").val("");
@@ -187,6 +219,8 @@
 		$("#description").val("");
 		$('#enabled').prop('checked', false);
 		$("#path").val("");
+		$("#moduleId").val("");
+		$("#parentPermissionId").val("");
 	}
     function showSuccessMessage(message){
     	$('#success').css({'display': ''});
@@ -200,13 +234,19 @@
 			$("#errorMessage").text(message);
 			$("#error").delay( 2000 ).fadeOut( 500, "linear");
     }
+    
+    $(document).ready(function(){
+    	load();
+    	populateModulesSelect();
+    	populateParentPermissionSelect();
+    });
 	</script>
 	<style type="text/css">
 	
 	</style>
 
 </head>
-<body onload="load();">
+<body>
 
 
 <div class="container">
@@ -245,7 +285,7 @@
 
  <table id="table" align="center" class="table table-striped table-hover table-bordered">  
 <thead>
-<tr><th>Id</th><th>Name</th><th>Description</th><th>Path</th><th>Enabled</th><th>Actions</th></tr>  
+<tr><th>Id</th><th>Module</th><th>Parent Permission</th><th>Name</th><th>Description</th><th>Path</th><th>Enabled</th><th>Actions</th></tr>  
 </thead>
 </table>
 
@@ -274,6 +314,22 @@
 		        
 		        
 		        <form class="form-horizontal">
+		        	<div class="form-group">
+					    <label for="name" class="col-sm-3 control-label">Module</label>
+					    <div class="col-sm-7">
+					      <select id="moduleId" class="form-control input-sm">
+					      	<option value="">-- Select Option --</option>
+					      </select>
+					    </div>
+					</div>
+					<div class="form-group">
+					    <label for="name" class="col-sm-3 control-label">Parent Permission</label>
+					    <div class="col-sm-7">
+					      <select id="parentPermissionId" class="form-control input-sm">
+					      	<option value="">-- Select Option --</option>
+					      </select>
+					    </div>
+					</div>
 				  <div class="form-group">
 				    <label for="name" class="col-sm-3 control-label">Name</label>
 				    <div class="col-sm-7">

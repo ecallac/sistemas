@@ -12,7 +12,7 @@
     table{
     	font-size: small;
     }
-    accordion { width: 240px; height: 170px; padding: 0.4em; position: relative; }
+    accordion { padding: 0.4em; position: relative; }
     </style>
     
     <script type="text/javascript">
@@ -71,7 +71,7 @@
   <td style="height: 50px;width: 100%;" colspan="2"><tiles:insertAttribute name="header" /></td>
 </tr>
 <tr>
-<td style="width: 150px;height: 100%;"  valign="top" rowspan = "3"><tiles:insertAttribute name="menu" /></td>
+<td style="width: 240px;height: 100%;"  valign="top" rowspan = "3"><tiles:insertAttribute name="menu" /></td>
 </tr>
 <tr>
 <td style="height: 15px;width: 100%;"><tiles:insertAttribute name="navigation" /></td>

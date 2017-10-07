@@ -15,6 +15,7 @@ import com.security.domain.Role;
 public interface RoleDao extends BaseDao{
 	List<Role> findRolesByUserName(String userName);
 	List<Role> findRolesByUserId(Long id);
+	List<Role> findByEnabled(String enabled);
 //	Role findRoleById(Long id);
 //	List<Role> findAllRoles();
 }

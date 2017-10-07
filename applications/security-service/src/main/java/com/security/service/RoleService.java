@@ -18,4 +18,5 @@ public interface RoleService {
 	List<Role> findAllRoles();
 	void save(Role role);
 	void delete(Role role);
+	List<Role> findByEnabled(String enabled);
 }

@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.common.utils.BeanParser;
+import com.common.utils.CommonConstants;
 import com.common.utils.CommonUtil;
 import com.security.domain.Module;
 import com.security.service.ModuleService;
@@ -43,6 +45,18 @@ public class ModuleController {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("module");
 		return modelAndView;
+	}
+	
+	@RequestMapping(value = "/module/enabledModules", method = {RequestMethod.GET,RequestMethod.POST})
+	public @ResponseBody Map<String, Object> initializeEnableModules() {
+		Map<String, Object> map = new HashMap<String, Object>();
+		List<ModuleView> list = castModuleToModuleViewList(moduleService.findModulesByEnabled(CommonConstants.YES));
+		if (list != null) {
+			map.put("data", list);
+		} else {
+			map.put("data", new ArrayList<ModuleView>());
+		}
+		return map;
 	}
 	
   @RequestMapping(value = "/module/list", method = {RequestMethod.GET,RequestMethod.POST})
@@ -78,20 +92,8 @@ public class ModuleController {
 	         return map;
 	      }
         
-        if (moduleView.getId()==null) {
-        	moduleService.save((Module) BeanParser.parseObjectToNewClass(moduleView, Module.class, null));
-		}else{
-			Module module = moduleService.findModuleById(moduleView.getId());
-			if (module!=null) {
-				module = (Module) BeanParser.parseBetweenObjects(moduleView, module, null);
-				moduleService.save(module);
-			}else{
-				map.put(SecurityConstants.STATUS, SecurityConstants.ERROR);
-		        map.put(SecurityConstants.MESSAGE, "Your record couldn't be saved");
-		        map.put("validated", true);
-		        return map;
-			}
-		}
+		moduleService.save((Module) BeanParser.parseObjectToNewClass(moduleView, Module.class, null));
+        
         map.put("validated", true);
         map.put(SecurityConstants.STATUS, SecurityConstants.OK);
         map.put(SecurityConstants.MESSAGE, "Your record have been saved successfully at "+CommonUtil.dateToString(new Date(), "yyyy-MM-dd HH:mm:ss"));

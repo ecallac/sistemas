@@ -33,21 +33,23 @@ public class PermissionDaoImpl extends BaseDaoSupport implements PermissionDao {
 //		Session session = getHibernateTemplate().getSessionFactory().getCurrentSession();
 //		Query qry = session.createQuery("FROM Permission WHERE status = ?");
 //		qry.setParameter(0, id);
-		return (List<Permission>) getHibernateTemplate().find("FROM Permission WHERE enabled = ?", enabled);
+		return (List<Permission>) getHibernateTemplate().findByNamedParam("FROM Permission WHERE enabled = :enabled", "enabled", enabled);
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<Permission> findByModuleId(Long id) {
-		return (List<Permission>) getHibernateTemplate().find("FROM Permission WHERE module.id = ?", id);
+		return (List<Permission>) getHibernateTemplate().findByNamedParam("FROM Permission WHERE module.id = :id","id", id);
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<Permission> findPermissionByRoleId(Long id) {
-		List<Permission> permissions = (List<Permission>) getHibernateTemplate().find("SELECT p FROM Permission p join p.roles r WHERE r.id = ?", id);
-//		List<Permission> permissions = new ArrayList<Permission>();
-//		for (RolePermission rolePermission : rolePermissions) {
-//			permissions.add(rolePermission.getPermission());
-//		}
+		List<Permission> permissions = (List<Permission>) getHibernateTemplate().findByNamedParam("SELECT p FROM Permission p join p.roles r WHERE r.id = :id","id", id);
 		return permissions;
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Permission> findEnabledPermissionsByModuleId(Long id) {
+		// TODO Auto-generated method stub
+		return (List<Permission>) getHibernateTemplate().findByNamedParam("FROM Permission WHERE enabled='Y' and module.id = :id","id", id);
 	}
 }

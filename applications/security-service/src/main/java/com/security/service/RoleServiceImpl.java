@@ -10,6 +10,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.common.utils.BeanParser;
 import com.security.dao.RoleDao;
 import com.security.domain.Role;
 
@@ -55,12 +56,27 @@ public class RoleServiceImpl implements RoleService {
 
 	public void save(Role role) {
 		// TODO Auto-generated method stub
-		roleDao.save(role);
+		
+		if (role.getId()==null) {
+			roleDao.save(role);
+		}else{
+			Role roleStored = findRoleById(role.getId());
+			if (roleStored!=null) {
+				roleStored = (Role) BeanParser.parseBetweenObjects(role, roleStored, null);
+				roleDao.save(roleStored);
+			}
+		}
 	}
 
 	public void delete(Role role) {
 		// TODO Auto-generated method stub
 		roleDao.delete(role);
+	}
+
+	@Override
+	public List<Role> findByEnabled(String enabled) {
+		// TODO Auto-generated method stub
+		return roleDao.findByEnabled(enabled);
 	}
 
 }

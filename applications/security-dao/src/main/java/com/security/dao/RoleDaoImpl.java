@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import com.security.dao.common.BaseDaoSupport;
+import com.security.domain.Module;
 import com.security.domain.Role;
 
 /**
@@ -50,6 +51,11 @@ public class RoleDaoImpl extends BaseDaoSupport implements RoleDao {
 //			roles.add(roleUser.getRole());
 //		}
 		return roles;
+	}
+
+	public List<Role> findByEnabled(String enabled) {
+		// TODO Auto-generated method stub
+		return (List<Role>) getHibernateTemplate().findByNamedParam("FROM Role WHERE enabled = :enabled", "enabled", enabled);
 	}
 
 

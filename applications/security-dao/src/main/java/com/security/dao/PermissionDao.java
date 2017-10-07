@@ -16,4 +16,5 @@ public interface PermissionDao extends BaseDao {
 	List<Permission> findByEnabled(String enabled);
 	List<Permission> findByModuleId(Long id);
 	List<Permission> findPermissionByRoleId(Long id);
+	List<Permission> findEnabledPermissionsByModuleId(Long id);
 }

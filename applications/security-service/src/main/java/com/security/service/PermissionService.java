@@ -18,5 +18,6 @@ public interface PermissionService {
 	List<Permission> findAllPermissions();
 	List<Permission> findPermissionsByEnabled(String enabled);
 	List<Permission> findPermissionsByModuleId(Long id);
+	List<Permission> findEnabledPermissionsByModuleId(Long id);
 	List<Permission> findPermissionByRoleId(Long id);
 }
