@@ -33,16 +33,18 @@ public class UserDaoImpl extends BaseDaoSupport implements UserDao {
 //		Session session = getHibernateTemplate().getSessionFactory().getCurrentSession();
 //		Query qry = session.createQuery("FROM User WHERE userName = ?");
 //		qry.setParameter(0, userName);
-		List<User> users = (List<User>) getHibernateTemplate().find("FROM User WHERE userName = ?", userName);
+		List<User> users = (List<User>) getHibernateTemplate().findByNamedParam("FROM User WHERE userName = :userName","userName", userName);
 		return CommonUtil.containElemnts(users)?users.get(users.size()-1):null;
 	}
 	
 	public User findUserByUsernameAndPassword(String userName,String password){
-		List<User> users = (List<User>) getHibernateTemplate().find("FROM User WHERE userName = ? and password = ?", userName,password);
+		String [] params = {"userName","password"};
+		Object [] objects = {userName,password};
+		List<User> users = (List<User>) getHibernateTemplate().findByNamedParam("FROM User WHERE userName = :userName and password = :password", params,objects);
 		return CommonUtil.containElemnts(users)?users.get(users.size()-1):null;
 	}
 
 	public List<User> findUsersByStatus(String status) {
-		return (List<User>) getHibernateTemplate().find("FROM User WHERE status = ?", status);
+		return (List<User>) getHibernateTemplate().findByNamedParam("FROM User WHERE status = :status","status", status);
 	}
 }

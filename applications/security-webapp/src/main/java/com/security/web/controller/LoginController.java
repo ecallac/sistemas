@@ -51,11 +51,9 @@ public class LoginController {
 	}
 	
 	@RequestMapping(value={"/","/home"}, method=RequestMethod.GET)
-	public ModelAndView home(HttpSession session){
+	public ModelAndView home(){
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("home");
-		
-		session.setAttribute("permissionByModule", new ArrayList<PermissionView>());
 		return modelAndView;
 	}
 	

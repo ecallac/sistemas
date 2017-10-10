@@ -10,14 +10,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -40,13 +41,19 @@ import com.security.web.bean.PermissionView;
  */
 @Controller
 public class PermissionController {
+	
+	@Autowired
+	@Value("${security.common.tipoBaseByCategory}")
+	private String tipoBaseByCategory;
+	
 	@Autowired
 	PermissionService permissionService;
 	
 	@RequestMapping(value={"/permission"}, method={RequestMethod.GET,RequestMethod.POST})
-	public ModelAndView list(){
+	public ModelAndView list(HttpSession session){
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("permission");
+		session.setAttribute("URL_TYPE_PERMISSION_LIST", tipoBaseByCategory+"?categoria="+SecurityConstants.TIPOBASE_TYPE_PERMISSION);
 		return modelAndView;
 	}
 	

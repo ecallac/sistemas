@@ -10,4 +10,7 @@ package com.common.utils;
 public interface CommonConstants {
 	static final String YES = "Y";
 	static final String NO = "N";
+	static final String JSON ="JSON";
+	static final String XML ="XML";
+	
 }

@@ -37,7 +37,8 @@
                	enabled: elabled,
                	path: $('#path').val(),
                	moduleId: $('#moduleId').val(),
-               	parentPermissionId: $('#parentPermissionId').val()
+               	parentPermissionId: $('#parentPermissionId').val(),
+               	type:$('#type').val()
 		}
 		$('.bindingError').remove();
 		
@@ -110,6 +111,7 @@
        			$("#path").val(response.viewBean.path);
        			$("#moduleId").val(response.viewBean.module.id);
        			$("#parentPermissionId").val(response.viewBean.parentPermission.id);
+       			$("#type").val(response.viewBean.type);
        		}
        };
        
@@ -153,12 +155,13 @@
    		         	{ "data": "parentPermission.name" ,"defaultContent": ""},
    		            { "data": "name" },
    		            { "data": "description" },
-   		            { "data": "path" }
+   		            { "data": "path" },
+   		         	{ "data": "type" ,"defaultContent": ""}
    		        ];
-       			var columnsExport = [ 0, 1, 2, 3, 4, 5];
+       			var columnsExport = [ 0, 1, 2, 3, 4, 5, 6];
        			var jsonColumnDefs = [
        	            {
-       	            	"targets": 6,
+       	            	"targets": 7,
        	                "render": function ( data, type, row ) {
       	                var checkedActive='';
                          if (row.enabled == 'Y'){
@@ -168,7 +171,7 @@
        	                }
        	            },
        	        	{
-       	            	"targets": 7,
+       	            	"targets": 8,
        	                "render": function ( data, type, row ) {
        	                    return "<td><button title='Edit' onclick='edit("+row.id+")' type='button' class='btn btn-link btn-xs toltip' data-toggle='modal' data-target='#Form'><img src='<c:url value='/resources/img/icons/black/doc_edit_icon&16.png' />'></button> | "+
            	                 "<button title='Delete' onclick='remove("+row.id+")' type='button' class='btn btn-link btn-xs toltip'><img src='<c:url value='/resources/img/icons/black/trash_icon&16.png' />'></button> ";
@@ -211,6 +214,19 @@
        ajaxPostWithoutForm(ajaxUrl,successFunction);
     }
     
+    function populatePermissionTypeSelect(){
+    	var URL_TYPE_PERMISSION_LIST = "<%=request.getSession().getAttribute("URL_TYPE_PERMISSION_LIST") %>";
+    	var ajaxUrl = URL_TYPE_PERMISSION_LIST;
+    	var successFunction = function(response){
+       		if(response.objectBean.length>0){
+       			$.each(response.objectBean, function(i, row) {
+                    $('#type').append('<option value="' + row.codigo + '">' + row.codigo + '</option>');
+                });
+       		}
+       };
+       ajaxWithoutForm(ajaxUrl,"GET",successFunction);
+    }
+    
     
     function clearFields(){
 		$('.bindingError').remove();
@@ -221,6 +237,7 @@
 		$("#path").val("");
 		$("#moduleId").val("");
 		$("#parentPermissionId").val("");
+		$("#type").val("");
 	}
     function showSuccessMessage(message){
     	$('#success').css({'display': ''});
@@ -239,6 +256,7 @@
     	load();
     	populateModulesSelect();
     	populateParentPermissionSelect();
+    	populatePermissionTypeSelect();
     });
 	</script>
 	<style type="text/css">
@@ -285,7 +303,7 @@
 
  <table id="table" align="center" class="table table-striped table-hover table-bordered">  
 <thead>
-<tr><th>Id</th><th>Module</th><th>Parent Permission</th><th>Name</th><th>Description</th><th>Path</th><th>Enabled</th><th>Actions</th></tr>  
+<tr><th>Id</th><th>Module</th><th>Parent Permission</th><th>Name</th><th>Description</th><th>Path</th><th>Type</th><th>Enabled</th><th>Actions</th></tr>  
 </thead>
 </table>
 
@@ -315,7 +333,7 @@
 		        
 		        <form class="form-horizontal">
 		        	<div class="form-group">
-					    <label for="name" class="col-sm-3 control-label">Module</label>
+					    <label for="moduleId" class="col-sm-3 control-label">Module</label>
 					    <div class="col-sm-7">
 					      <select id="moduleId" class="form-control input-sm">
 					      	<option value="">-- Select Option --</option>
@@ -323,9 +341,17 @@
 					    </div>
 					</div>
 					<div class="form-group">
-					    <label for="name" class="col-sm-3 control-label">Parent Permission</label>
+					    <label for="parentPermissionId" class="col-sm-3 control-label">Parent Permission</label>
 					    <div class="col-sm-7">
 					      <select id="parentPermissionId" class="form-control input-sm">
+					      	<option value="">-- Select Option --</option>
+					      </select>
+					    </div>
+					</div>
+					<div class="form-group">
+					    <label for="type" class="col-sm-3 control-label">Permission Type</label>
+					    <div class="col-sm-7">
+					      <select id="type" class="form-control input-sm">
 					      	<option value="">-- Select Option --</option>
 					      </select>
 					    </div>

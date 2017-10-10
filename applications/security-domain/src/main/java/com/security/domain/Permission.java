@@ -54,6 +54,17 @@ public class Permission extends BaseEntity {
 	@Cascade({CascadeType.SAVE_UPDATE, CascadeType.DELETE})
 	private List<Role> roles;
 	
+	private String type;
+	
+	
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
 	/**
 	 * @return the name
 	 */

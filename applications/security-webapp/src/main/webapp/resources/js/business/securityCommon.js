@@ -68,6 +68,28 @@
         });
 	}
 	
+	function ajaxWithoutForm(ajaxUrl,type,successFunction){
+		$.ajax({
+           	type:type,
+               dataType: 'json',
+               contentType: 'application/json',
+               url:ajaxUrl,
+			beforeSend: function(xhr) {
+		        // setting a timeout
+		        var token = $("meta[name='_csrf']").attr("content");
+				var header = $("meta[name='_csrf_header']").attr("content");
+		        xhr.setRequestHeader("Accept", "application/json");
+				xhr.setRequestHeader("Content-Type", "application/json");
+				xhr.setRequestHeader(header, token);
+		    },
+               success: successFunction,
+               error: function (jqXHR, exception) {
+                 console.log(jqXHR);
+			  alert('Error: ' + jqXHR);
+		  }  
+        });
+	}
+	
 	
 	function createTable(tableId,fileTitle,jsonData,jsonColumns,jsonColumnDefs,columnsExport){
     	var exportTittle=fileTitle;

@@ -31,9 +31,9 @@ public class WebInit extends AbstractAnnotationConfigDispatcherServletInitialize
 		return new String[]{"/"};
 	}
 	
-	@Override
-    protected Filter[] getServletFilters() {
-        return new Filter[]{new SessionTimeoutCookieFilter()};
-    }
+//	@Override
+//    protected Filter[] getServletFilters() {
+//        return new Filter[]{new SessionTimeoutCookieFilter()};
+//    }
 
 }

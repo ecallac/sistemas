@@ -33,13 +33,13 @@ public class ModuleDaoImpl extends BaseDaoSupport implements ModuleDao {
 //		Session session = getHibernateTemplate().getSessionFactory().getCurrentSession();
 //		Query qry = session.createQuery("FROM Module WHERE status = ?");
 //		qry.setParameter(0, id);
-		return (List<Module>) getHibernateTemplate().find("FROM Module WHERE enabled = ?", enabled);
+		return (List<Module>) getHibernateTemplate().findByNamedParam("FROM Module WHERE enabled = :enabled","enabled", enabled);
 	}
 
 	@SuppressWarnings("unchecked")
 	public Module findByName(String name) {
 		// TODO Auto-generated method stub
-		List<Module> modules = (List<Module>) getHibernateTemplate().find("FROM Module WHERE name = ?", name);
+		List<Module> modules = (List<Module>) getHibernateTemplate().findByNamedParam("FROM Module WHERE name = :name", "name", name);
 		return CommonUtil.containElemnts(modules)?modules.get(modules.size()-1):null;
 	}
 }

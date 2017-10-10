@@ -10,7 +10,7 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
-    $('.header').scrollToFixed();
+    /* $('.header').scrollToFixed(); */
     $('[data-toggle="tooltip"]').tooltip();
     $('.toltip').tooltip({placement : 'bottom'});
 });

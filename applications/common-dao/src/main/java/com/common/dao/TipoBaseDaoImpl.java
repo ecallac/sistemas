@@ -31,12 +31,14 @@ public class TipoBaseDaoImpl extends BaseDaoSupport implements TipoBaseDao {
 	@SuppressWarnings("unchecked")
 	public List<TipoBase> findByTiposBaseXCategorias(String categoria) {
 		// TODO Auto-generated method stub
-		return (List<TipoBase>) getHibernateTemplate().find("FROM TipoBase WHERE categoria = ?", categoria);
+		return (List<TipoBase>) getHibernateTemplate().findByNamedParam("FROM TipoBase WHERE categoria = :categoria","categoria", categoria);
 	}
 	@SuppressWarnings("unchecked")
 	public List<TipoBase> findByTiposBaseXCategoriasActivas(String categoria) {
 		// TODO Auto-generated method stub
-		return (List<TipoBase>) getHibernateTemplate().find("FROM TipoBase WHERE activo = ? and categoria = ?", CommonConstants.YES,categoria);
+		String [] params = {"activo","categoria"};
+		Object [] objects = {CommonConstants.YES,categoria};
+		return (List<TipoBase>) getHibernateTemplate().findByNamedParam("FROM TipoBase WHERE activo = :activo and categoria = :categoria", params,objects);
 	}
 
 }

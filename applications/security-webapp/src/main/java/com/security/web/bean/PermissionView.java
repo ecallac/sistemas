@@ -28,8 +28,17 @@ public class PermissionView {
 	private PermissionView parentPermission;
 	
 	private String parentPermissionId;
+	@NotEmpty
+	private String type;
 	
-	
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
 
 	public String getModuleId() {
 		return moduleId;
