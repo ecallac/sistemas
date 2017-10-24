@@ -125,7 +125,7 @@ CREATE TABLE `persona` (
   `apellidos` varchar(45) DEFAULT NULL,
   `tipo_estado_civil` varchar(45) DEFAULT NULL,
   `sexo` varchar(45) DEFAULT NULL,
-  `fechanacimiento` decimal(3,2) DEFAULT NULL,
+  `fechanacimiento` datetime DEFAULT NULL,
   `email` varchar(45) DEFAULT NULL,
   `entidad_id` int(11) NOT NULL,
   `datecreated` datetime DEFAULT NULL,
@@ -161,8 +161,8 @@ CREATE TABLE `personaorganizacion` (
   PRIMARY KEY (`persona_id`,`organizacion_id`),
   KEY `fk_personaorganizacion_organizacion1_idx` (`organizacion_id`),
   KEY `fk_personaorganizacion_persona1_idx` (`persona_id`),
-  CONSTRAINT `fk_personaorganizacion_persona1` FOREIGN KEY (`persona_id`) REFERENCES `persona` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_personaorganizacion_organizacion1` FOREIGN KEY (`organizacion_id`) REFERENCES `organizacion` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `fk_personaorganizacion_organizacion1` FOREIGN KEY (`organizacion_id`) REFERENCES `organizacion` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_personaorganizacion_persona1` FOREIGN KEY (`persona_id`) REFERENCES `persona` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -318,4 +318,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-10-23 13:34:03
+-- Dump completed on 2017-10-24  0:06:34
