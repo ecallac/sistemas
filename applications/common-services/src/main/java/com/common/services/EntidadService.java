@@ -19,4 +19,6 @@ public interface EntidadService {
 	Entidad findById(Long id);
 	List<Organizacion> findAllOrganizacion();
 	List<Persona> findAllPersona();
+	List<Organizacion> findOrganizacionPorNombre(String nombre);
+	List<Persona> findPersonaPorNombre(String nombre);
 }

@@ -29,31 +29,45 @@ public class EntidadServiceImpl implements EntidadService {
 	@Override
 	public void save(Organizacion organizacion) {
 		// TODO Auto-generated method stub
-		
+		entidadDao.save(organizacion);
 	}
 
 	@Override
 	public void save(Persona persona) {
 		// TODO Auto-generated method stub
-		
+		entidadDao.save(persona);
 	}
 
 	@Override
 	public Entidad findById(Long id) {
 		// TODO Auto-generated method stub
-		return null;
+		return (Entidad) entidadDao.findById(Entidad.class, id);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Organizacion> findAllOrganizacion() {
 		// TODO Auto-generated method stub
-		return null;
+		return (List<Organizacion>) entidadDao.findAll(Organizacion.class);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Persona> findAllPersona() {
 		// TODO Auto-generated method stub
-		return null;
+		return (List<Persona>) entidadDao.findAll(Persona.class);
+	}
+
+	@Override
+	public List<Organizacion> findOrganizacionPorNombre(String nombre) {
+		// TODO Auto-generated method stub
+		return entidadDao.findOrganizacionPorNombre(nombre);
+	}
+
+	@Override
+	public List<Persona> findPersonaPorNombre(String nombre) {
+		// TODO Auto-generated method stub
+		return entidadDao.findPersonaPorNombre(nombre);
 	}
 
 }
