@@ -184,9 +184,7 @@
        			
        		}
        };
-       
        ajaxPostWithoutForm(ajaxUrl,successFunction);
-       
     }
     
     
@@ -239,18 +237,6 @@
 		$("#parentPermissionId").val("");
 		$("#type").val("");
 	}
-    function showSuccessMessage(message){
-    	$('#success').css({'display': ''});
-			$('#error').css({'display': 'none'});
-			$("#successMessage").text(message);
-			$("#success").delay( 2000 ).fadeOut( 500, "linear");
-    }
-    function showErrorMessage(message){
-    	$('#success').css({'display': 'none'});
-			$('#error').css({'display': ''});
-			$("#errorMessage").text(message);
-			$("#error").delay( 2000 ).fadeOut( 500, "linear");
-    }
     
     $(document).ready(function(){
     	load();
@@ -274,13 +260,6 @@
 
 
 <h1>Permissions</h1>
-
-<div class="alert alert-success" style="display: none;" id="success">
-		<strong>Success!</strong> <span id="successMessage"></span>.
-</div>
-<div class="alert alert-danger" style="display: none;" id="error">
-		<strong>Error!</strong> <span id="errorMessage"></span>.
-	</div>
 
 
 

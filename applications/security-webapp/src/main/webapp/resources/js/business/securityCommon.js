@@ -1,4 +1,13 @@
-	function post(path, params, method) {
+	function showSuccessMessage(message){
+    	$.bootstrapGrowl("<b>Success!</b> "+message, { type: 'success' });
+    	
+    }
+    function showErrorMessage(message){
+    	$.bootstrapGrowl("<b>Error!</b> "+message, { type: 'danger' });
+    	
+    }
+    
+    function post(path, params, method) {
         method = method || "post"; // Set method to post by default if not specified.
 
         // The rest of this code assumes you are not using a library.
@@ -47,6 +56,7 @@
 	}
 	
 	function ajaxPostWithoutForm(ajaxUrl,successFunction){
+		
 		$.ajax({
            	type:'POST',
                dataType: 'json',
