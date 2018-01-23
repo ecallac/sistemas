@@ -24,6 +24,7 @@ public class ModuleServiceImpl implements ModuleService {
 
 	@Autowired
 	ModuleDao moduleDao;
+	
 	/* (non-Javadoc)
 	 * @see com.security.service.ModuleService#save(com.security.domain.Module)
 	 */
@@ -76,5 +77,7 @@ public class ModuleServiceImpl implements ModuleService {
 		// TODO Auto-generated method stub
 		return moduleDao.findByName(name);
 	}
+
+	
 
 }

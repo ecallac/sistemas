@@ -12,7 +12,7 @@ import java.util.Map;
  */
 public class ModuleBean {
 	private String name;
-	private String version;
+	private String moduleVersion;
 	private String description;
 	private List<PermissionBean> permissions;
 	private Map<String,String> rolesByPermission;
@@ -22,12 +22,6 @@ public class ModuleBean {
 	}
 	public void setName(String name) {
 		this.name = name;
-	}
-	public String getVersion() {
-		return version;
-	}
-	public void setVersion(String version) {
-		this.version = version;
 	}
 	public String getDescription() {
 		return description;
@@ -46,6 +40,12 @@ public class ModuleBean {
 	}
 	public void setRolesByPermission(Map<String, String> rolesByPermission) {
 		this.rolesByPermission = rolesByPermission;
+	}
+	public String getModuleVersion() {
+		return moduleVersion;
+	}
+	public void setModuleVersion(String moduleVersion) {
+		this.moduleVersion = moduleVersion;
 	}
 	
 }
