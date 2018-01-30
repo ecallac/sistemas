@@ -34,7 +34,7 @@ public class ModuleRestController {
 	PermissionService permissionService;
 	
 	@RequestMapping(value = "/getRolesOfPermissionByModule", //
-            method = RequestMethod.GET, //
+            method = RequestMethod.POST, //
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
     public String getRolesOfPermissionByModule(@RequestBody ModuleCanonicalRequest request) {
 		System.out.println(":::getRolesOfPermissionByModule");

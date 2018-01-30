@@ -113,19 +113,19 @@ public class PermissionServiceImpl implements PermissionService {
 	public Map<String, String> getRolesOfPermissionByModuleId(Long id) {
 		List<Permission> permissions = findEnabledPermissionsByModuleId(id);
 		
-		Map<String,List<String>> permissionBeans = new HashMap<>();
+		Map<String,List<String>> permissionBeans = new HashMap<String,List<String>>();
 		
 		for (Permission permission : permissions) {
 			List<Role> rolesDB = permission.getRoles();
 			
-			List<String> roles = new ArrayList<>();
+			List<String> roles = new ArrayList<String>();
 			for (Role role : rolesDB) {
 				roles.add(role.getNameWithPrefix());
 			}
 			permissionBeans.put(permission.getPath(), roles);	
 		}
 		
-		Map<String, String> map = new HashMap<>();
+		Map<String, String> map = new HashMap<String, String>();
 		
 		int c = 1;
 		for (Map.Entry<String,List<String>> entry : permissionBeans.entrySet()){

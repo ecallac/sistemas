@@ -60,3 +60,7 @@
 
 <script src="<c:url value='/resources/js/jquery.bootstrap-growl.js' />"></script>
 
+
+
+<link href="<c:url value='/resources/css/AlertJS.css' />" rel="stylesheet" type="text/css">
+<script src="<c:url value='/resources/js/AlertJS.js' />"></script>
