@@ -34,7 +34,7 @@ $(document).ready(function() {
 <body>
 
 
-<table class="footer" style="width:100%;height:50%" border="0">
+<table class="footer" style="width:100%;height:10px" border="0">
 <tbody>
 <tr>
 	<td align="center">Copyright © 2017 - Ecallac</td>

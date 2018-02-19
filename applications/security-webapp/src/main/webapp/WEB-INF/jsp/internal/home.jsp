@@ -10,6 +10,6 @@
 <%-- <jsp:include page="../includes/menu.jsp" /> --%>
 
 				<h3>Welcome home page</h3>
-
+<input type="button" value = "Test the alert" onclick="alert('Alert this pages');" />
 </body>
 </html>

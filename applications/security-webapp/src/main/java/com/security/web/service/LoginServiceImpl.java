@@ -20,13 +20,13 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.security.client.bean.ModuleBean;
 import com.security.client.bean.RoleBean;
 import com.security.client.bean.UserBean;
+import com.security.client.service.ModuleClientService;
+import com.security.client.service.ModuleClientServiceImpl;
 import com.security.client.service.UserClientService;
 import com.security.client.service.UserClientServiceImpl;
-import com.security.domain.Module;
-import com.security.domain.Permission;
-import com.security.domain.Role;
 import com.security.service.ModuleService;
 import com.security.service.PermissionService;
 
@@ -45,6 +45,10 @@ public class LoginServiceImpl implements UserDetailsService {
 	@Autowired
 	@Value("${security.user.userbyusername.xml}")
 	private String securityUserByUserName;
+	
+	@Autowired
+	@Value("${security.module.rolesbymodule.xml}")
+	private String securityRolesByModule;
 	
 	public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
 		UserBean userBean = getUser(userName);
@@ -75,40 +79,50 @@ public class LoginServiceImpl implements UserDetailsService {
 		}
 	}
 	
-	public Map<String,String> getPermissionByRole(){
+	protected ModuleBean getModule(String moduleName) throws Exception{
+		Map<String, String> urls =new HashMap<String, String>();
+		urls.put(ModuleClientService.ROLES_BY_MODULE_URL, securityRolesByModule);
+		ModuleClientService client = new ModuleClientServiceImpl();
+		client.setUrls(urls);
+		return client.getRolesOfPermissionByModule(moduleName);
+	}
+	
+	public Map<String,String> getPermissionByRole() throws Exception{
+		Map<String, String> map = getModule(MODULE_SECURITY).getRolesByPermission();
 		
-		Module module = moduleService.findByName(MODULE_SECURITY);
-		List<Permission> permissions = permissionService.findEnabledPermissionsByModuleId(module.getId());
 		
-		Map<String,List<String>> permissionBeans = new HashMap<>();
-		
-		for (Permission permission : permissions) {
-			List<Role> rolesDB = permission.getRoles();
-			
-			List<String> roles = new ArrayList<>();
-			for (Role role : rolesDB) {
-				roles.add(role.getNameWithPrefix());
-			}
-			permissionBeans.put(permission.getPath(), roles);	
-		}
-		
-		Map<String, String> map = new HashMap<>();
-		
-		int c = 1;
-		for (Map.Entry<String,List<String>> entry : permissionBeans.entrySet()){
-			List<String> list = entry.getValue();
-			
-			StringBuffer buffer = new StringBuffer();
-			for (String string : list) {
-				if (c > 1) {
-					buffer.append(",");
-				}
-				buffer.append("'"+string+"'");
-				c++;
-			}
-			map.put(entry.getKey(), buffer.toString());
-			c=0;
-		}
+//		Module module = moduleService.findByName(MODULE_SECURITY);
+//		List<Permission> permissions = permissionService.findEnabledPermissionsByModuleId(module.getId());
+//		
+//		Map<String,List<String>> permissionBeans = new HashMap<>();
+//		
+//		for (Permission permission : permissions) {
+//			List<Role> rolesDB = permission.getRoles();
+//			
+//			List<String> roles = new ArrayList<>();
+//			for (Role role : rolesDB) {
+//				roles.add(role.getNameWithPrefix());
+//			}
+//			permissionBeans.put(permission.getPath(), roles);	
+//		}
+//		
+//		Map<String, String> map = new HashMap<>();
+//		
+//		int c = 1;
+//		for (Map.Entry<String,List<String>> entry : permissionBeans.entrySet()){
+//			List<String> list = entry.getValue();
+//			
+//			StringBuffer buffer = new StringBuffer();
+//			for (String string : list) {
+//				if (c > 1) {
+//					buffer.append(",");
+//				}
+//				buffer.append("'"+string+"'");
+//				c++;
+//			}
+//			map.put(entry.getKey(), buffer.toString());
+//			c=0;
+//		}
 		
 		System.out.println(map);
 		return map;

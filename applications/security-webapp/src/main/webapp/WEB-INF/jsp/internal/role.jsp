@@ -196,18 +196,7 @@
 		$("#description").val("");
 		$('#enabled').prop('checked', false)
 	}
-    function showSuccessMessage(message){
-    	$('#success').css({'display': ''});
-			$('#error').css({'display': 'none'});
-			$("#successMessage").text(message);
-			$("#success").delay( 2000 ).fadeOut( 500, "linear");
-    }
-    function showErrorMessage(message){
-    	$('#success').css({'display': 'none'});
-			$('#error').css({'display': ''});
-			$("#errorMessage").text(message);
-			$("#error").delay( 2000 ).fadeOut( 500, "linear");
-    }
+
 
     $(function() {
     	  var availableTags = [
@@ -305,14 +294,8 @@
 
 
 
-<h1>Modules</h1>
+<h1>Roles</h1>
 
-<div class="alert alert-success" style="display: none;" id="success">
-		<strong>Success!</strong> <span id="successMessage"></span>.
-</div>
-<div class="alert alert-danger" style="display: none;" id="error">
-		<strong>Error!</strong> <span id="errorMessage"></span>.
-	</div>
 
 
 
@@ -354,7 +337,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">Module</h4>
+        <h4 class="modal-title">Role</h4>
       </div>
       <div class="modal-body">
 

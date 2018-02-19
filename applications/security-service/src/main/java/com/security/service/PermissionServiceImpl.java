@@ -3,7 +3,10 @@
  */
 package com.security.service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.transaction.Transactional;
 
@@ -14,6 +17,7 @@ import com.common.utils.BeanParser;
 import com.security.dao.PermissionDao;
 import com.security.domain.Module;
 import com.security.domain.Permission;
+import com.security.domain.Role;
 
 /**
  * @author EFRAIN
@@ -104,5 +108,42 @@ public class PermissionServiceImpl implements PermissionService {
 		// TODO Auto-generated method stub
 		return permissionDao.findEnabledPermissionsByModuleId(id);
 	}
-
+	
+	@Override
+	public Map<String, String> getRolesOfPermissionByModuleId(Long id) {
+		List<Permission> permissions = findEnabledPermissionsByModuleId(id);
+		
+		Map<String,List<String>> permissionBeans = new HashMap<String,List<String>>();
+		
+		for (Permission permission : permissions) {
+			List<Role> rolesDB = permission.getRoles();
+			
+			List<String> roles = new ArrayList<String>();
+			for (Role role : rolesDB) {
+				roles.add(role.getNameWithPrefix());
+			}
+			permissionBeans.put(permission.getPath(), roles);	
+		}
+		
+		Map<String, String> map = new HashMap<String, String>();
+		
+		int c = 1;
+		for (Map.Entry<String,List<String>> entry : permissionBeans.entrySet()){
+			List<String> list = entry.getValue();
+			
+			StringBuffer buffer = new StringBuffer();
+			for (String string : list) {
+				if (c > 1) {
+					buffer.append(",");
+				}
+				buffer.append("'"+string+"'");
+				c++;
+			}
+			map.put(entry.getKey(), buffer.toString());
+			c=0;
+		}
+		
+		System.out.println(map);
+		return map;
+	}
 }
