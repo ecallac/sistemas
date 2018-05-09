@@ -127,7 +127,7 @@ public class ModuleController {
 			module = (Module) BeanParser.parseBetweenObjects(moduleView, module, null);
 			moduleService.save(module);
 			map.put(SecurityConstants.STATUS, SecurityConstants.OK);
-	        map.put(SecurityConstants.MESSAGE, "Your record have been saved successfully at "+CommonUtil.dateToString(new Date(), "yyyy-MM-dd HH:mm:ss"));
+	        map.put(SecurityConstants.MESSAGE, "Your record have been updated successfully at "+CommonUtil.dateToString(new Date(), "yyyy-MM-dd HH:mm:ss"));
 		}else{
 			map.put(SecurityConstants.STATUS, SecurityConstants.ERROR);
 	        map.put(SecurityConstants.MESSAGE, "Your status couldn't be updated");

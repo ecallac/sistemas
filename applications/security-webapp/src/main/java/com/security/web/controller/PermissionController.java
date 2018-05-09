@@ -147,7 +147,7 @@ public class PermissionController {
     	Permission Permission = (Permission) BeanParser.parseObjectToNewClass(permissionView, Permission.class, null);
 		permissionService.save(Permission);
 		map.put(SecurityConstants.STATUS, SecurityConstants.OK);
-        map.put(SecurityConstants.MESSAGE, "Your record have been saved successfully at "+CommonUtil.dateToString(new Date(), "yyyy-MM-dd HH:mm:ss"));
+        map.put(SecurityConstants.MESSAGE, "Your record have been updated successfully at "+CommonUtil.dateToString(new Date(), "yyyy-MM-dd HH:mm:ss"));
 		
         return map;
     }

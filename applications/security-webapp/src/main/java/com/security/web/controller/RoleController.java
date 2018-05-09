@@ -129,7 +129,7 @@ public class RoleController {
 			Role = (Role) BeanParser.parseBetweenObjects(RoleView, Role, null);
 			roleService.save(Role);
 			map.put(SecurityConstants.STATUS, SecurityConstants.OK);
-	        map.put(SecurityConstants.MESSAGE, "Your record have been saved successfully at "+CommonUtil.dateToString(new Date(), "yyyy-MM-dd HH:mm:ss"));
+	        map.put(SecurityConstants.MESSAGE, "Your record have been updated successfully at "+CommonUtil.dateToString(new Date(), "yyyy-MM-dd HH:mm:ss"));
 		}else{
 			map.put(SecurityConstants.STATUS, SecurityConstants.ERROR);
 	        map.put(SecurityConstants.MESSAGE, "Your status couldn't be updated");

@@ -27,6 +27,7 @@ import com.security.client.service.ModuleClientService;
 import com.security.client.service.ModuleClientServiceImpl;
 import com.security.client.service.UserClientService;
 import com.security.client.service.UserClientServiceImpl;
+import com.security.domain.Module;
 import com.security.service.ModuleService;
 import com.security.service.PermissionService;
 
@@ -79,19 +80,20 @@ public class LoginServiceImpl implements UserDetailsService {
 		}
 	}
 	
-	protected ModuleBean getModule(String moduleName) throws Exception{
-		Map<String, String> urls =new HashMap<String, String>();
-		urls.put(ModuleClientService.ROLES_BY_MODULE_URL, securityRolesByModule);
-		ModuleClientService client = new ModuleClientServiceImpl();
-		client.setUrls(urls);
-		return client.getRolesOfPermissionByModule(moduleName);
-	}
+//	protected ModuleBean getModule(String moduleName) throws Exception{
+//		Map<String, String> urls =new HashMap<String, String>();
+//		urls.put(ModuleClientService.ROLES_BY_MODULE_URL, securityRolesByModule);
+//		ModuleClientService client = new ModuleClientServiceImpl();
+//		client.setUrls(urls);
+//		return client.getRolesOfPermissionByModule(moduleName);
+//	}
 	
 	public Map<String,String> getPermissionByRole() throws Exception{
-		Map<String, String> map = getModule(MODULE_SECURITY).getRolesByPermission();
+//		Map<String, String> map = getModule(MODULE_SECURITY).getRolesByPermission();
 		
 		
-//		Module module = moduleService.findByName(MODULE_SECURITY);
+		Module module = moduleService.findByName(MODULE_SECURITY);
+		Map<String, String> map= permissionService.getRolesOfPermissionByModuleId(module.getId());
 //		List<Permission> permissions = permissionService.findEnabledPermissionsByModuleId(module.getId());
 //		
 //		Map<String,List<String>> permissionBeans = new HashMap<>();
