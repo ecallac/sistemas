@@ -53,13 +53,10 @@
  <sec:authorize access="hasRole('ROLE_ADMIN')">
  
  <div id="button_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4 no-footer">
-<div class="dt-buttons btn-group">              
-<!-- <a href="userForm">Add New User</a> -->
+<div class="dt-buttons btn-group">
    <button data-target="#AddUser" title="Add a new user" type="button" class="btn btn-default toltip" data-toggle="modal">
 		<img src="<c:url value='/resources/img/icons/black/user_icon&16.png' />"> Add New User
 	</button>
-   <!-- <a href="resetPasswordForm">Change Password</a> -->
-   
    <button data-target="#AllChangePassword" title="Change Unknown User Password" type="button" class="btn btn-default toltip" data-toggle="modal">
 		<img src="<c:url value='/resources/img/icons/black/key_icon&16.png' />"> Change Password
    </button>
