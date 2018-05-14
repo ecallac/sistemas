@@ -65,7 +65,7 @@ font-size: small;
 	  <div class="panel panel-default">
 	    <div class="panel-heading" role="tab" id="headingFour">
 	      <h4 class="panel-title">
-	        <a class="collapsed" role="button" href="${pageContext.request.contextPath}/userList" >
+	        <a class="collapsed" role="button" href="${pageContext.request.contextPath}/user" >
 	          User Management
 	        </a>
 	      </h4>

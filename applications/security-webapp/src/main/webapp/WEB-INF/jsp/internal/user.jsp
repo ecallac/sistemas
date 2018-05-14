@@ -23,87 +23,77 @@
 	
 	var contexPath = "<%=request.getContextPath() %>";
 	
-//     function save(){
-//     	var elabled = "N";
-//     	if ($('#enabled').is(':checked')) {
-// 			elabled = "Y";
-// 		}
-// 		var formData= {
-// 				id: parseInt($("#id").val()), 
-//                	name: $('#name').val(),
-//                	description: $('#description').val(),
-//                	enabled: elabled,
-//                	author: $('#author').val(),
-//                	moduleVersion: $('#moduleVersion').val()
-// 		}
-// 		$('.bindingError').remove();
+    function save(){
+		var formData= {
+				id: parseInt($("#id").val()), 
+				userName: $('#userName').val(),
+				status: $('#status').val(),
+               	question: $('#question').val(),
+               	answer: $('#answer').val()
+		}
+		$('.bindingError').remove();
 		
-//     	var ajaxUrl = contexPath+'/module/save.json';
-//     	var successFunction = function(response){
-//      	   if(response.validated){
-//                //Set response
-//     		   if(response.status=="OK"){
-//          			showSuccessMessage(response.message);
-//          			load();
-//          			$('#Form').modal('hide');
-//          		}else{
-//          			showErrorMessage(response.message);
-//          		}
-//             }else{
-//               //Set error messages
-//               $.each(response.messages,function(key,value){
-//   	            $('input[id='+key+']').after('<span class="bindingError" style="color:red;font-weight: bold;">'+value+'</span>');
-//               });
-//             }
+    	var ajaxUrl = contexPath+'/user/save.json';
+    	var successFunction = function(response){
+     	   if(response.validated){
+               //Set response
+    		   if(response.status=="OK"){
+         			showSuccessMessage(response.message);
+         			load();
+         			$('#Form').modal('hide');
+         		}else{
+         			showErrorMessage(response.message);
+         		}
+            }else{
+              //Set error messages
+              $.each(response.messages,function(key,value){
+  	            $('input[id='+key+']').after('<span class="bindingError" style="color:red;font-weight: bold;">'+value+'</span>');
+              });
+            }
     	   
-//        };
+       };
        
-//        ajaxPost(ajaxUrl,formData,successFunction);
+       ajaxPost(ajaxUrl,formData,successFunction);
               
-//     }
+    }
     
     
     
-//     function remove(idVal){
-//     	var formData= {
-// 				id: idVal
-// 		}
-//     	var ajaxUrl = contexPath+'/module/delete.json';
-//     	var successFunction = function(response){
-//        		if(response.status=="OK"){
-//        			showSuccessMessage(response.message);
-//        			load();
-//        		}else{
-//        			showErrorMessage(response.message);
-//        		}
-//        };
+    function remove(idVal){
+    	var formData= {
+				id: idVal
+		}
+    	var ajaxUrl = contexPath+'/user/delete.json';
+    	var successFunction = function(response){
+       		if(response.status=="OK"){
+       			showSuccessMessage(response.message);
+       			load();
+       		}else{
+       			showErrorMessage(response.message);
+       		}
+       };
        
-//        ajaxPost(ajaxUrl,formData,successFunction);
-//     }
+       ajaxPost(ajaxUrl,formData,successFunction);
+    }
     
-//     function edit(idVal){
-//     	var formData= {
-// 				id: idVal
-// 		}
-//     	$('.bindingError').remove();
-//     	var ajaxUrl = contexPath+'/module/load.json';
-//     	var successFunction = function(response){
-//        		if(response.status=="OK"){
-//        			$("#id").val(response.viewBean.id);
-//        			$("#name").val(response.viewBean.name);
-//        			$("#description").val(response.viewBean.description);
-//        			if (response.viewBean.enabled == 'Y'){
-//        				$('#enabled').prop('checked', true);
-//        			}else{
-//        				$('#enabled').prop('checked', false);
-//        			}
-//        			$("#author").val(response.viewBean.author);
-//        			$("#moduleVersion").val(response.viewBean.moduleVersion);
-//        		}
-//        };
+    function edit(idVal){
+    	var formData= {
+				id: idVal
+		}
+    	$('.bindingError').remove();
+    	var ajaxUrl = contexPath+'/user/load.json';
+    	var successFunction = function(response){
+       		if(response.status=="OK"){
+       			$("#id").val(response.viewBean.id);
+       			$("#userName").val(response.viewBean.userName);
+       			$("#status").val(response.viewBean.status);
+       			$("#question").val(response.viewBean.question);
+       			$("#answer").val(response.viewBean.answer);
+       		}
+       };
        
-//        ajaxPost(ajaxUrl,formData,successFunction);
-//     }
+       ajaxPost(ajaxUrl,formData,successFunction);
+    }
     
 //     function enableAndDisable(object,idVal){
 //     	var elabled = "N";
@@ -128,51 +118,55 @@
     	
 //     }
     
-//     function load(){
-//     	var ajaxUrl = contexPath+'/module/list.json';
-//     	var successFunction = function(response){
-//        		if(response.data.length>0){
+    function load(){
+    	var ajaxUrl = contexPath+'/user/list.json';
+    	var successFunction = function(response){
+       		if(response.data.length>0){
        			
-//        			var tableId = "#table";
-//        			var fileTitle = "Module List";
-//        			var jsonData = response.data;
-//        			var jsonColumns = [
-//    		            { "data": "id" },
-//    		            { "data": "name" },
-//    		            { "data": "description" },
-//    		            { "data": "author" },
-//    		            { "data": "moduleVersion" }
-//    		        ];
-//        			var columnsExport = [ 0, 1, 2, 3, 4 ];
-//        			var jsonColumnDefs = [
-//        	            {
-//        	            	"targets": 5,
-//        	                "render": function ( data, type, row ) {
-//       	                var checkedActive='';
-//                          if (row.enabled == 'Y'){
-//                          	checkedActive = "checked='true'";
-//                          }
-//       	                    return "<td><input type='checkbox' name='select' id='select' "+checkedActive+" onclick='enableAndDisable(this,"+row.id+");'></td>";
-//        	                }
-//        	            },
-//        	        	{
-//        	            	"targets": 6,
-//        	                "render": function ( data, type, row ) {
-//        	                    return "<td><button title='Edit' onclick='edit("+row.id+")' type='button' class='btn btn-link btn-xs toltip' data-toggle='modal' data-target='#Form'><img src='<c:url value='/resources/img/icons/black/doc_edit_icon&16.png' />'></button> | "+
-//            	                 "<button title='Delete' onclick='remove("+row.id+")' type='button' class='btn btn-link btn-xs toltip'><img src='<c:url value='/resources/img/icons/black/trash_icon&16.png' />'></button> | "+
-//            	              		"<button title='Permissions by Module' onclick='getPermissions("+row.id+")' type='button' class='btn btn-link btn-xs toltip' data-toggle='modal' data-target='#Permissions'><img src='<c:url value='/resources/img/icons/black/cogs_icon&16.png' />'></button></td>";
-//        	                }
-//        	            }
-//        	        ];
+       			var tableId = "#table";
+       			var fileTitle = "User List";
+       			var jsonData = response.data;
+       			var jsonColumns = [
+   		            { "data": "id" },
+   		            { "data": "userName" },
+   		            { "data": "status" },
+   		            { "data": "question" },
+   		            { "data": "answer" }
+   		        ];
+       			var columnsExport = [ 0, 1, 2, 3, 4 ];
+       			var jsonColumnDefs = [
+       	        	{
+       	            	"targets": 5,
+       	                "render": function ( data, type, row ) {
+       	                    return "<td><button title='Edit' onclick='edit("+row.id+")' type='button' class='btn btn-link btn-xs toltip' data-toggle='modal' data-target='#AddUser'><img src='<c:url value='/resources/img/icons/black/doc_edit_icon&16.png' />'></button> | "+
+           	                 "<button title='Delete' onclick='remove("+row.id+")' type='button' class='btn btn-link btn-xs toltip'><img src='<c:url value='/resources/img/icons/black/trash_icon&16.png' />'></button> | "//+
+           	              		//"<button title='Permissions by Module' onclick='getPermissions("+row.id+")' type='button' class='btn btn-link btn-xs toltip' data-toggle='modal' data-target='#Permissions'><img src='<c:url value='/resources/img/icons/black/cogs_icon&16.png' />'></button></td>"
+           	              		;
+       	                }
+       	            }
+       	        ];
        			
-//        			createTable(tableId,fileTitle,jsonData,jsonColumns,jsonColumnDefs,columnsExport);
+       			createTable(tableId,fileTitle,jsonData,jsonColumns,jsonColumnDefs,columnsExport);
        			
-//        		}
-//        };
+       		}
+       };
        
-//        ajaxPostWithoutForm(ajaxUrl,successFunction);
+       ajaxPostWithoutForm(ajaxUrl,successFunction);
        
-//     }
+    }
+    
+    function populateStatusSelect(){
+    	var ajaxUrl = contexPath+'/user/enabledStatus.json';
+    	var successFunction = function(response){
+       		if(response.data.length>0){
+       			$.each(response.data, function(i, row) {
+//                     $('#status').append('<option value="' + row.id + '">' + row.name + '</option>');
+                    $('#status').append('<option value="' + row + '">' + row + '</option>');
+                });
+       		}
+       };
+       ajaxPostWithoutForm(ajaxUrl,successFunction);
+    }
     
 // 	function getPermissions(idVal){
     	
@@ -187,20 +181,25 @@
 		$("#answer").val("");
 		$("#status").val("");
 	}
-    function clearPassFields(){
-		$('.bindingError').remove();
-		$("#id").val("");
-		$("#userName").val("");
-		$("#password").val("");
-		$('#newPasswordAgain').val("");
-	}
+//     function clearPassFields(){
+// 		$('.bindingError').remove();
+// 		$("#id").val("");
+// 		$("#userName").val("");
+// 		$("#password").val("");
+// 		$('#newPasswordAgain').val("");
+// 	}
+
+	$(document).ready(function(){
+    	load();
+    	populateStatusSelect();
+    });
 	</script>
 	<style type="text/css">
 	
 	</style>
 
 </head>
-<body onload="load();">
+<body>
 
 
 <div class="container">
@@ -209,7 +208,7 @@
 
 
 
-<h1>User</h1>
+<h1>Users</h1>
 
 
 
@@ -238,6 +237,10 @@
 </thead>
 </table>
 
+<br/> 
+   Custom Export:  
+   <a href="reportUserList/pdf">PDF</a> | <a href="reportUserListXls">Excel</a>
+   
 </div></div>
 
 

@@ -30,18 +30,21 @@
    <definition name="permission" extends="template"> 
        <put-attribute name="body" value="/WEB-INF/jsp/internal/permission.jsp" />  
    </definition>
-   <definition name="userList" extends="template">
-       <put-attribute name="body" value="/WEB-INF/jsp/internal/userList.jsp" />  
+   <definition name="user" extends="template">
+       <put-attribute name="body" value="/WEB-INF/jsp/internal/user.jsp" />  
    </definition>
-   <definition name="userForm" extends="template">
-       <put-attribute name="body" value="/WEB-INF/jsp/internal/userForm.jsp" />  
-   </definition>
-   <definition name="userEditForm" extends="template">
-       <put-attribute name="body" value="/WEB-INF/jsp/internal/userEditForm.jsp" />  
-   </definition>
-   <definition name="resetPasswordForm" extends="template">
-       <put-attribute name="body" value="/WEB-INF/jsp/internal/resetPasswordForm.jsp" />  
-   </definition>
+<!--    <definition name="userList" extends="template"> -->
+<!--        <put-attribute name="body" value="/WEB-INF/jsp/internal/userList.jsp" />   -->
+<!--    </definition> -->
+<!--    <definition name="userForm" extends="template"> -->
+<!--        <put-attribute name="body" value="/WEB-INF/jsp/internal/userForm.jsp" />   -->
+<!--    </definition> -->
+<!--    <definition name="userEditForm" extends="template"> -->
+<!--        <put-attribute name="body" value="/WEB-INF/jsp/internal/userEditForm.jsp" />   -->
+<!--    </definition> -->
+<!--    <definition name="resetPasswordForm" extends="template"> -->
+<!--        <put-attribute name="body" value="/WEB-INF/jsp/internal/resetPasswordForm.jsp" />   -->
+<!--    </definition> -->
    
   
 </tiles-definitions>

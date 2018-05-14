@@ -81,8 +81,8 @@
    <td>
    <button  title="Edit" type="button" class="btn btn-link btn-xs" data-toggle="tooltip" data-placement="bottom"><img src="<c:url value='/resources/img/icons/black/doc_edit_icon&16.png' />"></button>
         <a href="editUser/${user.id}" title="Edit"  data-toggle="tooltip" data-placement="bottom"><img src="<c:url value='/resources/img/icons/black/doc_edit_icon&16.png' />"></a>
-        | <a href="resetPasswordForm/${user.id}" title="Reset Password"  data-toggle="tooltip" data-placement="bottom" ><img src="<c:url value='/resources/img/icons/black/key_icon&16.png' />"></a>
         | <a href="deleteUser/${user.id}" title="Delete"  data-toggle="tooltip" data-placement="bottom" ><img src="<c:url value='/resources/img/icons/black/trash_icon&16.png"' />"></a>
+        | <a href="resetPasswordForm/${user.id}" title="Reset Password"  data-toggle="tooltip" data-placement="bottom" ><img src="<c:url value='/resources/img/icons/black/key_icon&16.png' />"></a>
         | <a href="assigneRoleUser/${user.id}" title="Assing Roles"  data-toggle="tooltip" data-placement="bottom" ><img src="<c:url value='/resources/img/icons/black/users_icon&16.png"' />"></a>
       
    </td>
