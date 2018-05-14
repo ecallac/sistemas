@@ -17,22 +17,17 @@ public class ResetUserView{
 	private String userName;
 	@NotEmpty
 	@Size(min=8)
-	private String password;
+	private String newPassword;
 	@NotEmpty
 	@Size(min=8)
 	private String newPasswordAgain;
 	
-	/**
-	 * @return the password
-	 */
-	public String getPassword() {
-		return password;
+	
+	public String getNewPassword() {
+		return newPassword;
 	}
-	/**
-	 * @param password the password to set
-	 */
-	public void setPassword(String password) {
-		this.password = password;
+	public void setNewPassword(String newPassword) {
+		this.newPassword = newPassword;
 	}
 	/**
 	 * @return the newPasswordAgain

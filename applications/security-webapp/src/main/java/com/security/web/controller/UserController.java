@@ -162,36 +162,36 @@ public class UserController {
     }
     
     
-    @RequestMapping(value = "/resetPassword", method = RequestMethod.POST)
-    public ModelAndView resetPassword(@Valid ResetUserView resetUserView,BindingResult result,Principal principal) {
-    	ModelAndView modelAndView = new ModelAndView();
-    	modelAndView.setViewName("redirect:/userList");
-    	
-        if (result.hasErrors()) {
-            return modelAndView;
-        }
-        
-        
-        try {
-        	
-        	if (!resetUserView.getPassword().equals(resetUserView.getNewPasswordAgain())) {
-    			throw new BusinessException("The new password aren't same! Try again please.");
-    		}
-        	
-        	User user = (User)BeanParser.parseObjectToNewClass(resetUserView, User.class, null);
-            user.setUpdatedBy(user.getId()==null?principal.getName():user.getUpdatedBy());
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-            
-        	userService.savePassword(user);
-		} catch (Exception e) {
-			modelAndView.addObject("error", e.getMessage());
-			modelAndView.setViewName("resetPasswordForm");
-			return modelAndView;
-		}
-        modelAndView.addObject("message", "Password was updated successfully.");
-        
-		return modelAndView;
-    }
+//    @RequestMapping(value = "/resetPassword", method = RequestMethod.POST)
+//    public ModelAndView resetPassword(@Valid ResetUserView resetUserView,BindingResult result,Principal principal) {
+//    	ModelAndView modelAndView = new ModelAndView();
+//    	modelAndView.setViewName("redirect:/userList");
+//    	
+//        if (result.hasErrors()) {
+//            return modelAndView;
+//        }
+//        
+//        
+//        try {
+//        	
+//        	if (!resetUserView.getPassword().equals(resetUserView.getNewPasswordAgain())) {
+//    			throw new BusinessException("The new password aren't same! Try again please.");
+//    		}
+//        	
+//        	User user = (User)BeanParser.parseObjectToNewClass(resetUserView, User.class, null);
+//            user.setUpdatedBy(user.getId()==null?principal.getName():user.getUpdatedBy());
+//            user.setPassword(passwordEncoder.encode(user.getPassword()));
+//            
+//        	userService.savePassword(user);
+//		} catch (Exception e) {
+//			modelAndView.addObject("error", e.getMessage());
+//			modelAndView.setViewName("resetPasswordForm");
+//			return modelAndView;
+//		}
+//        modelAndView.addObject("message", "Password was updated successfully.");
+//        
+//		return modelAndView;
+//    }
     
     
     @RequestMapping("/reportUserList/{format}")
