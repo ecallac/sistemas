@@ -20,4 +20,5 @@ public interface UserService {
 	User findUserByUserName(String userName);
 	List<User> findUsersByStatus(String status);
 	void savePassword(User user) throws Exception;
+	void savePasswordById(User user);
 }

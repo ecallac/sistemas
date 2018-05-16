@@ -84,6 +84,15 @@ public class UserServiceImpl implements UserService {
 		userStored.setUpdatedBy(user.getUpdatedBy());
 		userDao.save(userStored);
 	}
+
+	@Override
+	public void savePasswordById(User user){
+		User userStored = findUserById(user.getId());
+		userStored.setPassword(user.getPassword());
+		userStored.setUpdatedBy(user.getUpdatedBy());
+		userDao.save(userStored);
+		
+	}
 	
 	
 }

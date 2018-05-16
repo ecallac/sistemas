@@ -12,13 +12,14 @@ import org.hibernate.validator.constraints.NotEmpty;
  * @dateCreated 1 may. 2017 21:31:13
  */
 public class UserEditView {
+
 	private Long id;
-	@NotEmpty
-	@Size(min=8)
+//	@NotEmpty
+	@Size(min=4,max=255)
 	private String userName;
 	@NotEmpty
 	private String status;
-	private Long personId;
+	private Long entidadRoleId;
 	@NotEmpty
 	private String question;
 	@NotEmpty
@@ -55,18 +56,6 @@ public class UserEditView {
 		this.status = status;
 	}
 	/**
-	 * @return the personId
-	 */
-	public Long getPersonId() {
-		return personId;
-	}
-	/**
-	 * @param personId the personId to set
-	 */
-	public void setPersonId(Long personId) {
-		this.personId = personId;
-	}
-	/**
 	 * @return the question
 	 */
 	public String getQuestion() {
@@ -89,6 +78,12 @@ public class UserEditView {
 	 */
 	public void setAnswer(String answer) {
 		this.answer = answer;
+	}
+	public Long getEntidadRoleId() {
+		return entidadRoleId;
+	}
+	public void setEntidadRoleId(Long entidadRoleId) {
+		this.entidadRoleId = entidadRoleId;
 	}
 	
 }

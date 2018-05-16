@@ -17,37 +17,45 @@
 	<title></title>
 	<script type="text/javascript">
 	
-	$('#Add').on('shown.bs.modal', function () {
+	$('#AddUser').on('shown.bs.modal', function () {
+	  
+	})
+	$('#EditUser').on('shown.bs.modal', function () {
+	  
+	})
+	$('#EditUserPassword').on('shown.bs.modal', function () {
 	  
 	})
 	
 	var contexPath = "<%=request.getContextPath() %>";
 	
     function save(){
-		var formData= {
-				id: parseInt($("#id").val()), 
-				userName: $('#userName').val(),
-				status: $('#status').val(),
-               	question: $('#question').val(),
-               	answer: $('#answer').val()
+		var formData= { 
+				userName: $('#AuserName').val(),
+				password: $('#Apassword').val(),
+				passwordAgain: $('#ApasswordAgain').val(),
+				status: $('#Astatus').val(),
+               	question: $('#Aquestion').val(),
+               	answer: $('#Aanswer').val()
 		}
 		$('.bindingError').remove();
 		
-    	var ajaxUrl = contexPath+'/user/save.json';
+    	var ajaxUrl = contexPath+'/user/saveNew.json';
     	var successFunction = function(response){
      	   if(response.validated){
                //Set response
     		   if(response.status=="OK"){
          			showSuccessMessage(response.message);
          			load();
-         			$('#Form').modal('hide');
+         			$('#AddUser').modal('hide');
          		}else{
          			showErrorMessage(response.message);
          		}
             }else{
               //Set error messages
               $.each(response.messages,function(key,value){
-  	            $('input[id='+key+']').after('<span class="bindingError" style="color:red;font-weight: bold;">'+value+'</span>');
+  	            $('input[id=A'+key+']').after('<span class="bindingError" style="color:red;font-weight: bold;">'+value+'</span>');
+  	          	$('select[id=A'+key+']').after('<span class="bindingError" style="color:red;font-weight: bold;">'+value+'</span>');
               });
             }
     	   
@@ -57,6 +65,74 @@
               
     }
     
+    function saveEdit(){
+		var formData= {
+				id: parseInt($("#Eid").val()), 
+				userName: $('#EuserName').val(),
+				status: $('#Estatus').val(),
+               	question: $('#Equestion').val(),
+               	answer: $('#Eanswer').val()
+		}
+		$('.bindingError').remove();
+		
+    	var ajaxUrl = contexPath+'/user/saveEdit.json';
+    	var successFunction = function(response){
+     	   if(response.validated){
+               //Set response
+    		   if(response.status=="OK"){
+         			showSuccessMessage(response.message);
+         			load();
+         			$('#EditUser').modal('hide');
+         		}else{
+         			showErrorMessage(response.message);
+         		}
+            }else{
+              //Set error messages
+              $.each(response.messages,function(key,value){
+  	            $('input[id=E'+key+']').after('<span class="bindingError" style="color:red;font-weight: bold;">'+value+'</span>');
+  	          	$('select[id=E'+key+']').after('<span class="bindingError" style="color:red;font-weight: bold;">'+value+'</span>');
+              });
+            }
+    	   
+       };
+       
+       ajaxPost(ajaxUrl,formData,successFunction);
+              
+    }
+    
+    function saveEditPassword(){
+		var formData= {
+				id: parseInt($("#Pid").val()), 
+				userName: $('#PuserName').val(),
+				password: $('#Ppassword').val(),
+				passwordAgain: $('#PpasswordAgain').val()
+		}
+		$('.bindingError').remove();
+		
+    	var ajaxUrl = contexPath+'/user/saveEditPassword.json';
+    	var successFunction = function(response){
+     	   if(response.validated){
+               //Set response
+    		   if(response.status=="OK"){
+         			showSuccessMessage(response.message);
+         			load();
+         			$('#EditUserPassword').modal('hide');
+         		}else{
+         			showErrorMessage(response.message);
+         		}
+            }else{
+              //Set error messages
+              $.each(response.messages,function(key,value){
+  	            $('input[id=P'+key+']').after('<span class="bindingError" style="color:red;font-weight: bold;">'+value+'</span>');
+  	          	$('select[id=P'+key+']').after('<span class="bindingError" style="color:red;font-weight: bold;">'+value+'</span>');
+              });
+            }
+    	   
+       };
+       
+       ajaxPost(ajaxUrl,formData,successFunction);
+              
+    }
     
     
     function remove(idVal){
@@ -81,14 +157,30 @@
 				id: idVal
 		}
     	$('.bindingError').remove();
-    	var ajaxUrl = contexPath+'/user/load.json';
+    	var ajaxUrl = contexPath+'/user/loadEdit.json';
     	var successFunction = function(response){
        		if(response.status=="OK"){
-       			$("#id").val(response.viewBean.id);
-       			$("#userName").val(response.viewBean.userName);
-       			$("#status").val(response.viewBean.status);
-       			$("#question").val(response.viewBean.question);
-       			$("#answer").val(response.viewBean.answer);
+       			$("#Eid").val(response.viewBean.id);
+       			$("#EuserName").val(response.viewBean.userName);
+       			$("#Estatus").val(response.viewBean.status);
+       			$("#Equestion").val(response.viewBean.question);
+       			$("#Eanswer").val(response.viewBean.answer);
+       		}
+       };
+       
+       ajaxPost(ajaxUrl,formData,successFunction);
+    }
+    
+    function editPassword(idVal){
+    	var formData= {
+				id: idVal
+		}
+    	$('.bindingError').remove();
+    	var ajaxUrl = contexPath+'/user/loadEditPassword.json';
+    	var successFunction = function(response){
+       		if(response.status=="OK"){
+       			$("#Pid").val(response.viewBean.id);
+       			$("#PuserName").val(response.viewBean.userName);
        		}
        };
        
@@ -138,9 +230,9 @@
        	        	{
        	            	"targets": 5,
        	                "render": function ( data, type, row ) {
-       	                    return "<td><button title='Edit' onclick='edit("+row.id+")' type='button' class='btn btn-link btn-xs toltip' data-toggle='modal' data-target='#AddUser'><img src='<c:url value='/resources/img/icons/black/doc_edit_icon&16.png' />'></button> | "+
-           	                 "<button title='Delete' onclick='remove("+row.id+")' type='button' class='btn btn-link btn-xs toltip'><img src='<c:url value='/resources/img/icons/black/trash_icon&16.png' />'></button> | "//+
-           	              		//"<button title='Permissions by Module' onclick='getPermissions("+row.id+")' type='button' class='btn btn-link btn-xs toltip' data-toggle='modal' data-target='#Permissions'><img src='<c:url value='/resources/img/icons/black/cogs_icon&16.png' />'></button></td>"
+       	                    return "<td><button title='Edit' onclick='edit("+row.id+")' type='button' class='btn btn-link btn-xs toltip' data-toggle='modal' data-target='#EditUser'><img src='<c:url value='/resources/img/icons/black/doc_edit_icon&16.png' />'></button> | "+
+           	                 "<button title='Delete' onclick='remove("+row.id+")' type='button' class='btn btn-link btn-xs toltip'><img src='<c:url value='/resources/img/icons/black/trash_icon&16.png' />'></button> | "+
+           	              	"<button title='Change Password' onclick='editPassword("+row.id+")' type='button' class='btn btn-link btn-xs toltip' data-toggle='modal' data-target='#EditUserPassword'><img src='<c:url value='/resources/img/icons/black/key_icon&16.png' />'></button></td>"
            	              		;
        	                }
        	            }
@@ -161,7 +253,8 @@
        		if(response.data.length>0){
        			$.each(response.data, function(i, row) {
 //                     $('#status').append('<option value="' + row.id + '">' + row.name + '</option>');
-                    $('#status').append('<option value="' + row + '">' + row + '</option>');
+                    $('#Estatus').append('<option value="' + row + '">' + row + '</option>');
+                    $('#Astatus').append('<option value="' + row + '">' + row + '</option>');
                 });
        		}
        };
@@ -174,19 +267,28 @@
     
     function clearFields(){
 		$('.bindingError').remove();
-		$("#id").val("");
-		$("#userName").val("");
-		$("#password").val("");
-		$('#question').val("");
-		$("#answer").val("");
-		$("#status").val("");
+		$("#Aid").val("");
+		$("#AuserName").val("");
+		$("#Apassword").val("");
+		$("#ApasswordAgain").val("");
+		$('#Aquestion').val("");
+		$("#Aanswer").val("");
+		$("#Astatus").val("");
 	}
+//     function clearEditFields(){
+// 		$('.bindingError').remove();
+// 		$("#Eid").val("");
+// 		$("#EuserName").val("");
+// 		$('#Equestion').val("");
+// 		$("#Eanswer").val("");
+// 		$("#Estatus").val("");
+// 	}
 //     function clearPassFields(){
 // 		$('.bindingError').remove();
-// 		$("#id").val("");
-// 		$("#userName").val("");
-// 		$("#password").val("");
-// 		$('#newPasswordAgain').val("");
+// 		$("#Pid").val("");
+// 		$("#PuserName").val("");
+// 		$("#PnewPassword").val("");
+// 		$('#PnewPasswordAgain').val("");
 // 	}
 
 	$(document).ready(function(){
@@ -222,9 +324,9 @@
 	<button data-target="#AddUser" title="Add a new user" type="button" class="btn btn-default toltip" data-toggle="modal" onclick="clearFields();">
 		<img src="<c:url value='/resources/img/icons/black/user_icon&16.png' />"> Add New User
 	</button>
-	<button data-target="#AllChangePassword" title="Change Unknown User Password" type="button" class="btn btn-default toltip" data-toggle="modal" onclick="clearPassFields();">
-		<img src="<c:url value='/resources/img/icons/black/key_icon&16.png' />"> Change Password
-	</button>
+<!-- 	<button data-target="#AllChangePassword" title="Change Unknown User Password" type="button" class="btn btn-default toltip" data-toggle="modal" onclick="clearPassFields();"> -->
+<%-- 		<img src="<c:url value='/resources/img/icons/black/key_icon&16.png' />"> Change Password --%>
+<!-- 	</button> -->
 </div>
 </div>
 <br>
@@ -258,7 +360,7 @@
       </div>
       <div class="modal-body">
 
-		<input type="hidden" id="id" name="id"/>
+		<input type="hidden" id="Aid" name="Aid"/>
 
 		<div class="form-container">
 		        
@@ -267,33 +369,39 @@
 		        
 		        <form class="form-horizontal">
 				  <div class="form-group">
-				    <label for="userName" class="col-sm-3 control-label">Username</label>
+				    <label for="AuserName" class="col-sm-3 control-label">Username</label>
 				    <div class="col-sm-7">
-				      <input type="text" class="form-control" id="userName" placeholder="Username">
+				      <input type="text" class="form-control" id="AuserName" placeholder="Username">
 				    </div>
 				  </div>
 				  <div class="form-group">
-				    <label for="password" class="col-sm-3 control-label">Password</label>
+				    <label for="Apassword" class="col-sm-3 control-label">Password</label>
 				    <div class="col-sm-7">
-				      <input type="text" class="form-control" id="password" placeholder="Password">
+				      <input type="password" class="form-control" id="Apassword" placeholder="Password">
 				    </div>
 				  </div>
 				  <div class="form-group">
-				    <label for="question" class="col-sm-3 control-label">Question</label>
+				    <label for="ApasswordAgain" class="col-sm-3 control-label">Password Again</label>
 				    <div class="col-sm-7">
-				      <input type="text" class="form-control" id="question" placeholder="Question">
+				      <input type="password" class="form-control" id="ApasswordAgain" placeholder="Password Again">
 				    </div>
 				  </div>
 				  <div class="form-group">
-				    <label for="answer" class="col-sm-3 control-label">Answer</label>
+				    <label for="Aquestion" class="col-sm-3 control-label">Question</label>
 				    <div class="col-sm-7">
-				      <input type="text" class="form-control" id="answer" placeholder="Answer">
+				      <input type="text" class="form-control" id="Aquestion" placeholder="Question">
 				    </div>
 				  </div>
 				  <div class="form-group">
-				    <label for="status" class="col-sm-3 control-label">Status</label>
+				    <label for="Aanswer" class="col-sm-3 control-label">Answer</label>
 				    <div class="col-sm-7">
-				      <select id="status" class="form-control input-sm">
+				      <input type="text" class="form-control" id="Aanswer" placeholder="Answer">
+				    </div>
+				  </div>
+				  <div class="form-group">
+				    <label for="Astatus" class="col-sm-3 control-label">Status</label>
+				    <div class="col-sm-7">
+				      <select id="Astatus" class="form-control input-sm">
 					      	<option value="">-- Select Option --</option>
 					      </select>
 				    </div>
@@ -321,7 +429,138 @@
 
 
 
+<div class="modal fade" id="EditUser" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+  
+ <%--  <form id="moduleView" method="post" > --%>
+  
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">User</h4>
+      </div>
+      <div class="modal-body">
 
+		<input type="hidden" id="Eid" name="Eid"/>
+
+		<div class="form-container">
+		        
+		        
+		        
+		        
+		        <form class="form-horizontal">
+				  <div class="form-group">
+				    <label for="EuserName" class="col-sm-3 control-label">Username</label>
+				    <div class="col-sm-7">
+				      <input type="text" class="form-control" id="EuserName" placeholder="Username">
+				    </div>
+				  </div>
+				  <div class="form-group">
+				    <label for="Equestion" class="col-sm-3 control-label">Question</label>
+				    <div class="col-sm-7">
+				      <input type="text" class="form-control" id="Equestion" placeholder="Question">
+				    </div>
+				  </div>
+				  <div class="form-group">
+				    <label for="Eanswer" class="col-sm-3 control-label">Answer</label>
+				    <div class="col-sm-7">
+				      <input type="text" class="form-control" id="Eanswer" placeholder="Answer">
+				    </div>
+				  </div>
+				  <div class="form-group">
+				    <label for="Estatus" class="col-sm-3 control-label">Status</label>
+				    <div class="col-sm-7">
+				      <select id="Estatus" class="form-control input-sm">
+					      	<option value="">-- Select Option --</option>
+					      </select>
+				    </div>
+				  </div>
+			  </form>
+		        
+		        
+		        
+		       
+		</div>
+
+
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" onclick="saveEdit();">Save</button>
+      </div>
+      
+    </div>
+    
+    <%-- </form> --%>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+<div class="modal fade" id="EditUserPassword" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+  
+ <%--  <form id="moduleView" method="post" > --%>
+  
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Change Password</h4>
+      </div>
+      <div class="modal-body">
+
+		<input type="hidden" id="Pid" name="Pid"/>
+
+		<div class="form-container">
+		        
+		        
+		        
+		        
+		        <form class="form-horizontal">
+				  <div class="form-group">
+				    <label for="PuserName" class="col-sm-3 control-label">Username</label>
+				    <div class="col-sm-7">
+				      <input type="text" class="form-control" id="PuserName" placeholder="Username">
+				    </div>
+				  </div>
+				  <div class="form-group">
+				    <label for="Ppassword" class="col-sm-3 control-label">Password</label>
+				    <div class="col-sm-7">
+				      <input type="password" class="form-control" id="Ppassword" placeholder="New Password">
+				    </div>
+				  </div>
+				  <div class="form-group">
+				    <label for="PpasswordAgain" class="col-sm-3 control-label">Password Again</label>
+				    <div class="col-sm-7">
+				      <input type="password" class="form-control" id="PpasswordAgain" placeholder="New Password Again">
+				    </div>
+				  </div>
+			  </form>
+		        
+		        
+		        
+		       
+		</div>
+
+
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" onclick="saveEditPassword();">Save</button>
+      </div>
+      
+    </div>
+    
+    <%-- </form> --%>
+  </div>
+</div>
 
 
 
