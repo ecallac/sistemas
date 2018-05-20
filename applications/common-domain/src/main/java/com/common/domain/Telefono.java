@@ -19,7 +19,7 @@ public class Telefono extends BaseEntity {
 	private String tipo;
 	private String numero;
 	private String codigoarea;
-	@ManyToOne(fetch=FetchType.LAZY)
+	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name = "entidad_id")
 	private Entidad entidad;
 

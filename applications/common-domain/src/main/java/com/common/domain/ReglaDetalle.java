@@ -20,7 +20,7 @@ public class ReglaDetalle extends BaseEntity {
 	private Double valornumero;
 	private String valorcadena;
 	private String activo;
-	@ManyToOne(fetch=FetchType.LAZY)
+	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name = "regla_id")
 	private Regla regla;
 	public String getCondicion() {

@@ -26,7 +26,7 @@ public class Regla extends BaseEntity {
 	@Column(name = "tipo_valor")
 	private String tipoValor;
 	private String activo;
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "regla", fetch = FetchType.LAZY)
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "regla", fetch = FetchType.EAGER)
 	private List<ReglaDetalle> reglaDetalles;
 	public String getCategoria() {
 		return categoria;

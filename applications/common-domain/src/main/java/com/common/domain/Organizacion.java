@@ -26,10 +26,10 @@ public class Organizacion extends Entidad {
 	private String tipoOrganizacion;
 	private String numeroidentificacion;
 	private String razonsocial;
-	@OneToOne(fetch=FetchType.LAZY)
+	@OneToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name = "entidad_id")
 	private Entidad entidad;
-	@ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+	@ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
 	@JoinTable(name = "personaorganizacion", joinColumns = {
 			@JoinColumn(name = "organizacion_id", nullable = false, updatable = false) },
 			inverseJoinColumns = { @JoinColumn(name = "persona_id",

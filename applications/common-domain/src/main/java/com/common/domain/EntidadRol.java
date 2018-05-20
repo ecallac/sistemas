@@ -20,7 +20,7 @@ public class EntidadRol extends BaseEntity {
 	private String estado;
 	@Column(name = "tipo_entidadrol")
 	private String tipoEntidadrol;
-	@ManyToOne(fetch=FetchType.LAZY)
+	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name = "entidad_id")
 	private Entidad entidad;
 

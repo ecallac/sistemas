@@ -22,13 +22,13 @@ import javax.persistence.Table;
 public class Entidad extends BaseEntity{
 	@Column(name = "tipo_entidad")
 	private String tipoEntidad;
-	@OneToOne(cascade = CascadeType.ALL, mappedBy = "entidad", fetch = FetchType.LAZY)
+	@OneToOne(cascade = CascadeType.ALL, mappedBy = "entidad", fetch = FetchType.EAGER)
 	private Persona persona;
-	@OneToOne(cascade = CascadeType.ALL, mappedBy = "entidad", fetch = FetchType.LAZY)
+	@OneToOne(cascade = CascadeType.ALL, mappedBy = "entidad", fetch = FetchType.EAGER)
 	private Organizacion organizacion;
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "entidad", fetch = FetchType.LAZY)
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "entidad", fetch = FetchType.EAGER)
 	private List<EntidadRol> entidadRols;
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "entidad", fetch = FetchType.LAZY)
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "entidad", fetch = FetchType.EAGER)
 	private List<Telefono> telefonos;
 	
 	public String getTipoEntidad() {

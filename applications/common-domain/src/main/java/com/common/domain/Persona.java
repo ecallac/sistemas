@@ -32,10 +32,10 @@ public class Persona extends Entidad {
 	private String sexo;
 	private Date fechanacimiento;
 	private String email;
-	@OneToOne(fetch=FetchType.LAZY)
+	@OneToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name = "entidad_id")
 	private Entidad entidad;
-	@ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY, mappedBy = "personas")
+	@ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER, mappedBy = "personas")
 	private List<Organizacion> organizacions;
 
 	public String getTipoDocumentoIdentificaion() {
