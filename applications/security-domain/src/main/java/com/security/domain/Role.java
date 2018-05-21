@@ -36,7 +36,7 @@ public class Role extends BaseEntity{
 //	@OneToMany(mappedBy="role",fetch=FetchType.LAZY)
 //	@Cascade({CascadeType.SAVE_UPDATE, CascadeType.DELETE})
 	
-	@ManyToMany(fetch = FetchType.LAZY)
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "roleuser", joinColumns = {
 			@JoinColumn(name = "role_id", nullable = false, updatable = false) },
 			inverseJoinColumns = { @JoinColumn(name = "user_id",
@@ -47,7 +47,7 @@ public class Role extends BaseEntity{
 //	@OneToMany(mappedBy="role",fetch=FetchType.LAZY)
 //	@Cascade({CascadeType.SAVE_UPDATE, CascadeType.DELETE})
 	
-	@ManyToMany(fetch = FetchType.LAZY)
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "rolepermission", joinColumns = {
 			@JoinColumn(name = "role_id", nullable = false, updatable = false) },
 			inverseJoinColumns = { 

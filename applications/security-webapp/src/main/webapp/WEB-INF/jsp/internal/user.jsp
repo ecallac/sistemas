@@ -17,15 +17,10 @@
 	<title></title>
 	<script type="text/javascript">
 	
-	$('#AddUser').on('shown.bs.modal', function () {
-	  
-	})
-	$('#EditUser').on('shown.bs.modal', function () {
-	  
-	})
-	$('#EditUserPassword').on('shown.bs.modal', function () {
-	  
-	})
+	$('#AddUser').on('shown.bs.modal', function () {})
+	$('#EditUser').on('shown.bs.modal', function () {})
+	$('#EditUserPassword').on('shown.bs.modal', function () {})
+	$('#EditUserRole').on('shown.bs.modal', function () {})
 	
 	var contexPath = "<%=request.getContextPath() %>";
 	
@@ -135,6 +130,42 @@
     }
     
     
+    
+    
+    
+    
+    function saveEditUserRole(){
+		var formData= {
+				id: parseInt($("#userId").val()) 
+// 				roleId: $('#roleId').val()
+		}
+		$('.bindingError').remove();
+		
+    	var ajaxUrl = contexPath+'/user/saveEditUserRole.json';
+    	var successFunction = function(response){
+     	   if(response.validated){
+               //Set response
+    		   if(response.status=="OK"){
+         			showSuccessMessage(response.message);
+         			load();
+         			$('#EditUserRole').modal('hide');
+         		}else{
+         			showErrorMessage(response.message);
+         		}
+            }else{
+              //Set error messages
+              $.each(response.messages,function(key,value){
+  	            $('input[id='+key+']').after('<span class="bindingError" style="color:red;font-weight: bold;">'+value+'</span>');
+              });
+            }
+    	   
+       };
+       
+       ajaxPost(ajaxUrl,formData,successFunction);
+              
+    }
+    
+    
     function remove(idVal){
     	var formData= {
 				id: idVal
@@ -187,28 +218,46 @@
        ajaxPost(ajaxUrl,formData,successFunction);
     }
     
-//     function enableAndDisable(object,idVal){
-//     	var elabled = "N";
-//     	if (object.checked) {
-// 			elabled = "Y";
-// 		}
-//     	var formData= {
-// 				id: idVal,
-// 				enabled:elabled
-// 		}
-//     	var ajaxUrl = contexPath+'/module/enableDisable.json';
-//     	var successFunction = function(response){
-//        		if(response.status=="OK"){
-//        			showSuccessMessage(response.message);
-//        		}else{
-//        			showErrorMessage(response.message);
-//        		}
-//        };
+    function editUserRole(idVal){
+    	var formData= {
+				id: idVal
+		}
+    	$('.bindingError').remove();
+    	var ajaxUrl = contexPath+'/user/loadEditUserRole.json';
+    	var successFunction = function(response){
+       		if(response.status=="OK"){
+       			$("#userId").val(response.viewBean.id);
+       			$("#RuserName").val(response.viewBean.userName);
+       			loadRoles(idVal);
+       		}
+       };
        
-//        ajaxPost(ajaxUrl,formData,successFunction);
+       ajaxPost(ajaxUrl,formData,successFunction);
+    }
+    
+    function assignRolesbyUser(object,userId,roleId){
+    	var selected = "N";
+    	if (object.checked) {
+    		selected = "Y";
+		}
+    	var formData= {
+    			userId: userId,
+    			roleId: roleId,
+    			selected: selected
+		}
+    	var ajaxUrl = contexPath+'/user/assignRolesbyUser.json';
+    	var successFunction = function(response){
+       		if(response.status=="OK"){
+       			showSuccessMessage(response.message);
+       		}else{
+       			showErrorMessage(response.message);
+       		}
+       };
+       
+       ajaxPost(ajaxUrl,formData,successFunction);
     	
     	
-//     }
+    }
     
     function load(){
     	var ajaxUrl = contexPath+'/user/list.json';
@@ -232,7 +281,8 @@
        	                "render": function ( data, type, row ) {
        	                    return "<td><button title='Edit' onclick='edit("+row.id+")' type='button' class='btn btn-link btn-xs toltip' data-toggle='modal' data-target='#EditUser'><img src='<c:url value='/resources/img/icons/black/doc_edit_icon&16.png' />'></button> | "+
            	                 "<button title='Delete' onclick='remove("+row.id+")' type='button' class='btn btn-link btn-xs toltip'><img src='<c:url value='/resources/img/icons/black/trash_icon&16.png' />'></button> | "+
-           	              	"<button title='Change Password' onclick='editPassword("+row.id+")' type='button' class='btn btn-link btn-xs toltip' data-toggle='modal' data-target='#EditUserPassword'><img src='<c:url value='/resources/img/icons/black/key_icon&16.png' />'></button></td>"
+           	              	"<button title='Change Password' onclick='editPassword("+row.id+")' type='button' class='btn btn-link btn-xs toltip' data-toggle='modal' data-target='#EditUserPassword'><img src='<c:url value='/resources/img/icons/black/key_icon&16.png' />'></button></td>"+
+           	             "<button title='Change Roles by User' onclick='editUserRole("+row.id+")' type='button' class='btn btn-link btn-xs toltip' data-toggle='modal' data-target='#EditUserRole'><img src='<c:url value='/resources/img/icons/black/cogs_icon&16.png' />'></button></td>"
            	              		;
        	                }
        	            }
@@ -247,23 +297,56 @@
        
     }
     
-    function populateStatusSelect(){
-    	var ajaxUrl = contexPath+'/user/enabledStatus.json';
+    
+    function loadRoles(idVal){
+    	var formData= {
+				id: idVal
+		}
+    	$('.bindingError').remove();
+    	var ajaxUrl = contexPath+'/user/enabledRolesByUser.json';
     	var successFunction = function(response){
        		if(response.data.length>0){
-       			$.each(response.data, function(i, row) {
-//                     $('#status').append('<option value="' + row.id + '">' + row.name + '</option>');
-                    $('#Estatus').append('<option value="' + row + '">' + row + '</option>');
-                    $('#Astatus').append('<option value="' + row + '">' + row + '</option>');
+       			
+       			var tableId = "#roles";
+       			var jsonData = response.data;
+       			var jsonColumns = [
+   		            { "data": "roleId" },
+   		            { "data": "roleDescription" }
+   		        ];
+       			var jsonColumnDefs = [
+       				{
+       	            	"targets": 2,
+       	                "render": function ( data, type, row) {
+      	                var checkedActive='';
+                         if (row.selected == 'Y'){
+                         	checkedActive = "checked='true'";
+                         }
+      	                    return "<td><input type='checkbox' name='roleSelected' id='roleSelected' "+checkedActive+" value='"+row.roleId+"' onclick='assignRolesbyUser(this,"+row.userId+","+row.roleId+");'></td>";
+       	                }
+       	            }
+       	        ];
+       			
+       			createTableWithoutButtons(tableId,jsonData,jsonColumns,jsonColumnDefs);
+       			
+       		}
+       };
+       
+       ajaxPost(ajaxUrl,formData,successFunction);
+    }
+    
+    function populateStatusSelect(){
+    	var URL_USER_STATUS_LIST = "<%=request.getSession().getAttribute("URL_USER_STATUS_LIST") %>";
+    	var ajaxUrl = URL_USER_STATUS_LIST;
+    	var successFunction = function(response){
+       		if(response.objectBean.length>0){
+       			$.each(response.objectBean, function(i, row) {
+                    $('#Astatus').append('<option value="' + row.id + '">' + row.codigo + '</option>');
+                    $('#Estatus').append('<option value="' + row.id + '">' + row.codigo + '</option>');
                 });
        		}
        };
-       ajaxPostWithoutForm(ajaxUrl,successFunction);
+       ajaxWithoutForm(ajaxUrl,"GET",successFunction);
     }
-    
-// 	function getPermissions(idVal){
-    	
-//     }
     
     function clearFields(){
 		$('.bindingError').remove();
@@ -275,25 +358,11 @@
 		$("#Aanswer").val("");
 		$("#Astatus").val("");
 	}
-//     function clearEditFields(){
-// 		$('.bindingError').remove();
-// 		$("#Eid").val("");
-// 		$("#EuserName").val("");
-// 		$('#Equestion').val("");
-// 		$("#Eanswer").val("");
-// 		$("#Estatus").val("");
-// 	}
-//     function clearPassFields(){
-// 		$('.bindingError').remove();
-// 		$("#Pid").val("");
-// 		$("#PuserName").val("");
-// 		$("#PnewPassword").val("");
-// 		$('#PnewPasswordAgain').val("");
-// 	}
 
 	$(document).ready(function(){
     	load();
     	populateStatusSelect();
+    	
     });
 	</script>
 	<style type="text/css">
@@ -554,6 +623,62 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
         <button type="button" class="btn btn-primary" onclick="saveEditPassword();">Save</button>
+      </div>
+      
+    </div>
+    
+    <%-- </form> --%>
+  </div>
+</div>
+
+
+
+
+
+
+
+<div class="modal fade" id="EditUserRole" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+  
+ <%--  <form id="moduleView" method="post" > --%>
+  
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Edit Role of User</h4>
+      </div>
+      <div class="modal-body">
+
+		<input type="hidden" id="userId" name="userId"/>
+
+		<div class="form-container">
+		        
+		        <form class="form-horizontal">
+				  <div class="form-group">
+				    <label for="RuserName" class="col-sm-3 control-label">Username</label>
+				    <div class="col-sm-7">
+				      <input type="text" class="form-control" id="RuserName" placeholder="Username">
+				    </div>
+				  </div>
+			  
+		         <table id="roles" align="center" class="table table-striped table-hover table-bordered">  
+				<thead>
+				<tr><th>Id</th><th>Description</th><th>Select</th></tr>  
+				</thead>
+				</table>
+		        
+
+		       </form> 
+		        
+		        
+		       
+		</div>
+
+
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
       </div>
       
     </div>

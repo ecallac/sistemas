@@ -16,6 +16,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.context.request.RequestContextHolder;
 
 import com.security.web.service.LoginServiceImpl;
 
@@ -41,6 +42,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 		DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
 		daoAuthenticationProvider.setUserDetailsService(loginServiceImpl);
 		daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
+		
 		return daoAuthenticationProvider;
 	}
 	

@@ -27,12 +27,12 @@ import org.hibernate.validator.constraints.NotEmpty;
 public class User extends BaseEntity{
 	
 	@NotEmpty
-	@Size(min=8)
+	@Size(min=4)
 	@Column(name = "username", unique = true, nullable = false)
 	private String userName;
 	
 	@NotEmpty
-	@Size(min=8)
+	@Size(min=4)
 	@Column(name = "password",nullable = false)
 	private String password;
 	
@@ -57,11 +57,11 @@ public class User extends BaseEntity{
 	
 //	@OneToMany(mappedBy="user",fetch=FetchType.LAZY)
 //	@Cascade({CascadeType.SAVE_UPDATE, CascadeType.DELETE})
-	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "users")
-	@Cascade({CascadeType.SAVE_UPDATE, CascadeType.DELETE})
+	@ManyToMany(fetch = FetchType.EAGER, mappedBy = "users")
+	@Cascade({CascadeType.ALL})
 	private List<Role> roles;
 	
-	@OneToMany(mappedBy="user",fetch=FetchType.LAZY)
+	@OneToMany(mappedBy="user",fetch=FetchType.EAGER)
 	@Cascade({CascadeType.SAVE_UPDATE, CascadeType.DELETE})
 	private List<Session> sessions;
 	

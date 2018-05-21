@@ -16,6 +16,7 @@ import com.common.utils.BeanParser;
 
 import com.security.dao.UserDao;
 import com.security.domain.BusinessException;
+import com.security.domain.Role;
 import com.security.domain.User;
 
 /**
@@ -29,6 +30,9 @@ public class UserServiceImpl implements UserService {
 	
 	@Autowired
 	UserDao userDao;
+	
+	@Autowired
+	RoleService roleService;
 
 	public void save(User user) {
 		if (user.getId()==null) {
@@ -91,6 +95,26 @@ public class UserServiceImpl implements UserService {
 		userStored.setPassword(user.getPassword());
 		userStored.setUpdatedBy(user.getUpdatedBy());
 		userDao.save(userStored);
+		
+	}
+
+	@Override
+	public void saveRoleInUser(Long userId, Long roleId) {
+		User user = findUserById(userId);
+    	Role role = roleService.findRoleById(roleId);
+    	role.getUsers().add(user);
+    	user.getRoles().add(role);
+    	save(user);
+	}
+
+	@Override
+	public void deleteRoleFromUser(Long userId, Long roleId) {
+		User user = findUserById(userId);
+		Role roleStored = roleService.findRoleById(roleId);
+		user.getRoles().remove(roleStored);
+		roleStored.getUsers().remove(user);
+		roleService.save(roleStored);
+		save(user);
 		
 	}
 	

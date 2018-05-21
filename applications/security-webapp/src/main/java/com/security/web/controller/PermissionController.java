@@ -53,7 +53,7 @@ public class PermissionController {
 	public ModelAndView list(HttpSession session){
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("permission");
-		session.setAttribute("URL_TYPE_PERMISSION_LIST", tipoBaseByCategory+"?categoria="+SecurityConstants.TIPOBASE_TYPE_PERMISSION);
+		session.setAttribute("URL_TYPE_PERMISSION_LIST", tipoBaseByCategory+"?categoria="+SecurityConstants.TIPOBASE_CATEGORIA_TYPE_PERMISSION);
 		return modelAndView;
 	}
 	

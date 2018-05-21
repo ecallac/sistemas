@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.security.domain.Permission;
@@ -29,6 +30,10 @@ public class LoginController {
 		if (error != null) {
 			modelAndView.addObject("error", "Username or password is incorrect!");
 		}
+		
+//		String sessionId = RequestContextHolder.currentRequestAttributes().getSessionId();
+		
+		
 		if (logout != null) {
 			modelAndView.addObject("message", "Logged out from page successfully.");
 		}

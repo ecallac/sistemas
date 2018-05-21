@@ -44,7 +44,7 @@ public class Permission extends BaseEntity {
 	@JoinColumn(name="parent_Permission_Id")
 	private Permission parentPermission;
 	
-	@OneToMany(mappedBy="parentPermission",fetch=FetchType.LAZY)
+	@OneToMany(mappedBy="parentPermission",fetch=FetchType.EAGER)
 	@Cascade({CascadeType.SAVE_UPDATE, CascadeType.DELETE})
 	private List<Permission> childPermissions;
 

@@ -164,3 +164,20 @@
     		"columnDefs": jsonColumnDefs
     	} );
     }
+	
+	function createTableWithoutButtons(tableId,jsonData,jsonColumns,jsonColumnDefs){
+    	var printCounter = 0;
+    	$(tableId).DataTable( {
+    		dom: 'Bfrtip',
+    		"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+    		destroy: true,
+//    				"bProcessing" : true,
+    		"data": jsonData,
+    		
+    		buttons: [
+    			'pageLength'
+    		],
+    		"columns": jsonColumns,
+    		"columnDefs": jsonColumnDefs
+    	} );
+    }

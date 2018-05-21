@@ -13,8 +13,10 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
+import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -29,17 +31,24 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.common.client.canonical.CanonicalResponse;
 import com.common.utils.BeanParser;
+import com.common.utils.CommonConstants;
 import com.common.utils.CommonUtil;
+import com.security.domain.Role;
 import com.security.domain.User;
+import com.security.service.RoleService;
 import com.security.service.UserService;
 import com.security.utils.SecurityConstants;
 import com.security.web.bean.ModuleView;
+import com.security.web.bean.RoleView;
 import com.security.web.bean.UserEditPasswordView;
 import com.security.web.bean.UserEditView;
 import com.security.web.bean.UserNewView;
+import com.security.web.bean.UserRoleView;
 import com.security.web.bean.UserView;
 import com.security.web.utils.ExcelUtils;
+import com.security.web.utils.HTTPClientUtils;
 
 /**
  * @author efrain.calla
@@ -50,146 +59,21 @@ public class UserController {
 	
 	@Autowired
     private UserService userService;
+	
+	@Autowired
+	RoleService roleService;
      
     @Autowired
     private PasswordEncoder passwordEncoder;
     
     @Autowired
+	@Value("${security.common.tipoBaseByCategory}")
+	private String tipoBaseByCategory;
+    
+    @Autowired
 	@Value("${report.web.xls.templates}")
 	private String xlsReportTemplate;
-    
-//    @RequestMapping(value={"/userList"}, method=RequestMethod.GET)
-//	public ModelAndView userInfo(){
-//		ModelAndView modelAndView = new ModelAndView();
-//	    modelAndView.addObject("list", userService.findAllUsers());
-//		modelAndView.setViewName("userList");
-//		return modelAndView;
-//	}
-    
-//    @RequestMapping("/userForm")  
-//    public String showform(ModelMap model){  
-//    	model.addAttribute("user", new User());
-//        return "userForm";
-//    }
-    
-//    @ModelAttribute("states")
-//    public List<String> initializeCountries() {
-//        List<String> countries = new ArrayList<String>();
-//        countries.add("1");
-//        countries.add("2");
-//        countries.add("3");
-//        countries.add("4");
-////        countries.add("Active");
-////        countries.add("Inactive");
-////        countries.add("Deleted");
-////        countries.add("Locked");
-//        return countries;
-//    }
-    
-    @RequestMapping(value = "/user/enabledStatus", method = {RequestMethod.GET,RequestMethod.POST})
-	public @ResponseBody Map<String, Object> initializeUserStatus() {
-		Map<String, Object> map = new HashMap<String, Object>();
-		List<String> list = new ArrayList<String>();
-		list.add("1");
-		list.add("2");
-		list.add("3");
-//		if (list != null) {
-			map.put("data", list);
-//		} else {
-//			map.put("data", new ArrayList<ModuleView>());
-//		}
-		return map;
-	}
-    
-//    @RequestMapping(value = "/saveUser", method = RequestMethod.POST)
-//    public String saveUser(@Valid User user,
-//            BindingResult result,Principal principal,ModelMap model) {
-//    	
-//        if (result.hasErrors()) {
-//            System.out.println("There are errors");
-//            return "userForm";
-//        }
-//        user.setCreatedBy(principal.getName());
-//        user.setPassword(passwordEncoder.encode(user.getPassword()));
-//        userService.save(user);
-//        return "redirect:/userList";
-//    }
-//    
-//    @RequestMapping("/editUser/{id}")  
-//    public ModelAndView editUser(@PathVariable int id){ 
-//    	User user = userService.findUserById(Long.valueOf(id));
-//    	UserEditView userEditView = (UserEditView)BeanParser.parseObjectToNewClass(user, UserEditView.class, null);
-//        return new ModelAndView("userEditForm","userEditView",userEditView);  
-//    }
-//    
-//    @RequestMapping(value = "/saveUserEdit", method = RequestMethod.POST)
-//    public String saveUserEdit(@Valid UserEditView userEditView,
-//            BindingResult result,Principal principal,ModelMap model) {
-//    	
-//        if (result.hasErrors()) {
-//            System.out.println("There are errors");
-//            return "userEditForm";
-//        }
-//        User user = (User)BeanParser.parseObjectToNewClass(userEditView, User.class, null);
-//		user.setUpdatedBy(principal.getName());
-//        userService.save(user);
-//        return "redirect:/userList";
-//    }
-//    
-//    @RequestMapping("/deleteUser/{id}")
-//    public ModelAndView deleteUser(@PathVariable int id){ 
-//    	User user = userService.findUserById(Long.valueOf(id));
-//    	userService.delete(user);
-//        return new ModelAndView("redirect:/userList");  
-//    }
-    
-//    @RequestMapping("/resetPasswordForm/{id}")
-//    public String resetPasswordForm(ModelMap model,@PathVariable Integer id){ 
-//    	ResetUserView resetUserView = new ResetUserView();
-//    	if (id !=null) {
-//    		User user = userService.findUserById(Long.valueOf(id));
-//    		resetUserView = (ResetUserView)BeanParser.parseObjectToNewClass(user, ResetUserView.class, null);
-//		}
-//    	model.addAttribute("resetUserView", resetUserView);
-//        return "resetPasswordForm";
-//    }
-//    @RequestMapping("/resetPasswordForm")
-//    public String resetPasswordForm(ModelMap model){
-//    	model.addAttribute("resetUserView", new ResetUserView());
-//        return "resetPasswordForm";
-//    }
-    
-    
-//    @RequestMapping(value = "/resetPassword", method = RequestMethod.POST)
-//    public ModelAndView resetPassword(@Valid ResetUserView resetUserView,BindingResult result,Principal principal) {
-//    	ModelAndView modelAndView = new ModelAndView();
-//    	modelAndView.setViewName("redirect:/userList");
-//    	
-//        if (result.hasErrors()) {
-//            return modelAndView;
-//        }
-//        
-//        
-//        try {
-//        	
-//        	if (!resetUserView.getPassword().equals(resetUserView.getNewPasswordAgain())) {
-//    			throw new BusinessException("The new password aren't same! Try again please.");
-//    		}
-//        	
-//        	User user = (User)BeanParser.parseObjectToNewClass(resetUserView, User.class, null);
-//            user.setUpdatedBy(user.getId()==null?principal.getName():user.getUpdatedBy());
-//            user.setPassword(passwordEncoder.encode(user.getPassword()));
-//            
-//        	userService.savePassword(user);
-//		} catch (Exception e) {
-//			modelAndView.addObject("error", e.getMessage());
-//			modelAndView.setViewName("resetPasswordForm");
-//			return modelAndView;
-//		}
-//        modelAndView.addObject("message", "Password was updated successfully.");
-//        
-//		return modelAndView;
-//    }
+
     
     
     @RequestMapping("/reportUserList/{format}")
@@ -236,9 +120,10 @@ public class UserController {
     
     
     @RequestMapping(value={"/user"}, method={RequestMethod.GET,RequestMethod.POST})
-	public ModelAndView list(){
+	public ModelAndView list(HttpSession session){
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("user");
+		session.setAttribute("URL_USER_STATUS_LIST", tipoBaseByCategory+"?categoria="+SecurityConstants.TIPOBASE_CATEGORIA_USER_STATUS);
 		return modelAndView;
 	}
     
@@ -247,6 +132,30 @@ public class UserController {
         Map<String, Object> map = new HashMap<String, Object>();
         List<UserView> list = castUserToUserEditViewList(userService.findAllUsers());
         if (list != null) {
+        	String response = HTTPClientUtils.sendGetRequest(tipoBaseByCategory+"?categoria="+SecurityConstants.TIPOBASE_CATEGORIA_USER_STATUS, "json");
+        	ObjectMapper mapper = new ObjectMapper();
+        	try {
+				CanonicalResponse canonicalResponse = mapper.readValue(response, CanonicalResponse.class);
+				if (canonicalResponse.getStatus().equals(CanonicalResponse.STATUS_OK)) {
+					Object object = canonicalResponse.getObjectBean();
+					List<Map<Object, Object>> maps = (List<Map<Object, Object>>) object;
+					
+					for (UserView userView : list) {
+						for (Map<Object, Object> map2 : maps) {
+							Integer id = (Integer) map2.get("id");
+							String codigo = (String) map2.get("codigo");
+							if (userView.getStatus().equals(id.toString())) {
+								userView.setStatus(codigo);
+							}
+						}
+					}
+				} else {
+
+				}
+			} catch (Exception e) {
+				System.err.println(e.getMessage());
+				e.printStackTrace();
+			}
             map.put("data", list);
         } else {
       	  map.put("data", new ArrayList<ModuleView>());
@@ -287,6 +196,61 @@ public class UserController {
         User user = userService.findUserById(userView.getId());
         map.put(SecurityConstants.STATUS, SecurityConstants.OK);
         map.put("viewBean", (UserEditPasswordView)BeanParser.parseObjectToNewClass(user, UserEditPasswordView.class, null));
+        return map;
+    }
+    
+    @RequestMapping(value = "/user/loadEditUserRole", method = {RequestMethod.POST})
+    public @ResponseBody  Map<String, Object> loadEditUserRole(@RequestBody UserView userView) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        User user = userService.findUserById(userView.getId());
+        map.put(SecurityConstants.STATUS, SecurityConstants.OK);
+        map.put("viewBean", (UserView)BeanParser.parseObjectToNewClass(user, UserView.class, null));
+        return map;
+    }
+    
+    @RequestMapping(value = "/user/enabledRolesByUser", method = {RequestMethod.GET,RequestMethod.POST})
+	  public @ResponseBody Map<String, Object> initializeEnabledRolesByUser(@RequestBody UserView userView) {
+	      Map<String, Object> map = new HashMap<String, Object>();
+	      User user = userService.findUserById(userView.getId());
+	  List<Role> roles = roleService.findByEnabled(CommonConstants.YES);
+	  List<UserRoleView> list = castUserRoleViewList(userView.getId(), roles, user.getRoles());
+	  if (list != null) {
+	      map.put("data", list);
+	  } else {
+		  map.put("data", new ArrayList<RoleView>());
+	      }
+	      return map;
+	  }
+    private List<UserRoleView> castUserRoleViewList(Long userId,List<Role> enabledRoles,List<Role> userRoles){
+    	List<UserRoleView> userRoleViews = new ArrayList<>();
+    	for (Role role : enabledRoles) {
+    		UserRoleView userRoleView = new UserRoleView();
+			userRoleView.setUserId(userId);
+			userRoleView.setRoleId(role.getId());
+			userRoleView.setRoleDescription(role.getDescription());
+			for (Role userRole : userRoles) {
+				if (userRole.getId().toString().equals(role.getId().toString())) {
+					userRoleView.setSelected(SecurityConstants.YES);
+				}
+			}
+			userRoleViews.add(userRoleView);
+		}
+    	
+		return userRoleViews;
+    }
+    
+    @RequestMapping(value = "/user/assignRolesbyUser", method = {RequestMethod.POST})
+    public @ResponseBody  Map<String, Object> assignRolesbyUser(@RequestBody UserRoleView userRoleView) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        if (userRoleView.getSelected().equals(SecurityConstants.YES)) {
+        	userService.saveRoleInUser(userRoleView.getUserId(), userRoleView.getRoleId());
+		} else {
+			userService.deleteRoleFromUser(userRoleView.getUserId(), userRoleView.getRoleId());
+		}
+    	
+		map.put(SecurityConstants.STATUS, SecurityConstants.OK);
+        map.put(SecurityConstants.MESSAGE, "Your record have been updated successfully at "+CommonUtil.dateToString(new Date(), "yyyy-MM-dd HH:mm:ss"));
+		
         return map;
     }
     

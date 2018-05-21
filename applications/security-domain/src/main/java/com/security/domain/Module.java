@@ -38,7 +38,7 @@ public class Module extends BaseEntity{
 	private String moduleVersion;
 	
 	
-	@OneToMany(mappedBy="module",fetch=FetchType.LAZY)
+	@OneToMany(mappedBy="module",fetch=FetchType.EAGER)
 	@Cascade({CascadeType.SAVE_UPDATE, CascadeType.DELETE})
 	private List<Permission> permissions;
 

@@ -21,4 +21,6 @@ public interface UserService {
 	List<User> findUsersByStatus(String status);
 	void savePassword(User user) throws Exception;
 	void savePasswordById(User user);
+	void saveRoleInUser(Long userId,Long roleId);
+	void deleteRoleFromUser(Long userId,Long roleId);
 }
