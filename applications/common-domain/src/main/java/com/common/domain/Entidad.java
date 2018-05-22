@@ -13,6 +13,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 /**
  * @author efrain
  *
@@ -23,12 +26,16 @@ public class Entidad extends BaseEntity{
 	@Column(name = "tipo_entidad")
 	private String tipoEntidad;
 	@OneToOne(cascade = CascadeType.ALL, mappedBy = "entidad", fetch = FetchType.EAGER)
+	@Fetch(value = FetchMode.SELECT)
 	private Persona persona;
 	@OneToOne(cascade = CascadeType.ALL, mappedBy = "entidad", fetch = FetchType.EAGER)
+	@Fetch(value = FetchMode.SELECT)
 	private Organizacion organizacion;
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "entidad", fetch = FetchType.EAGER)
+	@Fetch(value = FetchMode.SELECT)
 	private List<EntidadRol> entidadRols;
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "entidad", fetch = FetchType.EAGER)
+	@Fetch(value = FetchMode.SELECT)
 	private List<Telefono> telefonos;
 	
 	public String getTipoEntidad() {

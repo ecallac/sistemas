@@ -15,6 +15,9 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 /**
  * @author efrain
  *
@@ -34,8 +37,10 @@ public class Persona extends Entidad {
 	private String email;
 	@OneToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name = "entidad_id")
+	@Fetch(value = FetchMode.SELECT)
 	private Entidad entidad;
 	@ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER, mappedBy = "personas")
+	@Fetch(value = FetchMode.SELECT)
 	private List<Organizacion> organizacions;
 
 	public String getTipoDocumentoIdentificaion() {

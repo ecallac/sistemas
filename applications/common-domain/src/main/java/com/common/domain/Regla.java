@@ -12,6 +12,9 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 /**
  * @author efrain
  *
@@ -27,6 +30,7 @@ public class Regla extends BaseEntity {
 	private String tipoValor;
 	private String activo;
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "regla", fetch = FetchType.EAGER)
+	@Fetch(value = FetchMode.SELECT)
 	private List<ReglaDetalle> reglaDetalles;
 	public String getCategoria() {
 		return categoria;

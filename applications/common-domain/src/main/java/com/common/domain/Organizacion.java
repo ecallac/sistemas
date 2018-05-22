@@ -15,6 +15,9 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 /**
  * @author efrain
  *
@@ -28,6 +31,7 @@ public class Organizacion extends Entidad {
 	private String razonsocial;
 	@OneToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name = "entidad_id")
+	@Fetch(value = FetchMode.SELECT)
 	private Entidad entidad;
 	@ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
 	@JoinTable(name = "personaorganizacion", joinColumns = {

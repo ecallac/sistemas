@@ -9,6 +9,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 /**
  * @author efrain
  *
@@ -21,6 +24,7 @@ public class Telefono extends BaseEntity {
 	private String codigoarea;
 	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name = "entidad_id")
+	@Fetch(value = FetchMode.SELECT)
 	private Entidad entidad;
 
 	public String getTipo() {
