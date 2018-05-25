@@ -3,6 +3,7 @@
  */
 package com.security.web.controller;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -86,7 +87,7 @@ public class PermissionController {
   }
 	
 	@RequestMapping(value = "/permission/save", method = {RequestMethod.POST})
-    public @ResponseBody  Map<String, Object> save(@RequestBody @Valid PermissionView permissionView,BindingResult result) {
+    public @ResponseBody  Map<String, Object> save(@RequestBody @Valid PermissionView permissionView,BindingResult result,Principal principal) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		if(result.hasErrors()){
 	         
@@ -108,6 +109,11 @@ public class PermissionController {
 		}
 		if (StringUtils.isNotBlank(permissionView.getParentPermissionId())) {
 			permission.setParentPermission((Permission)BeanParser.parseObjectToNewClass(permissionView.getParentPermission(), Permission.class, null));
+		}
+		if (permissionView.getId()==null) {
+			permission.setCreatedBy(principal.getName());
+		} else {
+			permission.setUpdatedBy(principal.getName());
 		}
 		permissionService.save(permission);
 		
@@ -142,10 +148,11 @@ public class PermissionController {
     }
 	
 	@RequestMapping(value = "/permission/enableDisable", method = {RequestMethod.POST})
-    public @ResponseBody  Map<String, Object> enableDisable(@RequestBody PermissionView permissionView) {
+    public @ResponseBody  Map<String, Object> enableDisable(@RequestBody PermissionView permissionView,Principal principal) {
         Map<String, Object> map = new HashMap<String, Object>();
-    	Permission Permission = (Permission) BeanParser.parseObjectToNewClass(permissionView, Permission.class, null);
-		permissionService.save(Permission);
+    	Permission permission = (Permission) BeanParser.parseObjectToNewClass(permissionView, Permission.class, null);
+    	permission.setUpdatedBy(principal.getName());
+		permissionService.save(permission);
 		map.put(SecurityConstants.STATUS, SecurityConstants.OK);
         map.put(SecurityConstants.MESSAGE, "Your record have been updated successfully at "+CommonUtil.dateToString(new Date(), "yyyy-MM-dd HH:mm:ss"));
 		

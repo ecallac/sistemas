@@ -24,7 +24,7 @@ import org.hibernate.annotations.FetchMode;
  */
 @Entity
 @Table(name = "organizacion")
-public class Organizacion extends Entidad {
+public class Organizacion extends BaseEntity {
 	@Column(name = "tipo_organizacion")
 	private String tipoOrganizacion;
 	private String numeroidentificacion;

@@ -62,7 +62,12 @@ public class RoleServiceImpl implements RoleService {
 		}else{
 			Role roleStored = findRoleById(role.getId());
 			if (roleStored!=null) {
-				roleStored = (Role) BeanParser.parseBetweenObjects(role, roleStored, null);
+				if (!roleStored.getEnabled().equals(role.getEnabled())) {
+					roleStored.setEnabled(role.getEnabled());
+					roleStored.setUpdatedBy(role.getUpdatedBy());
+				} else {
+					roleStored = (Role) BeanParser.parseBetweenObjects(role, roleStored, null);
+				}
 				roleDao.save(roleStored);
 			}
 		}

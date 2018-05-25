@@ -3,6 +3,7 @@
  */
 package com.security.web.controller;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -77,7 +78,7 @@ public class RoleController {
   }
 	
 	@RequestMapping(value = "/role/save", method = {RequestMethod.POST})
-    public @ResponseBody  Map<String, Object> save(@RequestBody @Valid RoleView RoleView,BindingResult result) {
+    public @ResponseBody  Map<String, Object> save(@RequestBody @Valid RoleView RoleView,BindingResult result,Principal principal) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		if(result.hasErrors()){
 	         
@@ -93,7 +94,13 @@ public class RoleController {
 	         return map;
 	      }
         
-		roleService.save((Role) BeanParser.parseObjectToNewClass(RoleView, Role.class, null));
+		Role role = (Role) BeanParser.parseObjectToNewClass(RoleView, Role.class, null);
+		if (role.getId()==null) {
+			role.setCreatedBy(principal.getName());
+		} else {
+			role.setUpdatedBy(principal.getName());
+		}
+		roleService.save(role);
 		
         
         map.put("validated", true);
@@ -122,11 +129,12 @@ public class RoleController {
     }
 	
 	@RequestMapping(value = "/role/enableDisable", method = {RequestMethod.POST})
-    public @ResponseBody  Map<String, Object> enableDisable(@RequestBody RoleView RoleView) {
+    public @ResponseBody  Map<String, Object> enableDisable(@RequestBody RoleView RoleView,Principal principal) {
         Map<String, Object> map = new HashMap<String, Object>();
         Role Role = roleService.findRoleById(RoleView.getId());
         if (Role!=null) {
 			Role = (Role) BeanParser.parseBetweenObjects(RoleView, Role, null);
+			Role.setUpdatedBy(principal.getName());
 			roleService.save(Role);
 			map.put(SecurityConstants.STATUS, SecurityConstants.OK);
 	        map.put(SecurityConstants.MESSAGE, "Your record have been updated successfully at "+CommonUtil.dateToString(new Date(), "yyyy-MM-dd HH:mm:ss"));

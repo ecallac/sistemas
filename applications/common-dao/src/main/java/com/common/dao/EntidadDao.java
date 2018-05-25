@@ -17,4 +17,5 @@ public interface EntidadDao extends BaseDao {
 
 	List<Organizacion> findOrganizacionPorNombre(String nombre);
 	List<Persona> findPersonaPorNombre(String nombre);
+	List<Persona> findPersonaPorNombreApellidoYNumeroDocumento(String termino);
 }

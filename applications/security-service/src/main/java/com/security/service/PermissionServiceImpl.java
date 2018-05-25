@@ -41,18 +41,23 @@ public class PermissionServiceImpl implements PermissionService {
 		}else{
 			Permission permissionStored = findPermissionById(permission.getId());
 			if (permissionStored!=null) {
-				permissionStored = (Permission) BeanParser.parseBetweenObjects(permission, permissionStored, null);
-				
-				if (permission.getParentPermission()!=null) {
-					Permission parentPermissionStored = findPermissionById(permission.getParentPermission().getId());
-					permissionStored.setParentPermission(parentPermissionStored);
+				if (!permissionStored.getEnabled().equals(permission.getEnabled())) {
+					permissionStored.setEnabled(permission.getEnabled());
+					permissionStored.setUpdatedBy(permission.getUpdatedBy());
 				}else{
-					permissionStored.setParentPermission(null);
-				}
-				
-				if (permission.getModule()!=null) {
-					Module moduleStored = moduleService.findModuleById(permission.getModule().getId());
-					permissionStored.setModule(moduleStored);
+					permissionStored = (Permission) BeanParser.parseBetweenObjects(permission, permissionStored, null);
+					
+					if (permission.getParentPermission()!=null) {
+						Permission parentPermissionStored = findPermissionById(permission.getParentPermission().getId());
+						permissionStored.setParentPermission(parentPermissionStored);
+					}else{
+						permissionStored.setParentPermission(null);
+					}
+					
+					if (permission.getModule()!=null) {
+						Module moduleStored = moduleService.findModuleById(permission.getModule().getId());
+						permissionStored.setModule(moduleStored);
+					}
 				}
 				permissionDao.save(permissionStored);
 			}

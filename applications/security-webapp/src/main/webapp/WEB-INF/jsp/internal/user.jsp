@@ -26,6 +26,8 @@
 	
     function save(){
 		var formData= { 
+				fullName: $('#AfullName').val(),
+				entidadId: $('#entidadId').val(),
 				userName: $('#AuserName').val(),
 				password: $('#Apassword').val(),
 				passwordAgain: $('#ApasswordAgain').val(),
@@ -272,15 +274,17 @@
    		            { "data": "userName" },
    		            { "data": "status" },
    		            { "data": "question" },
-   		            { "data": "answer" }
+   		            { "data": "answer" },
+   		         	{ "data": "activationDate" ,"defaultContent": ""},
+   		      		{ "data": "inactivationDate" ,"defaultContent": ""}
    		        ];
-       			var columnsExport = [ 0, 1, 2, 3, 4 ];
+       			var columnsExport = [ 0, 1, 2, 3, 4 , 5, 6];
        			var jsonColumnDefs = [
        	        	{
-       	            	"targets": 5,
+       	            	"targets": 7,
        	                "render": function ( data, type, row ) {
-       	                    return "<td><button title='Edit' onclick='edit("+row.id+")' type='button' class='btn btn-link btn-xs toltip' data-toggle='modal' data-target='#EditUser'><img src='<c:url value='/resources/img/icons/black/doc_edit_icon&16.png' />'></button> | "+
-           	                 "<button title='Delete' onclick='remove("+row.id+")' type='button' class='btn btn-link btn-xs toltip'><img src='<c:url value='/resources/img/icons/black/trash_icon&16.png' />'></button> | "+
+       	                    return "<td><button title='Edit' onclick='edit("+row.id+")' type='button' class='btn btn-link btn-xs toltip' data-toggle='modal' data-target='#EditUser'><img src='<c:url value='/resources/img/icons/black/doc_edit_icon&16.png' />'></button>"+
+           	                 "<button title='Delete' onclick='remove("+row.id+")' type='button' class='btn btn-link btn-xs toltip'><img src='<c:url value='/resources/img/icons/black/trash_icon&16.png' />'></button>"+
            	              	"<button title='Change Password' onclick='editPassword("+row.id+")' type='button' class='btn btn-link btn-xs toltip' data-toggle='modal' data-target='#EditUserPassword'><img src='<c:url value='/resources/img/icons/black/key_icon&16.png' />'></button></td>"+
            	             "<button title='Change Roles by User' onclick='editUserRole("+row.id+")' type='button' class='btn btn-link btn-xs toltip' data-toggle='modal' data-target='#EditUserRole'><img src='<c:url value='/resources/img/icons/black/cogs_icon&16.png' />'></button></td>"
            	              		;
@@ -348,9 +352,59 @@
        ajaxWithoutForm(ajaxUrl,"GET",successFunction);
     }
     
+    function autocompletePerson(){
+    	var URL_PERSONA_LIST = "<%=request.getSession().getAttribute("URL_PERSONA_LIST") %>";
+    	$("#AfullName").autocomplete({
+    	    minLength: 2,
+    		source: function(request,response){
+    			$("#entidadId").val("");
+    			$.ajax({
+    				url: URL_PERSONA_LIST+request.term,
+    				type:'GET',
+    				dataType: "json",
+    				data: {
+    					term: request.term
+    				},
+    				success: function (data){
+//     					alert(data);
+    					
+//     					response(data);
+    					response($.map(data, function (el) {
+    	                     return {
+    	                         label: el.fullName,
+    	                         value: el.id
+    	                     };
+    	                 }));
+    				}
+    			})
+    		},
+    	    select: function(event, ui){
+//     	    	alert("2aqui "+ui.item.value+ " 1aqui "+ui.item.label);
+    	    	$("#entidadId").val(ui.item.value);
+//     	    	// Prevent value from being put in the input:
+    	        this.value = ui.item.label;
+//     	        alert(ui.item.value);
+//     	        // Set the next input's value to the "value" of the item.
+    	        $(this).next("input").val(ui.item.value);
+    	        event.preventDefault();
+
+// //     	    	var termino = ui.item.lavel;
+// //     	    	$.ajax({
+// //     	    		type:'GET',
+// //     	    		url: contexPath+'/entidad/personaPorTermino?termino='+termino,
+// //     	    		success: function(result){
+// //     	    			alert(result);
+// //     	    		}
+// //     	    	});
+    	    }
+    	});
+    }
+    
     function clearFields(){
 		$('.bindingError').remove();
 		$("#Aid").val("");
+		$("#AfullName").val("");
+		$("#entidadId").val("");
 		$("#AuserName").val("");
 		$("#Apassword").val("");
 		$("#ApasswordAgain").val("");
@@ -362,18 +416,73 @@
 	$(document).ready(function(){
     	load();
     	populateStatusSelect();
-    	
+    	autocompletePerson();
     });
+	
+	
+	
 	</script>
 	<style type="text/css">
-	
+.ui-autocomplete {
+  position: absolute;
+  top: 100%;
+  left: 0;
+/*   z-index: 1000; -- normal*/
+  display: none;
+  float: left;
+  min-width: 160px;
+  padding: 5px 0;
+  margin: 2px 0 0;
+  list-style: none;
+  font-size: 14px;
+  text-align: left;
+  background-color: #ffffff;
+  border: 1px solid #cccccc;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 4px;
+  -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+  background-clip: padding-box;
+  z-index:2147483647; /* -- for modal */
+}
+
+.ui-autocomplete > li > div {
+  display: block;
+  padding: 3px 20px;
+  clear: both;
+  font-weight: normal;
+  line-height: 1.42857143;
+  color: #333333;
+  white-space: nowrap;
+}
+
+.ui-state-hover,
+.ui-state-active,
+.ui-state-focus {
+  text-decoration: none;
+  color: #262626;
+  background-color: #f5f5f5;
+  cursor: pointer;
+}
+
+.ui-helper-hidden-accessible {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+
 	</style>
 
 </head>
 <body>
 
 
-<div class="container">
+<!-- <div class="container"> -->
 
 
 
@@ -404,7 +513,7 @@
 
  <table id="table" align="center" class="table table-striped table-hover table-bordered">  
 <thead>
-<tr><th>Id</th><th>Username</th><th>status</th><th>question</th><th>answer</th><th>Actions</th></tr>  
+<tr><th>Id</th><th>Username</th><th>status</th><th>question</th><th>answer</th><th>Activation Date</th><th>Inactivation Date</th><th>Actions</th></tr>  
 </thead>
 </table>
 
@@ -415,7 +524,7 @@
 </div></div>
 
 
-</div>
+<!-- </div> -->
 
 <div class="modal fade" id="AddUser" tabindex="-1" role="dialog">
   <div class="modal-dialog" role="document">
@@ -437,6 +546,13 @@
 		        
 		        
 		        <form class="form-horizontal">
+		        	<div class="form-group">
+				    <label for="AfullName" class="col-sm-3 control-label">Full Name</label>
+				    <div class="col-sm-7">
+				      <input type="text" class="form-control" id="AfullName" placeholder="Full Name"> <a href="#">Register New</a>
+				      <input type="hidden" class="form-control" id="entidadId">
+				    </div>
+				  </div>
 				  <div class="form-group">
 				    <label for="AuserName" class="col-sm-3 control-label">Username</label>
 				    <div class="col-sm-7">

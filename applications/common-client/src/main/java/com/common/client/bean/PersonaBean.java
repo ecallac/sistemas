@@ -1,119 +1,93 @@
 /**
  * 
  */
-package com.common.domain;
+package com.common.client.bean;
 
 import java.util.Date;
-import java.util.List;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
 /**
- * @author efrain
+ * @author efrain.calla
  *
  */
-@Entity
-@Table(name = "persona")
-public class Persona extends BaseEntity {
-	@Column(name = "tipo_documento_identificaion")
+public class PersonaBean {
+	private Long id;
 	private String tipoDocumentoIdentificaion;
 	private String numeroidentificacion;
 	private String nombres;
 	private String apellidos;
-	@Column(name = "tipo_estado_civil")
 	private String tipoEstadoCivil;
 	private String sexo;
 	private Date fechanacimiento;
 	private String email;
-	@OneToOne(fetch=FetchType.EAGER)
-	@JoinColumn(name = "entidad_id")
-	@Fetch(value = FetchMode.SELECT)
-	private Entidad entidad;
-	@ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER, mappedBy = "personas")
-	@Fetch(value = FetchMode.SELECT)
-	private List<Organizacion> organizacions;
-
+	private Long entidadId;
+	private String fullName;
+	
+	
+	public String getFullName() {
+		return fullName;
+	}
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
+	}
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
+	}
 	public String getTipoDocumentoIdentificaion() {
 		return tipoDocumentoIdentificaion;
 	}
-
 	public void setTipoDocumentoIdentificaion(String tipoDocumentoIdentificaion) {
 		this.tipoDocumentoIdentificaion = tipoDocumentoIdentificaion;
 	}
-
 	public String getNumeroidentificacion() {
 		return numeroidentificacion;
 	}
-
 	public void setNumeroidentificacion(String numeroidentificacion) {
 		this.numeroidentificacion = numeroidentificacion;
 	}
-
 	public String getNombres() {
 		return nombres;
 	}
-
 	public void setNombres(String nombres) {
 		this.nombres = nombres;
 	}
-
 	public String getApellidos() {
 		return apellidos;
 	}
-
 	public void setApellidos(String apellidos) {
 		this.apellidos = apellidos;
 	}
-
 	public String getTipoEstadoCivil() {
 		return tipoEstadoCivil;
 	}
-
 	public void setTipoEstadoCivil(String tipoEstadoCivil) {
 		this.tipoEstadoCivil = tipoEstadoCivil;
 	}
-
 	public String getSexo() {
 		return sexo;
 	}
-
 	public void setSexo(String sexo) {
 		this.sexo = sexo;
 	}
-
 	public Date getFechanacimiento() {
 		return fechanacimiento;
 	}
-
 	public void setFechanacimiento(Date fechanacimiento) {
 		this.fechanacimiento = fechanacimiento;
 	}
-
 	public String getEmail() {
 		return email;
 	}
-
 	public void setEmail(String email) {
 		this.email = email;
 	}
-
-	public Entidad getEntidad() {
-		return entidad;
+	public Long getEntidadId() {
+		return entidadId;
 	}
-
-	public void setEntidad(Entidad entidad) {
-		this.entidad = entidad;
+	public void setEntidadId(Long entidadId) {
+		this.entidadId = entidadId;
 	}
-	
 	
 }

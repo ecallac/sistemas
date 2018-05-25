@@ -70,4 +70,10 @@ public class EntidadServiceImpl implements EntidadService {
 		return entidadDao.findPersonaPorNombre(nombre);
 	}
 
+	@Override
+	public List<Persona> findPersonaPorNombreApellidoYNumeroDocumento(String termino) {
+		// TODO Auto-generated method stub
+		return entidadDao.findPersonaPorNombreApellidoYNumeroDocumento(termino);
+	}
+
 }

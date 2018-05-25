@@ -71,6 +71,10 @@ public class UserController {
 	private String tipoBaseByCategory;
     
     @Autowired
+	@Value("${security.common.entidad.personaPorTermino}")
+	private String personaPorTermino;
+    
+    @Autowired
 	@Value("${report.web.xls.templates}")
 	private String xlsReportTemplate;
 
@@ -124,6 +128,7 @@ public class UserController {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("user");
 		session.setAttribute("URL_USER_STATUS_LIST", tipoBaseByCategory+"?categoria="+SecurityConstants.TIPOBASE_CATEGORIA_USER_STATUS);
+		session.setAttribute("URL_PERSONA_LIST", personaPorTermino+"?termino=");
 		return modelAndView;
 	}
     
@@ -275,6 +280,12 @@ public class UserController {
 			map.put("validated", true);
 			 map.put(SecurityConstants.STATUS, SecurityConstants.ERROR);
 	         map.put(SecurityConstants.MESSAGE, "The new password aren't same! Try again please.");
+	         return map;
+		}
+		if (userNewView.getEntidadId().equals("")) {
+			map.put("validated", true);
+			 map.put(SecurityConstants.STATUS, SecurityConstants.ERROR);
+	         map.put(SecurityConstants.MESSAGE, "Person is not registered in the system. Register and try again please.");
 	         return map;
 		}
         

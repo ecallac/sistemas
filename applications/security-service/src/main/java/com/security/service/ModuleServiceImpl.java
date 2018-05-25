@@ -34,7 +34,12 @@ public class ModuleServiceImpl implements ModuleService {
 		}else{
 			Module moduleStored = (Module) findModuleById(module.getId());
 			if (moduleStored!=null) {
-				moduleStored = (Module) BeanParser.parseBetweenObjects(module, moduleStored, null);
+				if (!moduleStored.getEnabled().equals(module.getEnabled())) {
+					moduleStored.setEnabled(module.getEnabled());
+					moduleStored.setUpdatedBy(module.getUpdatedBy());
+				} else {
+					moduleStored = (Module) BeanParser.parseBetweenObjects(module, moduleStored, null);
+				}
 				moduleDao.save(moduleStored);
 			}
 		}

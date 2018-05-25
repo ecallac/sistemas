@@ -21,7 +21,7 @@ $(document).ready(function() {
     background-color: #000000;
     color: #FFFFFF;
     height: 50px;
-    padding: 5px;
+    padding: 10px;
     width: 100%;
 }
 </style>
@@ -49,6 +49,7 @@ $(document).ready(function() {
 Welcome : ${pageContext.request.userPrincipal.name} | 
 	<a href="javascript:document.getElementById('logout').submit()" title="Logout" class="toltip"><img src="<c:url value='/resources/img/icons/white/on-off_icon&16.png' />"> </a>
 </c:if>
+
 
 </td>
 </tr>

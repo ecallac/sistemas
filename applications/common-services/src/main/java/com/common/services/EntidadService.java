@@ -21,4 +21,5 @@ public interface EntidadService {
 	List<Persona> findAllPersona();
 	List<Organizacion> findOrganizacionPorNombre(String nombre);
 	List<Persona> findPersonaPorNombre(String nombre);
+	List<Persona> findPersonaPorNombreApellidoYNumeroDocumento(String termino);
 }

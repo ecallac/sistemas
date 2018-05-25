@@ -3,6 +3,7 @@
  */
 package com.security.web.controller;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -76,7 +77,7 @@ public class ModuleController {
   }
 	
 	@RequestMapping(value = "/module/save", method = {RequestMethod.POST})
-    public @ResponseBody  Map<String, Object> save(@RequestBody @Valid ModuleView moduleView,BindingResult result) {
+    public @ResponseBody  Map<String, Object> save(@RequestBody @Valid ModuleView moduleView,BindingResult result,Principal principal) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		if(result.hasErrors()){
 	         
@@ -92,7 +93,13 @@ public class ModuleController {
 	         return map;
 	      }
         
-		moduleService.save((Module) BeanParser.parseObjectToNewClass(moduleView, Module.class, null));
+		Module module = (Module) BeanParser.parseObjectToNewClass(moduleView, Module.class, null);
+		if (module.getId()==null) {
+			module.setCreatedBy(principal.getName());
+		} else {
+			module.setUpdatedBy(principal.getName());
+		}
+		moduleService.save(module);
         
         map.put("validated", true);
         map.put(SecurityConstants.STATUS, SecurityConstants.OK);
@@ -120,11 +127,12 @@ public class ModuleController {
     }
 	
 	@RequestMapping(value = "/module/enableDisable", method = {RequestMethod.POST})
-    public @ResponseBody  Map<String, Object> enableDisable(@RequestBody ModuleView moduleView) {
+    public @ResponseBody  Map<String, Object> enableDisable(@RequestBody ModuleView moduleView,Principal principal) {
         Map<String, Object> map = new HashMap<String, Object>();
         Module module = moduleService.findModuleById(moduleView.getId());
         if (module!=null) {
 			module = (Module) BeanParser.parseBetweenObjects(moduleView, module, null);
+			module.setUpdatedBy(principal.getName());
 			moduleService.save(module);
 			map.put(SecurityConstants.STATUS, SecurityConstants.OK);
 	        map.put(SecurityConstants.MESSAGE, "Your record have been updated successfully at "+CommonUtil.dateToString(new Date(), "yyyy-MM-dd HH:mm:ss"));

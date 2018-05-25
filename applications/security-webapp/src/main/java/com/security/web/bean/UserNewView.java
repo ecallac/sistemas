@@ -12,6 +12,9 @@ import org.hibernate.validator.constraints.NotEmpty;
  *
  */
 public class UserNewView {
+	private String entidadId;
+	@NotEmpty
+	private String fullName;
 //	@NotEmpty
 	@Size(min=4,max=255)
 	private String userName;
@@ -21,7 +24,6 @@ public class UserNewView {
 //	@NotEmpty
 	@Size(min=4,max=255)
 	private String passwordAgain;
-	@NotEmpty
 	private String status;
 	private Long entidadRoleId;
 	@NotEmpty
@@ -30,6 +32,18 @@ public class UserNewView {
 	private String answer;
 	
 	
+	public String getEntidadId() {
+		return entidadId;
+	}
+	public void setEntidadId(String entidadId) {
+		this.entidadId = entidadId;
+	}
+	public String getFullName() {
+		return fullName;
+	}
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
+	}
 	public String getPassword() {
 		return password;
 	}

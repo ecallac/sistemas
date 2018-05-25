@@ -164,9 +164,9 @@
        	        	{
        	            	"targets": 4,
        	                "render": function ( data, type, row ) {
-       	                    return "<td><button title='Edit' onclick='edit("+row.id+")' type='button' class='btn btn-link btn-xs toltip' data-toggle='modal' data-target='#Form'><img src='<c:url value='/resources/img/icons/black/doc_edit_icon&16.png' />'></button> | "+
-           	                 "<button title='Delete' onclick='remove("+row.id+")' type='button' class='btn btn-link btn-xs toltip'><img src='<c:url value='/resources/img/icons/black/trash_icon&16.png' />'></button> | "+
-           	              	"<button title='Permissions by Role' onclick='getPermissions("+row.id+")' type='button' class='btn btn-link btn-xs toltip' data-toggle='modal' data-target='#Permissions'><img src='<c:url value='/resources/img/icons/black/cogs_icon&16.png' />'></button></td> | "+
+       	                    return "<td><button title='Edit' onclick='edit("+row.id+")' type='button' class='btn btn-link btn-xs toltip' data-toggle='modal' data-target='#Form'><img src='<c:url value='/resources/img/icons/black/doc_edit_icon&16.png' />'></button>"+
+           	                 "<button title='Delete' onclick='remove("+row.id+")' type='button' class='btn btn-link btn-xs toltip'><img src='<c:url value='/resources/img/icons/black/trash_icon&16.png' />'></button>"+
+           	              	"<button title='Permissions by Role' onclick='getPermissions("+row.id+")' type='button' class='btn btn-link btn-xs toltip' data-toggle='modal' data-target='#Permissions'><img src='<c:url value='/resources/img/icons/black/cogs_icon&16.png' />'></button></td>"+
            	             	"<button title='Users by Role' onclick='getUsers("+row.id+")' type='button' class='btn btn-link btn-xs toltip' data-toggle='modal' data-target='#Users'><img src='<c:url value='/resources/img/icons/black/user_icon&16.png' />'></button></td>";
        	                }
        	            }
@@ -288,7 +288,7 @@
 </head>
 <body onload="load();">
 
-<div class="container">
+<!-- <div class="container"> -->
 
 
 
@@ -327,7 +327,7 @@
 </div></div>
 
 
-</div>
+<!-- </div> -->
 
 <div class="modal fade" id="Form" tabindex="-1" role="dialog">
   <div class="modal-dialog" role="document">

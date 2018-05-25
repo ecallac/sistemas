@@ -39,6 +39,12 @@ public class EntidadDaoImpl extends BaseDaoSupport implements EntidadDao {
 		// TODO Auto-generated method stub
 		return (List<Persona>) getHibernateTemplate().findByNamedParam("FROM Persona WHERE nombres like :nombre or apellidos like :nombre","nombre", "%"+nombre+"%");
 	}
+
+	@SuppressWarnings("unchecked")
+	public List<Persona> findPersonaPorNombreApellidoYNumeroDocumento(String termino) {
+		// TODO Auto-generated method stub
+		return (List<Persona>) getHibernateTemplate().findByNamedParam("FROM Persona WHERE nombres like :termino or apellidos like :termino or numeroidentificacion like :termino" ,"termino", termino+"%");
+	}
 	
 	
 }
