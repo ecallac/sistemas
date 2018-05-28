@@ -91,4 +91,10 @@ public class TipoBaseServiceImpl implements TipoBaseService {
 		return tipoBaseDao.findByTiposBaseXCategoriasActivas(categoria);
 	}
 
+	@Override
+	public TipoBase findByTiposBaseXCodigo(String codigo) {
+		// TODO Auto-generated method stub
+		return tipoBaseDao.findByTiposBaseXCodigo(codigo);
+	}
+
 }

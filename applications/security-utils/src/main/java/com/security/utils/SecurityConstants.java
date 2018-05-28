@@ -21,4 +21,6 @@ public interface SecurityConstants {
 	static final String TIPOBASE_CATEGORIA_TYPE_PERMISSION = "TYPE_PERMISSION";
 	static final String TIPOBASE_CATEGORIA_USER_STATUS = "USER_STATUS";
 	
+	static final String TIPOBASE_CODIGO_ER_USUARIO = "ER_USUARIO";
+	
 }

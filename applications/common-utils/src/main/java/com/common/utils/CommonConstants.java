@@ -12,5 +12,9 @@ public interface CommonConstants {
 	static final String NO = "N";
 	static final String JSON ="JSON";
 	static final String XML ="XML";
-	
+	static final String OK = "OK";
+	static final String ERROR = "ERROR";
+	static final String INFO = "INFO";
+	static final String STATUS = "status";
+	static final String MESSAGE = "message";
 }

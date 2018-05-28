@@ -15,4 +15,5 @@ import com.common.domain.TipoBase;
 public interface TipoBaseDao extends BaseDao {
 	List<TipoBase> findByTiposBaseXCategorias(String categoria);
 	List<TipoBase> findByTiposBaseXCategoriasActivas(String categoria);
+	TipoBase findByTiposBaseXCodigo(String codigo);
 }

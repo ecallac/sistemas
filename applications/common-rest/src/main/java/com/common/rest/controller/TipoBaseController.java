@@ -48,13 +48,35 @@ public class TipoBaseController {
         return canonicalResponse;
     }
 	
+	@RequestMapping(value = "/tipobase/getTipoBasesXCodigo",method = RequestMethod.GET)
+	@ResponseBody
+    public CanonicalResponse getTipoBasesXCodigo(@RequestParam(value = "codigo", required = true) String codigo) {
+		System.out.println(":::getTipoBasesXCodigo");
+		TipoBase tipoBase = tipoBaseService.findByTiposBaseXCodigo(codigo);
+        if (tipoBase!=null) {
+        	System.out.println(":::error");
+        	CanonicalResponse canonicalResponse = new CanonicalResponse();
+        	canonicalResponse.setStatus(CanonicalResponse.STATUS_ERROR);
+        	canonicalResponse.setMessage("Rows was not found in the database!");
+        	return canonicalResponse;
+        }
+        CanonicalResponse canonicalResponse = new CanonicalResponse();
+    	canonicalResponse.setStatus(CanonicalResponse.STATUS_OK);
+    	canonicalResponse.setObjectBean(convert(tipoBase));
+        return canonicalResponse;
+    }
+	
 	private List<TipoBaseBean> convertList(List<TipoBase> tipoBases){
 		List<TipoBaseBean> tipoBaseBeans = new ArrayList<>();
 		for (TipoBase tipoBase : tipoBases) {
-			TipoBaseBean tipoBaseBean = (TipoBaseBean) BeanParser.parseObjectToNewClass(tipoBase, TipoBaseBean.class, null);
+			TipoBaseBean tipoBaseBean = convert(tipoBase);
 			tipoBaseBeans.add(tipoBaseBean);
 		}
 		
 		return tipoBaseBeans;
+	}
+	
+	private TipoBaseBean convert(TipoBase tipoBase){
+		return (TipoBaseBean) BeanParser.parseObjectToNewClass(tipoBase, TipoBaseBean.class, null);
 	}
 }

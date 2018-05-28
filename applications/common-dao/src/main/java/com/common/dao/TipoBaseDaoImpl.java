@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -39,6 +40,14 @@ public class TipoBaseDaoImpl extends BaseDaoSupport implements TipoBaseDao {
 		String [] params = {"activo","categoria"};
 		Object [] objects = {CommonConstants.YES,categoria};
 		return (List<TipoBase>) getHibernateTemplate().findByNamedParam("FROM TipoBase WHERE activo = :activo and categoria = :categoria", params,objects);
+	}
+
+	@SuppressWarnings("unchecked")
+	public TipoBase findByTiposBaseXCodigo(String codigo) {
+		String [] params = {"activo","codigo"};
+		Object [] objects = {CommonConstants.YES,codigo};
+		List<TipoBase> list = (List<TipoBase>) getHibernateTemplate().findByNamedParam("FROM TipoBase WHERE activo = :activo and codigo = :codigo", params,objects);
+		return CollectionUtils.isNotEmpty(list)?list.get(0):null;
 	}
 
 }

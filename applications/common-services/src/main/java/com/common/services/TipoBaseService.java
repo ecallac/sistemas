@@ -19,5 +19,6 @@ public interface TipoBaseService {
 	List<TipoBase> findAllTipoBases();
 	List<TipoBase> findTipoBasesXCategoria(String categoria);
 	List<TipoBase> findTipoBasesXCategoriaActivos(String categoria);
+	TipoBase findByTiposBaseXCodigo(String codigo);
 	
 }
