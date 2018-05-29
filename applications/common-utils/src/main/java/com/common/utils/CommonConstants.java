@@ -17,4 +17,7 @@ public interface CommonConstants {
 	static final String INFO = "INFO";
 	static final String STATUS = "status";
 	static final String MESSAGE = "message";
+	
+	static final String TIPOBASE_CODIGO_PERSONA = "E_PERSONA";
+	static final String TIPOBASE_CODIGO_ORGANIZACION = "E_ORGANIZACION";
 }

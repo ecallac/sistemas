@@ -12,4 +12,6 @@ import com.common.utils.BusinessException;
  */
 public interface EntidadRoleService {
 	void save(EntidadRol entidadRol) throws BusinessException ;
+	EntidadRol getEntidadRolByEntidadId(Long entidadId,String tipoEntidadRol);
+	EntidadRol findEntidadRolById(Long id);
 }

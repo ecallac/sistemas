@@ -46,4 +46,16 @@ public class EntidadRoleServiceImpl implements EntidadRoleService {
 		
 	}
 
+	@Override
+	public EntidadRol getEntidadRolByEntidadId(Long entidadId,String tipoEntidadRol) {
+		// TODO Auto-generated method stub
+		return entidadRoleDao.findByEntidadId(entidadId,tipoEntidadRol);
+	}
+
+	@Override
+	public EntidadRol findEntidadRolById(Long id) {
+		// TODO Auto-generated method stub
+		return (EntidadRol) entidadRoleDao.findById(EntidadRol.class, id);
+	}
+
 }

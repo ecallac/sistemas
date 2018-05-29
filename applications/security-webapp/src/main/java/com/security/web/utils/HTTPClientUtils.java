@@ -71,7 +71,7 @@ public class HTTPClientUtils {
 
 			HttpResponse response = httpClient.execute(postRequest);
 
-			if (response.getStatusLine().getStatusCode() != 201) {
+			if (response.getStatusLine().getStatusCode() != 200) {
 				throw new RuntimeException("Failed : HTTP error code : "
 					+ response.getStatusLine().getStatusCode());
 			}

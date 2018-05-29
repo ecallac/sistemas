@@ -22,4 +22,6 @@ public interface EntidadService {
 	List<Organizacion> findOrganizacionPorNombre(String nombre);
 	List<Persona> findPersonaPorNombre(String nombre);
 	List<Persona> findPersonaPorNombreApellidoYNumeroDocumento(String termino);
+	Persona findPersonByEntityId(Long entidadId);
+	Organizacion findOrganizacionByEntityId(Long entidadId);
 }

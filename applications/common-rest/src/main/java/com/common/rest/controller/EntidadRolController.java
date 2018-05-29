@@ -15,12 +15,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.common.client.bean.EntidadRoleBean;
-import com.common.client.bean.PersonaBean;
 import com.common.domain.Entidad;
 import com.common.domain.EntidadRol;
 import com.common.services.EntidadRoleService;
-import com.common.services.EntidadService;
-import com.common.utils.BeanParser;
 import com.common.utils.CommonConstants;
 import com.common.utils.CommonUtil;
 
@@ -39,21 +36,36 @@ public class EntidadRolController {
 	public Map<String, Object> save(@RequestBody EntidadRoleBean entidadRoleBean) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		System.out.println(":::save");
-		EntidadRol entidadRol = castEntidadRolBeanToEntidadRol(entidadRoleBean);
-		try {
-			entidadRoleService.save(entidadRol);
-			entidadRoleBean.setId(entidadRol.getId());
+		EntidadRol entidadRolStored = entidadRoleService.getEntidadRolByEntidadId(entidadRoleBean.getEntidadId(),entidadRoleBean.getTipoEntidadRole());
+		if (entidadRolStored!=null) {
+			entidadRoleBean = castEntidadRolToEntidadRoleBean(entidadRolStored);
 			map.put(CommonConstants.STATUS, CommonConstants.OK);
-	        map.put(CommonConstants.MESSAGE, "Your record have been saved successfully at "+CommonUtil.dateToString(new Date(), "yyyy-MM-dd HH:mm:ss"));
+	        map.put(CommonConstants.MESSAGE, "There is an Entidad Rol with entidad ID:"+ entidadRoleBean.getEntidadId() + " and Tipo Entidad Rol ID:" +entidadRoleBean.getTipoEntidadRole());
 	        
-		} catch (Exception e) {
-			map.put(CommonConstants.STATUS, CommonConstants.ERROR);
-	        map.put(CommonConstants.MESSAGE, e.getMessage());
-	        e.printStackTrace();
+		}else{
+			EntidadRol entidadRol = castEntidadRolBeanToEntidadRol(entidadRoleBean);
+			try {
+				entidadRoleService.save(entidadRol);
+				entidadRoleBean.setId(entidadRol.getId());
+				map.put(CommonConstants.STATUS, CommonConstants.OK);
+		        map.put(CommonConstants.MESSAGE, "Your record have been saved successfully at "+CommonUtil.dateToString(new Date(), "yyyy-MM-dd HH:mm:ss"));
+		        
+			} catch (Exception e) {
+				map.put(CommonConstants.STATUS, CommonConstants.ERROR);
+		        map.put(CommonConstants.MESSAGE, e.getMessage());
+		        e.printStackTrace();
+			}
 		}
-		
 		map.put("entidadRol", entidadRoleBean);
 		return map;
+	}
+	private EntidadRoleBean castEntidadRolToEntidadRoleBean(EntidadRol entidadRol){
+		EntidadRoleBean entidadRoleBean = new EntidadRoleBean();
+		entidadRoleBean.setId(entidadRol.getId());
+		entidadRoleBean.setEntidadId(entidadRol.getEntidad().getId());
+		entidadRoleBean.setTipoEntidadRole(entidadRol.getTipoEntidadrol());
+		entidadRoleBean.setCreatedBy(entidadRol.getCreatedBy());
+		return entidadRoleBean;
 	}
 	
 	private EntidadRol castEntidadRolBeanToEntidadRol(EntidadRoleBean entidadRoleBean){

@@ -53,7 +53,7 @@ public class TipoBaseController {
     public CanonicalResponse getTipoBasesXCodigo(@RequestParam(value = "codigo", required = true) String codigo) {
 		System.out.println(":::getTipoBasesXCodigo");
 		TipoBase tipoBase = tipoBaseService.findByTiposBaseXCodigo(codigo);
-        if (tipoBase!=null) {
+        if (tipoBase==null) {
         	System.out.println(":::error");
         	CanonicalResponse canonicalResponse = new CanonicalResponse();
         	canonicalResponse.setStatus(CanonicalResponse.STATUS_ERROR);

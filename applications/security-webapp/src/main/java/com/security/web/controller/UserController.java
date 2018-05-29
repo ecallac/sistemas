@@ -16,7 +16,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
-import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -28,12 +27,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.common.client.bean.EntidadRoleBean;
+import com.common.client.bean.PersonaBean;
 import com.common.client.bean.TipoBaseBean;
-import com.common.client.canonical.CanonicalResponse;
 import com.common.utils.BeanParser;
 import com.common.utils.CommonConstants;
 import com.common.utils.CommonUtil;
@@ -51,7 +51,6 @@ import com.security.web.bean.UserRoleView;
 import com.security.web.bean.UserView;
 import com.security.web.service.integration.CommonServiceIntegration;
 import com.security.web.utils.ExcelUtils;
-import com.security.web.utils.HTTPClientUtils;
 
 /**
  * @author efrain.calla
@@ -68,14 +67,6 @@ public class UserController {
      
     @Autowired
     private PasswordEncoder passwordEncoder;
-    
-//    @Autowired
-//	@Value("${security.common.tipoBaseByCategory}")
-//	private String tipoBaseByCategory;
-    
-//    @Autowired
-//	@Value("${security.common.entidad.personaPorTermino}")
-//	private String personaPorTermino;
     
     @Autowired
 	@Value("${report.web.xls.templates}")
@@ -132,6 +123,8 @@ public class UserController {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("user");
 		session.setAttribute("URL_USER_STATUS_LIST", commonServiceIntegration.getTipoBaseByCategory()+"?categoria="+SecurityConstants.TIPOBASE_CATEGORIA_USER_STATUS);
+		session.setAttribute("URL_TYPE_DOCUMENTO_LIST", commonServiceIntegration.getTipoBaseByCategory()+"?categoria="+SecurityConstants.TIPOBASE_CATEGORIA_TYPE_PERSONA_DOCUMENTO);
+		session.setAttribute("URL_TYPE_ESTADO_CIVIL_LIST", commonServiceIntegration.getTipoBaseByCategory()+"?categoria="+SecurityConstants.TIPOBASE_CATEGORIA_TYPE_PERSONA_ESTADO_CIVIL);
 		session.setAttribute("URL_PERSONA_LIST", commonServiceIntegration.getPersonaPorTermino()+"?termino=");
 		return modelAndView;
 	}
@@ -144,37 +137,19 @@ public class UserController {
         	List<TipoBaseBean> tipoBaseBeans = commonServiceIntegration.getTipoBasesXCategoriasActivas(SecurityConstants.TIPOBASE_CATEGORIA_USER_STATUS);
         	for (UserView userView : list) {
         		for (TipoBaseBean tipoBaseBean : tipoBaseBeans) {
-            		if (userView.getStatus().equals(tipoBaseBean.getId())) {
+            		if (userView.getStatus().equals(tipoBaseBean.getId().toString())) {
     					userView.setStatus(tipoBaseBean.getCodigo());
     				}
     			}
+        		
+        		try {
+        			PersonaBean personaBean = commonServiceIntegration.getPersonaPorEntidadRolId(userView.getEntidadRoleId());
+            		userView.setEntityName(personaBean.getFullName());
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+        		
 			}
-        	
-        	
-//        	String response = HTTPClientUtils.sendGetRequest(tipoBaseByCategory+"?categoria="+SecurityConstants.TIPOBASE_CATEGORIA_USER_STATUS, "json");
-//        	ObjectMapper mapper = new ObjectMapper();
-//        	try {
-//				CanonicalResponse canonicalResponse = mapper.readValue(response, CanonicalResponse.class);
-//				if (canonicalResponse.getStatus().equals(CanonicalResponse.STATUS_OK)) {
-//					Object object = canonicalResponse.getObjectBean();
-//					List<Map<Object, Object>> maps = (List<Map<Object, Object>>) object;
-//					
-//					for (UserView userView : list) {
-//						for (Map<Object, Object> map2 : maps) {
-//							Integer id = (Integer) map2.get("id");
-//							String codigo = (String) map2.get("codigo");
-//							if (userView.getStatus().equals(id.toString())) {
-//								userView.setStatus(codigo);
-//							}
-//						}
-//					}
-//				} else {
-//
-//				}
-//			} catch (Exception e) {
-//				System.err.println(e.getMessage());
-//				e.printStackTrace();
-//			}
             map.put("data", list);
         } else {
       	  map.put("data", new ArrayList<ModuleView>());
@@ -185,7 +160,8 @@ public class UserController {
     public List<UserView> castUserToUserEditViewList(List<User> users){
 		List<UserView> userEditViews = new ArrayList<UserView>();
 		for (User user : users) {
-			userEditViews.add((UserView)BeanParser.parseObjectToNewClass(user, UserView.class, null));
+			UserView userView = (UserView)BeanParser.parseObjectToNewClass(user, UserView.class, null);
+			userEditViews.add(userView);
 		}
 		return userEditViews;
 	}
@@ -292,17 +268,20 @@ public class UserController {
 	    }
 		map.put("validated", true);
 		
-		if (!userNewView.getPassword().equals(userNewView.getPasswordAgain())) {
-			 map.put(SecurityConstants.STATUS, SecurityConstants.ERROR);
-	         map.put(SecurityConstants.MESSAGE, "The new password aren't same! Try again please.");
-	         return map;
-		}
 		if (userNewView.getEntidadId().equals("")) {
 			 map.put(SecurityConstants.STATUS, SecurityConstants.ERROR);
 	         map.put(SecurityConstants.MESSAGE, "Person is not registered in the system. Register and try again please.");
 	         return map;
 		}
-		
+		Map<String, Object> userNameValidation = verifyUserName(userNewView.getUserName());
+		if (SecurityConstants.ERROR.equals((String) userNameValidation.get(SecurityConstants.STATUS))) {
+	         return userNameValidation;
+		}
+		if (!userNewView.getPassword().equals(userNewView.getPasswordAgain())) {
+			 map.put(SecurityConstants.STATUS, SecurityConstants.ERROR);
+	         map.put(SecurityConstants.MESSAGE, "The new password aren't same! Try again please.");
+	         return map;
+		}
 		
 		User user = (User) BeanParser.parseObjectToNewClass(userNewView, User.class, null);
 		TipoBaseBean tipoBaseBean = commonServiceIntegration.getTipoBasesXCodigo(SecurityConstants.TIPOBASE_CODIGO_ER_USUARIO);
@@ -393,4 +372,17 @@ public class UserController {
         return map;
     }
     
+    @RequestMapping(value = "/user/verifyUserName", method = {RequestMethod.GET})
+    public @ResponseBody  Map<String, Object> verifyUserName(@RequestParam(value = "userName", required = true) String userName) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        
+        User user = userService.findUserByUserName(userName);
+        if (user==null) {
+        	map.put(SecurityConstants.STATUS, SecurityConstants.OK);
+		} else {
+			map.put(SecurityConstants.STATUS, SecurityConstants.ERROR);
+	        map.put(SecurityConstants.MESSAGE, "This value already exists.");
+		}
+        return map;
+    }
 }

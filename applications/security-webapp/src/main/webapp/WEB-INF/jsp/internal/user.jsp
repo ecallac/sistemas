@@ -21,6 +21,7 @@
 	$('#EditUser').on('shown.bs.modal', function () {})
 	$('#EditUserPassword').on('shown.bs.modal', function () {})
 	$('#EditUserRole').on('shown.bs.modal', function () {})
+	$('#AddPerson').on('shown.bs.modal', function () {})
 	
 	var contexPath = "<%=request.getContextPath() %>";
 	
@@ -271,17 +272,16 @@
        			var jsonData = response.data;
        			var jsonColumns = [
    		            { "data": "id" },
+   		         	{ "data": "entityName" },
    		            { "data": "userName" },
    		            { "data": "status" },
    		            { "data": "question" },
-   		            { "data": "answer" },
-   		         	{ "data": "activationDate" ,"defaultContent": ""},
-   		      		{ "data": "inactivationDate" ,"defaultContent": ""}
+   		            { "data": "answer" }
    		        ];
-       			var columnsExport = [ 0, 1, 2, 3, 4 , 5, 6];
+       			var columnsExport = [ 0, 1, 2, 3, 4 , 5];
        			var jsonColumnDefs = [
        	        	{
-       	            	"targets": 7,
+       	            	"targets": 6,
        	                "render": function ( data, type, row ) {
        	                    return "<td><button title='Edit' onclick='edit("+row.id+")' type='button' class='btn btn-link btn-xs toltip' data-toggle='modal' data-target='#EditUser'><img src='<c:url value='/resources/img/icons/black/doc_edit_icon&16.png' />'></button>"+
            	                 "<button title='Delete' onclick='remove("+row.id+")' type='button' class='btn btn-link btn-xs toltip'><img src='<c:url value='/resources/img/icons/black/trash_icon&16.png' />'></button>"+
@@ -338,6 +338,23 @@
        ajaxPost(ajaxUrl,formData,successFunction);
     }
     
+    function verifyUserName(object){
+    	$('#bindingErrorUserName').remove();
+    	var ajaxUrl = contexPath+'/user/verifyUserName?userName='+object.value;
+    	var id = object.id;
+    	var successFunction = function(response){
+       		if(response.status=='OK'){
+       			$( "#div-"+id ).removeClass( "has-error" ).addClass( "has-success" );
+       		}else{
+       			$( "#div-"+id ).removeClass( "has-success" ).addClass( "has-error" );
+       			$('input[id='+id+']').after('<span id="bindingErrorUserName" class="bindingError" style="color:red;font-weight: bold;">'+response.message+'</span>');
+       		}
+       };
+       
+       ajaxWithoutForm(ajaxUrl,"GET",successFunction);
+    }
+    
+    
     function populateStatusSelect(){
     	var URL_USER_STATUS_LIST = "<%=request.getSession().getAttribute("URL_USER_STATUS_LIST") %>";
     	var ajaxUrl = URL_USER_STATUS_LIST;
@@ -346,6 +363,32 @@
        			$.each(response.objectBean, function(i, row) {
                     $('#Astatus').append('<option value="' + row.id + '">' + row.codigo + '</option>');
                     $('#Estatus').append('<option value="' + row.id + '">' + row.codigo + '</option>');
+                });
+       		}
+       };
+       ajaxWithoutForm(ajaxUrl,"GET",successFunction);
+    }
+    
+    function populateTypeDocumentSelect(){
+    	var URL_TYPE_DOCUMENTO_LIST = "<%=request.getSession().getAttribute("URL_TYPE_DOCUMENTO_LIST") %>";
+    	var ajaxUrl = URL_TYPE_DOCUMENTO_LIST;
+    	var successFunction = function(response){
+       		if(response.objectBean.length>0){
+       			$.each(response.objectBean, function(i, row) {
+                    $('#tipoDocumentoIdentificaion').append('<option value="' + row.id + '">' + row.descripcion + '</option>');
+                });
+       		}
+       };
+       ajaxWithoutForm(ajaxUrl,"GET",successFunction);
+    }
+    
+    function populateTypeEstadoCivilSelect(){
+    	var URL_TYPE_ESTADO_CIVIL_LIST = "<%=request.getSession().getAttribute("URL_TYPE_ESTADO_CIVIL_LIST") %>";
+    	var ajaxUrl = URL_TYPE_ESTADO_CIVIL_LIST;
+    	var successFunction = function(response){
+       		if(response.objectBean.length>0){
+       			$.each(response.objectBean, function(i, row) {
+                    $('#tipoEstadoCivil').append('<option value="' + row.id + '">' + row.descripcion + '</option>');
                 });
        		}
        };
@@ -366,9 +409,6 @@
     					term: request.term
     				},
     				success: function (data){
-//     					alert(data);
-    					
-//     					response(data);
     					response($.map(data, function (el) {
     	                     return {
     	                         label: el.fullName,
@@ -379,23 +419,10 @@
     			})
     		},
     	    select: function(event, ui){
-//     	    	alert("2aqui "+ui.item.value+ " 1aqui "+ui.item.label);
     	    	$("#entidadId").val(ui.item.value);
-//     	    	// Prevent value from being put in the input:
     	        this.value = ui.item.label;
-//     	        alert(ui.item.value);
-//     	        // Set the next input's value to the "value" of the item.
     	        $(this).next("input").val(ui.item.value);
     	        event.preventDefault();
-
-// //     	    	var termino = ui.item.lavel;
-// //     	    	$.ajax({
-// //     	    		type:'GET',
-// //     	    		url: contexPath+'/entidad/personaPorTermino?termino='+termino,
-// //     	    		success: function(result){
-// //     	    			alert(result);
-// //     	    		}
-// //     	    	});
     	    }
     	});
     }
@@ -411,12 +438,16 @@
 		$('#Aquestion').val("");
 		$("#Aanswer").val("");
 		$("#Astatus").val("");
+		$( "#div-AuserName" ).removeClass( "has-error" );
+		$( "#div-AuserName" ).removeClass( "has-success" );
 	}
 
 	$(document).ready(function(){
     	load();
     	populateStatusSelect();
     	autocompletePerson();
+    	populateTypeDocumentSelect();
+    	populateTypeEstadoCivilSelect();
     });
 	
 	
@@ -502,6 +533,9 @@
 	<button data-target="#AddUser" title="Add a new user" type="button" class="btn btn-default toltip" data-toggle="modal" onclick="clearFields();">
 		<img src="<c:url value='/resources/img/icons/black/user_icon&16.png' />"> Add New User
 	</button>
+	
+	
+	
 <!-- 	<button data-target="#AllChangePassword" title="Change Unknown User Password" type="button" class="btn btn-default toltip" data-toggle="modal" onclick="clearPassFields();"> -->
 <%-- 		<img src="<c:url value='/resources/img/icons/black/key_icon&16.png' />"> Change Password --%>
 <!-- 	</button> -->
@@ -513,7 +547,7 @@
 
  <table id="table" align="center" class="table table-striped table-hover table-bordered">  
 <thead>
-<tr><th>Id</th><th>Username</th><th>status</th><th>question</th><th>answer</th><th>Activation Date</th><th>Inactivation Date</th><th>Actions</th></tr>  
+<tr><th>Id</th><th>Entity Name</th><th>Username</th><th>status</th><th>question</th><th>answer</th><th>Actions</th></tr>  
 </thead>
 </table>
 
@@ -549,14 +583,14 @@
 		        	<div class="form-group">
 				    <label for="AfullName" class="col-sm-3 control-label">Full Name</label>
 				    <div class="col-sm-7">
-				      <input type="text" class="form-control" id="AfullName" placeholder="Full Name"> <a href="#">Register New</a>
+				      <input type="text" class="form-control" id="AfullName" placeholder="Full Name"><button type="button" data-toggle="modal" class="btn btn-link" title="Register New" data-target="#AddPerson" >Register New</button>
 				      <input type="hidden" class="form-control" id="entidadId">
 				    </div>
 				  </div>
-				  <div class="form-group">
+				  <div class="form-group" id="div-AuserName">
 				    <label for="AuserName" class="col-sm-3 control-label">Username</label>
 				    <div class="col-sm-7">
-				      <input type="text" class="form-control" id="AuserName" placeholder="Username">
+				      <input type="text" class="form-control" id="AuserName" placeholder="Username" onchange="verifyUserName(this);">
 				    </div>
 				  </div>
 				  <div class="form-group">
@@ -634,10 +668,10 @@
 		        
 		        
 		        <form class="form-horizontal">
-				  <div class="form-group">
+				  <div class="form-group" id="div-EuserName">
 				    <label for="EuserName" class="col-sm-3 control-label">Username</label>
 				    <div class="col-sm-7">
-				      <input type="text" class="form-control" id="EuserName" placeholder="Username">
+				      <input type="text" class="form-control" id="EuserName" placeholder="Username" readonly="readonly">
 				    </div>
 				  </div>
 				  <div class="form-group">
@@ -711,7 +745,7 @@
 				  <div class="form-group">
 				    <label for="PuserName" class="col-sm-3 control-label">Username</label>
 				    <div class="col-sm-7">
-				      <input type="text" class="form-control" id="PuserName" placeholder="Username">
+				      <input type="text" class="form-control" id="PuserName" placeholder="Username" readonly="readonly">
 				    </div>
 				  </div>
 				  <div class="form-group">
@@ -795,6 +829,108 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+      
+    </div>
+    
+    <%-- </form> --%>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+<div class="modal fade" id="AddPerson" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+  
+ <%--  <form id="moduleView" method="post" > --%>
+  
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Add Person</h4>
+      </div>
+      <div class="modal-body">
+
+		<div class="form-container">
+		        
+		        
+		        
+		        
+		        <form class="form-horizontal">
+		        <div class="form-group">
+				    <label for="tipoDocumentoIdentificaion" class="col-sm-3 control-label">Document Type</label>
+				    <div class="col-sm-7">
+				      <select id="tipoDocumentoIdentificaion" class="form-control input-sm">
+					      	<option value="">-- Select Option --</option>
+					      </select>
+				    </div>
+				  </div>
+				  <div class="form-group">
+				    <label for="numeroidentificacion" class="col-sm-3 control-label">Identification Number</label>
+				    <div class="col-sm-7">
+				      <input type="text" class="form-control" id="numeroidentificacion" placeholder="Identification Number">
+				    </div>
+				  </div>
+				  <div class="form-group">
+				    <label for="nombres" class="col-sm-3 control-label">First Name</label>
+				    <div class="col-sm-7">
+				      <input type="text" class="form-control" id="nombres" placeholder="First Name">
+				    </div>
+				  </div>
+				  <div class="form-group">
+				    <label for="apellidos" class="col-sm-3 control-label">Last Name</label>
+				    <div class="col-sm-7">
+				      <input type="text" class="form-control" id="apellidos" placeholder="Last Name">
+				    </div>
+				  </div>
+				  <div class="form-group">
+				    <label for="tipoEstadoCivil" class="col-sm-3 control-label">Civil Status</label>
+				    <div class="col-sm-7">
+				      <select id="tipoEstadoCivil" class="form-control input-sm">
+					      	<option value="">-- Select Option --</option>
+					      </select>
+				    </div>
+				  </div>
+				  <div class="form-group">
+				    <label for="sexo" class="col-sm-3 control-label">Gender</label>
+				    <div class="col-sm-7">
+				      <select id="sexo" class="form-control input-sm">
+					      	<option value="">-- Select Option --</option>
+					      	<option value="M">Male</option>
+					      	<option value="F">Female</option>
+					      </select>
+				    </div>
+				  </div>
+				  <div class="form-group">
+				    <label for="fechanacimiento" class="col-sm-3 control-label">Birth Date</label>
+				    <div class="col-sm-7">
+				      <input type="text" class="form-control" id="fechanacimiento" placeholder="Bith Date">
+				    </div>
+				  </div>
+				  <div class="form-group">
+				    <label for="email" class="col-sm-3 control-label">E-mail</label>
+				    <div class="col-sm-7">
+				      <input type="text" class="form-control" id="email" placeholder="E-mail">
+				    </div>
+				  </div>
+			  </form>
+		        
+		        
+		        
+		       
+		</div>
+
+
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" onclick="savePerson();">Save</button>
       </div>
       
     </div>

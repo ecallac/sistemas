@@ -76,4 +76,16 @@ public class EntidadServiceImpl implements EntidadService {
 		return entidadDao.findPersonaPorNombreApellidoYNumeroDocumento(termino);
 	}
 
+	@Override
+	public Persona findPersonByEntityId(Long entidadId) {
+		// TODO Auto-generated method stub
+		return entidadDao.findPersonaByEntidadId(entidadId);
+	}
+
+	@Override
+	public Organizacion findOrganizacionByEntityId(Long entidadId) {
+		// TODO Auto-generated method stub
+		return entidadDao.findOrganizacionByEntidadId(entidadId);
+	}
+
 }

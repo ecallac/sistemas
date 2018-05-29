@@ -15,13 +15,10 @@ public class UserNewView {
 	private String entidadId;
 	@NotEmpty
 	private String fullName;
-//	@NotEmpty
 	@Size(min=4,max=255)
 	private String userName;
-//	@NotEmpty
 	@Size(min=4,max=255)
 	private String password;
-//	@NotEmpty
 	@Size(min=4,max=255)
 	private String passwordAgain;
 	private String status;
