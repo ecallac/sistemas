@@ -7,12 +7,12 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
-import com.common.utils.CommonUtil;
 import com.security.dao.common.BaseDaoSupport;
 import com.security.domain.Module;
 
@@ -40,6 +40,6 @@ public class ModuleDaoImpl extends BaseDaoSupport implements ModuleDao {
 	public Module findByName(String name) {
 		// TODO Auto-generated method stub
 		List<Module> modules = (List<Module>) getHibernateTemplate().findByNamedParam("FROM Module WHERE name = :name", "name", name);
-		return CommonUtil.containElemnts(modules)?modules.get(modules.size()-1):null;
+		return CollectionUtils.isNotEmpty(modules)?modules.get(modules.size()-1):null;
 	}
 }

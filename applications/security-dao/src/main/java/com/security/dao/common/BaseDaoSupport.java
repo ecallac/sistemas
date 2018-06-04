@@ -6,9 +6,9 @@ package com.security.dao.common;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.orm.hibernate4.support.HibernateDaoSupport;
 
-import com.common.utils.CommonUtil;
 import com.security.domain.BaseEntity;
 
 /**
@@ -40,7 +40,7 @@ public class BaseDaoSupport extends HibernateDaoSupport {
 //		List<BaseEntity> list = qry.list();
 		String query = "FROM "+classObject.getName()+" WHERE id = ?";
 		List<?> list = (List<?>) getHibernateTemplate().find(query, id);
-		return CommonUtil.containElemnts(list)?list.get(list.size()-1):null;
+		return CollectionUtils.isNotEmpty(list)?list.get(list.size()-1):null;
 	}
 
 	public List<?> findAll(Class<?> classObject) {

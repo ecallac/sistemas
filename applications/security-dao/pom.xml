@@ -11,7 +11,6 @@
         <joda-time.version>2.3</joda-time.version>
         <security.domain.version>1.0.0.0</security.domain.version>
         <security.utils.version>1.0.0.0</security.utils.version>
-        <common.utils.version>1.0.0.0</common.utils.version>
         <junit.version>4.12</junit.version>
 	</properties>
 	
@@ -25,11 +24,6 @@
             <groupId>com.security</groupId>
             <artifactId>security-utils</artifactId>
             <version>${security.utils.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.common</groupId>
-            <artifactId>common-utils</artifactId>
-            <version>${common.utils.version}</version>
         </dependency>
         <dependency>
 			<groupId>junit</groupId>
