@@ -20,8 +20,8 @@ import com.common.client.bean.EntidadRoleBean;
 import com.common.client.bean.PersonaBean;
 import com.common.client.bean.TipoBaseBean;
 import com.common.client.canonical.CanonicalResponse;
-import com.common.utils.CommonConstants;
 import com.security.utils.BusinessException;
+import com.security.utils.SecurityConstants;
 import com.security.web.utils.HTTPClientUtils;
 
 @Service("commonServiceIntegration")
@@ -58,7 +58,7 @@ public class CommonServiceIntegrationImpl implements CommonServiceIntegration {
 	@Override
 	public List<TipoBaseBean> getTipoBasesXCategoriasActivas(String categoria) {
 		// TODO Auto-generated method stub
-		String responseString = HTTPClientUtils.sendGetRequest(tipoBaseByCategory+"?categoria="+categoria, CommonConstants.JSON);
+		String responseString = HTTPClientUtils.sendGetRequest(tipoBaseByCategory+"?categoria="+categoria, SecurityConstants.JSON);
 		
 		try {
 			ObjectMapper mapper = new ObjectMapper();
@@ -89,7 +89,7 @@ public class CommonServiceIntegrationImpl implements CommonServiceIntegration {
 
 	@Override
 	public TipoBaseBean getTipoBasesXCodigo(String codigo) {
-		String responseString = HTTPClientUtils.sendGetRequest(tipoBaseByCodigo+"?codigo="+codigo, CommonConstants.JSON);
+		String responseString = HTTPClientUtils.sendGetRequest(tipoBaseByCodigo+"?codigo="+codigo, SecurityConstants.JSON);
 		
 		try {
 			ObjectMapper mapper = new ObjectMapper();
@@ -120,10 +120,10 @@ public class CommonServiceIntegrationImpl implements CommonServiceIntegration {
 		
 		ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
 		String json = ow.writeValueAsString(entidadRoleBean);
-		String jsonResponse = HTTPClientUtils.sendPostRequest(saveEntidadRol, CommonConstants.JSON, json);
+		String jsonResponse = HTTPClientUtils.sendPostRequest(saveEntidadRol, SecurityConstants.JSON, json);
 		Map<String,Object> result = new ObjectMapper().readValue(jsonResponse, HashMap.class);
-		if (CommonConstants.ERROR.equals(result.get(CommonConstants.STATUS))) {
-			throw new BusinessException((String)result.get(CommonConstants.MESSAGE));
+		if (SecurityConstants.ERROR.equals(result.get(SecurityConstants.STATUS))) {
+			throw new BusinessException((String)result.get(SecurityConstants.MESSAGE));
 		}else{
 			Map<Object, Object> map = (Map<Object, Object>)  result.get("entidadRol");
 			Integer id = (Integer) map.get("id");
@@ -139,10 +139,10 @@ public class CommonServiceIntegrationImpl implements CommonServiceIntegration {
 
 	@Override
 	public PersonaBean getPersonaPorEntidadRolId(Long entidadRolId) throws JsonParseException, JsonMappingException, IOException {
-		String jsonResponse = HTTPClientUtils.sendGetRequest(entidadPorEntidadRolId+"?entidadRolId="+entidadRolId, CommonConstants.JSON);
+		String jsonResponse = HTTPClientUtils.sendGetRequest(entidadPorEntidadRolId+"?entidadRolId="+entidadRolId, SecurityConstants.JSON);
 		Map<String,Object> result = new ObjectMapper().readValue(jsonResponse, HashMap.class);
-		if (CommonConstants.OK.equals(result.get(CommonConstants.STATUS))) {
-			if(CommonConstants.TIPOBASE_CODIGO_PERSONA.equals(result.get("EntityType"))){
+		if (SecurityConstants.OK.equals(result.get(SecurityConstants.STATUS))) {
+			if(SecurityConstants.TIPOBASE_CODIGO_PERSONA.equals(result.get("EntityType"))){
 				Map<Object, Object> map = (Map<Object, Object>)  result.get("Entidad");
 				Integer id = (Integer) map.get("id");
 				Integer entidadId = (Integer) map.get("entidadId");

@@ -17,19 +17,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.common.utils.BeanParser;
-import com.common.utils.CommonConstants;
-import com.common.utils.CommonUtil;
 import com.security.domain.Module;
 import com.security.service.ModuleService;
+import com.security.utils.BeanParser;
 import com.security.utils.SecurityConstants;
+import com.security.utils.SecurityUtil;
 import com.security.web.bean.ModuleView;
 
 /**
@@ -51,7 +49,7 @@ public class ModuleController {
 	@RequestMapping(value = "/module/enabledModules", method = {RequestMethod.GET,RequestMethod.POST})
 	public @ResponseBody Map<String, Object> initializeEnableModules() {
 		Map<String, Object> map = new HashMap<String, Object>();
-		List<ModuleView> list = castModuleToModuleViewList(moduleService.findModulesByEnabled(CommonConstants.YES));
+		List<ModuleView> list = castModuleToModuleViewList(moduleService.findModulesByEnabled(SecurityConstants.YES));
 		if (list != null) {
 			map.put("data", list);
 		} else {
@@ -103,7 +101,7 @@ public class ModuleController {
         
         map.put("validated", true);
         map.put(SecurityConstants.STATUS, SecurityConstants.OK);
-        map.put(SecurityConstants.MESSAGE, "Your record have been saved successfully at "+CommonUtil.dateToString(new Date(), "yyyy-MM-dd HH:mm:ss"));
+        map.put(SecurityConstants.MESSAGE, "Your record have been saved successfully at "+SecurityUtil.dateToString(new Date(), "yyyy-MM-dd HH:mm:ss"));
         return map;
     }
 	
@@ -113,7 +111,7 @@ public class ModuleController {
 		Module module = moduleService.findModuleById(Long.valueOf(moduleView.getId()));
 		moduleService.delete(module);
         map.put(SecurityConstants.STATUS, SecurityConstants.OK);
-        map.put(SecurityConstants.MESSAGE, "Your record have been deleted successfully at "+CommonUtil.dateToString(new Date(), "yyyy-MM-dd HH:mm:ss"));
+        map.put(SecurityConstants.MESSAGE, "Your record have been deleted successfully at "+SecurityUtil.dateToString(new Date(), "yyyy-MM-dd HH:mm:ss"));
         return map;
 	}
 	
@@ -135,7 +133,7 @@ public class ModuleController {
 			module.setUpdatedBy(principal.getName());
 			moduleService.save(module);
 			map.put(SecurityConstants.STATUS, SecurityConstants.OK);
-	        map.put(SecurityConstants.MESSAGE, "Your record have been updated successfully at "+CommonUtil.dateToString(new Date(), "yyyy-MM-dd HH:mm:ss"));
+	        map.put(SecurityConstants.MESSAGE, "Your record have been updated successfully at "+SecurityUtil.dateToString(new Date(), "yyyy-MM-dd HH:mm:ss"));
 		}else{
 			map.put(SecurityConstants.STATUS, SecurityConstants.ERROR);
 	        map.put(SecurityConstants.MESSAGE, "Your status couldn't be updated");

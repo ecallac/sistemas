@@ -26,13 +26,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.common.utils.BeanParser;
-import com.common.utils.CommonConstants;
-import com.common.utils.CommonUtil;
 import com.security.domain.Module;
 import com.security.domain.Permission;
 import com.security.service.PermissionService;
+import com.security.utils.BeanParser;
 import com.security.utils.SecurityConstants;
+import com.security.utils.SecurityUtil;
 import com.security.web.bean.ModuleView;
 import com.security.web.bean.PermissionView;
 
@@ -61,7 +60,7 @@ public class PermissionController {
 	@RequestMapping(value = "/permission/enabledPermissions", method = {RequestMethod.GET,RequestMethod.POST})
 	  public @ResponseBody Map<String, Object> initializeEnableModules() {
 	      Map<String, Object> map = new HashMap<String, Object>();
-	      List<PermissionView> list = castPermissionToPermissionViewList(permissionService.findPermissionsByEnabled(CommonConstants.YES));
+	      List<PermissionView> list = castPermissionToPermissionViewList(permissionService.findPermissionsByEnabled(SecurityConstants.YES));
 	      if (list != null) {
 	          map.put("data", list);
 	      } else {
@@ -119,7 +118,7 @@ public class PermissionController {
 		
         map.put("validated", true);
         map.put(SecurityConstants.STATUS, SecurityConstants.OK);
-        map.put(SecurityConstants.MESSAGE, "Your record have been saved successfully at "+CommonUtil.dateToString(new Date(), "yyyy-MM-dd HH:mm:ss"));
+        map.put(SecurityConstants.MESSAGE, "Your record have been saved successfully at "+SecurityUtil.dateToString(new Date(), "yyyy-MM-dd HH:mm:ss"));
         return map;
     }
 	
@@ -129,7 +128,7 @@ public class PermissionController {
 		Permission Permission = permissionService.findPermissionById(Long.valueOf(permissionView.getId()));
 		permissionService.delete(Permission);
         map.put(SecurityConstants.STATUS, SecurityConstants.OK);
-        map.put(SecurityConstants.MESSAGE, "Your record have been deleted successfully at "+CommonUtil.dateToString(new Date(), "yyyy-MM-dd HH:mm:ss"));
+        map.put(SecurityConstants.MESSAGE, "Your record have been deleted successfully at "+SecurityUtil.dateToString(new Date(), "yyyy-MM-dd HH:mm:ss"));
         return map;
 	}
 	
@@ -154,7 +153,7 @@ public class PermissionController {
     	permission.setUpdatedBy(principal.getName());
 		permissionService.save(permission);
 		map.put(SecurityConstants.STATUS, SecurityConstants.OK);
-        map.put(SecurityConstants.MESSAGE, "Your record have been updated successfully at "+CommonUtil.dateToString(new Date(), "yyyy-MM-dd HH:mm:ss"));
+        map.put(SecurityConstants.MESSAGE, "Your record have been updated successfully at "+SecurityUtil.dateToString(new Date(), "yyyy-MM-dd HH:mm:ss"));
 		
         return map;
     }

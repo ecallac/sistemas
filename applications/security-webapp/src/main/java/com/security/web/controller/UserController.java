@@ -34,14 +34,13 @@ import org.springframework.web.servlet.ModelAndView;
 import com.common.client.bean.EntidadRoleBean;
 import com.common.client.bean.PersonaBean;
 import com.common.client.bean.TipoBaseBean;
-import com.common.utils.BeanParser;
-import com.common.utils.CommonConstants;
-import com.common.utils.CommonUtil;
 import com.security.domain.Role;
 import com.security.domain.User;
 import com.security.service.RoleService;
 import com.security.service.UserService;
+import com.security.utils.BeanParser;
 import com.security.utils.SecurityConstants;
+import com.security.utils.SecurityUtil;
 import com.security.web.bean.ModuleView;
 import com.security.web.bean.RoleView;
 import com.security.web.bean.UserEditPasswordView;
@@ -96,7 +95,7 @@ public class UserController {
     	beans.put("fileName", templateFileName);
 		beans.put("dateReport", String.valueOf(new Date()));
 		
-		if(CommonUtil.containElemnts(users)){
+		if(SecurityUtil.containElemnts(users)){
 			beans.put("listUsers", users);
 			beans.put("dividedInto", users.size());
 		}else{
@@ -172,7 +171,7 @@ public class UserController {
 		User user = userService.findUserById(Long.valueOf(userView.getId()));
 		userService.delete(user);
         map.put(SecurityConstants.STATUS, SecurityConstants.OK);
-        map.put(SecurityConstants.MESSAGE, "Your record have been deleted successfully at "+CommonUtil.dateToString(new Date(), "yyyy-MM-dd HH:mm:ss"));
+        map.put(SecurityConstants.MESSAGE, "Your record have been deleted successfully at "+SecurityUtil.dateToString(new Date(), "yyyy-MM-dd HH:mm:ss"));
         return map;
 	}
     
@@ -207,7 +206,7 @@ public class UserController {
 	  public @ResponseBody Map<String, Object> initializeEnabledRolesByUser(@RequestBody UserView userView) {
 	      Map<String, Object> map = new HashMap<String, Object>();
 	      User user = userService.findUserById(userView.getId());
-	  List<Role> roles = roleService.findByEnabled(CommonConstants.YES);
+	  List<Role> roles = roleService.findByEnabled(SecurityConstants.YES);
 	  List<UserRoleView> list = castUserRoleViewList(userView.getId(), roles, user.getRoles());
 	  if (list != null) {
 	      map.put("data", list);
@@ -244,7 +243,7 @@ public class UserController {
 		}
     	
 		map.put(SecurityConstants.STATUS, SecurityConstants.OK);
-        map.put(SecurityConstants.MESSAGE, "Your record have been updated successfully at "+CommonUtil.dateToString(new Date(), "yyyy-MM-dd HH:mm:ss"));
+        map.put(SecurityConstants.MESSAGE, "Your record have been updated successfully at "+SecurityUtil.dateToString(new Date(), "yyyy-MM-dd HH:mm:ss"));
 		
         return map;
     }
@@ -306,7 +305,7 @@ public class UserController {
 		userService.save(user);
         
         map.put(SecurityConstants.STATUS, SecurityConstants.OK);
-        map.put(SecurityConstants.MESSAGE, "Your record have been saved successfully at "+CommonUtil.dateToString(new Date(), "yyyy-MM-dd HH:mm:ss"));
+        map.put(SecurityConstants.MESSAGE, "Your record have been saved successfully at "+SecurityUtil.dateToString(new Date(), "yyyy-MM-dd HH:mm:ss"));
         return map;
     }
     
@@ -333,7 +332,7 @@ public class UserController {
         
         map.put("validated", true);
         map.put(SecurityConstants.STATUS, SecurityConstants.OK);
-        map.put(SecurityConstants.MESSAGE, "Your record have been saved successfully at "+CommonUtil.dateToString(new Date(), "yyyy-MM-dd HH:mm:ss"));
+        map.put(SecurityConstants.MESSAGE, "Your record have been saved successfully at "+SecurityUtil.dateToString(new Date(), "yyyy-MM-dd HH:mm:ss"));
         return map;
     }
     
@@ -368,7 +367,7 @@ public class UserController {
         
         map.put("validated", true);
         map.put(SecurityConstants.STATUS, SecurityConstants.OK);
-        map.put(SecurityConstants.MESSAGE, "Your record have been saved successfully at "+CommonUtil.dateToString(new Date(), "yyyy-MM-dd HH:mm:ss"));
+        map.put(SecurityConstants.MESSAGE, "Your record have been saved successfully at "+SecurityUtil.dateToString(new Date(), "yyyy-MM-dd HH:mm:ss"));
         return map;
     }
     

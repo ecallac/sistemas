@@ -16,6 +16,7 @@ public interface SecurityConstants {
 	static final String MESSAGE = "message";
 	static final String YES = "Y";
 	static final String NO = "N";
+	static final String JSON ="JSON";
 	
 	static final String MODULE_SECURITY = "SECURITY";
 	static final String TIPOBASE_CATEGORIA_TYPE_PERMISSION = "TYPE_PERMISSION";
