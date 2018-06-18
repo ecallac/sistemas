@@ -41,6 +41,7 @@ public class LoginServiceImpl implements UserDetailsService {
 
 	@Autowired
 	PermissionService permissionService;
+	
 	@Autowired
 	ModuleService moduleService;
 	

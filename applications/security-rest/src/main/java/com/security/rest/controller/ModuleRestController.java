@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.common.utils.BeanParser;
 import com.security.client.bean.ModuleBean;
 import com.security.client.canonical.ModuleCanonicalRequest;
 import com.security.client.canonical.ModuleCanonicalResponse;
@@ -20,6 +19,7 @@ import com.security.client.utils.XmlUtils;
 import com.security.domain.Module;
 import com.security.service.ModuleService;
 import com.security.service.PermissionService;
+import com.security.utils.BeanParser;
 
 /**
  * @author efrain.calla
