@@ -6,6 +6,12 @@
     	$.bootstrapGrowl("<b>Error!</b> "+message, { type: 'danger' });
     	
     }
+    function showErrorMessageByField(object,key,message,extra){
+    	$(object+'[id='+key+']').after('<span class="bindingError" style="color:red;font-weight: bold;" '+extra+'>'+message+'</span>');
+    }
+    function makeButton(title,onclick,extra,icon){
+    	return "<td><button title='"+title+"' onclick='"+onclick+"' type='button' class='btn btn-link btn-xs toltip' "+extra+"><img src='"+icon+"'></button>";
+    }
     
     function post(path, params, method) {
         method = method || "post"; // Set method to post by default if not specified.

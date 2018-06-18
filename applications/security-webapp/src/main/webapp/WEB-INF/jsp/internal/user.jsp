@@ -25,6 +25,7 @@
 	
 	var contexPath = "<%=request.getContextPath() %>";
 	
+    
     function save(){
 		var formData= { 
 				fullName: $('#AfullName').val(),
@@ -52,8 +53,10 @@
             }else{
               //Set error messages
               $.each(response.messages,function(key,value){
-  	            $('input[id=A'+key+']').after('<span class="bindingError" style="color:red;font-weight: bold;">'+value+'</span>');
-  	          	$('select[id=A'+key+']').after('<span class="bindingError" style="color:red;font-weight: bold;">'+value+'</span>');
+            	  showErrorMessageByField('input','A'+key,value,'');
+            	  showErrorMessageByField('select','A'+key,value,'');
+//   	            $('input[id=A'+key+']').after('<span class="bindingError" style="color:red;font-weight: bold;">'+value+'</span>');
+//   	          	$('select[id=A'+key+']').after('<span class="bindingError" style="color:red;font-weight: bold;">'+value+'</span>');
               });
             }
     	   
@@ -87,8 +90,10 @@
             }else{
               //Set error messages
               $.each(response.messages,function(key,value){
-  	            $('input[id=E'+key+']').after('<span class="bindingError" style="color:red;font-weight: bold;">'+value+'</span>');
-  	          	$('select[id=E'+key+']').after('<span class="bindingError" style="color:red;font-weight: bold;">'+value+'</span>');
+            	  showErrorMessageByField('input','E'+key,value,'');
+            	  showErrorMessageByField('select','E'+key,value,'');
+//   	            $('input[id=E'+key+']').after('<span class="bindingError" style="color:red;font-weight: bold;">'+value+'</span>');
+//   	          	$('select[id=E'+key+']').after('<span class="bindingError" style="color:red;font-weight: bold;">'+value+'</span>');
               });
             }
     	   
@@ -121,8 +126,10 @@
             }else{
               //Set error messages
               $.each(response.messages,function(key,value){
-  	            $('input[id=P'+key+']').after('<span class="bindingError" style="color:red;font-weight: bold;">'+value+'</span>');
-  	          	$('select[id=P'+key+']').after('<span class="bindingError" style="color:red;font-weight: bold;">'+value+'</span>');
+            	  showErrorMessageByField('input' , 'P'+key , value , '');
+            	  showErrorMessageByField('select' , 'P'+key , value , '');
+//   	            $('input[id=P'+key+']').after('<span class="bindingError" style="color:red;font-weight: bold;">'+value+'</span>');
+//   	          	$('select[id=P'+key+']').after('<span class="bindingError" style="color:red;font-weight: bold;">'+value+'</span>');
               });
             }
     	   
@@ -131,8 +138,7 @@
        ajaxPost(ajaxUrl,formData,successFunction);
               
     }
-    
-    
+   
     
     
     
@@ -158,7 +164,8 @@
             }else{
               //Set error messages
               $.each(response.messages,function(key,value){
-  	            $('input[id='+key+']').after('<span class="bindingError" style="color:red;font-weight: bold;">'+value+'</span>');
+            	  showErrorMessageByField('input' , key , value , '');
+//   	            $('input[id='+key+']').after('<span class="bindingError" style="color:red;font-weight: bold;">'+value+'</span>');
               });
             }
     	   
@@ -230,7 +237,7 @@
     	var successFunction = function(response){
        		if(response.status=="OK"){
        			$("#userId").val(response.viewBean.id);
-       			$("#RuserName").val(response.viewBean.userName);
+       			$("#RuserName").text(response.viewBean.userName);
        			loadRoles(idVal);
        		}
        };
@@ -283,11 +290,18 @@
        	        	{
        	            	"targets": 6,
        	                "render": function ( data, type, row ) {
-       	                    return "<td><button title='Edit' onclick='edit("+row.id+")' type='button' class='btn btn-link btn-xs toltip' data-toggle='modal' data-target='#EditUser'><img src='<c:url value='/resources/img/icons/black/doc_edit_icon&16.png' />'></button>"+
-           	                 "<button title='Delete' onclick='remove("+row.id+")' type='button' class='btn btn-link btn-xs toltip'><img src='<c:url value='/resources/img/icons/black/trash_icon&16.png' />'></button>"+
-           	              	"<button title='Change Password' onclick='editPassword("+row.id+")' type='button' class='btn btn-link btn-xs toltip' data-toggle='modal' data-target='#EditUserPassword'><img src='<c:url value='/resources/img/icons/black/key_icon&16.png' />'></button></td>"+
-           	             "<button title='Change Roles by User' onclick='editUserRole("+row.id+")' type='button' class='btn btn-link btn-xs toltip' data-toggle='modal' data-target='#EditUserRole'><img src='<c:url value='/resources/img/icons/black/cogs_icon&16.png' />'></button></td>"
-           	              		;
+//        	                    return "<td><button title='Edit' onclick='edit("+row.id+")' type='button' class='btn btn-link btn-xs toltip' data-toggle='modal' data-target='#EditUser'><img src='<c:url value='/resources/img/icons/black/doc_edit_icon&16.png' />'></button>"+
+//            	                 "<button title='Delete' onclick='remove("+row.id+")' type='button' class='btn btn-link btn-xs toltip'><img src='<c:url value='/resources/img/icons/black/trash_icon&16.png' />'></button>"+
+//            	              	"<button title='Change Password' onclick='editPassword("+row.id+")' type='button' class='btn btn-link btn-xs toltip' data-toggle='modal' data-target='#EditUserPassword'><img src='<c:url value='/resources/img/icons/black/key_icon&16.png' />'></button>"+
+//            	             "<button title='Change Roles by User' onclick='editUserRole("+row.id+")' type='button' class='btn btn-link btn-xs toltip' data-toggle='modal' data-target='#EditUserRole'><img src='<c:url value='/resources/img/icons/black/cogs_icon&16.png' />'></button></td>"
+//            	              ;
+       	                 return "<td>"+
+       	                	makeButton("Edit","edit("+row.id+")","data-toggle='modal' data-target='#EditUser'","<c:url value='/resources/img/icons/black/doc_edit_icon&16.png' />")+
+       	              		makeButton("Delete","remove("+row.id+")","","<c:url value='/resources/img/icons/black/trash_icon&16.png' />")+
+       	           			makeButton("Change Password","editPassword("+row.id+")","data-toggle='modal' data-target='#EditUserPassword'","<c:url value='/resources/img/icons/black/key_icon&16.png' />")+
+       	       				makeButton("Change Roles by User","editUserRole("+row.id+")","data-toggle='modal' data-target='#EditUserRole'","<c:url value='/resources/img/icons/black/cogs_icon&16.png' />")
+       	        			"</td>";
+       	              		;
        	                }
        	            }
        	        ];
@@ -347,7 +361,8 @@
        			$( "#div-"+id ).removeClass( "has-error" ).addClass( "has-success" );
        		}else{
        			$( "#div-"+id ).removeClass( "has-success" ).addClass( "has-error" );
-       			$('input[id='+id+']').after('<span id="bindingErrorUserName" class="bindingError" style="color:red;font-weight: bold;">'+response.message+'</span>');
+       			showErrorMessageByField('input' , id , response.message , 'id="bindingErrorUserName"');
+//        			$('input[id='+id+']').after('<span id="bindingErrorUserName" class="bindingError" style="color:red;font-weight: bold;">'+response.message+'</span>');
        		}
        };
        
@@ -425,6 +440,11 @@
     	        event.preventDefault();
     	    }
     	});
+    }
+    
+    function validateEmail(email) {
+	    var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+	    return re.test(email);
     }
     
     function clearFields(){
@@ -807,7 +827,8 @@
 				  <div class="form-group">
 				    <label for="RuserName" class="col-sm-3 control-label">Username</label>
 				    <div class="col-sm-7">
-				      <input type="text" class="form-control" id="RuserName" placeholder="Username">
+				    	<span id="RuserName" ></span>
+<!-- 				      <input type="text" class="form-control" id="RuserName" placeholder="Username"> -->
 				    </div>
 				  </div>
 			  
