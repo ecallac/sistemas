@@ -47,6 +47,14 @@ public class CommonServiceIntegrationImpl implements CommonServiceIntegration {
 	@Value("${security.common.entidad.entidadPorEntidadRolId}")
 	private String entidadPorEntidadRolId;
 	
+	@Autowired
+	@Value("${security.app.common.rest}")
+	private String commonRestApp;
+	
+	public String getCommonRestApp() {
+		return commonRestApp;
+	}
+
 	public String getPersonaPorTermino() {
 		return personaPorTermino;
 	}

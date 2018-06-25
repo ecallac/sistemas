@@ -1,119 +1,99 @@
 /**
  * 
  */
-package com.common.domain;
+package com.common.rest.bean;
 
-import java.util.Date;
-import java.util.List;
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotEmpty;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
+import com.common.rest.constraint.ValidDate;
 
 /**
- * @author efrain
+ * @author efrain.calla
  *
  */
-@Entity
-@Table(name = "persona")
-public class Persona extends BaseEntity {
-	@Column(name = "tipo_documento_identificaion")
+public class PersonaView {
+	public static String FORMAT="yyyy-MM-dd";
+	@NotEmpty
 	private String tipoDocumentoIdentificaion;
+	@NotEmpty
 	private String numeroidentificacion;
+	@NotEmpty
 	private String nombres;
+	@NotEmpty
 	private String apellidos;
-	@Column(name = "tipo_estado_civil")
+	@NotEmpty
 	private String tipoEstadoCivil;
+	@NotEmpty
 	private String sexo;
-	private Date fechanacimiento;
+	@ValidDate(pattern="yyyy-MM-dd",message="Is invalid date")
+	private String fechanacimiento;
+	@NotEmpty
+	@Email
 	private String email;
-	@OneToOne(cascade = CascadeType.ALL,fetch=FetchType.EAGER)
-	@JoinColumn(name = "entidad_id")
-	@Fetch(value = FetchMode.SELECT)
-	private Entidad entidad;
-	@ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER, mappedBy = "personas")
-	@Fetch(value = FetchMode.SELECT)
-	private List<Organizacion> organizacions;
-
+	@NotEmpty
+	private String entidadId;
+	@NotEmpty
+	private String createdBy;
 	public String getTipoDocumentoIdentificaion() {
 		return tipoDocumentoIdentificaion;
 	}
-
 	public void setTipoDocumentoIdentificaion(String tipoDocumentoIdentificaion) {
 		this.tipoDocumentoIdentificaion = tipoDocumentoIdentificaion;
 	}
-
 	public String getNumeroidentificacion() {
 		return numeroidentificacion;
 	}
-
 	public void setNumeroidentificacion(String numeroidentificacion) {
 		this.numeroidentificacion = numeroidentificacion;
 	}
-
 	public String getNombres() {
 		return nombres;
 	}
-
 	public void setNombres(String nombres) {
 		this.nombres = nombres;
 	}
-
 	public String getApellidos() {
 		return apellidos;
 	}
-
 	public void setApellidos(String apellidos) {
 		this.apellidos = apellidos;
 	}
-
 	public String getTipoEstadoCivil() {
 		return tipoEstadoCivil;
 	}
-
 	public void setTipoEstadoCivil(String tipoEstadoCivil) {
 		this.tipoEstadoCivil = tipoEstadoCivil;
 	}
-
 	public String getSexo() {
 		return sexo;
 	}
-
 	public void setSexo(String sexo) {
 		this.sexo = sexo;
 	}
-
-	public Date getFechanacimiento() {
+	public String getFechanacimiento() {
 		return fechanacimiento;
 	}
-
-	public void setFechanacimiento(Date fechanacimiento) {
+	public void setFechanacimiento(String fechanacimiento) {
 		this.fechanacimiento = fechanacimiento;
 	}
-
 	public String getEmail() {
 		return email;
 	}
-
 	public void setEmail(String email) {
 		this.email = email;
 	}
-
-	public Entidad getEntidad() {
-		return entidad;
+	public String getEntidadId() {
+		return entidadId;
 	}
-
-	public void setEntidad(Entidad entidad) {
-		this.entidad = entidad;
+	public void setEntidadId(String entidadId) {
+		this.entidadId = entidadId;
 	}
-	
+	public String getCreatedBy() {
+		return createdBy;
+	}
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
+	}
 	
 }

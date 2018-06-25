@@ -66,6 +66,48 @@
               
     }
     
+    function savePerson(){
+		var formData= { 
+				createdBy: $('#createdBy').val(),
+				entidadId: $('#entidadId_persona').val(),
+				tipoDocumentoIdentificaion: $('#tipoDocumentoIdentificaion').val(),
+				numeroidentificacion: $('#numeroidentificacion').val(),
+				nombres: $('#nombres').val(),
+				apellidos: $('#apellidos').val(),
+				tipoEstadoCivil: $('#tipoEstadoCivil').val(),
+				sexo: $('#sexo').val(),
+				fechanacimiento: $('#fechanacimiento').val(),
+               	email: $('#email').val()
+		}
+		$('.bindingError').remove();
+		
+		var URL_COMMON_REST_APP = "<%=request.getSession().getAttribute("URL_COMMON_REST_APP") %>";
+    	var ajaxUrl = URL_COMMON_REST_APP+'/persona/saveNew.json';
+    	var successFunction = function(response){
+     	   if(response.validated){
+               //Set response
+    		   if(response.status=="OK"){
+         			showSuccessMessage(response.message);
+//          			load();
+         			$('#AddPerson').modal('hide');
+//          			clearPersonFields();
+         		}else{
+         			showErrorMessage(response.message);
+         		}
+            }else{
+              //Set error messages
+              $.each(response.messages,function(key,value){
+            	  showErrorMessageByField('input',key,value,'');
+            	  showErrorMessageByField('select',key,value,'');
+              });
+            }
+    	   
+       };
+       
+       ajaxPost(ajaxUrl,formData,successFunction);
+              
+    }
+    
     function saveEdit(){
 		var formData= {
 				id: parseInt($("#Eid").val()), 
@@ -353,7 +395,7 @@
     }
     
     function verifyUserName(object){
-    	$('#bindingErrorUserName').remove();
+    	$('#bindingError'+object.id).remove();
     	var ajaxUrl = contexPath+'/user/verifyUserName?userName='+object.value;
     	var id = object.id;
     	var successFunction = function(response){
@@ -361,7 +403,7 @@
        			$( "#div-"+id ).removeClass( "has-error" ).addClass( "has-success" );
        		}else{
        			$( "#div-"+id ).removeClass( "has-success" ).addClass( "has-error" );
-       			showErrorMessageByField('input' , id , response.message , 'id="bindingErrorUserName"');
+       			showErrorMessageByField('input' , id , response.message , '');
 //        			$('input[id='+id+']').after('<span id="bindingErrorUserName" class="bindingError" style="color:red;font-weight: bold;">'+response.message+'</span>');
        		}
        };
@@ -460,6 +502,18 @@
 		$("#Astatus").val("");
 		$( "#div-AuserName" ).removeClass( "has-error" );
 		$( "#div-AuserName" ).removeClass( "has-success" );
+	}
+    
+    function clearPersonFields(){
+		$('.bindingError').remove();
+		$('#tipoDocumentoIdentificaion').val(""),
+		$('#numeroidentificacion').val(""),
+		$('#nombres').val(""),
+		$('#apellidos').val(""),
+		$('#tipoEstadoCivil').val(""),
+		$('#sexo').val(""),
+		$('#fechanacimiento').val(""),
+       	$('#email').val("")
 	}
 
 	$(document).ready(function(){
@@ -603,7 +657,7 @@
 		        	<div class="form-group">
 				    <label for="AfullName" class="col-sm-3 control-label">Full Name</label>
 				    <div class="col-sm-7">
-				      <input type="text" class="form-control" id="AfullName" placeholder="Full Name"><button type="button" data-toggle="modal" class="btn btn-link" title="Register New" data-target="#AddPerson" >Register New</button>
+				      <input type="text" class="form-control" id="AfullName" placeholder="Full Name"><button type="button" data-toggle="modal" class="btn btn-link" title="Register New" data-target="#AddPerson" onclick="clearPersonFields();">Register New</button>
 				      <input type="hidden" class="form-control" id="entidadId">
 				    </div>
 				  </div>
@@ -883,6 +937,9 @@
 		        
 		        
 		        <form class="form-horizontal">
+		        <input type="hidden" id="createdBy" value="${pageContext.request.userPrincipal.name}">
+		        <input type="hidden" id="entidadId_persona" value="${entidadId}">
+		        
 		        <div class="form-group">
 				    <label for="tipoDocumentoIdentificaion" class="col-sm-3 control-label">Document Type</label>
 				    <div class="col-sm-7">

@@ -7,7 +7,7 @@
     	
     }
     function showErrorMessageByField(object,key,message,extra){
-    	$(object+'[id='+key+']').after('<span class="bindingError" style="color:red;font-weight: bold;" '+extra+'>'+message+'</span>');
+    	$(object+'[id='+key+']').after('<span class="bindingError" style="color:red;font-weight: bold;" id="bindingError'+key+'" '+extra+'>'+message+'</span>');
     }
     function makeButton(title,onclick,extra,icon){
     	return "<td><button title='"+title+"' onclick='"+onclick+"' type='button' class='btn btn-link btn-xs toltip' "+extra+"><img src='"+icon+"'></button>";

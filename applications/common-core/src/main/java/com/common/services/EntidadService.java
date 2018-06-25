@@ -16,6 +16,7 @@ import com.common.domain.Persona;
 public interface EntidadService {
 	void save(Organizacion organizacion);
 	void save(Persona persona);
+	void save(Entidad entidad);
 	Entidad findById(Long id);
 	List<Organizacion> findAllOrganizacion();
 	List<Persona> findAllPersona();

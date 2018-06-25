@@ -13,6 +13,7 @@ import com.common.client.bean.TipoBaseBean;
 import com.security.utils.BusinessException;
 
 public interface CommonServiceIntegration {
+	String getCommonRestApp();
 	String getPersonaPorTermino();
 	String getTipoBaseByCategory();
 	List<TipoBaseBean> getTipoBasesXCategoriasActivas(String categoria);

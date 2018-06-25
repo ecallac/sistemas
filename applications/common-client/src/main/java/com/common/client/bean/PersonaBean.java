@@ -21,8 +21,15 @@ public class PersonaBean {
 	private String email;
 	private Long entidadId;
 	private String fullName;
+	private String createdBy;
 	
 	
+	public String getCreatedBy() {
+		return createdBy;
+	}
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
+	}
 	public String getFullName() {
 		return fullName;
 	}

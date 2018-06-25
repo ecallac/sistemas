@@ -88,4 +88,10 @@ public class EntidadServiceImpl implements EntidadService {
 		return entidadDao.findOrganizacionByEntidadId(entidadId);
 	}
 
+	@Override
+	public void save(Entidad entidad) {
+		entidadDao.save(entidad);
+		
+	}
+
 }

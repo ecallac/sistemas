@@ -125,6 +125,9 @@ public class UserController {
 		session.setAttribute("URL_TYPE_DOCUMENTO_LIST", commonServiceIntegration.getTipoBaseByCategory()+"?categoria="+SecurityConstants.TIPOBASE_CATEGORIA_TYPE_PERSONA_DOCUMENTO);
 		session.setAttribute("URL_TYPE_ESTADO_CIVIL_LIST", commonServiceIntegration.getTipoBaseByCategory()+"?categoria="+SecurityConstants.TIPOBASE_CATEGORIA_TYPE_PERSONA_ESTADO_CIVIL);
 		session.setAttribute("URL_PERSONA_LIST", commonServiceIntegration.getPersonaPorTermino()+"?termino=");
+		TipoBaseBean tipoBaseBean = commonServiceIntegration.getTipoBasesXCodigo(SecurityConstants.TIPOBASE_CODIGO_PERSONA);
+		session.setAttribute("entidadId", tipoBaseBean.getId());
+		session.setAttribute("URL_COMMON_REST_APP", commonServiceIntegration.getCommonRestApp());
 		return modelAndView;
 	}
     
@@ -272,9 +275,13 @@ public class UserController {
 	         map.put(SecurityConstants.MESSAGE, "Person is not registered in the system. Register and try again please.");
 	         return map;
 		}
-		Map<String, Object> userNameValidation = verifyUserName(userNewView.getUserName());
-		if (SecurityConstants.ERROR.equals((String) userNameValidation.get(SecurityConstants.STATUS))) {
-	         return userNameValidation;
+		map.putAll(verifyUserName(userNewView.getUserName()));
+		if (SecurityConstants.ERROR.equals((String) map.get(SecurityConstants.STATUS))) {
+			map.put("validated", false);
+			Map<String, String> errors = new HashMap<String, String>();
+			errors.put("userName", (String) map.get(SecurityConstants.MESSAGE));
+			map.put("messages", errors);
+	         return map;
 		}
 		if (!userNewView.getPassword().equals(userNewView.getPasswordAgain())) {
 			 map.put(SecurityConstants.STATUS, SecurityConstants.ERROR);
