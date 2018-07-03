@@ -8,5 +8,5 @@ package com.common.rest.bean;
  *
  */
 public class ReglaView {
-
+	//test
 }
