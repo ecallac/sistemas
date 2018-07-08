@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.security.web.service;
+package com.internal.web.service;
 
 import static com.security.client.service.UserClientService.USER_BY_USERNAME_URL;
 

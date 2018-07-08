@@ -18,7 +18,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.context.request.RequestContextHolder;
 
-import com.security.web.service.LoginServiceImpl;
+import com.internal.web.service.LoginServiceImpl;
 
 /**
  * @author EFRAIN
