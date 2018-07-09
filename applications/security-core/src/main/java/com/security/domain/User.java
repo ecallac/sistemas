@@ -58,7 +58,7 @@ public class User extends BaseEntity{
 //	@OneToMany(mappedBy="user",fetch=FetchType.LAZY)
 //	@Cascade({CascadeType.SAVE_UPDATE, CascadeType.DELETE})
 	@ManyToMany(fetch = FetchType.EAGER, mappedBy = "users")
-	@Cascade({CascadeType.ALL})
+	@Cascade({CascadeType.SAVE_UPDATE})
 	private List<Role> roles;
 	
 	@OneToMany(mappedBy="user",fetch=FetchType.EAGER)

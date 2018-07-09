@@ -41,7 +41,7 @@ public class Role extends BaseEntity{
 			@JoinColumn(name = "role_id", nullable = false, updatable = false) },
 			inverseJoinColumns = { @JoinColumn(name = "user_id",
 					nullable = false, updatable = false) })
-	@Cascade({CascadeType.SAVE_UPDATE, CascadeType.DELETE})
+	@Cascade({CascadeType.SAVE_UPDATE})
 	private List<User> users;
 	
 //	@OneToMany(mappedBy="role",fetch=FetchType.LAZY)
@@ -52,7 +52,7 @@ public class Role extends BaseEntity{
 			@JoinColumn(name = "role_id", nullable = false, updatable = false) },
 			inverseJoinColumns = { 
 					@JoinColumn(name = "permission_id", nullable = false, updatable = false) })
-	@Cascade({CascadeType.SAVE_UPDATE, CascadeType.DELETE})
+	@Cascade({CascadeType.SAVE_UPDATE})
 	private List<Permission> permissions;
 	
 	public String getNameWithPrefix(){

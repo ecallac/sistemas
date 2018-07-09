@@ -17,6 +17,7 @@ import javax.validation.Valid;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -125,10 +126,19 @@ public class PermissionController {
 	@RequestMapping(value={"/permission/delete"}, method={RequestMethod.POST})
 	public @ResponseBody Map<String, Object> delete(@RequestBody PermissionView permissionView){
 		Map<String, Object> map = new HashMap<String, Object>();
-		Permission Permission = permissionService.findPermissionById(Long.valueOf(permissionView.getId()));
-		permissionService.delete(Permission);
-        map.put(SecurityConstants.STATUS, SecurityConstants.OK);
-        map.put(SecurityConstants.MESSAGE, "Your record have been deleted successfully at "+SecurityUtil.dateToString(new Date(), "yyyy-MM-dd HH:mm:ss"));
+		try {
+			Permission Permission = permissionService.findPermissionById(Long.valueOf(permissionView.getId()));
+			permissionService.delete(Permission);
+	        map.put(SecurityConstants.STATUS, SecurityConstants.OK);
+	        map.put(SecurityConstants.MESSAGE, "Your record have been deleted successfully at "+SecurityUtil.dateToString(new Date(), "yyyy-MM-dd HH:mm:ss"));
+		} catch (DataIntegrityViolationException e) {
+			map.put(SecurityConstants.STATUS, SecurityConstants.ERROR);
+			map.put(SecurityConstants.MESSAGE, "System couln't do the action, Review data dependences.");
+		} catch (Exception e) {
+			map.put(SecurityConstants.STATUS, SecurityConstants.ERROR);
+			map.put(SecurityConstants.MESSAGE, e.getMessage());
+		}
+		
         return map;
 	}
 	

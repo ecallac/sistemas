@@ -51,7 +51,7 @@ public class Permission extends BaseEntity {
 //	@OneToMany(mappedBy="permission",fetch=FetchType.EAGER)
 //	@Cascade({CascadeType.SAVE_UPDATE, CascadeType.DELETE})
 	@ManyToMany(fetch = FetchType.EAGER, mappedBy = "permissions")
-	@Cascade({CascadeType.SAVE_UPDATE, CascadeType.DELETE})
+	@Cascade({CascadeType.SAVE_UPDATE})
 	private List<Role> roles;
 	
 	private String type;

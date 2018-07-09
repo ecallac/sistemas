@@ -38,7 +38,7 @@ font-size: small;
 	    <div class="panel-heading" role="tab" id="headingTwo">
 	      <h4 class="panel-title">
 	        <a class="collapsed" role="button" href="${pageContext.request.contextPath}/module" >
-	          Module Management
+	          Module
 	        </a>
 	      </h4>
 	    </div>
@@ -52,7 +52,7 @@ font-size: small;
 	    <div class="panel-heading" role="tab" id="headingThree">
 	      <h4 class="panel-title">
 	        <a class="collapsed" role="button" href="${pageContext.request.contextPath}/role">
-	          Role Management
+	          Role
 	        </a>
 	      </h4>
 	    </div>
@@ -66,7 +66,7 @@ font-size: small;
 	    <div class="panel-heading" role="tab" id="headingFour">
 	      <h4 class="panel-title">
 	        <a class="collapsed" role="button" href="${pageContext.request.contextPath}/user" >
-	          User Management
+	          User
 	        </a>
 	      </h4>
 	    </div>
@@ -80,7 +80,7 @@ font-size: small;
 	    <div class="panel-heading" role="tab" id="headingFour">
 	      <h4 class="panel-title">
 	        <a class="collapsed" role="button" href="${pageContext.request.contextPath}/permission" >
-	          Permission Management
+	          Permission
 	        </a>
 	      </h4>
 	    </div>
