@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+	http://www.springframework.org/schema/aop
+		http://www.springframework.org/schema/aop/spring-aop-4.0.xsd">
+
+
+	<bean id="dataSourceJDBC" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName">
+			<value>${database.connection.driver}</value>
+		</property>
+		<property name="url">
+			<value>${database.connection.url}</value>
+		</property>
+		<property name="username">
+			<value>${database.connection.username}</value>
+		</property>
+		<property name="password">
+			<value>${database.connection.password}</value>
+		</property>
+	</bean>
+	
+
+	<!--   Hibernate Session Factory -->
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+   		<property name="dataSource" ref="dataSourceJDBC"/>
+		<property name="configLocations">
+			<list>
+				<value>
+					classpath:com/internal/domain/config/hibernate.cfg.xml
+				</value>
+			</list>
+		</property>
+<!-- 		<property name="configurationClass"> -->
+<!-- 			<value>org.hibernate.cfg.AnnotationConfiguration</value> -->
+<!-- 		</property> -->
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">${hibernate.dialect}</prop>
+				<prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
+			</props>
+		</property>
+	</bean>
+	
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	
+</beans>

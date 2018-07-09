@@ -16,6 +16,6 @@
  											classpath:com/internal/web/config/reports.properties" />
 	
 	<!-- Application Datasource and Dao -->
-<!-- 	<import resource="classpath:/com/security/dao/config/dbaccess-config.xml"/> -->
+ 	<import resource="classpath:/com/internal/dao/config/dbaccess-config.xml"/>
 	
 </beans>
