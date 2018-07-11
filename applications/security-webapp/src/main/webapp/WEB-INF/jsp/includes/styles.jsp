@@ -38,11 +38,12 @@
 	<script src="<c:url value='/resources/js/buttons.print.min.js' />"></script>
 	
  	<script src="<c:url value='/resources/js/jquery-ui.min.js' />"></script>
+ 	<script src="<c:url value='/resources/js/jquery.stalker.js' />"></script>
  	
 	
 	<link href="<c:url value='/resources/css/dataTables.bootstrap4.css' />"  rel="stylesheet"></link>
 	<link href="<c:url value='/resources/css/buttons.bootstrap4.min.css' />"  rel="stylesheet"></link>
-	
+	<link href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" rel="stylesheet" type="text/css" />
 	
 	<script src="<c:url value='/resources/js/hummingbird-treeview-1.4.js' />"></script>
 

@@ -19,9 +19,9 @@
 	<title></title>
 	<script type="text/javascript">
 	
-	$('#Add').on('shown.bs.modal', function () {
-	  
-	})
+	$('#Form').draggable({
+    	handle: ".modal-header"
+	}); 
 	
 	var contexPath = "<%=request.getContextPath() %>";
 	

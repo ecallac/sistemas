@@ -12,7 +12,6 @@
     table{
     	font-size: small;
     }
-    accordion { padding: 0.4em; position: relative; }
     </style>
     
     <script type="text/javascript">
