@@ -63,6 +63,10 @@ public class ModuleRestController {
 		List<PermissionBean> permissions = new ArrayList<PermissionBean>();
 		for (Permission permission : module.getPermissions()) {
 			PermissionBean permissionBean = (PermissionBean) BeanParser.parseObjectToNewClass(permission, PermissionBean.class, null);
+			if (permission.getParentPermission()!=null) {
+				PermissionBean parentPermissionBean = (PermissionBean) BeanParser.parseObjectToNewClass(permission.getParentPermission(), PermissionBean.class, null);
+				permissionBean.setParentPermission(parentPermissionBean);
+			}
 			permissions.add(permissionBean);
 		}
 		moduleBean.setPermissions(permissions);
