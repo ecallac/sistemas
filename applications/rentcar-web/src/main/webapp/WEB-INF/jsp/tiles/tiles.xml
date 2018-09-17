@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC  "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"  "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">  
+ 
+<tiles-definitions>  
+  
+  <definition name="login" template="/WEB-INF/jsp/login/login.jsp"/>  
+   
+   <!-- Base Definition -->
+   <definition name="template" template="/WEB-INF/jsp/tiles/layouts/defaultLayout.jsp">  
+       <put-attribute name="title" value="Internal" />
+       <put-attribute name="header" value="/WEB-INF/jsp/tiles/template/defaultHeader.jsp" /> 
+       <put-attribute name="navigation" value="/WEB-INF/jsp/tiles/template/defaultNavigation.jsp" /> 
+       <put-attribute name="footer" value="/WEB-INF/jsp/tiles/template/defaultFooter.jsp" />
+        
+   </definition>
+   
+	<definition name="403Page" extends="template">
+       <put-attribute name="body" value="/WEB-INF/jsp/login/403page.jsp" />  
+   </definition>
+   <definition name="home" extends="template"> 
+       <put-attribute name="body" value="/WEB-INF/jsp/internal/home.jsp" />  
+   </definition>
+   <definition name="marca" extends="template"> 
+       <put-attribute name="body" value="/WEB-INF/jsp/internal/marca.jsp" />  
+   </definition>
+   <definition name="modelo" extends="template"> 
+       <put-attribute name="body" value="/WEB-INF/jsp/internal/modelo.jsp" />  
+   </definition>
+   <definition name="clase" extends="template"> 
+       <put-attribute name="body" value="/WEB-INF/jsp/internal/clase.jsp" />  
+   </definition>
+   <definition name="categoria" extends="template"> 
+       <put-attribute name="body" value="/WEB-INF/jsp/internal/categoria.jsp" />  
+   </definition>
+   <definition name="descripsion" extends="template"> 
+       <put-attribute name="body" value="/WEB-INF/jsp/internal/descripsion.jsp" />  
+   </definition>
+  
+</tiles-definitions>
