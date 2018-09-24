@@ -55,7 +55,9 @@ public class DescripsionView {
 
 	public void setCategoriaId(String categoriaId) {
 		CategoriaView categoriaView = new CategoriaView();
-		categoriaView.setId(Long.valueOf(categoriaId));
+		if (!StringUtils.isEmpty(categoriaId)) {
+			categoriaView.setId(Long.valueOf(categoriaId));
+		}
 		this.categoria = categoriaView;
 		this.categoriaId = categoriaId;
 	}

@@ -40,7 +40,7 @@ public class ConductorServiceImpl implements ConductorService {
 	public void save(Conductor entity) {
 		if (entity.getId()==null) {
 			entity.setDateCreated(new Date());
-//			entity.setStatus(Status.ENABLED.getCode());
+			entity.setStatus(Status.ENABLED.getCode());
 		}else {
 			Conductor dataDB= findById(entity.getId());
 			entity = (Conductor) BeanParser.parseBetweenObjects(entity, dataDB, null);

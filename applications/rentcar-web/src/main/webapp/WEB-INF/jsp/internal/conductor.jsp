@@ -21,12 +21,16 @@
     	handle: ".modal-header"
 	}); 
 	
-	var contexPath = "<%=request.getContextPath() %>/marca";
+	var contexPath = "<%=request.getContextPath() %>/conductor";
 	
     function save(){
 		var formData= {
 				id: parseInt($("#id").val()), 
-				descripsion: $('#descripsion').val()
+				numeroDocumento: $('#numeroDocumento').val(),
+				nombre: $('#nombre').val(),
+				apellido: $('#apellido').val(),
+				telefono: $('#telefono').val(),
+				direccion: $('#direccion').val()
 		}
 		$('.bindingError').remove();
 		
@@ -82,7 +86,11 @@
     	var successFunction = function(response){
        		if(response.status=="OK"){
        			$("#id").val(response.viewBean.id);
-       			$("#descripsion").val(response.viewBean.descripsion);
+       			$("#numeroDocumento").val(response.viewBean.numeroDocumento);
+       			$("#nombre").val(response.viewBean.nombre);
+       			$("#apellido").val(response.viewBean.apellido);
+       			$("#telefono").val(response.viewBean.telefono);
+       			$("#direccion").val(response.viewBean.direccion);
        		}
        };
        
@@ -95,16 +103,20 @@
        		if(response.data.length>0){
        			
        			var tableId = "#table";
-       			var fileTitle = "Marca List";
+       			var fileTitle = "Conductor List";
        			var jsonData = response.data;
        			var jsonColumns = [
    		            { "data": "id" },
-   		            { "data": "descripsion" }
+   		            { "data": "numeroDocumento" },
+   		            { "data": "nombre" },
+   		            { "data": "apellido" },
+   		            { "data": "telefono" },
+   		            { "data": "direccion" }
    		        ];
-       			var columnsExport = [ 0, 1];
+       			var columnsExport = [ 0, 1, 3, 4, 5];
        			var jsonColumnDefs = [
        	        	{
-       	            	"targets": 2,
+       	            	"targets": 6,
        	                "render": function ( data, type, row ) {
        	                    return "<td>"+
        	                 		makeButton("Edit","edit("+row.id+")","data-toggle='modal' data-target='#Form'","<c:url value='/resources/static/img/icons/black/doc_edit_icon&16.png' />")+
@@ -126,7 +138,11 @@
     function clearFields(){
 		$('.bindingError').remove();
 		$("#id").val("");
-		$("#descripsion").val("");
+		$("#numeroDocumento").val("");
+		$("#nombre").val("");
+		$("#apellido").val("");
+		$("#telefono").val("");
+		$("#direccion").val("");
 	}
     
 	</script>
@@ -144,7 +160,7 @@
 
 
 
-<h1>${tittle}s</h1>
+<h1>${tittle}es</h1>
 
 
 
@@ -163,7 +179,7 @@
 
  <table id="table" align="center" class="table table-striped table-hover table-bordered">  
 <thead>
-<tr><th>Id</th><th>Descripsion</th><th>Actions</th></tr>  
+<tr><th>Id</th><th>Numero Documento</th><th>Nombre</th><th>Apellidos</th><th>Telefono</th><th>Direccion</th><th>Actions</th></tr>  
 </thead>
 </table>
 
@@ -195,9 +211,33 @@
 		        <form class="form-horizontal">
 				  
 				  <div class="form-group">
-				    <label for="descripsion" class="col-sm-3 control-label">Descripsion</label>
+				    <label for="numeroDocumento" class="col-sm-3 control-label">Numero de Documento</label>
 				    <div class="col-sm-7">
-				      <input type="text" class="form-control" id="descripsion" placeholder="Descripsion">
+				      <input type="text" class="form-control" id="numeroDocumento" placeholder="Numero de Documento">
+				    </div>
+				  </div>
+				  <div class="form-group">
+				    <label for="nombre" class="col-sm-3 control-label">Nombre</label>
+				    <div class="col-sm-7">
+				      <input type="text" class="form-control" id="nombre" placeholder="Nombre">
+				    </div>
+				  </div>
+				  <div class="form-group">
+				    <label for="apellido" class="col-sm-3 control-label">Apellidos</label>
+				    <div class="col-sm-7">
+				      <input type="text" class="form-control" id="apellido" placeholder="Apellidos">
+				    </div>
+				  </div>
+				  <div class="form-group">
+				    <label for="telefono" class="col-sm-3 control-label">Telefono</label>
+				    <div class="col-sm-7">
+				      <input type="text" class="form-control" id="telefono" placeholder="Telefono">
+				    </div>
+				  </div>
+				  <div class="form-group">
+				    <label for="direccion" class="col-sm-3 control-label">Direccion</label>
+				    <div class="col-sm-7">
+				      <input type="text" class="form-control" id="direccion" placeholder="Direccion">
 				    </div>
 				  </div>
 				  

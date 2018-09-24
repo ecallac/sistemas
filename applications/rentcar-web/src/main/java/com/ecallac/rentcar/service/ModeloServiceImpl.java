@@ -25,6 +25,8 @@ public class ModeloServiceImpl implements ModeloService{
 
 	@Autowired
 	ModeloRepository modeloRepository;
+	@Autowired
+	MarcaService marcaService;
 	
 	@Override
 	public List<Modelo> findList() {
@@ -47,6 +49,7 @@ public class ModeloServiceImpl implements ModeloService{
 			entity.setDateUpdated(new Date());
 			entity.setVersion(entity.getVersion()+1);
 		}
+		entity.setMarca(marcaService.findById(entity.getMarca().getId()));
 		modeloRepository.save(entity);
 	}
 

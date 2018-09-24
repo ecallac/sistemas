@@ -55,7 +55,9 @@ public class ModeloView {
 
 	public void setMarcaId(String marcaId) {
 		MarcaView marcaView = new MarcaView();
-		marcaView.setId(Long.valueOf(marcaId));
+		if (!StringUtils.isEmpty(marcaId)) {
+			marcaView.setId(Long.valueOf(marcaId));
+		}
 		this.marca = marcaView;
 		this.marcaId = marcaId;
 	}

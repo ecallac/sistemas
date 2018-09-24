@@ -35,5 +35,8 @@
    <definition name="descripsion" extends="template"> 
        <put-attribute name="body" value="/WEB-INF/jsp/internal/descripsion.jsp" />  
    </definition>
+   <definition name="conductor" extends="template"> 
+       <put-attribute name="body" value="/WEB-INF/jsp/internal/conductor.jsp" />  
+   </definition>
   
 </tiles-definitions>

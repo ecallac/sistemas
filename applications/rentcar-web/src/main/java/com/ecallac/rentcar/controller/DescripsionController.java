@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.ecallac.rentcar.domain.Categoria;
 import com.ecallac.rentcar.domain.Descripsion;
 import com.ecallac.rentcar.service.DescripsionService;
 import com.ecallac.rentcar.util.BeanParser;
@@ -98,6 +99,8 @@ public class DescripsionController {
 		} else {
 			object.setUpdatedBy(principal.getName());
 		}
+		Categoria parentObject = (Categoria) BeanParser.parseObjectToNewClass(view.getCategoria(), Categoria.class, null);
+		object.setCategoria(parentObject);
 		descripsionService.save(object);
         
         map.put("validated", true);

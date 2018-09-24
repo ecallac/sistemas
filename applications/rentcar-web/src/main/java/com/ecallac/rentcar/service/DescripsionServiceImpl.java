@@ -25,6 +25,8 @@ public class DescripsionServiceImpl implements DescripsionService {
 	
 	@Autowired
 	DescripsionRepository descripsionRepository;
+	@Autowired
+	CategoriaService categoriaService;
 	
 	@Override
 	public List<Descripsion> findList() {
@@ -47,6 +49,7 @@ public class DescripsionServiceImpl implements DescripsionService {
 			entity.setDateUpdated(new Date());
 			entity.setVersion(entity.getVersion()+1);
 		}
+		entity.setCategoria(categoriaService.findById(entity.getCategoria().getId()));
 		descripsionRepository.save(entity);
 	}
 

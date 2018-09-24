@@ -95,43 +95,48 @@
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
         <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Marca <span class="caret"></span></a>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Vehiculo <span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="${pageContext.request.contextPath}/marca">Lista</a></li>
-<!--             <li role="separator" class="divider"></li> -->
-<!--             <li><a href="#">Separated link</a></li> -->
+            <li><a href="${pageContext.request.contextPath}/marca">Marca</a></li>
+            <li><a href="${pageContext.request.contextPath}/modelo">Modelo</a></li>
+            <li><a href="${pageContext.request.contextPath}/clase">Clase</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="${pageContext.request.contextPath}/vehiculo">Vehiculo</a></li>
           </ul>
         </li>
       </ul>
       <ul class="nav navbar-nav">
         <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Modelo <span class="caret"></span></a>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Conductor <span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="${pageContext.request.contextPath}/modelo">Lista</a></li>
+            <li><a href="${pageContext.request.contextPath}/conductor">Lista</a></li>
           </ul>
         </li>
       </ul>
       <ul class="nav navbar-nav">
         <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Clase <span class="caret"></span></a>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Detalle de Operacion <span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="${pageContext.request.contextPath}/clase">Lista</a></li>
+            <li><a href="${pageContext.request.contextPath}/categoria">Categoria</a></li>
+            <li><a href="${pageContext.request.contextPath}/descripsion">Descripsion</a></li>
           </ul>
         </li>
       </ul>
       <ul class="nav navbar-nav">
         <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Categoria <span class="caret"></span></a>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Procesos <span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="${pageContext.request.contextPath}/categoria">Lista</a></li>
+            <li><a href="${pageContext.request.contextPath}/alquiler">Alquiler</a></li>
+            <li><a href="${pageContext.request.contextPath}/operciondiaria">Operacion Diaria</a></li>
+            <li><a href="${pageContext.request.contextPath}/cierre">Cierre</a></li>
           </ul>
         </li>
       </ul>
       <ul class="nav navbar-nav">
         <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Descripsion <span class="caret"></span></a>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Reportes <span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="${pageContext.request.contextPath}/descripsion">Lista</a></li>
+            <li><a href="${pageContext.request.contextPath}/lista">Lista</a></li>
           </ul>
         </li>
       </ul>

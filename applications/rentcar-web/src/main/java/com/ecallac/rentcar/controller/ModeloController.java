@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.ecallac.rentcar.domain.Marca;
 import com.ecallac.rentcar.domain.Modelo;
 import com.ecallac.rentcar.service.ModeloService;
 import com.ecallac.rentcar.util.BeanParser;
@@ -96,6 +97,8 @@ public class ModeloController {
 		} else {
 			object.setUpdatedBy(principal.getName());
 		}
+		Marca parentObject = (Marca) BeanParser.parseObjectToNewClass(view.getMarca(), Marca.class, null);
+		object.setMarca(parentObject);
 		modeloService.save(object);
         
         map.put("validated", true);
