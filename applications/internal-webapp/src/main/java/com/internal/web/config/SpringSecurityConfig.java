@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -62,6 +63,9 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 		for (Map.Entry<String,String> entry : map.entrySet()){
 			http.authorizeRequests().antMatchers(entry.getKey()).access("hasAnyRole("+entry.getValue()+")");
 		}
+		http.authorizeRequests().antMatchers("/dwr/**/*").permitAll();
+//		http.authorizeRequests().antMatchers("/**/*").permitAll();
+		
 		http.authorizeRequests().antMatchers("/login").permitAll();
 		http.authorizeRequests().and().exceptionHandling().accessDeniedPage("/403");
 		http.authorizeRequests().and().formLogin()
@@ -71,5 +75,10 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 					.usernameParameter("userName")
 					.passwordParameter("password")
 					.and().logout().logoutUrl("/j_spring_security_logout").logoutSuccessUrl("/login?logout");
+	}
+	
+	@Override
+	public void configure(WebSecurity web) throws Exception {
+	    web.ignoring().antMatchers("/dwr/**/*");
 	}
 }

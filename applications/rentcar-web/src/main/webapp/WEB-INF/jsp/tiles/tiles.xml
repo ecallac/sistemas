@@ -38,5 +38,16 @@
    <definition name="conductor" extends="template"> 
        <put-attribute name="body" value="/WEB-INF/jsp/internal/conductor.jsp" />  
    </definition>
-  
+   <definition name="vehiculo" extends="template"> 
+       <put-attribute name="body" value="/WEB-INF/jsp/internal/vehiculo.jsp" />  
+   </definition>
+   <definition name="alquiler" extends="template"> 
+       <put-attribute name="body" value="/WEB-INF/jsp/internal/alquiler.jsp" />  
+   </definition>
+   <definition name="tipo" extends="template"> 
+       <put-attribute name="body" value="/WEB-INF/jsp/internal/tipo.jsp" />  
+   </definition>
+   <definition name="operacion" extends="template"> 
+       <put-attribute name="body" value="/WEB-INF/jsp/internal/operacion.jsp" />  
+   </definition>
 </tiles-definitions>

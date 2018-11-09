@@ -16,4 +16,5 @@ public interface ModeloService {
 	Modelo findById(Long id);
 	void save(Modelo entity);
 	void delete(Long id,String deletedBy);
+	List<Modelo> findListByMarca(Long marcaId);
 }

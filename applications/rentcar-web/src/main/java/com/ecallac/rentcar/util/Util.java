@@ -26,6 +26,31 @@ public final class Util {
 	private Util() {
 	   }
 	
+	public static Object convertObjectType(Object valueFrom,String typeFrom,String typeTo) throws ParseException{
+		if (typeTo.equals("java.lang.String")) {
+			if (typeFrom.equals("java.util.Date")) {
+				return convertDateToString((Date) valueFrom, "yyyy-MM-dd");
+			} else {
+				return convertObjectToString(valueFrom);
+			}
+		} else if(typeFrom.equals("java.lang.String")){
+			if (typeTo.equals("java.lang.Long")) {
+				return convertStringToLong((String) valueFrom);
+			} else if (typeTo.equals("java.lang.Integer")) {
+				return convertStringToInteger((String) valueFrom);
+			} else if (typeTo.equals("java.math.BigDecimal")) {
+				return convertObjectToBigDecimal(valueFrom);
+			} else if (typeTo.equals("java.util.Date")) {
+				return convertStringToDate((String) valueFrom, "yyyy-MM-dd");
+			} else if (typeTo.equals("java.lang.Double")) {
+				return convertStringToDouble((String) valueFrom);
+			} else if (typeTo.equals("java.lang.Boolean")) {
+				return convertStringToBoolean((String) valueFrom);
+			} 
+		}
+		return null;
+	}
+	
 	public static boolean containElemnts(List<?> list){
 		if(list == null || list.size()==0){
 			return false;
@@ -54,9 +79,22 @@ public final class Util {
 		return null;
 	}
 	
+	public static Boolean convertStringToBoolean(String object){
+		if(object!=null){
+			return  Boolean.valueOf(object);
+		}
+		return null;
+	}
+	
 	public static String convertObjectToString(Object object){
 		if(object!=null){
 			return  String.valueOf(object);
+		}
+		return null;
+	}
+	public static Double convertStringToDouble(String object){
+		if(object!=null){
+			return  Double.valueOf(object);
 		}
 		return null;
 	}
@@ -74,7 +112,7 @@ public final class Util {
 		return cal.getTime();
 	}
 	
-	public static String dateToString(java.util.Date date, String pattern) {
+	public static String convertDateToString(java.util.Date date, String pattern) {
 		String result = null;
 		if (date == null) {
 			return null;
@@ -100,7 +138,7 @@ public final class Util {
 //		return stringToDate(dateToString(date, pattern), pattern);
 //	}
 //	
-	public static java.util.Date stringToDate(String dateStr, String pattern) throws ParseException {
+	public static java.util.Date convertStringToDate(String dateStr, String pattern) throws ParseException{
 		Date date = null;
 		if (dateStr == null || dateStr.trim().equals("")) {
 			return null;
@@ -130,7 +168,7 @@ public final class Util {
 		return list;
 	}
 	
-	public static BigDecimal objectToBigDecimal(Object object){
+	public static BigDecimal convertObjectToBigDecimal(Object object){
 		return BigDecimal.valueOf(Double.valueOf(String.valueOf(object))).setScale(6,RoundingMode.HALF_UP);
 	}
 	

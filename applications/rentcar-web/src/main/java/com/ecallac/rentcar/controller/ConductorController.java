@@ -96,7 +96,7 @@ public class ConductorController {
         
         map.put("validated", true);
         map.put(Status.STATUS_TXT.getCode(), Status.OK.getCode());
-        map.put(Status.MESSAGE_TXT.getCode(), "Your record have been saved successfully at "+Util.dateToString(new Date(), "yyyy-MM-dd HH:mm:ss"));
+        map.put(Status.MESSAGE_TXT.getCode(), "Your record have been saved successfully at "+Util.convertDateToString(new Date(), "yyyy-MM-dd HH:mm:ss"));
         return map;
     }
 	
@@ -105,7 +105,7 @@ public class ConductorController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		conductorService.delete(view.getId(),principal.getName());
 		map.put(Status.STATUS_TXT.getCode(), Status.OK.getCode());
-        map.put(Status.MESSAGE_TXT.getCode(), "Your record have been deleted successfully at "+Util.dateToString(new Date(), "yyyy-MM-dd HH:mm:ss"));
+        map.put(Status.MESSAGE_TXT.getCode(), "Your record have been deleted successfully at "+Util.convertDateToString(new Date(), "yyyy-MM-dd HH:mm:ss"));
         return map;
 	}
 	

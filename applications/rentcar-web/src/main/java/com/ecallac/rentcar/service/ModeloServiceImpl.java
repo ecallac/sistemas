@@ -58,4 +58,10 @@ public class ModeloServiceImpl implements ModeloService{
 		modeloRepository.updateStatus(Status.DELETED.getCode(),deletedBy,new Date(), id);
 	}
 
+	@Override
+	public List<Modelo> findListByMarca(Long marcaId) {
+		// TODO Auto-generated method stub
+		return modeloRepository.findByMarcaIdAndStatus(marcaId, Status.ENABLED.getCode());
+	}
+
 }

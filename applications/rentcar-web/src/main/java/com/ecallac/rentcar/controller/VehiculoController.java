@@ -25,12 +25,18 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.ecallac.rentcar.domain.Clase;
+import com.ecallac.rentcar.domain.Marca;
+import com.ecallac.rentcar.domain.Modelo;
 import com.ecallac.rentcar.domain.Vehiculo;
 import com.ecallac.rentcar.service.VehiculoService;
 import com.ecallac.rentcar.util.BeanParser;
 import com.ecallac.rentcar.util.Constants;
 import com.ecallac.rentcar.util.Status;
 import com.ecallac.rentcar.util.Util;
+import com.ecallac.rentcar.view.ClaseView;
+import com.ecallac.rentcar.view.MarcaView;
+import com.ecallac.rentcar.view.ModeloView;
 import com.ecallac.rentcar.view.VehiculoView;
 
 /**
@@ -70,9 +76,10 @@ public class VehiculoController {
 	@RequestMapping(value = "/load", method = {RequestMethod.POST})
     public @ResponseBody  Map<String, Object> load(@RequestBody VehiculoView view) {
         Map<String, Object> map = new HashMap<String, Object>();
-        Vehiculo module = vehiculoService.findById(view.getId());
+        Vehiculo object = vehiculoService.findById(view.getId());
         map.put(Status.STATUS_TXT.getCode(), Status.OK.getCode());
-        map.put("viewBean", (VehiculoView)BeanParser.parseObjectToNewClass(module, VehiculoView.class, null));
+        view = (VehiculoView)BeanParser.parseObjectToNewClass(object, VehiculoView.class, null);
+		map.put("viewBean", view);
         return map;
     }
 	
@@ -96,7 +103,7 @@ public class VehiculoController {
         
         map.put("validated", true);
         map.put(Status.STATUS_TXT.getCode(), Status.OK.getCode());
-        map.put(Status.MESSAGE_TXT.getCode(), "Your record have been saved successfully at "+Util.dateToString(new Date(), "yyyy-MM-dd HH:mm:ss"));
+        map.put(Status.MESSAGE_TXT.getCode(), "Your record have been saved successfully at "+Util.convertDateToString(new Date(), "yyyy-MM-dd HH:mm:ss"));
         return map;
     }
 	
@@ -105,14 +112,15 @@ public class VehiculoController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		vehiculoService.delete(view.getId(),principal.getName());
 		map.put(Status.STATUS_TXT.getCode(), Status.OK.getCode());
-        map.put(Status.MESSAGE_TXT.getCode(), "Your record have been deleted successfully at "+Util.dateToString(new Date(), "yyyy-MM-dd HH:mm:ss"));
+        map.put(Status.MESSAGE_TXT.getCode(), "Your record have been deleted successfully at "+Util.convertDateToString(new Date(), "yyyy-MM-dd HH:mm:ss"));
         return map;
 	}
 	
 	public List<VehiculoView> castObjectToObjectViewList(List<Vehiculo> list){
 		List<VehiculoView> newObjects = new ArrayList<VehiculoView>();
 		for (Vehiculo object : list) {
-			newObjects.add((VehiculoView)BeanParser.parseObjectToNewClass(object, VehiculoView.class, null));
+			VehiculoView view = (VehiculoView)BeanParser.parseObjectToNewClass(object, VehiculoView.class, null);
+			newObjects.add(view);
 		}
 		return newObjects;
 	}

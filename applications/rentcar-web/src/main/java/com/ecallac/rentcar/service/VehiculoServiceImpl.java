@@ -25,6 +25,10 @@ public class VehiculoServiceImpl implements VehiculoService {
 	
 	@Autowired
 	VehiculoRepository vehiculoRepository;
+	@Autowired
+	ModeloService modeloService;
+	@Autowired
+	ClaseService claseService;
 	
 	@Override
 	public List<Vehiculo> findList() {
@@ -40,13 +44,15 @@ public class VehiculoServiceImpl implements VehiculoService {
 	public void save(Vehiculo entity) {
 		if (entity.getId()==null) {
 			entity.setDateCreated(new Date());
-//			entity.setStatus(Status.ENABLED.getCode());
+			entity.setStatus(Status.ENABLED.getCode());
 		}else {
 			Vehiculo dataDB= findById(entity.getId());
 			entity = (Vehiculo) BeanParser.parseBetweenObjects(entity, dataDB, null);
 			entity.setDateUpdated(new Date());
 			entity.setVersion(entity.getVersion()+1);
 		}
+		entity.setModelo(modeloService.findById(entity.getModelo().getId()));
+		entity.setClase(claseService.findById(entity.getClase().getId()));
 		vehiculoRepository.save(entity);
 	}
 

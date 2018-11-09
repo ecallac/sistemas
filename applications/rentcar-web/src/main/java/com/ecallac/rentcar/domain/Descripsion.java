@@ -23,9 +23,7 @@ public class Descripsion extends BaseEntity {
 	@JoinColumn(name="categoria_id")
 	private Categoria categoria;
 	transient
-	private List<Entrada> entradas;
-	transient
-	private List<Salida> salidas;
+	private List<Dinero> dineros;
 	public String getDescripsion() {
 		return descripsion;
 	}
@@ -44,17 +42,11 @@ public class Descripsion extends BaseEntity {
 	public void setCategoria(Categoria categoria) {
 		this.categoria = categoria;
 	}
-	public List<Entrada> getEntradas() {
-		return entradas;
+	public List<Dinero> getDineros() {
+		return dineros;
 	}
-	public void setEntradas(List<Entrada> entradas) {
-		this.entradas = entradas;
-	}
-	public List<Salida> getSalidas() {
-		return salidas;
-	}
-	public void setSalidas(List<Salida> salidas) {
-		this.salidas = salidas;
+	public void setDineros(List<Dinero> dineros) {
+		this.dineros = dineros;
 	}
 	
 }

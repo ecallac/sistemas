@@ -13,6 +13,7 @@ public enum Status {
 	OK("OK"),
 	ERROR("ERROR"),
 	
+	NEW("N"),
 	ENABLED("Y"),
 	DELETED("D");
 	private String code;

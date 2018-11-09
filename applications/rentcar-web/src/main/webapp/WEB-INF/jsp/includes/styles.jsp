@@ -52,3 +52,8 @@
 
 <link href="<c:url value='/resources/static/css/AlertJS.css' />" rel="stylesheet" type="text/css">
 <script src="<c:url value='/resources/static/js/AlertJS.js' />"></script>
+
+<script src="<c:url value='/resources/static/js/bootstrap-datepicker.js' />"></script>
+<script src="<c:url value='/resources/static/js/locales/bootstrap-datepicker.es.js' />" charset="UTF-8"></script>
+<link href="<c:url value='/resources/static/css/datepicker.css' />" rel="stylesheet" type="text/css">
+

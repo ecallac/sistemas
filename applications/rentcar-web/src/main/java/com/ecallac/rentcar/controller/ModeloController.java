@@ -69,14 +69,24 @@ public class ModeloController {
 		return map;
 	}
 	
+	@RequestMapping(value = "/listByMarca", method = {RequestMethod.GET,RequestMethod.POST})
+	public @ResponseBody Map<String, Object> getListByMarca(@RequestBody ModeloView view) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		List<ModeloView> list = castObjectToObjectViewList(modeloService.findListByMarca(view.getMarca().getId()));
+		if (list != null) {
+			map.put("data", list);
+		} else {
+			map.put("data", new ArrayList<ModeloView>());
+		}
+		return map;
+	}
+	
 	@RequestMapping(value = "/load", method = {RequestMethod.POST})
     public @ResponseBody  Map<String, Object> load(@RequestBody ModeloView view) {
         Map<String, Object> map = new HashMap<String, Object>();
         Modelo object = modeloService.findById(view.getId());
         map.put(Status.STATUS_TXT.getCode(), Status.OK.getCode());
         view = (ModeloView)BeanParser.parseObjectToNewClass(object, ModeloView.class, null);
-		MarcaView parentview = (MarcaView)BeanParser.parseObjectToNewClass(object.getMarca(), MarcaView.class, null);
-		view.setMarca(parentview);
         map.put("viewBean", view);
         return map;
     }
@@ -97,13 +107,11 @@ public class ModeloController {
 		} else {
 			object.setUpdatedBy(principal.getName());
 		}
-		Marca parentObject = (Marca) BeanParser.parseObjectToNewClass(view.getMarca(), Marca.class, null);
-		object.setMarca(parentObject);
 		modeloService.save(object);
         
         map.put("validated", true);
         map.put(Status.STATUS_TXT.getCode(), Status.OK.getCode());
-        map.put(Status.MESSAGE_TXT.getCode(), "Your record have been saved successfully at "+Util.dateToString(new Date(), "yyyy-MM-dd HH:mm:ss"));
+        map.put(Status.MESSAGE_TXT.getCode(), "Your record have been saved successfully at "+Util.convertDateToString(new Date(), "yyyy-MM-dd HH:mm:ss"));
         return map;
     }
 	
@@ -112,7 +120,7 @@ public class ModeloController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		modeloService.delete(view.getId(),principal.getName());
 		map.put(Status.STATUS_TXT.getCode(), Status.OK.getCode());
-        map.put(Status.MESSAGE_TXT.getCode(), "Your record have been deleted successfully at "+Util.dateToString(new Date(), "yyyy-MM-dd HH:mm:ss"));
+        map.put(Status.MESSAGE_TXT.getCode(), "Your record have been deleted successfully at "+Util.convertDateToString(new Date(), "yyyy-MM-dd HH:mm:ss"));
         return map;
 	}
 	
@@ -120,8 +128,6 @@ public class ModeloController {
 		List<ModeloView> newObjects = new ArrayList<ModeloView>();
 		for (Modelo object : list) {
 			ModeloView view = (ModeloView)BeanParser.parseObjectToNewClass(object, ModeloView.class, null);
-			MarcaView parentview = (MarcaView)BeanParser.parseObjectToNewClass(object.getMarca(), MarcaView.class, null);
-			view.setMarca(parentview);
 			newObjects.add(view);
 		}
 		return newObjects;

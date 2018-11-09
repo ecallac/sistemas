@@ -5,6 +5,7 @@ package com.internal.web.config;
 
 import javax.servlet.Filter;
 
+import org.directwebremoting.servlet.DwrServlet;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 
@@ -23,13 +24,14 @@ public class WebInit extends AbstractAnnotationConfigDispatcherServletInitialize
 	@Override
 	protected Class<?>[] getServletConfigClasses() {
 		// TODO Auto-generated method stub
+		//return new Class[]{DwrServlet.class};
 		return null;
 	}
 
 	@Override
 	protected String[] getServletMappings() {
 		// TODO Auto-generated method stub
-		return new String[]{"/"};
+		return new String[]{"/dwr/**/*","/"};
 	}
 	
 //	@Override

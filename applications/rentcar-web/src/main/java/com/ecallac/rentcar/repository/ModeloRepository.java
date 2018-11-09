@@ -31,4 +31,7 @@ public interface ModeloRepository extends JpaRepository<Modelo, Long> {
 			,@Param("updatedBy") String updatedBy
 			,@Param("dateUpdated") Date dateUpdated
 			,@Param("id") Long id);
+	
+	List<Modelo> findByMarcaIdAndStatus(Long marcaId, String status);
+	
 }

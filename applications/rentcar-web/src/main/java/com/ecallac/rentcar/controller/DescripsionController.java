@@ -77,8 +77,6 @@ public class DescripsionController {
         Descripsion object = descripsionService.findById(view.getId());
         map.put(Status.STATUS_TXT.getCode(), Status.OK.getCode());
         view = (DescripsionView)BeanParser.parseObjectToNewClass(object, DescripsionView.class, null);
-		CategoriaView parentview = (CategoriaView)BeanParser.parseObjectToNewClass(object.getDescripsion(), CategoriaView.class, null);
-		view.setCategoria(parentview);
         map.put("viewBean", view);
         return map;
     }
@@ -99,13 +97,11 @@ public class DescripsionController {
 		} else {
 			object.setUpdatedBy(principal.getName());
 		}
-		Categoria parentObject = (Categoria) BeanParser.parseObjectToNewClass(view.getCategoria(), Categoria.class, null);
-		object.setCategoria(parentObject);
 		descripsionService.save(object);
         
         map.put("validated", true);
         map.put(Status.STATUS_TXT.getCode(), Status.OK.getCode());
-        map.put(Status.MESSAGE_TXT.getCode(), "Your record have been saved successfully at "+Util.dateToString(new Date(), "yyyy-MM-dd HH:mm:ss"));
+        map.put(Status.MESSAGE_TXT.getCode(), "Your record have been saved successfully at "+Util.convertDateToString(new Date(), "yyyy-MM-dd HH:mm:ss"));
         return map;
     }
 	
@@ -114,7 +110,7 @@ public class DescripsionController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		descripsionService.delete(view.getId(),principal.getName());
 		map.put(Status.STATUS_TXT.getCode(), Status.OK.getCode());
-        map.put(Status.MESSAGE_TXT.getCode(), "Your record have been deleted successfully at "+Util.dateToString(new Date(), "yyyy-MM-dd HH:mm:ss"));
+        map.put(Status.MESSAGE_TXT.getCode(), "Your record have been deleted successfully at "+Util.convertDateToString(new Date(), "yyyy-MM-dd HH:mm:ss"));
         return map;
 	}
 	
@@ -122,8 +118,6 @@ public class DescripsionController {
 		List<DescripsionView> newObjects = new ArrayList<DescripsionView>();
 		for (Descripsion object : list) {
 			DescripsionView view = (DescripsionView)BeanParser.parseObjectToNewClass(object, DescripsionView.class, null);
-			CategoriaView parentview = (CategoriaView)BeanParser.parseObjectToNewClass(object.getDescripsion(), CategoriaView.class, null);
-			view.setCategoria(parentview);
 			newObjects.add(view);
 		}
 		return newObjects;

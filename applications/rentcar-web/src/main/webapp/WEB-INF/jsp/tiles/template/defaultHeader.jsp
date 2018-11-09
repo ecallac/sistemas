@@ -95,30 +95,26 @@
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
         <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Vehiculo <span class="caret"></span></a>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Mantenimiento <span class="caret"></span></a>
           <ul class="dropdown-menu">
             <li><a href="${pageContext.request.contextPath}/marca">Marca</a></li>
             <li><a href="${pageContext.request.contextPath}/modelo">Modelo</a></li>
             <li><a href="${pageContext.request.contextPath}/clase">Clase</a></li>
             <li role="separator" class="divider"></li>
             <li><a href="${pageContext.request.contextPath}/vehiculo">Vehiculo</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="${pageContext.request.contextPath}/conductor">Conductor</a></li>
           </ul>
         </li>
       </ul>
       <ul class="nav navbar-nav">
         <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Conductor <span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <li><a href="${pageContext.request.contextPath}/conductor">Lista</a></li>
-          </ul>
-        </li>
-      </ul>
-      <ul class="nav navbar-nav">
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Detalle de Operacion <span class="caret"></span></a>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Configuracion <span class="caret"></span></a>
           <ul class="dropdown-menu">
             <li><a href="${pageContext.request.contextPath}/categoria">Categoria</a></li>
             <li><a href="${pageContext.request.contextPath}/descripsion">Descripsion</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="${pageContext.request.contextPath}/tipo">Tipo</a></li>
           </ul>
         </li>
       </ul>
@@ -127,7 +123,7 @@
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Procesos <span class="caret"></span></a>
           <ul class="dropdown-menu">
             <li><a href="${pageContext.request.contextPath}/alquiler">Alquiler</a></li>
-            <li><a href="${pageContext.request.contextPath}/operciondiaria">Operacion Diaria</a></li>
+            <li><a href="${pageContext.request.contextPath}/operacion">Operacion Diaria</a></li>
             <li><a href="${pageContext.request.contextPath}/cierre">Cierre</a></li>
           </ul>
         </li>

@@ -4,8 +4,10 @@
 package com.ecallac.rentcar.util;
 
 import java.lang.reflect.Field;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -60,14 +62,26 @@ public class BeanParser {
 			    	if (customMapping!=null && customMapping.containsKey(fromField.getName())) {
 			    		Field fieldValue = fromClass.getDeclaredField(fromField.getName());
 					    fieldValue.setAccessible(true);
+					    String fromType = fieldValue.getType().getName();
 						Object value = fieldValue.get(objectFrom);
 						if (value != null) {
 							try {
 								for (Class<?> toClazz : classesTo) {
 									try {
 										Field toField = toClazz.getDeclaredField(customMapping.get(fromField.getName()));
+										String toType = toField.getType().getName();
 										toField.setAccessible(true);
-										toField.set(objectTo, value);
+										if (fromType.equals(toType)) {
+											toField.set(objectTo, value);
+										}else{
+											Object objValue = Util.convertObjectType(value, fromType, toType);
+											if (objValue!=null) {
+												toField.set(objectTo, objValue);
+											} else {
+												objValue = parseObjectToNewClass(value, toField.getType(), customMapping);
+												toField.set(objectTo, objValue);
+											}
+										}
 									} catch (Exception e) {}
 								}
 							} catch (Exception e) {
@@ -76,18 +90,30 @@ public class BeanParser {
 					}else{
 						Field fieldValue = fromClass.getDeclaredField(fromField.getName());
 					    fieldValue.setAccessible(true);
+					    String fromType = fieldValue.getType().getName();
 						Object value = fieldValue.get(objectFrom);
 						if (value != null) {
 							try {
 								for (Class<?> toClazz : classesTo) {
 									try {
 										Field toField = toClazz.getDeclaredField(fromField.getName());
+										String toType = toField.getType().getName();
 										toField.setAccessible(true);
-										toField.set(objectTo, value);
+										if (fromType.equals(toType)) {
+											toField.set(objectTo, value);
+										}else{
+											Object objValue = Util.convertObjectType(value, fromType, toType);
+											if (objValue!=null) {
+												toField.set(objectTo, objValue);
+											} else {
+												objValue = parseObjectToNewClass(value, toField.getType(), null);
+												toField.set(objectTo, objValue);
+											}
+										}
+										
 									} catch (Exception e) {}
 								}
-							} catch (Exception e) {
-							}
+							} catch (Exception e) {}
 						}
 					}
 				}
