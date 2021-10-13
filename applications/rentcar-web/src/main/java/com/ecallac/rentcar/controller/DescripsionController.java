@@ -25,17 +25,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.ecallac.rentcar.domain.Categoria;
 import com.ecallac.rentcar.domain.Descripsion;
 import com.ecallac.rentcar.service.DescripsionService;
 import com.ecallac.rentcar.util.BeanParser;
 import com.ecallac.rentcar.util.Constants;
 import com.ecallac.rentcar.util.Status;
 import com.ecallac.rentcar.util.Util;
-import com.ecallac.rentcar.view.CategoriaView;
 import com.ecallac.rentcar.view.DescripsionView;
-import com.ecallac.rentcar.view.MarcaView;
-import com.ecallac.rentcar.view.ModeloView;
 
 /**
  * @author efrain.calla
