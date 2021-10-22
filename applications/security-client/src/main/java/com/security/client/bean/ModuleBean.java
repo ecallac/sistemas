@@ -4,19 +4,40 @@
 package com.security.client.bean;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author efrain.calla
  *
  */
 public class ModuleBean {
+	private Long id;
 	private String name;
-	private String moduleVersion;
 	private String description;
-	private List<PermissionBean> permissions;
-	private Map<String,String> rolesByPermission;
+	private String enabled;
+	private String author;
+	private String moduleVersion;
+	private String updatedBy;
+	private String createdBy;
+	private List<PermissionBean> permissionList;
 	
+	public String getUpdatedBy() {
+		return updatedBy;
+	}
+	public void setUpdatedBy(String updatedBy) {
+		this.updatedBy = updatedBy;
+	}
+	public String getCreatedBy() {
+		return createdBy;
+	}
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
+	}
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
+	}
 	public String getName() {
 		return name;
 	}
@@ -29,23 +50,29 @@ public class ModuleBean {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public List<PermissionBean> getPermissions() {
-		return permissions;
+	public String getEnabled() {
+		return enabled;
 	}
-	public void setPermissions(List<PermissionBean> permissions) {
-		this.permissions = permissions;
+	public void setEnabled(String enabled) {
+		this.enabled = enabled;
 	}
-	public Map<String, String> getRolesByPermission() {
-		return rolesByPermission;
+	public String getAuthor() {
+		return author;
 	}
-	public void setRolesByPermission(Map<String, String> rolesByPermission) {
-		this.rolesByPermission = rolesByPermission;
+	public void setAuthor(String author) {
+		this.author = author;
 	}
 	public String getModuleVersion() {
 		return moduleVersion;
 	}
 	public void setModuleVersion(String moduleVersion) {
 		this.moduleVersion = moduleVersion;
+	}
+	public List<PermissionBean> getPermissionList() {
+		return permissionList;
+	}
+	public void setPermissionList(List<PermissionBean> permissionList) {
+		this.permissionList = permissionList;
 	}
 	
 }

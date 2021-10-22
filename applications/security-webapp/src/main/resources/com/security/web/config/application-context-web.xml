@@ -25,7 +25,7 @@
 <!-- 	</bean> -->
 
 	<!-- Application Datasource and Dao -->
-	<import resource="classpath:/com/security/dao/config/dbaccess-config.xml"/>
+<!-- 	<import resource="classpath:/com/security/dao/config/dbaccess-config.xml"/> -->
 <!-- 	<import resource="classpath:/com/security/service/config/transaction-config.xml"/> -->
 
 

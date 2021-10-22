@@ -16,8 +16,6 @@ import javax.validation.Valid;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -27,14 +25,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.security.domain.Module;
-import com.security.domain.Permission;
-import com.security.service.PermissionService;
-import com.security.utils.BeanParser;
-import com.security.utils.SecurityConstants;
-import com.security.utils.SecurityUtil;
+import com.BeanParser;
+import com.common.TipoBase;
+import com.security.Module;
+import com.security.Permission;
 import com.security.web.bean.ModuleView;
 import com.security.web.bean.PermissionView;
+import com.security.web.service.integration.PermissionIntegration;
+import com.security.web.service.integration.TipoBaseIntegration;
+import com.security.web.utils.SecurityConstants;
+import com.security.web.utils.SecurityUtil;
 
 /**
  * @author efrain
@@ -44,36 +44,46 @@ import com.security.web.bean.PermissionView;
 public class PermissionController {
 	
 	@Autowired
-	@Value("${security.common.tipoBaseByCategory}")
-	private String tipoBaseByCategory;
+	TipoBaseIntegration tipoBaseIntegration;
 	
 	@Autowired
-	PermissionService permissionService;
+	PermissionIntegration permissionIntegration;
 	
 	@RequestMapping(value={"/permission"}, method={RequestMethod.GET,RequestMethod.POST})
 	public ModelAndView list(HttpSession session){
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("permission");
-		session.setAttribute("URL_TYPE_PERMISSION_LIST", tipoBaseByCategory+"?categoria="+SecurityConstants.TIPOBASE_CATEGORIA_TYPE_PERMISSION);
 		return modelAndView;
 	}
 	
-	@RequestMapping(value = "/permission/enabledPermissions", method = {RequestMethod.GET,RequestMethod.POST})
-	  public @ResponseBody Map<String, Object> initializeEnableModules() {
+	@RequestMapping(value = "/permission/permissionType", method = {RequestMethod.GET,RequestMethod.POST})
+	  public @ResponseBody Map<String, Object> initializePermissionType() {
 	      Map<String, Object> map = new HashMap<String, Object>();
-	      List<PermissionView> list = castPermissionToPermissionViewList(permissionService.findPermissionsByEnabled(SecurityConstants.YES));
+	      List<TipoBase> list = tipoBaseIntegration.findByCategoriaActivos(SecurityConstants.TIPOBASE_CATEGORIA_TYPE_PERMISSION);
 	      if (list != null) {
 	          map.put("data", list);
 	      } else {
-	    	  map.put("data", new ArrayList<PermissionView>());
+	    	  map.put("data", new ArrayList<TipoBase>());
 	      }
 	      return map;
 	  }
 	
+	@RequestMapping(value = "/permission/enabledPermissionsByModule", method = {RequestMethod.POST})
+    public @ResponseBody  Map<String, Object> getPeremissionsByModule(@RequestBody PermissionView permissionView) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        List<PermissionView> list = castPermissionToPermissionViewList(permissionIntegration.findEnabledListByModuleId(Long.valueOf(permissionView.getModuleId())));
+        if (list != null) {
+          map.put("data", list);
+      } else {
+    	  map.put("data", new ArrayList<PermissionView>());
+      }
+      return map;
+    }
+	
   @RequestMapping(value = "/permission/list", method = {RequestMethod.GET,RequestMethod.POST})
   public @ResponseBody Map<String, Object> getAll() {
       Map<String, Object> map = new HashMap<String, Object>();
-      List<PermissionView> list = castPermissionToPermissionViewList(permissionService.findAllPermissions());
+      List<PermissionView> list = castPermissionToPermissionViewList(permissionIntegration.findList());
       if (list != null) {
 //          map.put(SecurityConstants.STATUS, SecurityConstants.OK);
 //          map.put(SecurityConstants.MESSAGE, "Data found");
@@ -115,7 +125,7 @@ public class PermissionController {
 		} else {
 			permission.setUpdatedBy(principal.getName());
 		}
-		permissionService.save(permission);
+		permissionIntegration.save(permission);
 		
         map.put("validated", true);
         map.put(SecurityConstants.STATUS, SecurityConstants.OK);
@@ -123,29 +133,29 @@ public class PermissionController {
         return map;
     }
 	
-	@RequestMapping(value={"/permission/delete"}, method={RequestMethod.POST})
-	public @ResponseBody Map<String, Object> delete(@RequestBody PermissionView permissionView){
-		Map<String, Object> map = new HashMap<String, Object>();
-		try {
-			Permission Permission = permissionService.findPermissionById(Long.valueOf(permissionView.getId()));
-			permissionService.delete(Permission);
-	        map.put(SecurityConstants.STATUS, SecurityConstants.OK);
-	        map.put(SecurityConstants.MESSAGE, "Your record have been deleted successfully at "+SecurityUtil.dateToString(new Date(), "yyyy-MM-dd HH:mm:ss"));
-		} catch (DataIntegrityViolationException e) {
-			map.put(SecurityConstants.STATUS, SecurityConstants.ERROR);
-			map.put(SecurityConstants.MESSAGE, "System couln't do the action, Review data dependences.");
-		} catch (Exception e) {
-			map.put(SecurityConstants.STATUS, SecurityConstants.ERROR);
-			map.put(SecurityConstants.MESSAGE, e.getMessage());
-		}
-		
-        return map;
-	}
+//	@RequestMapping(value={"/permission/delete"}, method={RequestMethod.POST})
+//	public @ResponseBody Map<String, Object> delete(@RequestBody PermissionView permissionView){
+//		Map<String, Object> map = new HashMap<String, Object>();
+//		try {
+//			Permission Permission = securityServiceIntegration.findPermissionById(Long.valueOf(permissionView.getId()));
+//			securityServiceIntegration.delete(Permission);
+//	        map.put(SecurityConstants.STATUS, SecurityConstants.OK);
+//	        map.put(SecurityConstants.MESSAGE, "Your record have been deleted successfully at "+SecurityUtil.dateToString(new Date(), "yyyy-MM-dd HH:mm:ss"));
+//		} catch (DataIntegrityViolationException e) {
+//			map.put(SecurityConstants.STATUS, SecurityConstants.ERROR);
+//			map.put(SecurityConstants.MESSAGE, "System couln't do the action, Review data dependences.");
+//		} catch (Exception e) {
+//			map.put(SecurityConstants.STATUS, SecurityConstants.ERROR);
+//			map.put(SecurityConstants.MESSAGE, e.getMessage());
+//		}
+//		
+//        return map;
+//	}
 	
 	@RequestMapping(value = "/permission/load", method = {RequestMethod.POST})
     public @ResponseBody  Map<String, Object> load(@RequestBody PermissionView permissionView) {
         Map<String, Object> map = new HashMap<String, Object>();
-        Permission permission = permissionService.findPermissionById(permissionView.getId());
+        Permission permission = permissionIntegration.findById(permissionView.getId());
         map.put(SecurityConstants.STATUS, SecurityConstants.OK);
         
         PermissionView permissionViewStored = (PermissionView)BeanParser.parseObjectToNewClass(permission, PermissionView.class, null);
@@ -161,7 +171,7 @@ public class PermissionController {
         Map<String, Object> map = new HashMap<String, Object>();
     	Permission permission = (Permission) BeanParser.parseObjectToNewClass(permissionView, Permission.class, null);
     	permission.setUpdatedBy(principal.getName());
-		permissionService.save(permission);
+    	permissionIntegration.save(permission);
 		map.put(SecurityConstants.STATUS, SecurityConstants.OK);
         map.put(SecurityConstants.MESSAGE, "Your record have been updated successfully at "+SecurityUtil.dateToString(new Date(), "yyyy-MM-dd HH:mm:ss"));
 		

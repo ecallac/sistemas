@@ -144,6 +144,7 @@ public class PermissionServiceImpl implements PermissionService {
 				buffer.append("'"+string+"'");
 				c++;
 			}
+			
 			map.put(entry.getKey(), buffer.toString());
 			c=0;
 		}

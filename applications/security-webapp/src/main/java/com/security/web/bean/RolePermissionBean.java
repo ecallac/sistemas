@@ -3,7 +3,7 @@
  */
 package com.security.web.bean;
 
-import com.security.domain.Role;
+import com.security.Role;
 
 /**
  * @author EFRAIN

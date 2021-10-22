@@ -15,7 +15,7 @@ public class QuickPasswordEncodingGenerator {
      * @param args
      */
     public static void main(String[] args) {
-            String password = "123";
+            String password = "asdasd";
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             System.out.println(passwordEncoder.encode(password));
     }

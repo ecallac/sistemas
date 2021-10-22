@@ -23,12 +23,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.security.domain.Module;
-import com.security.service.ModuleService;
-import com.security.utils.BeanParser;
-import com.security.utils.SecurityConstants;
-import com.security.utils.SecurityUtil;
+import com.BeanParser;
+import com.security.Module;
 import com.security.web.bean.ModuleView;
+import com.security.web.service.integration.ModuleIntegration;
+import com.security.web.utils.SecurityConstants;
+import com.security.web.utils.SecurityUtil;
 
 /**
  * @author efrain
@@ -36,8 +36,9 @@ import com.security.web.bean.ModuleView;
  */
 @Controller
 public class ModuleController {
+	
 	@Autowired
-	ModuleService moduleService;
+	ModuleIntegration moduleIntegration;
 	
 	@RequestMapping(value={"/module"}, method={RequestMethod.GET,RequestMethod.POST})
 	public ModelAndView list(){
@@ -49,7 +50,7 @@ public class ModuleController {
 	@RequestMapping(value = "/module/enabledModules", method = {RequestMethod.GET,RequestMethod.POST})
 	public @ResponseBody Map<String, Object> initializeEnableModules() {
 		Map<String, Object> map = new HashMap<String, Object>();
-		List<ModuleView> list = castModuleToModuleViewList(moduleService.findModulesByEnabled(SecurityConstants.YES));
+		List<ModuleView> list = castModuleToModuleViewList(moduleIntegration.findEnabledList());
 		if (list != null) {
 			map.put("data", list);
 		} else {
@@ -61,7 +62,7 @@ public class ModuleController {
   @RequestMapping(value = "/module/list", method = {RequestMethod.GET,RequestMethod.POST})
   public @ResponseBody Map<String, Object> getAll() {
       Map<String, Object> map = new HashMap<String, Object>();
-      List<ModuleView> list = castModuleToModuleViewList(moduleService.findAllModules());
+      List<ModuleView> list = castModuleToModuleViewList(moduleIntegration.findList());
       if (list != null) {
 //          map.put(SecurityConstants.STATUS, SecurityConstants.OK);
 //          map.put(SecurityConstants.MESSAGE, "Data found");
@@ -97,7 +98,7 @@ public class ModuleController {
 		} else {
 			module.setUpdatedBy(principal.getName());
 		}
-		moduleService.save(module);
+		moduleIntegration.save(module);
         
         map.put("validated", true);
         map.put(SecurityConstants.STATUS, SecurityConstants.OK);
@@ -105,20 +106,10 @@ public class ModuleController {
         return map;
     }
 	
-	@RequestMapping(value={"/module/delete"}, method={RequestMethod.POST})
-	public @ResponseBody Map<String, Object> delete(@RequestBody ModuleView moduleView){
-		Map<String, Object> map = new HashMap<String, Object>();
-		Module module = moduleService.findModuleById(Long.valueOf(moduleView.getId()));
-		moduleService.delete(module);
-        map.put(SecurityConstants.STATUS, SecurityConstants.OK);
-        map.put(SecurityConstants.MESSAGE, "Your record have been deleted successfully at "+SecurityUtil.dateToString(new Date(), "yyyy-MM-dd HH:mm:ss"));
-        return map;
-	}
-	
 	@RequestMapping(value = "/module/load", method = {RequestMethod.POST})
     public @ResponseBody  Map<String, Object> load(@RequestBody ModuleView moduleView) {
         Map<String, Object> map = new HashMap<String, Object>();
-        Module module = moduleService.findModuleById(moduleView.getId());
+        Module module = moduleIntegration.findById(moduleView.getId());
         map.put(SecurityConstants.STATUS, SecurityConstants.OK);
         map.put("viewBean", (ModuleView)BeanParser.parseObjectToNewClass(module, ModuleView.class, null));
         return map;
@@ -127,17 +118,12 @@ public class ModuleController {
 	@RequestMapping(value = "/module/enableDisable", method = {RequestMethod.POST})
     public @ResponseBody  Map<String, Object> enableDisable(@RequestBody ModuleView moduleView,Principal principal) {
         Map<String, Object> map = new HashMap<String, Object>();
-        Module module = moduleService.findModuleById(moduleView.getId());
-        if (module!=null) {
-			module = (Module) BeanParser.parseBetweenObjects(moduleView, module, null);
-			module.setUpdatedBy(principal.getName());
-			moduleService.save(module);
-			map.put(SecurityConstants.STATUS, SecurityConstants.OK);
-	        map.put(SecurityConstants.MESSAGE, "Your record have been updated successfully at "+SecurityUtil.dateToString(new Date(), "yyyy-MM-dd HH:mm:ss"));
-		}else{
-			map.put(SecurityConstants.STATUS, SecurityConstants.ERROR);
-	        map.put(SecurityConstants.MESSAGE, "Your status couldn't be updated");
-		}
+		Module module = (Module) BeanParser.parseObjectToNewClass(moduleView, Module.class, null);
+		module.setUpdatedBy(principal.getName());
+		moduleIntegration.save(module);
+		map.put(SecurityConstants.STATUS, SecurityConstants.OK);
+        map.put(SecurityConstants.MESSAGE, "Your record have been updated successfully at "+SecurityUtil.dateToString(new Date(), "yyyy-MM-dd HH:mm:ss"));
+		
         
         return map;
     }

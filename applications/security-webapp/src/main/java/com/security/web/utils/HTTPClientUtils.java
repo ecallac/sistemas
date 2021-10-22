@@ -3,17 +3,19 @@
  */
 package com.security.web.utils;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.MalformedURLException;
-
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
+import org.apache.http.HttpStatus;
+import org.apache.http.client.HttpResponseException;
+import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.util.EntityUtils;
 
 /**
  * @author efrain
@@ -21,82 +23,57 @@ import org.apache.http.impl.client.DefaultHttpClient;
  */
 public class HTTPClientUtils {
 	public static String sendGetRequest(String url,String contentType){
-		StringBuffer buffer = new StringBuffer();
 		try {
-
-			DefaultHttpClient httpClient = new DefaultHttpClient();
-			HttpGet getRequest = new HttpGet(url);
-			getRequest.addHeader("accept", "application/"+contentType);
-
-			HttpResponse response = httpClient.execute(getRequest);
-
-			if (response.getStatusLine().getStatusCode() != 200) {
-				throw new RuntimeException("Failed : HTTP error code : "
-				   + response.getStatusLine().getStatusCode());
-			}
-
-			BufferedReader br = new BufferedReader(
-	                         new InputStreamReader((response.getEntity().getContent())));
-
-			String output;
-			System.out.println("Output from Server .... \n");
-			while ((output = br.readLine()) != null) {
-				buffer.append(output);
-				System.out.println(output);
-			}
-
-			httpClient.getConnectionManager().shutdown();
-
-		  } catch (ClientProtocolException e) {
-
+		    HttpUriRequest request = new HttpGet(url);
+		    request.addHeader("accept", contentType);
+		    RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(10000).build();
+		    System.out.println("Connecting GET to : "+url + " with content type : "+contentType);
+		    HttpResponse httpResponse = HttpClientBuilder.create()
+		                                                 .setDefaultRequestConfig(requestConfig)
+		                                                 .build()
+		                                                 .execute(request);
+		    HttpEntity entity = httpResponse.getEntity();
+		    String response = null;
+		    if (entity!=null) {
+				response = EntityUtils.toString(entity, "UTF-8");
+			} 
+		    System.out.println("Response : "+response);
+		    if (httpResponse.getStatusLine().getStatusCode() == HttpStatus.SC_OK || httpResponse.getStatusLine().getStatusCode() == HttpStatus.SC_NO_CONTENT) {
+		        return response;
+		    } else {
+		        throw new HttpResponseException(httpResponse.getStatusLine().getStatusCode(), response);
+		    }
+		} catch (Exception e) {
 			e.printStackTrace();
-
-		  } catch (IOException e) {
-
-			e.printStackTrace();
-		  }
-		return buffer.toString();
+		}
+		return null;
 	}
 	
-	public static String sendPostRequest(String url,String contentType,String requestData){
-		StringBuffer buffer = new StringBuffer();
+	public static String sendPostRequest(String url, String contentType, String requestData) {
 		try {
-
-			DefaultHttpClient httpClient = new DefaultHttpClient();
-			HttpPost postRequest = new HttpPost(url);
-
+			RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(10000).build();
+			System.out.println("Connecting POST to : "+url + " with content type : "+contentType);
+			CloseableHttpClient httpClient = HttpClientBuilder.create()
+															.setDefaultRequestConfig(requestConfig)
+															.build();
+			HttpPost httpPost = new HttpPost(url);
+			System.out.println("Request : "+requestData);
 			StringEntity input = new StringEntity(requestData);
-			input.setContentType("application/"+contentType);
-			postRequest.setEntity(input);
-
-			HttpResponse response = httpClient.execute(postRequest);
-
-			if (response.getStatusLine().getStatusCode() != 200) {
-				throw new RuntimeException("Failed : HTTP error code : "
-					+ response.getStatusLine().getStatusCode());
-			}
-
-			BufferedReader br = new BufferedReader(
-	                        new InputStreamReader((response.getEntity().getContent())));
-
-			String output;
-			System.out.println("Output from Server .... \n");
-			while ((output = br.readLine()) != null) {
-				buffer.append(output);
-				System.out.println(output);
-			}
-
-			httpClient.getConnectionManager().shutdown();
-
-		  } catch (MalformedURLException e) {
-
+			input.setContentType(contentType);
+			httpPost.setEntity(input);
+			CloseableHttpResponse httpResponse = httpClient.execute(httpPost);
+			
+			HttpEntity entity = httpResponse.getEntity();
+		    String response = EntityUtils.toString(entity, "UTF-8");
+		    System.out.println("Response : "+response);
+			if (httpResponse.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+		        return response;
+		    } else {
+		        throw new HttpResponseException(httpResponse.getStatusLine().getStatusCode(), response);
+		    }
+		} catch (Exception e) {
 			e.printStackTrace();
-
-		  } catch (IOException e) {
-
-			e.printStackTrace();
-
-		  }
-		return buffer.toString();
+		}
+		return null;
 	}
 }

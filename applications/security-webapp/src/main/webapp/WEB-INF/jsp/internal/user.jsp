@@ -68,8 +68,7 @@
     
     function savePerson(){
 		var formData= { 
-				createdBy: $('#createdBy').val(),
-				entidadId: $('#entidadId_persona').val(),
+				tipoEntidadId: $('#tipoEntidadId').val(),
 				tipoDocumentoIdentificaion: $('#tipoDocumentoIdentificaion').val(),
 				numeroidentificacion: $('#numeroidentificacion').val(),
 				nombres: $('#nombres').val(),
@@ -81,12 +80,13 @@
 		}
 		$('.bindingError').remove();
 		
-		var URL_COMMON_REST_APP = "<%=request.getSession().getAttribute("URL_COMMON_REST_APP") %>";
-    	var ajaxUrl = URL_COMMON_REST_APP+'/persona/saveNew.json';
+    	var ajaxUrl = contexPath+'/user/saveNewPerson.json';
     	var successFunction = function(response){
      	   if(response.validated){
                //Set response
     		   if(response.status=="OK"){
+    			   $("#AfullName").val(response.viewBean.fullName);
+    			   $("#entidadId").val(response.viewBean.entidad.id);
          			showSuccessMessage(response.message);
 //          			load();
          			$('#AddPerson').modal('hide');
@@ -339,7 +339,7 @@
 //            	              ;
        	                 return "<td>"+
        	                	makeButton("Edit","edit("+row.id+")","data-toggle='modal' data-target='#EditUser'","<c:url value='/resources/img/icons/black/doc_edit_icon&16.png' />")+
-       	              		makeButton("Delete","remove("+row.id+")","","<c:url value='/resources/img/icons/black/trash_icon&16.png' />")+
+//        	              		makeButton("Delete","remove("+row.id+")","","<c:url value='/resources/img/icons/black/trash_icon&16.png' />")+
        	           			makeButton("Change Password","editPassword("+row.id+")","data-toggle='modal' data-target='#EditUserPassword'","<c:url value='/resources/img/icons/black/key_icon&16.png' />")+
        	       				makeButton("Change Roles by User","editUserRole("+row.id+")","data-toggle='modal' data-target='#EditUserRole'","<c:url value='/resources/img/icons/black/cogs_icon&16.png' />")
        	        			"</td>";
@@ -413,11 +413,10 @@
     
     
     function populateStatusSelect(){
-    	var URL_USER_STATUS_LIST = "<%=request.getSession().getAttribute("URL_USER_STATUS_LIST") %>";
-    	var ajaxUrl = URL_USER_STATUS_LIST;
+    	var ajaxUrl = contexPath+'/user/userStatusType.json';
     	var successFunction = function(response){
-       		if(response.objectBean.length>0){
-       			$.each(response.objectBean, function(i, row) {
+       		if(response.data.length>0){
+       			$.each(response.data, function(i, row) {
                     $('#Astatus').append('<option value="' + row.id + '">' + row.codigo + '</option>');
                     $('#Estatus').append('<option value="' + row.id + '">' + row.codigo + '</option>');
                 });
@@ -427,11 +426,10 @@
     }
     
     function populateTypeDocumentSelect(){
-    	var URL_TYPE_DOCUMENTO_LIST = "<%=request.getSession().getAttribute("URL_TYPE_DOCUMENTO_LIST") %>";
-    	var ajaxUrl = URL_TYPE_DOCUMENTO_LIST;
+    	var ajaxUrl = contexPath+'/user/personaDocumentoType.json';
     	var successFunction = function(response){
-       		if(response.objectBean.length>0){
-       			$.each(response.objectBean, function(i, row) {
+       		if(response.data.length>0){
+       			$.each(response.data, function(i, row) {
                     $('#tipoDocumentoIdentificaion').append('<option value="' + row.id + '">' + row.descripcion + '</option>');
                 });
        		}
@@ -440,11 +438,10 @@
     }
     
     function populateTypeEstadoCivilSelect(){
-    	var URL_TYPE_ESTADO_CIVIL_LIST = "<%=request.getSession().getAttribute("URL_TYPE_ESTADO_CIVIL_LIST") %>";
-    	var ajaxUrl = URL_TYPE_ESTADO_CIVIL_LIST;
+    	var ajaxUrl = contexPath+'/user/personaEstadoCivilType.json';
     	var successFunction = function(response){
-       		if(response.objectBean.length>0){
-       			$.each(response.objectBean, function(i, row) {
+       		if(response.data.length>0){
+       			$.each(response.data, function(i, row) {
                     $('#tipoEstadoCivil').append('<option value="' + row.id + '">' + row.descripcion + '</option>');
                 });
        		}
@@ -453,13 +450,12 @@
     }
     
     function autocompletePerson(){
-    	var URL_PERSONA_LIST = "<%=request.getSession().getAttribute("URL_PERSONA_LIST") %>";
     	$("#AfullName").autocomplete({
     	    minLength: 2,
     		source: function(request,response){
     			$("#entidadId").val("");
     			$.ajax({
-    				url: URL_PERSONA_LIST+request.term,
+    				url: contexPath+'/user/personaPorTermino.json?termino='+request.term,
     				type:'GET',
     				dataType: "json",
     				data: {
@@ -469,7 +465,7 @@
     					response($.map(data, function (el) {
     	                     return {
     	                         label: el.fullName,
-    	                         value: el.id
+    	                         value: el.entidad.id
     	                     };
     	                 }));
     				}
@@ -522,6 +518,14 @@
     	autocompletePerson();
     	populateTypeDocumentSelect();
     	populateTypeEstadoCivilSelect();
+    	
+    	$('#fechanacimiento').datepicker({
+			format: 'yyyy/mm/dd',
+            //todayBtn: 'linked',
+            autoclose: true,
+            language: 'es',
+            todayHighlight: false
+		});
     });
 	
 	
@@ -937,8 +941,7 @@
 		        
 		        
 		        <form class="form-horizontal">
-		        <input type="hidden" id="createdBy" value="${pageContext.request.userPrincipal.name}">
-		        <input type="hidden" id="entidadId_persona" value="${entidadId}">
+		        <input type="hidden" id="tipoEntidadId" value="${tipoEntidadId}">
 		        
 		        <div class="form-group">
 				    <label for="tipoDocumentoIdentificaion" class="col-sm-3 control-label">Document Type</label>

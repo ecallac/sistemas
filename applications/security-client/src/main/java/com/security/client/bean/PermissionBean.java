@@ -3,8 +3,7 @@
  */
 package com.security.client.bean;
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+import java.util.List;
 
 /**
  * @author efrain.calla
@@ -17,6 +16,43 @@ public class PermissionBean {
 	private String description;
 	private PermissionBean parentPermission;
 	private String enabled;
+	private String updatedBy;
+	private String createdBy;
+	private ModuleBean module;
+	private List<RoleBean> roleList;
+	
+
+	public ModuleBean getModule() {
+		return module;
+	}
+
+	public void setModule(ModuleBean module) {
+		this.module = module;
+	}
+
+	public String getUpdatedBy() {
+		return updatedBy;
+	}
+
+	public void setUpdatedBy(String updatedBy) {
+		this.updatedBy = updatedBy;
+	}
+
+	public String getCreatedBy() {
+		return createdBy;
+	}
+
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
+	}
+
+	public List<RoleBean> getRoleList() {
+		return roleList;
+	}
+
+	public void setRoleList(List<RoleBean> roleList) {
+		this.roleList = roleList;
+	}
 
 	public String getName() {
 		return name;

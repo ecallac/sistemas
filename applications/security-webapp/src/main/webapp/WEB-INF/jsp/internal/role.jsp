@@ -167,7 +167,7 @@
        	                "render": function ( data, type, row ) {
        	                    return "<td>"+
 		       	                 makeButton("Edit","edit("+row.id+")","data-toggle='modal' data-target='#Form'","<c:url value='/resources/img/icons/black/doc_edit_icon&16.png' />")
-		       	                 makeButton("Delete","remove("+row.id+")","","<c:url value='/resources/img/icons/black/trash_icon&16.png' />")
+// 		       	                 makeButton("Delete","remove("+row.id+")","","<c:url value='/resources/img/icons/black/trash_icon&16.png' />")
 		       	                 makeButton("Permissions by Role","getPermissions("+row.id+")","data-toggle='modal' data-target='#Permissions'","<c:url value='/resources/img/icons/black/cogs_icon&16.png' />")
 		       	                 makeButton("Users by Role","getUsers("+row.id+")","data-toggle='modal' data-target='#Users'","<c:url value='/resources/img/icons/black/user_icon&16.png' />")
 	       	                 "</td>";

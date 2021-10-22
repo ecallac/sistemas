@@ -23,12 +23,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.security.domain.Role;
-import com.security.service.RoleService;
-import com.security.utils.BeanParser;
-import com.security.utils.SecurityConstants;
-import com.security.utils.SecurityUtil;
+import com.BeanParser;
+import com.security.Role;
 import com.security.web.bean.RoleView;
+import com.security.web.service.integration.RoleIntegration;
+import com.security.web.utils.SecurityConstants;
+import com.security.web.utils.SecurityUtil;
 
 /**
  * @author efrain
@@ -37,7 +37,7 @@ import com.security.web.bean.RoleView;
 @Controller
 public class RoleController {
 	@Autowired
-	RoleService roleService;
+	RoleIntegration roleIntegration;
 	
 	@RequestMapping(value={"/role"}, method={RequestMethod.GET,RequestMethod.POST})
 	public ModelAndView list(){
@@ -49,7 +49,7 @@ public class RoleController {
 	@RequestMapping(value = "/role/enabledRoles", method = {RequestMethod.GET,RequestMethod.POST})
 	  public @ResponseBody Map<String, Object> initializeEnabledRoles() {
 	      Map<String, Object> map = new HashMap<String, Object>();
-	      List<RoleView> list = castRoleToRoleViewList(roleService.findByEnabled(SecurityConstants.YES));
+	      List<RoleView> list = castRoleToRoleViewList(roleIntegration.findEnabledList());
 	      if (list != null) {
 	          map.put("data", list);
 	      } else {
@@ -61,7 +61,7 @@ public class RoleController {
   @RequestMapping(value = "/role/list", method = {RequestMethod.GET,RequestMethod.POST})
   public @ResponseBody Map<String, Object> getAll() {
       Map<String, Object> map = new HashMap<String, Object>();
-      List<RoleView> list = castRoleToRoleViewList(roleService.findAllRoles());
+      List<RoleView> list = castRoleToRoleViewList(roleIntegration.findList());
       if (list != null) {
 //          map.put(SecurityConstants.STATUS, SecurityConstants.OK);
 //          map.put(SecurityConstants.MESSAGE, "Data found");
@@ -97,7 +97,7 @@ public class RoleController {
 		} else {
 			role.setUpdatedBy(principal.getName());
 		}
-		roleService.save(role);
+		roleIntegration.save(role);
 		
         
         map.put("validated", true);
@@ -106,20 +106,20 @@ public class RoleController {
         return map;
     }
 	
-	@RequestMapping(value={"/role/delete"}, method={RequestMethod.POST})
-	public @ResponseBody Map<String, Object> delete(@RequestBody RoleView RoleView){
-		Map<String, Object> map = new HashMap<String, Object>();
-		Role Role = roleService.findRoleById(Long.valueOf(RoleView.getId()));
-		roleService.delete(Role);
-        map.put(SecurityConstants.STATUS, SecurityConstants.OK);
-        map.put(SecurityConstants.MESSAGE, "Your record have been deleted successfully at "+SecurityUtil.dateToString(new Date(), "yyyy-MM-dd HH:mm:ss"));
-        return map;
-	}
+//	@RequestMapping(value={"/role/delete"}, method={RequestMethod.POST})
+//	public @ResponseBody Map<String, Object> delete(@RequestBody RoleView RoleView){
+//		Map<String, Object> map = new HashMap<String, Object>();
+//		Role Role = securityServiceIntegration.findRoleById(Long.valueOf(RoleView.getId()));
+//		securityServiceIntegration.delete(Role);
+//        map.put(SecurityConstants.STATUS, SecurityConstants.OK);
+//        map.put(SecurityConstants.MESSAGE, "Your record have been deleted successfully at "+SecurityUtil.dateToString(new Date(), "yyyy-MM-dd HH:mm:ss"));
+//        return map;
+//	}
 	
 	@RequestMapping(value = "/role/load", method = {RequestMethod.POST})
     public @ResponseBody  Map<String, Object> load(@RequestBody RoleView RoleView) {
         Map<String, Object> map = new HashMap<String, Object>();
-        Role Role = roleService.findRoleById(RoleView.getId());
+        Role Role = roleIntegration.findById(RoleView.getId());
         map.put(SecurityConstants.STATUS, SecurityConstants.OK);
         map.put("viewBean", (RoleView)BeanParser.parseObjectToNewClass(Role, RoleView.class, null));
         return map;
@@ -128,17 +128,11 @@ public class RoleController {
 	@RequestMapping(value = "/role/enableDisable", method = {RequestMethod.POST})
     public @ResponseBody  Map<String, Object> enableDisable(@RequestBody RoleView RoleView,Principal principal) {
         Map<String, Object> map = new HashMap<String, Object>();
-        Role Role = roleService.findRoleById(RoleView.getId());
-        if (Role!=null) {
-			Role = (Role) BeanParser.parseBetweenObjects(RoleView, Role, null);
-			Role.setUpdatedBy(principal.getName());
-			roleService.save(Role);
-			map.put(SecurityConstants.STATUS, SecurityConstants.OK);
-	        map.put(SecurityConstants.MESSAGE, "Your record have been updated successfully at "+SecurityUtil.dateToString(new Date(), "yyyy-MM-dd HH:mm:ss"));
-		}else{
-			map.put(SecurityConstants.STATUS, SecurityConstants.ERROR);
-	        map.put(SecurityConstants.MESSAGE, "Your status couldn't be updated");
-		}
+		Role role = (Role) BeanParser.parseObjectToNewClass(RoleView, Role.class, null);
+		role.setUpdatedBy(principal.getName());
+		roleIntegration.save(role);
+		map.put(SecurityConstants.STATUS, SecurityConstants.OK);
+        map.put(SecurityConstants.MESSAGE, "Your record have been updated successfully at "+SecurityUtil.dateToString(new Date(), "yyyy-MM-dd HH:mm:ss"));
         
         return map;
     }

@@ -34,30 +34,37 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Module <span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <li><a href="${pageContext.request.contextPath}/module">Module Management</a></li>
-          </ul>
-        </li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Permission <span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <li><a href="${pageContext.request.contextPath}/permission">Permission Management</a></li>
-          </ul>
-        </li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Role <span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <li><a href="${pageContext.request.contextPath}/role">Role Management</a></li>
-          </ul>
-        </li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">User <span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <li><a href="${pageContext.request.contextPath}/user">User Management</a></li>
-          </ul>
-        </li>
+      
+      <c:forEach var="permission" items="${sessionScope.permissions}">
+      		<li><a href="${pageContext.request.contextPath}${permission.path}">${permission.description}</a></li>
+            </c:forEach>
+            
+<%--       <li><a href="${pageContext.request.contextPath}/module">Module Management</a></li> --%>
+      
+<!--         <li class="dropdown"> -->
+<!--           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Module <span class="caret"></span></a> -->
+<!--           <ul class="dropdown-menu"> -->
+<%--             <li><a href="${pageContext.request.contextPath}/module">Module Management</a></li> --%>
+<!--           </ul> -->
+<!--         </li> -->
+<!--         <li class="dropdown"> -->
+<!--           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Permission <span class="caret"></span></a> -->
+<!--           <ul class="dropdown-menu"> -->
+<%--             <li><a href="${pageContext.request.contextPath}/permission">Permission Management</a></li> --%>
+<!--           </ul> -->
+<!--         </li> -->
+<!--         <li class="dropdown"> -->
+<!--           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Role <span class="caret"></span></a> -->
+<!--           <ul class="dropdown-menu"> -->
+<%--             <li><a href="${pageContext.request.contextPath}/role">Role Management</a></li> --%>
+<!--           </ul> -->
+<!--         </li> -->
+<!--         <li class="dropdown"> -->
+<!--           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">User <span class="caret"></span></a> -->
+<!--           <ul class="dropdown-menu"> -->
+<%--             <li><a href="${pageContext.request.contextPath}/user">User Management</a></li> --%>
+<!--           </ul> -->
+<!--         </li> -->
       </ul>
       
       <ul class="nav navbar-nav navbar-right">

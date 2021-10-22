@@ -114,6 +114,8 @@
        			$("#moduleId").val(response.viewBean.module.id);
        			$("#parentPermissionId").val(response.viewBean.parentPermission.id);
        			$("#type").val(response.viewBean.type);
+       			
+       			populateParentPermissionSelectByModuleId(response.viewBean.module.id, response.viewBean.parentPermission.id);
        		}
        };
        
@@ -177,7 +179,7 @@
        	                "render": function ( data, type, row ) {
        	                    return "<td>"+
 		       	                 makeButton("Edit","edit("+row.id+")","data-toggle='modal' data-target='#Form'","<c:url value='/resources/img/icons/black/doc_edit_icon&16.png' />")+
-		       	                 makeButton("Delete","remove("+row.id+")","","<c:url value='/resources/img/icons/black/trash_icon&16.png' />")+
+// 		       	                 makeButton("Delete","remove("+row.id+")","","<c:url value='/resources/img/icons/black/trash_icon&16.png' />")+
 //        	                    "<button title='Edit' onclick='edit("+row.id+")' type='button' class='btn btn-link btn-xs toltip' data-toggle='modal' data-target='#Form'><img src='<c:url value='/resources/img/icons/black/doc_edit_icon&16.png' />'></button>"+
 //            	                 "<button title='Delete' onclick='remove("+row.id+")' type='button' class='btn btn-link btn-xs toltip'><img src='<c:url value='/resources/img/icons/black/trash_icon&16.png' />'></button> "
            	                "</td>" ;
@@ -206,29 +208,48 @@
        ajaxPostWithoutForm(ajaxUrl,successFunction);
     }
     
+    function populateParentPermissionSelectByModuleId(moduleId,permissionId){
+ 		if(moduleId!=''){
+ 	    	var formData= {
+ 	    			moduleId: moduleId
+ 			}
+ 	    	$('.bindingError').remove();
+ 	    	var ajaxUrl = contexPath+'/permission/enabledPermissionsByModule';
+ 	    	var successFunction = function(response){
+ 	       		if(response.data.length>0){
+ 	       			$('#parentPermissionId').empty();
+ 	       			$('#parentPermissionId').append('<option value="">-- Select Option --</option>');
+ 	       			$.each(response.data, function(i, row) {
+ 	       				if (row.id == permissionId) {
+ 	       					$('#parentPermissionId').append('<option value="' + row.id + '" selected>' + row.name + '</option>');
+						} else {
+							$('#parentPermissionId').append('<option value="' + row.id + '">' + row.name + '</option>');
+						}
+ 	                });
+ 	       		}
+ 	       };
+ 	       ajaxPost(ajaxUrl,formData,successFunction);
+ 		}else{
+ 			$('#parentPermissionId').empty();
+   			$('#parentPermissionId').append('<option value="">-- Select Option --</option>');
+ 		}
+     }
+    
     function populateParentPermissionSelect(){
-    	var ajaxUrl = contexPath+'/permission/enabledPermissions.json';
-    	var successFunction = function(response){
-       		if(response.data.length>0){
-       			$.each(response.data, function(i, row) {
-                    $('#parentPermissionId').append('<option value="' + row.id + '">' + row.name + '</option>');
-                });
-       		}
-       };
-       ajaxPostWithoutForm(ajaxUrl,successFunction);
+       var moduleId = $('#moduleId').val();
+       populateParentPermissionSelectByModuleId(moduleId,null);
     }
     
     function populatePermissionTypeSelect(){
-    	var URL_TYPE_PERMISSION_LIST = "<%=request.getSession().getAttribute("URL_TYPE_PERMISSION_LIST") %>";
-    	var ajaxUrl = URL_TYPE_PERMISSION_LIST;
+    	var ajaxUrl = contexPath+'/permission/permissionType.json';
     	var successFunction = function(response){
-       		if(response.objectBean.length>0){
-       			$.each(response.objectBean, function(i, row) {
+       		if(response.data.length>0){
+       			$.each(response.data, function(i, row) {
                     $('#type').append('<option value="' + row.codigo + '">' + row.codigo + '</option>');
                 });
        		}
        };
-       ajaxWithoutForm(ajaxUrl,"GET",successFunction);
+       ajaxPostWithoutForm(ajaxUrl,successFunction);
     }
     
     
@@ -247,9 +268,15 @@
     $(document).ready(function(){
     	load();
     	populateModulesSelect();
-    	populateParentPermissionSelect();
     	populatePermissionTypeSelect();
+    	
+    	$('#moduleId').on('change', function() {
+    		populateParentPermissionSelect();
+      	});
+    	
     });
+    
+    
 	</script>
 	<style type="text/css">
 	
@@ -288,7 +315,7 @@
 
  <table id="table" align="center" class="table table-striped table-hover table-bordered">  
 <thead>
-<tr><th>Id</th><th>Module</th><th>Parent Permission</th><th>Name</th><th>Description</th><th>Path</th><th>Type</th><th>Enabled</th><th>Actions</th></tr>  
+<tr><th>Id</th><th>Module</th><th>Parent</th><th>Name</th><th>Description</th><th>Path</th><th>Type</th><th>Enabled</th><th>Actions</th></tr>  
 </thead>
 </table>
 
@@ -326,7 +353,7 @@
 					    </div>
 					</div>
 					<div class="form-group">
-					    <label for="parentPermissionId" class="col-sm-3 control-label">Parent Permission</label>
+					    <label for="parentPermissionId" class="col-sm-3 control-label">Parent</label>
 					    <div class="col-sm-7">
 					      <select id="parentPermissionId" class="form-control input-sm">
 					      	<option value="">-- Select Option --</option>

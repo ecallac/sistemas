@@ -3,6 +3,7 @@
  */
 package com.security.client.bean;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -18,21 +19,50 @@ public class UserBean {
 	private String name;
 	private String question;
 	private String answer;
+	private Long entidadRoleId;
+	private String status;
+	private Date activationDate;
+	private Date inactivationDate;
+	private String updatedBy;
+	private String createdBy;
+	private List<RoleBean> roleList;
+	private List<PermissionBean> permissionList;
 	
-	private List<RoleBean> roles;
-	private List<PermissionBean> permissions;
-	
-	public List<RoleBean> getRoles() {
-		return roles;
+	public String getUpdatedBy() {
+		return updatedBy;
 	}
-	public void setRoles(List<RoleBean> roles) {
-		this.roles = roles;
+	public void setUpdatedBy(String updatedBy) {
+		this.updatedBy = updatedBy;
 	}
-	public List<PermissionBean> getPermissions() {
-		return permissions;
+	public String getCreatedBy() {
+		return createdBy;
 	}
-	public void setPermissions(List<PermissionBean> permissions) {
-		this.permissions = permissions;
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
+	}
+	public Long getEntidadRoleId() {
+		return entidadRoleId;
+	}
+	public void setEntidadRoleId(Long entidadRoleId) {
+		this.entidadRoleId = entidadRoleId;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	public Date getActivationDate() {
+		return activationDate;
+	}
+	public void setActivationDate(Date activationDate) {
+		this.activationDate = activationDate;
+	}
+	public Date getInactivationDate() {
+		return inactivationDate;
+	}
+	public void setInactivationDate(Date inactivationDate) {
+		this.inactivationDate = inactivationDate;
 	}
 	public String getUserName() {
 		return userName;
@@ -111,6 +141,18 @@ public class UserBean {
 	 */
 	public void setAnswer(String answer) {
 		this.answer = answer;
+	}
+	public List<RoleBean> getRoleList() {
+		return roleList;
+	}
+	public void setRoleList(List<RoleBean> roleList) {
+		this.roleList = roleList;
+	}
+	public List<PermissionBean> getPermissionList() {
+		return permissionList;
+	}
+	public void setPermissionList(List<PermissionBean> permissionList) {
+		this.permissionList = permissionList;
 	}
 	
 }

@@ -31,25 +31,29 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.common.client.bean.EntidadRoleBean;
-import com.common.client.bean.PersonaBean;
-import com.common.client.bean.TipoBaseBean;
-import com.security.domain.Role;
-import com.security.domain.User;
-import com.security.service.RoleService;
-import com.security.service.UserService;
-import com.security.utils.BeanParser;
-import com.security.utils.SecurityConstants;
-import com.security.utils.SecurityUtil;
+import com.BeanParser;
+import com.common.Entidad;
+import com.common.EntidadRol;
+import com.common.Persona;
+import com.common.TipoBase;
+import com.security.Role;
+import com.security.User;
 import com.security.web.bean.ModuleView;
+import com.security.web.bean.PersonaView;
 import com.security.web.bean.RoleView;
 import com.security.web.bean.UserEditPasswordView;
 import com.security.web.bean.UserEditView;
 import com.security.web.bean.UserNewView;
 import com.security.web.bean.UserRoleView;
 import com.security.web.bean.UserView;
-import com.security.web.service.integration.CommonServiceIntegration;
+import com.security.web.service.integration.EntidadRolIntegration;
+import com.security.web.service.integration.PersonaIntegration;
+import com.security.web.service.integration.RoleIntegration;
+import com.security.web.service.integration.TipoBaseIntegration;
+import com.security.web.service.integration.UserIntegration;
 import com.security.web.utils.ExcelUtils;
+import com.security.web.utils.SecurityConstants;
+import com.security.web.utils.SecurityUtil;
 
 /**
  * @author efrain.calla
@@ -57,13 +61,21 @@ import com.security.web.utils.ExcelUtils;
  */
 @Controller
 public class UserController {
-	
 	@Autowired
-    private UserService userService;
-	
-	@Autowired
-	RoleService roleService;
-     
+	TipoBaseIntegration tipoBaseIntegration;
+
+    @Autowired
+    UserIntegration userIntegration;
+    
+    @Autowired
+    RoleIntegration roleIntegration;
+
+    @Autowired
+    PersonaIntegration personaIntegration;
+    
+    @Autowired
+    EntidadRolIntegration entidadRolIntegration;
+    
     @Autowired
     private PasswordEncoder passwordEncoder;
     
@@ -71,13 +83,11 @@ public class UserController {
 	@Value("${report.web.xls.templates}")
 	private String xlsReportTemplate;
 
-    @Autowired
-    CommonServiceIntegration commonServiceIntegration;
     
     @RequestMapping("/reportUserList/{format}")
     public ModelAndView reportUser(ModelMap modelMap, ModelAndView modelAndView,@PathVariable String format){
     	
-    	List<User> users = userService.findAllUsers();
+    	List<User> users = userIntegration.findList();
         modelMap.put("datasource", users);
         modelMap.put("format", format);
         modelAndView = new ModelAndView("rpt_userJasperReport", modelMap);
@@ -89,7 +99,7 @@ public class UserController {
 		String templateFileName = "userReport.xls";
 		String reportTemplate = xlsReportTemplate+templateFileName;
 		
-    	List<User> users = userService.findAllUsers();
+    	List<User> users = userIntegration.findList();
     	
     	Map<String, Object> beans = new HashMap<String, Object>();
     	beans.put("fileName", templateFileName);
@@ -121,32 +131,70 @@ public class UserController {
 	public ModelAndView list(HttpSession session){
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("user");
-		session.setAttribute("URL_USER_STATUS_LIST", commonServiceIntegration.getTipoBaseByCategory()+"?categoria="+SecurityConstants.TIPOBASE_CATEGORIA_USER_STATUS);
-		session.setAttribute("URL_TYPE_DOCUMENTO_LIST", commonServiceIntegration.getTipoBaseByCategory()+"?categoria="+SecurityConstants.TIPOBASE_CATEGORIA_TYPE_PERSONA_DOCUMENTO);
-		session.setAttribute("URL_TYPE_ESTADO_CIVIL_LIST", commonServiceIntegration.getTipoBaseByCategory()+"?categoria="+SecurityConstants.TIPOBASE_CATEGORIA_TYPE_PERSONA_ESTADO_CIVIL);
-		session.setAttribute("URL_PERSONA_LIST", commonServiceIntegration.getPersonaPorTermino()+"?termino=");
-		TipoBaseBean tipoBaseBean = commonServiceIntegration.getTipoBasesXCodigo(SecurityConstants.TIPOBASE_CODIGO_PERSONA);
-		session.setAttribute("entidadId", tipoBaseBean.getId());
-		session.setAttribute("URL_COMMON_REST_APP", commonServiceIntegration.getCommonRestApp());
+		TipoBase tipoBase = tipoBaseIntegration.findByCodigo(SecurityConstants.TIPOBASE_CODIGO_PERSONA);
+		session.setAttribute("tipoEntidadId", tipoBase.getId());
 		return modelAndView;
 	}
+    
+    @RequestMapping(value = "/user/userStatusType", method = {RequestMethod.GET,RequestMethod.POST})
+	public @ResponseBody Map<String, Object> userStatusType() {
+	    Map<String, Object> map = new HashMap<String, Object>();
+	    List<TipoBase> list = tipoBaseIntegration.findByCategoriaActivos(SecurityConstants.TIPOBASE_CATEGORIA_USER_STATUS);
+	    if (list != null) {
+		    map.put("data", list);
+		} else {
+			map.put("data", new ArrayList<TipoBase>());
+	   	}
+	    return map;
+	}
+    @RequestMapping(value = "/user/personaDocumentoType", method = {RequestMethod.GET,RequestMethod.POST})
+	public @ResponseBody Map<String, Object> personaDocumentoType() {
+	    Map<String, Object> map = new HashMap<String, Object>();
+	    List<TipoBase> list = tipoBaseIntegration.findByCategoriaActivos(SecurityConstants.TIPOBASE_CATEGORIA_TYPE_PERSONA_DOCUMENTO);
+	    if (list != null) {
+		    map.put("data", list);
+		} else {
+			map.put("data", new ArrayList<TipoBase>());
+	   	}
+	    return map;
+	}
+    @RequestMapping(value = "/user/personaEstadoCivilType", method = {RequestMethod.GET,RequestMethod.POST})
+	public @ResponseBody Map<String, Object> personaEstadoCivilType() {
+	    Map<String, Object> map = new HashMap<String, Object>();
+	    List<TipoBase> list = tipoBaseIntegration.findByCategoriaActivos(SecurityConstants.TIPOBASE_CATEGORIA_TYPE_PERSONA_ESTADO_CIVIL);
+	    if (list != null) {
+		    map.put("data", list);
+		} else {
+			map.put("data", new ArrayList<TipoBase>());
+	   	}
+	    return map;
+	}
+    
+    @RequestMapping(value = "/user/personaPorTermino", method = {RequestMethod.GET,RequestMethod.POST})
+	@ResponseBody
+	public List<Persona> getPersonaPorTermino(@RequestParam(value = "termino", required = true) String termino){
+    	List<Persona> personas = personaIntegration.findByTermino(termino);
+    	for (Persona persona : personas) {
+    		persona.setFullName(persona.getNumeroidentificacion()+ " - " +persona.getNombres()+ " " + persona.getApellidos());
+		}
+    	return personas;
+    }
     
     @RequestMapping(value = "/user/list", method = {RequestMethod.GET,RequestMethod.POST})
     public @ResponseBody Map<String, Object> getAll() {
         Map<String, Object> map = new HashMap<String, Object>();
-        List<UserView> list = castUserToUserEditViewList(userService.findAllUsers());
+        List<UserView> list = castUserToUserEditViewList(userIntegration.findList());
         if (list != null) {
-        	List<TipoBaseBean> tipoBaseBeans = commonServiceIntegration.getTipoBasesXCategoriasActivas(SecurityConstants.TIPOBASE_CATEGORIA_USER_STATUS);
+        	List<TipoBase> tipoBases = tipoBaseIntegration.findByCategoriaActivos(SecurityConstants.TIPOBASE_CATEGORIA_USER_STATUS);
         	for (UserView userView : list) {
-        		for (TipoBaseBean tipoBaseBean : tipoBaseBeans) {
-            		if (userView.getStatus().equals(tipoBaseBean.getId().toString())) {
-    					userView.setStatus(tipoBaseBean.getCodigo());
+        		for (TipoBase tipoBase : tipoBases) {
+            		if (userView.getStatus().equals(tipoBase.getId().toString())) {
+    					userView.setStatus(tipoBase.getCodigo());
     				}
     			}
-        		
         		try {
-        			PersonaBean personaBean = commonServiceIntegration.getPersonaPorEntidadRolId(userView.getEntidadRoleId());
-            		userView.setEntityName(personaBean.getFullName());
+        			Persona persona = personaIntegration.findByEntidadRolId(userView.getEntidadRoleId());
+            		userView.setEntityName(persona.getNombres()+ " " + persona.getApellidos());
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -168,20 +216,20 @@ public class UserController {
 		return userEditViews;
 	}
     
-    @RequestMapping(value={"/user/delete"}, method={RequestMethod.POST})
-	public @ResponseBody Map<String, Object> delete(@RequestBody UserView userView){
-		Map<String, Object> map = new HashMap<String, Object>();
-		User user = userService.findUserById(Long.valueOf(userView.getId()));
-		userService.delete(user);
-        map.put(SecurityConstants.STATUS, SecurityConstants.OK);
-        map.put(SecurityConstants.MESSAGE, "Your record have been deleted successfully at "+SecurityUtil.dateToString(new Date(), "yyyy-MM-dd HH:mm:ss"));
-        return map;
-	}
+//    @RequestMapping(value={"/user/delete"}, method={RequestMethod.POST})
+//	public @ResponseBody Map<String, Object> delete(@RequestBody UserView userView){
+//		Map<String, Object> map = new HashMap<String, Object>();
+//		User user = userIntegration.findById(Long.valueOf(userView.getId()));
+//		userIntegration.delete(user);
+//        map.put(SecurityConstants.STATUS, SecurityConstants.OK);
+//        map.put(SecurityConstants.MESSAGE, "Your record have been deleted successfully at "+SecurityUtil.dateToString(new Date(), "yyyy-MM-dd HH:mm:ss"));
+//        return map;
+//	}
     
     @RequestMapping(value = "/user/loadEdit", method = {RequestMethod.POST})
     public @ResponseBody  Map<String, Object> loadEdit(@RequestBody UserView userView) {
         Map<String, Object> map = new HashMap<String, Object>();
-        User user = userService.findUserById(userView.getId());
+        User user = userIntegration.findById(userView.getId());
         map.put(SecurityConstants.STATUS, SecurityConstants.OK);
         map.put("viewBean", (UserEditView)BeanParser.parseObjectToNewClass(user, UserEditView.class, null));
         return map;
@@ -190,7 +238,7 @@ public class UserController {
     @RequestMapping(value = "/user/loadEditPassword", method = {RequestMethod.POST})
     public @ResponseBody  Map<String, Object> loadEditPassword(@RequestBody UserView userView) {
         Map<String, Object> map = new HashMap<String, Object>();
-        User user = userService.findUserById(userView.getId());
+        User user = userIntegration.findById(userView.getId());
         map.put(SecurityConstants.STATUS, SecurityConstants.OK);
         map.put("viewBean", (UserEditPasswordView)BeanParser.parseObjectToNewClass(user, UserEditPasswordView.class, null));
         return map;
@@ -199,7 +247,7 @@ public class UserController {
     @RequestMapping(value = "/user/loadEditUserRole", method = {RequestMethod.POST})
     public @ResponseBody  Map<String, Object> loadEditUserRole(@RequestBody UserView userView) {
         Map<String, Object> map = new HashMap<String, Object>();
-        User user = userService.findUserById(userView.getId());
+        User user = userIntegration.findById(userView.getId());
         map.put(SecurityConstants.STATUS, SecurityConstants.OK);
         map.put("viewBean", (UserView)BeanParser.parseObjectToNewClass(user, UserView.class, null));
         return map;
@@ -208,16 +256,16 @@ public class UserController {
     @RequestMapping(value = "/user/enabledRolesByUser", method = {RequestMethod.GET,RequestMethod.POST})
 	  public @ResponseBody Map<String, Object> initializeEnabledRolesByUser(@RequestBody UserView userView) {
 	      Map<String, Object> map = new HashMap<String, Object>();
-	      User user = userService.findUserById(userView.getId());
-	  List<Role> roles = roleService.findByEnabled(SecurityConstants.YES);
-	  List<UserRoleView> list = castUserRoleViewList(userView.getId(), roles, user.getRoles());
-	  if (list != null) {
-	      map.put("data", list);
-	  } else {
-		  map.put("data", new ArrayList<RoleView>());
-	      }
-	      return map;
-	  }
+	      User user = userIntegration.findById(userView.getId());
+		  List<Role> roles = roleIntegration.findEnabledList();
+		  List<UserRoleView> list = castUserRoleViewList(userView.getId(), roles, user.getRoles());
+		  if (list != null) {
+		      map.put("data", list);
+		  } else {
+			  map.put("data", new ArrayList<RoleView>());
+		      }
+		      return map;
+		  }
     private List<UserRoleView> castUserRoleViewList(Long userId,List<Role> enabledRoles,List<Role> userRoles){
     	List<UserRoleView> userRoleViews = new ArrayList<>();
     	for (Role role : enabledRoles) {
@@ -240,14 +288,53 @@ public class UserController {
     public @ResponseBody  Map<String, Object> assignRolesbyUser(@RequestBody UserRoleView userRoleView) {
         Map<String, Object> map = new HashMap<String, Object>();
         if (userRoleView.getSelected().equals(SecurityConstants.YES)) {
-        	userService.saveRoleInUser(userRoleView.getUserId(), userRoleView.getRoleId());
+        	userIntegration.addRoleUserAssociation(userRoleView.getUserId(), userRoleView.getRoleId());
 		} else {
-			userService.deleteRoleFromUser(userRoleView.getUserId(), userRoleView.getRoleId());
+			userIntegration.removeRoleUserAssociation(userRoleView.getUserId(), userRoleView.getRoleId());
 		}
     	
 		map.put(SecurityConstants.STATUS, SecurityConstants.OK);
         map.put(SecurityConstants.MESSAGE, "Your record have been updated successfully at "+SecurityUtil.dateToString(new Date(), "yyyy-MM-dd HH:mm:ss"));
 		
+        return map;
+    }
+    
+    @RequestMapping(value = "/user/saveNewPerson", method = {RequestMethod.POST})
+    public @ResponseBody  Map<String, Object> saveNewPerson(@RequestBody @Valid PersonaView personaView,BindingResult result,Principal principal) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		if(result.hasErrors()){
+	         
+	         //Get error message
+	         Map<String, String> errors = result.getFieldErrors().stream()
+	               .collect(
+	                     Collectors.toMap(FieldError::getField, FieldError::getDefaultMessage)
+	                 );
+	         
+	         map.put(SecurityConstants.STATUS, SecurityConstants.ERROR);
+	         map.put("validated", false);
+	         map.put("messages", errors);
+	         return map;
+	    }
+		map.put("validated", true);
+		
+		Persona persona = (Persona) BeanParser.parseObjectToNewClass(personaView, Persona.class, null);
+		try {
+			persona.setFechanacimiento(SecurityUtil.stringToTimestamp(personaView.getFechanacimiento(), PersonaView.FORMAT));
+		} catch (Exception e) {
+			map.put(SecurityConstants.STATUS, SecurityConstants.ERROR);
+	        map.put(SecurityConstants.MESSAGE, e.getMessage());
+		}
+		
+		Entidad entidad = new Entidad();
+		entidad.setCreatedBy(principal.getName());
+		entidad.setTipoEntidad(personaView.getTipoEntidadId());
+		persona.setEntidad(entidad);
+		persona.setCreatedBy(principal.getName());
+		persona = personaIntegration.save(persona);
+		persona.setFullName(persona.getNumeroidentificacion()+ " - " +persona.getNombres()+ " " + persona.getApellidos());
+		map.put("viewBean", persona);
+        map.put(SecurityConstants.STATUS, SecurityConstants.OK);
+        map.put(SecurityConstants.MESSAGE, "Your record have been saved successfully at "+SecurityUtil.dateToString(new Date(), "yyyy-MM-dd HH:mm:ss"));
         return map;
     }
     
@@ -290,15 +377,21 @@ public class UserController {
 		}
 		
 		User user = (User) BeanParser.parseObjectToNewClass(userNewView, User.class, null);
-		TipoBaseBean tipoBaseBean = commonServiceIntegration.getTipoBasesXCodigo(SecurityConstants.TIPOBASE_CODIGO_ER_USUARIO);
-		EntidadRoleBean entidadRoleBean = new EntidadRoleBean();
-		entidadRoleBean.setEntidadId(Long.parseLong(userNewView.getEntidadId()));
+		TipoBase tipoBase = tipoBaseIntegration.findByCodigo(SecurityConstants.TIPOBASE_CODIGO_ER_USUARIO);
+		EntidadRol entidadRoleBean = new EntidadRol();
+		Entidad entidadBean = new Entidad();
+		entidadBean.setId(Long.parseLong(userNewView.getEntidadId()));
+		entidadRoleBean.setEntidad(entidadBean);
 		entidadRoleBean.setCreatedBy(principal.getName());
-		entidadRoleBean.setTipoEntidadRole(tipoBaseBean.getId().toString());
+		entidadRoleBean.setTipoEntidadrol(tipoBase.getId().toString());
 		try {
-			EntidadRoleBean entidadRoleBeanRes = commonServiceIntegration.saveEntidadRol(entidadRoleBean);
+			EntidadRol entidadRoleBeanRes = entidadRolIntegration.save(entidadRoleBean);
 			if (entidadRoleBeanRes!=null) {
 				user.setEntidadRoleId(entidadRoleBeanRes.getId());
+			}else {
+				map.put(SecurityConstants.STATUS, SecurityConstants.ERROR);
+		        map.put(SecurityConstants.MESSAGE, "We Can't Create EntidadRol");
+		        return map;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -309,7 +402,7 @@ public class UserController {
 		
 		user.setCreatedBy(principal.getName());
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
-		userService.save(user);
+		userIntegration.save(user);
         
         map.put(SecurityConstants.STATUS, SecurityConstants.OK);
         map.put(SecurityConstants.MESSAGE, "Your record have been saved successfully at "+SecurityUtil.dateToString(new Date(), "yyyy-MM-dd HH:mm:ss"));
@@ -335,7 +428,7 @@ public class UserController {
         
 		User user = (User) BeanParser.parseObjectToNewClass(userEditView, User.class, null);
 		user.setUpdatedBy(principal.getName());
-		userService.save(user);
+		userIntegration.save(user);
         
         map.put("validated", true);
         map.put(SecurityConstants.STATUS, SecurityConstants.OK);
@@ -370,7 +463,7 @@ public class UserController {
     	User user = (User)BeanParser.parseObjectToNewClass(userEditPasswordView, User.class, null);
         user.setUpdatedBy(principal.getName());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-    	userService.savePasswordById(user);
+        userIntegration.savePasswordById(user);
         
         map.put("validated", true);
         map.put(SecurityConstants.STATUS, SecurityConstants.OK);
@@ -382,12 +475,12 @@ public class UserController {
     public @ResponseBody  Map<String, Object> verifyUserName(@RequestParam(value = "userName", required = true) String userName) {
         Map<String, Object> map = new HashMap<String, Object>();
         
-        User user = userService.findUserByUserName(userName);
+        User user = userIntegration.findByUserName(userName);
         if (user==null) {
         	map.put(SecurityConstants.STATUS, SecurityConstants.OK);
 		} else {
 			map.put(SecurityConstants.STATUS, SecurityConstants.ERROR);
-	        map.put(SecurityConstants.MESSAGE, "This value already exists.");
+	        map.put(SecurityConstants.MESSAGE, "UserName already exists.");
 		}
         return map;
     }

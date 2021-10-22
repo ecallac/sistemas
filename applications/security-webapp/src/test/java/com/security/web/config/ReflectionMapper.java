@@ -12,8 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.security.client.bean.UserBean;
-import com.security.domain.User;
+import com.security.User;
 
 /**
  * @author EFRAIN
@@ -111,13 +110,13 @@ public class ReflectionMapper {
 		
 		Map<String, String> map = new HashMap<>();
 		map.put("status", "name");
-		UserBean userBeanR = (UserBean)ReflectionMapper.parseObjectToNewClass(user,UserBean.class,map);
+		User userBeanR = (User)ReflectionMapper.parseObjectToNewClass(user,User.class,map);
 		System.out.println(userBeanR.getUserName());
 		
-		UserBean userBean = new UserBean();
+		User userBean = new User();
 		userBean.setUserName("valor2");
 		userBean.setId(2L);
-		userBean.setName("valor de nombre2");
+		userBean.setStatus("valor de nombre2");
 		
 		Map<String, String> map1 = new HashMap<>();
 		map1.put("name", "status");
@@ -130,7 +129,7 @@ public class ReflectionMapper {
 		user.setUserName("valor3");
 		user.setId(3L);
 		user.setStatus("valor de nombre3");
-		UserBean userBean1 = (UserBean)ReflectionMapper.parseBetweenObjects(user, userBean, map);
+		User userBean1 = (User)ReflectionMapper.parseBetweenObjects(user, userBean, map);
 		System.out.println(userBean1.getUserName());
 	}
 
