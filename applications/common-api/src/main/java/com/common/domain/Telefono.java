@@ -58,6 +58,12 @@ public class Telefono extends BaseEntity {
 	public void setEntidad(Entidad entidad) {
 		this.entidad = entidad;
 	}
+
+	@Override
+	public String toString() {
+		return "Telefono [tipo=" + tipo + ", numero=" + numero + ", codigoarea=" + codigoarea + ", entidad=" + entidad
+				+ "]";
+	}
 	
 	
 }

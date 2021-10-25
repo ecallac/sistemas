@@ -174,6 +174,13 @@ public class User extends BaseEntity{
 	public void setRoles(List<Role> roles) {
 		this.roles = roles;
 	}
+	@Override
+	public String toString() {
+		return "User [userName=" + userName + ", password=" + password + ", status=" + status + ", entidadRoleId="
+				+ entidadRoleId + ", question=" + question + ", answer=" + answer + ", activationDate=" + activationDate
+				+ ", inactivationDate=" + inactivationDate + ", roles=" + roles + ", sessions=" + sessions
+				+ ", roleUsers=" + roleUsers + "]";
+	}
 	
 	
 }

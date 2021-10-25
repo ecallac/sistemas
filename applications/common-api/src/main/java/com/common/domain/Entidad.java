@@ -77,6 +77,11 @@ public class Entidad extends BaseEntity{
 	public void setTelefonos(List<Telefono> telefonos) {
 		this.telefonos = telefonos;
 	}
+	@Override
+	public String toString() {
+		return "Entidad [tipoEntidad=" + tipoEntidad + ", persona=" + persona + ", organizacion=" + organizacion
+				+ ", entidadRols=" + entidadRols + ", telefonos=" + telefonos + "]";
+	}
 	
 	
 }

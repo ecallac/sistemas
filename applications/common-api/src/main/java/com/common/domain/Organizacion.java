@@ -74,6 +74,12 @@ public class Organizacion extends BaseEntity {
 	public void setEntidad(Entidad entidad) {
 		this.entidad = entidad;
 	}
+
+	@Override
+	public String toString() {
+		return "Organizacion [tipoOrganizacion=" + tipoOrganizacion + ", numeroidentificacion=" + numeroidentificacion
+				+ ", razonsocial=" + razonsocial + ", entidad=" + entidad + ", personas=" + personas + "]";
+	}
 	
 	
 }

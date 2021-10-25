@@ -41,6 +41,11 @@ public class RolePermissionKey implements Serializable {
 	public void setPermissionId(Long permissionId) {
 		this.permissionId = permissionId;
 	}
+
+	@Override
+	public String toString() {
+		return "RolePermissionKey [roleId=" + roleId + ", permissionId=" + permissionId + "]";
+	}
 	
 	
 }

@@ -126,6 +126,14 @@ public class Persona extends BaseEntity {
 	public void setEntidad(Entidad entidad) {
 		this.entidad = entidad;
 	}
+
+	@Override
+	public String toString() {
+		return "Persona [tipoDocumentoIdentificaion=" + tipoDocumentoIdentificaion + ", numeroidentificacion="
+				+ numeroidentificacion + ", nombres=" + nombres + ", apellidos=" + apellidos + ", tipoEstadoCivil="
+				+ tipoEstadoCivil + ", sexo=" + sexo + ", fechanacimiento=" + fechanacimiento + ", email=" + email
+				+ ", entidad=" + entidad + ", organizacions=" + organizacions + "]";
+	}
 	
 	
 }

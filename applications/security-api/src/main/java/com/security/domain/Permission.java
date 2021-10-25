@@ -172,19 +172,13 @@ public class Permission extends BaseEntity {
 		this.roles = roles;
 	}
 
-//	/**
-//	 * @return the rolePermissions
-//	 */
-//	public List<RolePermission> getRolePermissions() {
-//		return rolePermissions;
-//	}
-//
-//	/**
-//	 * @param rolePermissions the rolePermissions to set
-//	 */
-//	public void setRolePermissions(List<RolePermission> rolePermissions) {
-//		this.rolePermissions = rolePermissions;
-//	}
+	@Override
+	public String toString() {
+		return "Permission [name=" + name + ", description=" + description + ", path=" + path + ", enabled=" + enabled
+				+ ", module=" + module + ", parentPermission=" + parentPermission + ", childPermissions="
+				+ childPermissions + ", roles=" + roles + ", type=" + type + "]";
+	}
+
 	
 	
 }

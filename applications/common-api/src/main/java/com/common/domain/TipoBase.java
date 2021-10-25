@@ -81,6 +81,12 @@ public class TipoBase extends BaseEntity {
 	public void setActivo(String activo) {
 		this.activo = activo;
 	}
+
+	@Override
+	public String toString() {
+		return "TipoBase [categoria=" + categoria + ", codigo=" + codigo + ", descripcion=" + descripcion + ", activo="
+				+ activo + "]";
+	}
 	
 	
 }

@@ -125,5 +125,10 @@ public class Session {
 	public void setHostAddress(String hostAddress) {
 		this.hostAddress = hostAddress;
 	}
+	@Override
+	public String toString() {
+		return "Session [id=" + id + ", user=" + user + ", loginDate=" + loginDate + ", logoutDate=" + logoutDate
+				+ ", sessionKey=" + sessionKey + ", hostAddress=" + hostAddress + ", module=" + module + "]";
+	}
 	
 }

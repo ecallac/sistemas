@@ -122,6 +122,12 @@ public class Module extends BaseEntity{
 	public void setModuleVersion(String moduleVersion) {
 		this.moduleVersion = moduleVersion;
 	}
+
+	@Override
+	public String toString() {
+		return "Module [name=" + name + ", description=" + description + ", enabled=" + enabled + ", author=" + author
+				+ ", moduleVersion=" + moduleVersion + ", permissions=" + permissions + "]";
+	}
 	
 	
 }

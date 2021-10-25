@@ -51,6 +51,11 @@ public class EntidadRol extends BaseEntity {
 	public void setEntidad(Entidad entidad) {
 		this.entidad = entidad;
 	}
+
+	@Override
+	public String toString() {
+		return "EntidadRol [estado=" + estado + ", tipoEntidadrol=" + tipoEntidadrol + ", entidad=" + entidad + "]";
+	}
 	
 	
 }

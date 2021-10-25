@@ -75,6 +75,12 @@ public class Regla extends BaseEntity {
 	public void setReglaDetalles(List<ReglaDetalle> reglaDetalles) {
 		this.reglaDetalles = reglaDetalles;
 	}
+	@Override
+	public String toString() {
+		return "Regla [categoria=" + categoria + ", nombre=" + nombre + ", codigo=" + codigo + ", descripcion="
+				+ descripcion + ", tipoValor=" + tipoValor + ", activo=" + activo + ", reglaDetalles=" + reglaDetalles
+				+ "]";
+	}
 	
 	
 }
