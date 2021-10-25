@@ -41,6 +41,18 @@ public class Session {
 	
 	@Column(name = "hostaddress")
 	private String hostAddress;
+	
+	@ManyToOne
+	@JoinColumn(name="module_Id")
+	private Module module;
+	
+	
+	public Module getModule() {
+		return module;
+	}
+	public void setModule(Module module) {
+		this.module = module;
+	}
 	/**
 	 * @return the id
 	 */

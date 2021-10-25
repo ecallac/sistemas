@@ -16,6 +16,14 @@ public class Session {
 	private Date logoutDate;
 	private String sessionKey;
 	private String hostAddress;
+	private Module module;
+	
+	public Module getModule() {
+		return module;
+	}
+	public void setModule(Module module) {
+		this.module = module;
+	}
 	/**
 	 * @return the id
 	 */

@@ -37,4 +37,7 @@ public class RoleIntegration extends ServiceIntegrationAbstract<Role> {
 	public void save(Role bean) {
 		setObjectToPostRequest(appsecurityapi+"/"+basePath+"/save", bean);
 	}
+	public void savePermissionAssociation(Role bean) {
+		setObjectToPostRequest(appsecurityapi+"/"+basePath+"/saveRolePermissionAssociation", bean);
+	}
 }

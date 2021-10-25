@@ -43,6 +43,16 @@ public class PermissionController {
 		return new ResponseEntity(entityList,HttpStatus.OK);
     }
     
+    @SuppressWarnings("unchecked")
+	@RequestMapping(value = "/findEnabledListByModuleName", method = {RequestMethod.GET})
+    public ResponseEntity<?> findEnabledListByModuleName(@RequestParam(value = "moduleName", required = true) String moduleName) {
+		List<Permission> entityList = securityFacade.findEnabledPermissionsByModuleName(moduleName);
+		if (CollectionUtils.isEmpty(entityList)) {
+			return new ResponseEntity(new ArrayList<>(),HttpStatus.NO_CONTENT);
+        }
+		return new ResponseEntity(entityList,HttpStatus.OK);
+    }
+    
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/findById", method = {RequestMethod.GET})
     public ResponseEntity<?> findById(@RequestParam(value = "id", required = true) Long id) {

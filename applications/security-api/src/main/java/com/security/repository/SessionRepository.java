@@ -12,5 +12,5 @@ import com.security.domain.Session;
  *
  */
 public interface SessionRepository extends JpaRepository<Session, Long> {
-
+	Session findBySessionKey(String sessionKey);
 }

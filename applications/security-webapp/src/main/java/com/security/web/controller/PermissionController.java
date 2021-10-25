@@ -31,6 +31,7 @@ import com.security.Module;
 import com.security.Permission;
 import com.security.web.bean.ModuleView;
 import com.security.web.bean.PermissionView;
+import com.security.web.service.LoginService;
 import com.security.web.service.integration.PermissionIntegration;
 import com.security.web.service.integration.TipoBaseIntegration;
 import com.security.web.utils.SecurityConstants;
@@ -42,7 +43,8 @@ import com.security.web.utils.SecurityUtil;
  */
 @Controller
 public class PermissionController {
-	
+	@Autowired
+	LoginService loginService;
 	@Autowired
 	TipoBaseIntegration tipoBaseIntegration;
 	
@@ -50,8 +52,9 @@ public class PermissionController {
 	PermissionIntegration permissionIntegration;
 	
 	@RequestMapping(value={"/permission"}, method={RequestMethod.GET,RequestMethod.POST})
-	public ModelAndView list(HttpSession session){
+	public ModelAndView list(HttpSession session,Principal principal){
 		ModelAndView modelAndView = new ModelAndView();
+		loginService.addSessionObjects(session,principal);
 		modelAndView.setViewName("permission");
 		return modelAndView;
 	}

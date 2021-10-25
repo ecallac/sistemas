@@ -13,9 +13,6 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="_csrf" content="${_csrf.token}"/>
-	<meta name="_csrf_header" content="${_csrf.headerName}"/>
-	<meta name="_csrf_name" content="${_csrf.parameterName}"/>
 	<title></title>
 	<script type="text/javascript">
 	
@@ -208,7 +205,7 @@
        ajaxPostWithoutForm(ajaxUrl,successFunction);
     }
     
-    function populateParentPermissionSelectByModuleId(moduleId,permissionId){
+    function populateParentPermissionSelectByModuleId(moduleId,parentPermissionId){
  		if(moduleId!=''){
  	    	var formData= {
  	    			moduleId: moduleId
@@ -220,9 +217,10 @@
  	       			$('#parentPermissionId').empty();
  	       			$('#parentPermissionId').append('<option value="">-- Select Option --</option>');
  	       			$.each(response.data, function(i, row) {
- 	       				if (row.id == permissionId) {
+ 	       				var permissionId = $("#id").val();
+ 	       				if (row.id == parentPermissionId) {
  	       					$('#parentPermissionId').append('<option value="' + row.id + '" selected>' + row.name + '</option>');
-						} else {
+						} else if(permissionId != row.id) {
 							$('#parentPermissionId').append('<option value="' + row.id + '">' + row.name + '</option>');
 						}
  	                });
@@ -300,7 +298,6 @@
 <!-- <div class="panel-heading">User List Display tag</div> -->
   <div class="panel-body">   
    
-   <sec:authorize access="hasRole('ROLE_ADMIN')">
 <div id="button_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4 no-footer">
 <div class="dt-buttons btn-group">              
 <button data-target="#Form" title="Add New" type="button" class="btn btn-default toltip" data-toggle="modal" onclick="clearFields();">
@@ -310,7 +307,6 @@
 </div>
 <br>
    
-   </sec:authorize>
     
 
  <table id="table" align="center" class="table table-striped table-hover table-bordered">  

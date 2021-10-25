@@ -11,9 +11,6 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="_csrf" content="${_csrf.token}"/>
-	<meta name="_csrf_header" content="${_csrf.headerName}"/>
-	<meta name="_csrf_name" content="${_csrf.parameterName}"/>
 	<title></title>
 	<script type="text/javascript">
 	
@@ -280,6 +277,7 @@
        		if(response.status=="OK"){
        			$("#userId").val(response.viewBean.id);
        			$("#RuserName").text(response.viewBean.userName);
+       			$("#RpersonaFullName").text(response.persona.fullName);
        			loadRoles(idVal);
        		}
        };
@@ -605,7 +603,6 @@
 <!-- <div class="panel-heading">User List Display tag</div> -->
   <div class="panel-body">   
    
-   <sec:authorize access="hasRole('ROLE_ADMIN')">
 <div id="button_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4 no-footer">
 <div class="dt-buttons btn-group">
 	<button data-target="#AddUser" title="Add a new user" type="button" class="btn btn-default toltip" data-toggle="modal" onclick="clearFields();">
@@ -620,7 +617,6 @@
 </div>
 </div>
 <br>
-   </sec:authorize>
     
 
  <table id="table" align="center" class="table table-striped table-hover table-bordered">  
@@ -866,7 +862,7 @@
 
 
 <div class="modal fade" id="EditUserRole" tabindex="-1" role="dialog">
-  <div class="modal-dialog" role="document">
+  <div class="modal-dialog modal-lg" role="document">
   
  <%--  <form id="moduleView" method="post" > --%>
   
@@ -882,11 +878,11 @@
 		<div class="form-container">
 		        
 		        <form class="form-horizontal">
+				  
 				  <div class="form-group">
-				    <label for="RuserName" class="col-sm-3 control-label">Username</label>
+				    <label for="RuserName" class="col-sm-3 control-label">User : </label>
 				    <div class="col-sm-7">
-				    	<span id="RuserName" ></span>
-<!-- 				      <input type="text" class="form-control" id="RuserName" placeholder="Username"> -->
+				     <label id="RpersonaFullName"  class="control-label"></label> ( <label id="RuserName"  class="control-label"></label> ) 
 				    </div>
 				  </div>
 			  

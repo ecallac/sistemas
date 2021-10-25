@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import com.security.Session;
 import com.security.User;
 
 /**
@@ -44,5 +45,8 @@ public class UserIntegration extends ServiceIntegrationAbstract<User> {
 	}
 	public void removeRoleUserAssociation(Long userId,Long roleId) {
 		setObjectToPostRequest(appsecurityapi+"/"+basePath+"/removeRoleUserAssociation?userId="+userId+"&roleId="+roleId, null);
+	}
+	public void saveSession(Session bean) {
+		setObjectToPostRequest(appsecurityapi+"/"+basePath+"/saveSession", bean);
 	}
 }

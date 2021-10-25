@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.security.domain.Session;
 import com.security.domain.User;
 import com.security.facade.SecurityFacade;
 
@@ -103,6 +104,17 @@ public class UserController {
     	try {
     		securityFacade.deleteRoleInUser(userId, roleId);
     		return new ResponseEntity(HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    	return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+    
+    @RequestMapping(value = "/saveSession", method = {RequestMethod.POST})
+    public ResponseEntity<?> saveSession(@RequestBody Session bean) {
+    	try {
+    		securityFacade.saveSession(bean);
+    		return new ResponseEntity(bean,HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

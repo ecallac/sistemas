@@ -73,4 +73,15 @@ public class RoleController {
 		}
     	return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
     }
+    
+    @RequestMapping(value = "/saveRolePermissionAssociation", method = {RequestMethod.POST})
+    public ResponseEntity<?> saveRolePermissionAssociation(@RequestBody Role bean) {
+    	try {
+    		securityFacade.saveRolePermission(bean);
+    		return new ResponseEntity(HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    	return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }

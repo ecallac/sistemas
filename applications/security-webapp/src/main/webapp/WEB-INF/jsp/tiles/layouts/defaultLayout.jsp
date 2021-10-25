@@ -6,6 +6,10 @@
  
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <meta name="_csrf" content="${_csrf.token}"/>
+	<meta name="_csrf_header" content="${_csrf.headerName}"/>
+	<meta name="_csrf_name" content="${_csrf.parameterName}"/>
+	
     <title><tiles:getAsString name="title" /></title>
     <jsp:include page="../../includes/styles.jsp" />
     <style type="text/css">

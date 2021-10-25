@@ -41,7 +41,7 @@ public class RoleUserServiceImpl implements RoleUserService {
 	}
 	
 	@Override
-	public List<User> findListByRoleId(Long roleId) {
+	public List<User> findUserListByRoleId(Long roleId) {
 		// TODO Auto-generated method stub
 		return getUsers(roleUserRepository.findByRoleId(roleId));
 	}
@@ -55,7 +55,7 @@ public class RoleUserServiceImpl implements RoleUserService {
 	}
 	
 	@Override
-	public List<Role> findListByUserId(Long userId) {
+	public List<Role> findRoleListByUserId(Long userId) {
 		// TODO Auto-generated method stub
 		return getRolesByUser(roleUserRepository.findByUserId(userId));
 	}

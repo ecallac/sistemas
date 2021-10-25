@@ -67,16 +67,6 @@ public class PermissionServiceImpl implements PermissionService {
         }
 	}
 	@Override
-	public void updateEnable(Long id, String updatedBy) {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public void updateDisable(Long id, String updatedBy) {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
 	public List<Permission> findEnabledList() {
 		// TODO Auto-generated method stub
 		return permissionRepository.findAllByEnabledOrderByDescription(EnableIndicator.ENABLED.getCode());
@@ -93,6 +83,11 @@ public class PermissionServiceImpl implements PermissionService {
 			roles.add(rolePermission.getPermission());
 		}
 		return roles;
+	}
+	@Override
+	public List<Permission> findEnabledPermissionsByModuleName(String moduleName) {
+		// TODO Auto-generated method stub
+		return permissionRepository.findAllByModuleNameAndEnabledOrderByDescription(moduleName, EnableIndicator.ENABLED.getCode());
 	}
 
 }

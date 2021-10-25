@@ -18,4 +18,5 @@ import com.security.domain.RolePermission;
 public interface RolePermissionRepository extends JpaRepository<RolePermission, Long> {
     List<RolePermission> findByPermissionId(Long permissionId);
     List<RolePermission> findByRoleId(Long roleId);
+    void deleteByRoleId(Long roleId);
 }

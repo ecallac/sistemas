@@ -70,3 +70,13 @@
 <script src="<c:url value='/resources/js/bootstrap-datepicker.js' />"></script>
 <script src="<c:url value='/resources/js/locales/bootstrap-datepicker.es.js' />" charset="UTF-8"></script>
 <link href="<c:url value='/resources/css/datepicker.css' />" rel="stylesheet" type="text/css">
+
+
+<link href="<c:url value='/resources/css/themes/default/style.min.css' />"  rel="stylesheet"></link>
+<script type="text/javascript" src="<c:url value='/resources/js/jstree.min.js' />"></script>
+<script type="text/javascript" src="<c:url value='/resources/js/jstree.checkbox.js' />"></script>
+<script type="text/javascript" src="<c:url value='/resources/js/jstree.changed.js' />"></script>
+<script type="text/javascript" src="<c:url value='/resources/js/jstree.search.js' />"></script>
+<script type="text/javascript" src="<c:url value='/resources/js/jstree.sort.js' />"></script>
+<script type="text/javascript" src="<c:url value='/resources/js/jstree.types.js' />"></script>
+<script type="text/javascript" src="<c:url value='/resources/js/jstree.wholerow.js' />"></script>

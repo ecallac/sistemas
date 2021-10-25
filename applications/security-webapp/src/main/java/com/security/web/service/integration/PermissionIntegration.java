@@ -28,6 +28,9 @@ public class PermissionIntegration extends ServiceIntegrationAbstract<Permission
 	public List<Permission> findEnabledListByModuleId(Long moduleId) {
 		return getObjectListFromGetRequest(appsecurityapi+"/"+basePath+"/findEnabledListByModuleId?moduleId="+moduleId,new TypeReference<List<Permission>>(){});
 	}
+	public List<Permission> findEnabledListByModuleName(String moduleName) {
+		return getObjectListFromGetRequest(appsecurityapi+"/"+basePath+"/findEnabledListByModuleName?moduleName="+moduleName,new TypeReference<List<Permission>>(){});
+	}
 	public Permission findById(Long id) {
 		return getObjectFromGetRequest(appsecurityapi+"/"+basePath+"/findById?id="+id, Permission.class);
 	}

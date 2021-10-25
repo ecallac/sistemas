@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.BeanParser;
 import com.security.Module;
 import com.security.web.bean.ModuleView;
+import com.security.web.service.LoginService;
 import com.security.web.service.integration.ModuleIntegration;
 import com.security.web.utils.SecurityConstants;
 import com.security.web.utils.SecurityUtil;
@@ -36,13 +38,15 @@ import com.security.web.utils.SecurityUtil;
  */
 @Controller
 public class ModuleController {
-	
+	@Autowired
+	LoginService loginService;
 	@Autowired
 	ModuleIntegration moduleIntegration;
 	
 	@RequestMapping(value={"/module"}, method={RequestMethod.GET,RequestMethod.POST})
-	public ModelAndView list(){
+	public ModelAndView list(HttpSession session,Principal principal){
 		ModelAndView modelAndView = new ModelAndView();
+		loginService.addSessionObjects(session,principal);
 		modelAndView.setViewName("module");
 		return modelAndView;
 	}

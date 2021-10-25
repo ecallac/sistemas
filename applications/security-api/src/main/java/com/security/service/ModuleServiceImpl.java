@@ -53,16 +53,6 @@ public class ModuleServiceImpl implements ModuleService {
     }
 
     @Override
-    public void updateEnable(Long id,String updatedBy) {
-        moduleRepository.updateEnabledIndicator(EnableIndicator.ENABLED.getCode(),id);
-    }
-
-    @Override
-    public void updateDisable(Long id,String updatedBy) {
-        moduleRepository.updateEnabledIndicator(EnableIndicator.DISABLED.getCode(),id);
-    }
-
-    @Override
     public List<Module> findEnabledList() {
         return moduleRepository.findAllByEnabledOrderByDescription(EnableIndicator.ENABLED.getCode());
     }

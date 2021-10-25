@@ -64,18 +64,6 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public void updateEnable(Long id, String updatedBy) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void updateDisable(Long id, String updatedBy) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public User findByUsernameAndPassword(String userName, String password) {
 		// TODO Auto-generated method stub
 		return userRepository.findByUserNameAndPassword(userName, password);

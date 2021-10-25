@@ -13,9 +13,6 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="_csrf" content="${_csrf.token}"/>
-	<meta name="_csrf_header" content="${_csrf.headerName}"/>
-	<meta name="_csrf_name" content="${_csrf.parameterName}"/>
 	<title></title>
 	<script type="text/javascript">
 /* 	$(document).ready(function(){
@@ -166,10 +163,9 @@
        	            	"targets": 4,
        	                "render": function ( data, type, row ) {
        	                    return "<td>"+
-		       	                 makeButton("Edit","edit("+row.id+")","data-toggle='modal' data-target='#Form'","<c:url value='/resources/img/icons/black/doc_edit_icon&16.png' />")
-// 		       	                 makeButton("Delete","remove("+row.id+")","","<c:url value='/resources/img/icons/black/trash_icon&16.png' />")
-		       	                 makeButton("Permissions by Role","getPermissions("+row.id+")","data-toggle='modal' data-target='#Permissions'","<c:url value='/resources/img/icons/black/cogs_icon&16.png' />")
-		       	                 makeButton("Users by Role","getUsers("+row.id+")","data-toggle='modal' data-target='#Users'","<c:url value='/resources/img/icons/black/user_icon&16.png' />")
+		       	                 makeButton("Edit","edit("+row.id+")","data-toggle='modal' data-target='#Form'","<c:url value='/resources/img/icons/black/doc_edit_icon&16.png' />")+
+// 		       	                 makeButton("Delete","remove("+row.id+")","","<c:url value='/resources/img/icons/black/trash_icon&16.png' />")+
+		       	                 makeButton("Permissions by Role","loadToAssign("+row.id+")","data-toggle='modal' data-target='#assignForm'","<c:url value='/resources/img/icons/black/cogs_icon&16.png' />")
 	       	                 "</td>";
 //        	                    "<button title='Edit' onclick='edit("+row.id+")' type='button' class='btn btn-link btn-xs toltip' data-toggle='modal' data-target='#Form'><img src='<c:url value='/resources/img/icons/black/doc_edit_icon&16.png' />'></button>"+
 //            	                 "<button title='Delete' onclick='remove("+row.id+")' type='button' class='btn btn-link btn-xs toltip'><img src='<c:url value='/resources/img/icons/black/trash_icon&16.png' />'></button>"+
@@ -188,13 +184,128 @@
        
     }
     
-	function getPermissions(idVal){
-    	
-    }
+    function loadToAssign(idVal){
+		$("#jstree_demo_div").jstree('destroy');
+		var formData= {
+				roleId: idVal
+		}
+		var ajaxUrl = contexPath+'/role/loadPermissions.json';
+		var successFunction = function(response){
+	   		if(response.status=="OK"){
+	   			$("#id").val(response.viewBean.id);
+				$("#role").html( "<strong>" + response.viewBean.description + " [ "+response.viewBean.name+ " ]</strong>" );
+				
+				createTree(response.permissions);
+				
+// 				$("#assignForm").modal('show');
+	   		}
+	   };
+	   
+	   ajaxPost(ajaxUrl,formData,successFunction);
+	}
+    function searchPermissionsByModule(){
+		$("#jstree_demo_div").jstree('destroy');
+		var moduleId = $('#assignModuleId').val();
+		var mod;
+			if(moduleId!='' ||moduleId!=null){
+				mod = moduleId;
+			}
+			var idVal = $('#id').val();
+//			if(moduleId!=''){
+			var formData= {
+					roleId: idVal,
+	    			moduleId: mod
+			}
+			
+			var ajaxUrl = contexPath+'/role/loadPermissions.json';
+	    	var successFunction = function(response){
+	    		if(response.status=="OK"){
+	    			//console.log(response.permissions);
+	    			$("#id").val(response.viewBean.id);
+					$("#role").html( "<strong>" + response.viewBean.description + " [ "+response.viewBean.name+ " ]</strong>" );
+	    			
+					createTree(response.permissions);
+	       		}
+	       };
+	       ajaxPost(ajaxUrl,formData,successFunction);
+	}
+	
+	function createTree(data){
+		$("#jstree_demo_div").jstree({
+			'core' : {
+				  'data' : data,
+					'animation': false,
+				    'expand_selected_onload': true,
+					},
+		    	"checkbox" : {
+			      	"keep_selected_style" : true,
+			    	'three_state':false
+		    	},
+		    	"plugins" : [ "checkbox","wholerow" ]
+		  	})
+		.on("ready.jstree", function (e, data) {
+		                 // hide all icons
+				$('#jstree_demo_div').jstree().hide_icons();
+		    // hide all dots
+		    //$('#jstree').jstree().hide_dots();
+		     });
+	}
 
-	function getUsers(idVal){
-    	
-    }
+	function savePermissionsAssigned(){
+		
+		var permissionIds = [];
+		
+		var undeterminedNodes = $('#jstree_demo_div').jstree("get_undetermined", true);
+		$.each(undeterminedNodes, function() {
+			permissionIds.push(this.id);
+		});
+		var selectedNodes = $('#jstree_demo_div').jstree("get_selected", true);
+		$.each(selectedNodes, function() {
+			permissionIds.push(this.id);
+		});
+		
+		
+		var moduleId = $('#assignModuleId').val();
+		var mod;
+			if(moduleId!='' ||moduleId!=null){
+				mod = moduleId;
+			}
+			
+		var formData= {
+				permissionIds: permissionIds,
+				roleId: $('#id').val(),
+				moduleId: mod
+		}
+		var ajaxUrl = contexPath+'/role/saveAssignedPermissions.json';
+		var successFunction = function(response){
+	 	   if(response.validated){
+			   if(response.status=="OK"){
+	     			showSuccessMessage(response.message);
+	                 $('#assignForm').modal('hide');
+	     		}else{
+	     			showErrorMessage(response.message);
+	     		}
+	        }else{
+	          alertError("There is an error validating fields.");
+	        }
+		   
+	   };
+	   
+	   ajaxPost(ajaxUrl,formData,successFunction);
+	}
+	function populateAssignModulesSelect(){
+    	var ajaxUrl = contexPath+'/module/enabledModules.json';
+    	var successFunction = function(response){
+       		if(response.data.length>0){
+       			$('#assignModuleId').empty();
+       			$('#assignModuleId').append('<option value="">-- Select Option --</option>');
+       			$.each(response.data, function(i, row) {
+                    $('#assignModuleId').append('<option value="' + row.id + '">' + row.description + '</option>');
+                });
+       		}
+       };
+       ajaxPostWithoutForm(ajaxUrl,successFunction);
+	}
     
     function clearFields(){
 		$('.bindingError').remove();
@@ -205,35 +316,39 @@
 	}
 
 
-    $(function() {
-    	  var availableTags = [
-    	    "ActionScript",
-    	    "AppleScript",
-    	    "Asp",
-    	    "BASIC",
-    	    "C",
-    	    "C++",
-    	    "Clojure",
-    	    "COBOL",
-    	    "ColdFusion",
-    	    "Erlang",
-    	    "Fortran",
-    	    "Groovy",
-    	    "Haskell",
-    	    "Java",
-    	    "JavaScript",
-    	    "Lisp",
-    	    "Perl",
-    	    "PHP",
-    	    "Python",
-    	    "Ruby",
-    	    "Scala",
-    	    "Scheme"
-    	  ];
-    	  $("#tags").autocomplete({
-    	    source: availableTags
-    	  });
-    	});
+    $(document).ready(function(){
+    	load();
+    	populateAssignModulesSelect();
+    });
+//     $(function() {
+//     	  var availableTags = [
+//     	    "ActionScript",
+//     	    "AppleScript",
+//     	    "Asp",
+//     	    "BASIC",
+//     	    "C",
+//     	    "C++",
+//     	    "Clojure",
+//     	    "COBOL",
+//     	    "ColdFusion",
+//     	    "Erlang",
+//     	    "Fortran",
+//     	    "Groovy",
+//     	    "Haskell",
+//     	    "Java",
+//     	    "JavaScript",
+//     	    "Lisp",
+//     	    "Perl",
+//     	    "PHP",
+//     	    "Python",
+//     	    "Ruby",
+//     	    "Scala",
+//     	    "Scheme"
+//     	  ];
+//     	  $("#tags").autocomplete({
+//     	    source: availableTags
+//     	  });
+//     	});
 
 	</script>
 	<style type="text/css">
@@ -290,10 +405,16 @@
   width: 1px;
 }
 
+.container{
+  float: left;
+  margin: 30px;
+  width: 840px;
+  border: 0px solid black;
+  }
 	</style>
 
 </head>
-<body onload="load();">
+<body>
 
 <!-- <div class="container"> -->
 
@@ -312,7 +433,6 @@
    
 
    
-   <sec:authorize access="hasRole('ROLE_ADMIN')">
 <div id="button_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4 no-footer">
 <div class="dt-buttons btn-group">              
 <button data-target="#Form" title="Add New" type="button" class="btn btn-default toltip" data-toggle="modal" onclick="clearFields();">
@@ -321,8 +441,6 @@
 </div>
 </div>
 <br>
-   
-   </sec:authorize>
     
 
  <table id="table" align="center" class="table table-striped table-hover table-bordered">  
@@ -407,76 +525,72 @@
 
 
 
-<div class="modal fade" id="Permissions" tabindex="-1" role="dialog">
-  <div class="modal-dialog" role="document">
+<div class="modal fade" id="assignForm" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg" role="document">
   
- <%--  <form id="moduleView" method="post" > --%>
-  
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">Permissions by Role</h4>
-      </div>
-      <div class="modal-body">
-
-
-
-
-
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" onclick="save();">Save</button>
-      </div>
-      
-    </div>
-    
-  </div>
-</div>
-
-<div class="modal fade" id="Users" tabindex="-1" role="dialog">
-  <div class="modal-dialog" role="document">
-  
- <%--  <form id="moduleView" method="post" > --%>
   
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">Users by Role</h4>
+        <h4 class="modal-title">Assign Permission to Role</h4>
       </div>
       <div class="modal-body">
 
+		<input type="hidden" id="id" name="id"/>
 
-
-<div class="form-container">
+		<div class="form-container">
 		        
 		        
 		        
 		        
 		        <form class="form-horizontal">
-				  <div class="form-group">
-				      <label for="tags" class="col-sm-3 control-label">Username</label>
-				      <div class="col-sm-7">
-						<input type="text" class="form-control" id="tags" placeholder="Username">
-						</div>
-				    </div>
 				  
+				  <div class="form-group">
+				    <label for="role" class="col-sm-3 control-label">Role</label>
+				    <div class="col-sm-7">
+				    <label id="role"  class="control-label"></label>
+				    </div>
+				  </div>
+
+				  <div class="form-group">
+				    <label for="assignModuleId" class="col-sm-3 control-label">Module</label>
+				    <div class="col-sm-7">
+				      <select id="assignModuleId" class="form-control input-sm" onchange="searchPermissionsByModule();">
+										  <option value="">-- Select Option --</option>
+									  </select>
+				    </div>
+				  </div>
+				  
+				  <div class="form-group">
+				  
+				  <div id="jstree_demo_div" class="container"></div>
+					 
+					 
+				  </div>
 			  </form>
 		        
 		        
 		        
 		       
+		</div>
+
+
 
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" onclick="save();">Save</button>
+        <button type="button" class="btn btn-primary" onclick="savePermissionsAssigned();">Save</button>
       </div>
       
     </div>
     
   </div>
 </div>
+
+
+
+
+
 
 </body>
 </html>

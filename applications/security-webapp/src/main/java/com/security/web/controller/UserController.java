@@ -46,6 +46,7 @@ import com.security.web.bean.UserEditView;
 import com.security.web.bean.UserNewView;
 import com.security.web.bean.UserRoleView;
 import com.security.web.bean.UserView;
+import com.security.web.service.LoginService;
 import com.security.web.service.integration.EntidadRolIntegration;
 import com.security.web.service.integration.PersonaIntegration;
 import com.security.web.service.integration.RoleIntegration;
@@ -61,6 +62,8 @@ import com.security.web.utils.SecurityUtil;
  */
 @Controller
 public class UserController {
+	@Autowired
+	LoginService loginService;
 	@Autowired
 	TipoBaseIntegration tipoBaseIntegration;
 
@@ -128,11 +131,12 @@ public class UserController {
     
     
     @RequestMapping(value={"/user"}, method={RequestMethod.GET,RequestMethod.POST})
-	public ModelAndView list(HttpSession session){
+	public ModelAndView list(HttpSession session,Principal principal){
 		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.setViewName("user");
 		TipoBase tipoBase = tipoBaseIntegration.findByCodigo(SecurityConstants.TIPOBASE_CODIGO_PERSONA);
 		session.setAttribute("tipoEntidadId", tipoBase.getId());
+		loginService.addSessionObjects(session,principal);
+		modelAndView.setViewName("user");
 		return modelAndView;
 	}
     
@@ -250,6 +254,9 @@ public class UserController {
         User user = userIntegration.findById(userView.getId());
         map.put(SecurityConstants.STATUS, SecurityConstants.OK);
         map.put("viewBean", (UserView)BeanParser.parseObjectToNewClass(user, UserView.class, null));
+        Persona persona = personaIntegration.findByEntidadRolId(user.getEntidadRoleId());
+        persona.setFullName(persona.getNumeroidentificacion()+ " - " +persona.getNombres()+ " " + persona.getApellidos());
+        map.put("persona", persona);
         return map;
     }
     

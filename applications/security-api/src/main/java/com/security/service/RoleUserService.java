@@ -15,6 +15,6 @@ import com.security.domain.User;
 public interface RoleUserService{
 	void save(User user, Role role);
 	void delete(User user, Role role);
-	List<User> findListByRoleId(Long roleId);
-	List<Role> findListByUserId(Long userId);
+	List<User> findUserListByRoleId(Long roleId);
+	List<Role> findRoleListByUserId(Long userId);
 }

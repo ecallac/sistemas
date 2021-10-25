@@ -13,9 +13,6 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="_csrf" content="${_csrf.token}"/>
-	<meta name="_csrf_header" content="${_csrf.headerName}"/>
-	<meta name="_csrf_name" content="${_csrf.parameterName}"/>
 	<title></title>
 	<script type="text/javascript">
 	
@@ -223,8 +220,6 @@
 <div class="panel panel-default">
 <!-- <div class="panel-heading">User List Display tag</div> -->
   <div class="panel-body">   
-   
-   <sec:authorize access="hasRole('ROLE_ADMIN')">
 <div id="button_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4 no-footer">
 <div class="dt-buttons btn-group">              
 <button data-target="#Form" title="Add New" type="button" class="btn btn-default toltip" data-toggle="modal" onclick="clearFields();">
@@ -233,8 +228,6 @@
 </div>
 </div>
 <br>
-   
-   </sec:authorize>
     
 
  <table id="table" align="center" class="table table-striped table-hover table-bordered">  

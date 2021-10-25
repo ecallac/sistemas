@@ -4,23 +4,27 @@
 package com.security.web.controller;
 
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.security.Module;
-import com.security.Permission;
-import com.security.web.service.integration.ModuleIntegration;
-import com.security.web.service.integration.PermissionIntegration;
+import com.security.Session;
+import com.security.User;
+import com.security.web.service.LoginService;
 import com.security.web.utils.SecurityConstants;
+import com.security.web.utils.SecurityUtil;
 
 /**
  * @author EFRAIN
@@ -30,10 +34,7 @@ import com.security.web.utils.SecurityConstants;
 public class LoginController {
 	
 	@Autowired
-	PermissionIntegration permissionIntegration;
-	
-	@Autowired
-	ModuleIntegration moduleIntegration;
+	LoginService loginService;
 	
 	@RequestMapping(value="/login", method={RequestMethod.GET,RequestMethod.POST})
 	public ModelAndView login(@RequestParam(value = "error",required = false) String error,@RequestParam(value = "logout",	required = false) String logout){
@@ -67,28 +68,30 @@ public class LoginController {
 	}
 	
 	@RequestMapping(value={"/","/home"}, method=RequestMethod.GET)
-	public ModelAndView home(HttpSession session){
+	public ModelAndView home(HttpSession session,Principal principal){
 		ModelAndView modelAndView = new ModelAndView();
-		Module module = moduleIntegration.findByName(SecurityConstants.MODULE_SECURITY);
-		List<Permission> permissions= permissionIntegration.findEnabledListByModuleId(module.getId());
 		
-		List<Permission> list = new ArrayList<Permission>();
-		for (Permission permission : permissions) {
-			if (permission.getParentPermission()!=null) {
-				list.add(permission);
-			}
-		}
-//		modelAndView.addObject("permissions", list);
-		session.setAttribute("permissions", list);
+		loginService.addSessionObjects(session,principal);
+		
 		modelAndView.setViewName("home");
 		return modelAndView;
 	}
+
 	
-//	@RequestMapping(value={"/admin"}, method=RequestMethod.GET)
-//	public ModelAndView admin(){
-//		ModelAndView modelAndView = new ModelAndView();
-//		modelAndView.setViewName("internal/adminPage");
-//		return modelAndView;
-//	}
+	@RequestMapping(value = "/session/save", method = {RequestMethod.POST})
+    public @ResponseBody Map<String, Object> saveSession(HttpSession httpSession,@RequestBody Session session,Principal principal) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		System.out.println("sessionKey:"+httpSession.getId());
+		Module module = new Module();
+		module.setName(SecurityConstants.MODULE_SECURITY);
+		User user = new User();
+		user.setUserName(principal.getName());
+		session.setModule(module);
+		session.setUser(user);
+		session.setSessionKey(httpSession.getId());
+		loginService.saveSession(session);
+		map.put(SecurityConstants.STATUS, SecurityConstants.OK);
+		return map;
+    }
 	
 }

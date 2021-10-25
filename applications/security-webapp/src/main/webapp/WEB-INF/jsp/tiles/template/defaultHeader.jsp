@@ -8,6 +8,34 @@
 <title>Insert title here</title>
 
 </head>
+<script type="text/javascript">
+var sessionContexPath = "<%=request.getContextPath() %>";
+$(document).ready(function(){
+	getIp();
+});
+function getIp(){
+	$.getJSON("https://api.ipify.org?format=json",
+            function(data) {
+		saveSession(data.ip);
+		})
+}
+
+function saveSession(ip){
+	var formData= {
+			hostAddress: ip
+	}
+	var ajaxUrl = sessionContexPath+'/session/save.json';
+	var successFunction = function(response){
+   		if(response.status=="OK"){
+//    			$("#id").val(response.viewBean.id);
+   		}
+   };
+   
+   ajaxPost(ajaxUrl,formData,successFunction);
+}
+
+
+</script>
 <body>
 
 
@@ -28,7 +56,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="${pageContext.request.contextPath}/">Home</a>
+      <a class="navbar-brand" href="${pageContext.request.contextPath}/">Root</a>
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
