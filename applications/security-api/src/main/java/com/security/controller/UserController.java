@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,6 +36,16 @@ public class UserController {
     
     @Autowired
     SecurityFacade securityFacade;
+    
+    @SuppressWarnings("unchecked")
+	@RequestMapping(value = "/findByUserNameActive", method = {RequestMethod.GET})
+    public ResponseEntity<?> findByUserNameActive(@RequestParam(value = "userName", required = true) String userName) {
+		User entity = securityFacade.findUserByUserNameActive(userName);
+		if (entity==null) {
+			return new ResponseEntity(new User(),HttpStatus.NO_CONTENT);
+        }
+		return new ResponseEntity(entity,HttpStatus.OK);
+    }
     
     @SuppressWarnings("unchecked")
 	@RequestMapping(value = "/findByUserName", method = {RequestMethod.GET})
@@ -119,5 +130,10 @@ public class UserController {
 			e.printStackTrace();
 		}
     	return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+    
+    @Scheduled(cron="${scheduling.task.cron}")
+    public void reviewUser() {
+    	logger.info("review");
     }
 }

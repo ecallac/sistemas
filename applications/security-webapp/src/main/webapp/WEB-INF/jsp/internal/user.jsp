@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1" isELIgnored="false" session="true"%>
 <%@ taglib prefix ="c" uri="http://java.sun.com/jsp/jstl/core" %> 
-<%@ taglib prefix="display" uri="http://displaytag.sf.net"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
@@ -14,11 +13,6 @@
 	<title></title>
 	<script type="text/javascript">
 	
-	$('#AddUser').on('shown.bs.modal', function () {})
-	$('#EditUser').on('shown.bs.modal', function () {})
-	$('#EditUserPassword').on('shown.bs.modal', function () {})
-	$('#EditUserRole').on('shown.bs.modal', function () {})
-	$('#AddPerson').on('shown.bs.modal', function () {})
 	
 	var contexPath = "<%=request.getContextPath() %>";
 	
@@ -415,8 +409,8 @@
     	var successFunction = function(response){
        		if(response.data.length>0){
        			$.each(response.data, function(i, row) {
-                    $('#Astatus').append('<option value="' + row.id + '">' + row.codigo + '</option>');
-                    $('#Estatus').append('<option value="' + row.id + '">' + row.codigo + '</option>');
+                    $('#Astatus').append('<option value="' + row.codigo + '">' + row.descripcion + '</option>');
+                    $('#Estatus').append('<option value="' + row.codigo + '">' + row.descripcion + '</option>');
                 });
        		}
        };
@@ -428,7 +422,7 @@
     	var successFunction = function(response){
        		if(response.data.length>0){
        			$.each(response.data, function(i, row) {
-                    $('#tipoDocumentoIdentificaion').append('<option value="' + row.id + '">' + row.descripcion + '</option>');
+                    $('#tipoDocumentoIdentificaion').append('<option value="' + row.codigo + '">' + row.descripcion + '</option>');
                 });
        		}
        };
@@ -440,7 +434,7 @@
     	var successFunction = function(response){
        		if(response.data.length>0){
        			$.each(response.data, function(i, row) {
-                    $('#tipoEstadoCivil').append('<option value="' + row.id + '">' + row.descripcion + '</option>');
+                    $('#tipoEstadoCivil').append('<option value="' + row.codigo + '">' + row.descripcion + '</option>');
                 });
        		}
        };

@@ -1,5 +1,5 @@
 	function showSuccessMessage(message){
-    	$.bootstrapGrowl("<b>Success!</b> "+message, { type: 'success' });
+    	$.bootstrapGrowl("<b>Success!</b> "+message, { type: 'success' , align:'center', width:500});
     	
     }
     function showErrorMessage(message){
@@ -103,22 +103,38 @@
         });
 	}
 	
+	function alertError(message){
+		$.confirm({
+		    title: 'I found an error!',
+		    content: message,
+		    type: 'red',
+		    typeAnimated: true,
+		    buttons: {
+		        ok: {
+		            text: 'OK',
+		            btnClass: 'btn-red',
+		            action: function(){
+		            }
+		        }
+		    }
+		});
+	}
 	function processjqXHR(jqXHR){
 		console.log(jqXHR);
  	   if (jqXHR.status === 0) {
-            alert('Not connect.\n Verify Network.');
+ 		   alertError('Error: Not connect.\n Verify Network.');
         } else if (jqXHR.status == 404) {
-            alert('Requested page not found. [404]');
+        	alertError('Error: Requested page not found. [404]');
         } else if (jqXHR.status == 500) {
-            alert('Internal Server Error [500].');
+        	alertError('Error: Internal Server Error [500].');
         } else if (exception === 'parsererror') {
-            alert('Requested JSON parse failed.');
+        	alertError('Error: Requested JSON parse failed.');
         } else if (exception === 'timeout') {
-            alert('Time out error.');
+        	alertError('Error: Time out error.');
         } else if (exception === 'abort') {
-            alert('Ajax request aborted.');
+        	alertError('Error: Ajax request aborted.');
         } else {
-            alert('Uncaught Error.\n' + jqXHR.responseText);
+        	alertError('Error: Uncaught Error.\n' + jqXHR.responseText);
         }
 	}
 	

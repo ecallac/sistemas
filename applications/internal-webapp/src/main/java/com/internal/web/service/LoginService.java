@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.security.web.service;
+package com.internal.web.service;
 
 
 import java.security.Principal;
@@ -22,13 +22,13 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import com.internal.web.service.integration.PermissionIntegration;
+import com.internal.web.service.integration.UserIntegration;
+import com.internal.web.utils.Constants;
 import com.security.Permission;
 import com.security.Role;
 import com.security.Session;
 import com.security.User;
-import com.security.web.service.integration.PermissionIntegration;
-import com.security.web.service.integration.UserIntegration;
-import com.security.web.utils.SecurityConstants;
 
 
 /**
@@ -62,7 +62,7 @@ public class LoginService implements UserDetailsService {
 	}
 	
 	public Map<String,String> getPermissionByRole() throws Exception{
-		List<Permission> permissions= permissionIntegration.findEnabledListByModuleName(SecurityConstants.MODULE_SECURITY);
+		List<Permission> permissions= permissionIntegration.findEnabledListByModuleName(Constants.MODULE);
 		Map<String,List<String>> permissionBeans = new HashMap<String,List<String>>();
 		for (Permission permission : permissions) {
 			List<Role> rolesDB = permission.getRoles();
@@ -82,7 +82,7 @@ public class LoginService implements UserDetailsService {
 	
 	
 	public List<Permission> getPermissions(){
-		List<Permission> permissions= permissionIntegration.findEnabledListByModuleName(SecurityConstants.MODULE_SECURITY);
+		List<Permission> permissions= permissionIntegration.findEnabledListByModuleName(Constants.MODULE);
 		List<Permission> list = new ArrayList<Permission>();
 		for (Permission permission : permissions) {
 			if (permission.getParentPermission()!=null) {

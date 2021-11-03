@@ -182,11 +182,13 @@ public class PermissionController {
     }
 	
 	public List<PermissionView> castPermissionToPermissionViewList(List<Permission> permissions){
+		Map<String, TipoBase> map = tipoBaseIntegration.findByCategoriaActivosMap(SecurityConstants.TIPOBASE_CATEGORIA_TYPE_PERMISSION);
 		List<PermissionView> PermissionViews = new ArrayList<PermissionView>();
 		for (Permission permission : permissions) {
 			PermissionView permissionView = (PermissionView)BeanParser.parseObjectToNewClass(permission, PermissionView.class, null);
 			permissionView.setModule((ModuleView)BeanParser.parseObjectToNewClass(permission.getModule(), ModuleView.class, null));
 			permissionView.setParentPermission((PermissionView)BeanParser.parseObjectToNewClass(permission.getParentPermission(), PermissionView.class, null));
+			permissionView.setType(map.containsKey(permission.getType())?map.get(permission.getType()).getDescripcion():permission.getType());
 			PermissionViews.add(permissionView);
 		}
 		return PermissionViews;

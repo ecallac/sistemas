@@ -19,7 +19,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.context.request.RequestContextHolder;
 
-import com.internal.web.service.LoginServiceImpl;
+import com.internal.web.service.LoginService;
+
 
 /**
  * @author EFRAIN
@@ -30,18 +31,18 @@ import com.internal.web.service.LoginServiceImpl;
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
-	LoginServiceImpl loginServiceImpl;
+	LoginService loginService;
 	
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder builder) throws Exception{
-		builder.userDetailsService(loginServiceImpl);
+		builder.userDetailsService(loginService);
 		builder.authenticationProvider(authenticationProvider());
 	}
 	
 	@Bean
 	public DaoAuthenticationProvider authenticationProvider(){
 		DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
-		daoAuthenticationProvider.setUserDetailsService(loginServiceImpl);
+		daoAuthenticationProvider.setUserDetailsService(loginService);
 		daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
 		
 		return daoAuthenticationProvider;
@@ -59,7 +60,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 //		http.sessionManagement().invalidSessionUrl("/expiredSession.html");
 //		http.sessionManagement().sessionFixation().newSession();
 		
-		Map<String,String> map= loginServiceImpl.getPermissionByRole();
+		Map<String,String> map= loginService.getPermissionByRole();
 		for (Map.Entry<String,String> entry : map.entrySet()){
 			http.authorizeRequests().antMatchers(entry.getKey()).access("hasAnyRole("+entry.getValue()+")");
 		}

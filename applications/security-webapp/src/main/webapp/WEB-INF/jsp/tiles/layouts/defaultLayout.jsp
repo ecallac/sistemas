@@ -22,6 +22,11 @@
     $(document).ready(function(){
         $('[data-toggle="tooltip"]').tooltip();
         $('.toltip').tooltip({placement : 'bottom'});
+        
+        $('.modal').draggable({
+    	  	cursor: "move",
+    	    handle: ".modal-header"
+    	  });
     });
     $('#bar').stalker();
     </script>

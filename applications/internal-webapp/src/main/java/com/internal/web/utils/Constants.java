@@ -1,13 +1,13 @@
 /**
  * 
  */
-package com.security.web.utils;
+package com.internal.web.utils;
 
 /**
  * @author EFRAIN
  * @dateCreated 26 mar. 2017 13:59:23
  */
-public interface SecurityConstants {
+public interface Constants {
 	
 	static final String OK = "OK";
 	static final String ERROR = "ERROR";
@@ -18,7 +18,7 @@ public interface SecurityConstants {
 	static final String NO = "N";
 	static final String JSON ="JSON";
 	
-	static final String MODULE_SECURITY = "SECURITY";
+	static final String MODULE = "INTERNAL";
 	static final String TIPOBASE_CATEGORIA_TYPE_PERMISSION = "TYPE_PERMISSION";
 	static final String TIPOBASE_CATEGORIA_USER_STATUS = "TYPE_STATUS";
 	static final String TIPOBASE_CATEGORIA_TYPE_PERSONA_DOCUMENTO = "TYPE_PERSONA_DOCUMENTO";

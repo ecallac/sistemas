@@ -189,13 +189,8 @@ public class UserController {
         Map<String, Object> map = new HashMap<String, Object>();
         List<UserView> list = castUserToUserEditViewList(userIntegration.findList());
         if (list != null) {
-        	List<TipoBase> tipoBases = tipoBaseIntegration.findByCategoriaActivos(SecurityConstants.TIPOBASE_CATEGORIA_USER_STATUS);
+        	
         	for (UserView userView : list) {
-        		for (TipoBase tipoBase : tipoBases) {
-            		if (userView.getStatus().equals(tipoBase.getId().toString())) {
-    					userView.setStatus(tipoBase.getCodigo());
-    				}
-    			}
         		try {
         			Persona persona = personaIntegration.findByEntidadRolId(userView.getEntidadRoleId());
             		userView.setEntityName(persona.getNombres()+ " " + persona.getApellidos());
@@ -212,9 +207,11 @@ public class UserController {
     }
     
     public List<UserView> castUserToUserEditViewList(List<User> users){
+    	Map<String, TipoBase> map = tipoBaseIntegration.findByCategoriaActivosMap(SecurityConstants.TIPOBASE_CATEGORIA_USER_STATUS);
 		List<UserView> userEditViews = new ArrayList<UserView>();
 		for (User user : users) {
 			UserView userView = (UserView)BeanParser.parseObjectToNewClass(user, UserView.class, null);
+			userView.setStatus(map.containsKey(user.getStatus())?map.get(user.getStatus()).getDescripcion():user.getStatus());
 			userEditViews.add(userView);
 		}
 		return userEditViews;

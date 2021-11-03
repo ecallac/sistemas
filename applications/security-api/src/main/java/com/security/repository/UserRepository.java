@@ -17,6 +17,7 @@ import com.security.domain.User;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 	User findByUserName(String userName);
+	User findByUserNameAndStatus(String userName,String status);
 	List<User> findByStatus(String status);
 	User findByUserNameAndPassword(String userName, String password);
 }

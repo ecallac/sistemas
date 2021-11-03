@@ -11,11 +11,10 @@
 	<tx:annotation-driven/>
 	
 	
-	<context:property-placeholder location="classpath:com/internal/web/config/database.properties,
- 											classpath:com/internal/web/config/services.properties,
+	<context:property-placeholder location="classpath:com/internal/web/config/services.properties,
  											classpath:com/internal/web/config/reports.properties" />
 	
 	<!-- Application Datasource and Dao -->
- 	<import resource="classpath:/com/internal/dao/config/dbaccess-config.xml"/>
+<!--  	<import resource="classpath:/com/internal/dao/config/dbaccess-config.xml"/> -->
 	
 </beans>

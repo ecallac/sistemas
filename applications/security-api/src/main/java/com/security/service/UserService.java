@@ -14,6 +14,7 @@ import com.security.domain.User;
 public interface UserService extends BaseService<User>{
 	User findByUsernameAndPassword(String userName,String password);
 	User findByUserName(String userName);
+	User findByUserNameActive(String userName);
 	List<User> findByStatus(String status);
 	void savePassword(User user) throws Exception;
 	void savePasswordById(User user);

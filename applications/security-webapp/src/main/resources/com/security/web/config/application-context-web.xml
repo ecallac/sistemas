@@ -13,8 +13,7 @@
 	<!-- Property files -->
 <!-- 	<context:property-placeholder location="classpath:com/security/dao/resource/database.properties" /> -->
 	
-	<context:property-placeholder location="classpath:com/security/web/config/database.properties,
- 											classpath:com/security/web/config/services.properties,
+	<context:property-placeholder location="classpath:com/security/web/config/services.properties,
  											classpath:com/security/web/config/reports.properties" />
 	
 	<!-- This property file could be injected in any Service -->

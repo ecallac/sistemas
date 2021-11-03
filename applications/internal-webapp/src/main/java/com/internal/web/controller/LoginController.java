@@ -4,12 +4,25 @@
 package com.internal.web.controller;
 
 import java.security.Principal;
+import java.util.HashMap;
+import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.internal.web.service.LoginService;
+import com.internal.web.utils.Constants;
+import com.security.Module;
+import com.security.Session;
+import com.security.User;
 
 
 /**
@@ -18,6 +31,9 @@ import org.springframework.web.servlet.ModelAndView;
  */
 @Controller
 public class LoginController {
+	@Autowired
+	LoginService loginService;
+	
 	@RequestMapping(value="/login", method={RequestMethod.GET,RequestMethod.POST})
 	public ModelAndView login(@RequestParam(value = "error",required = false) String error,@RequestParam(value = "logout",	required = false) String logout){
 		ModelAndView modelAndView = new ModelAndView();
@@ -50,10 +66,30 @@ public class LoginController {
 	}
 	
 	@RequestMapping(value={"/","/home"}, method=RequestMethod.GET)
-	public ModelAndView home(){
+	public ModelAndView home(HttpSession session,Principal principal){
 		ModelAndView modelAndView = new ModelAndView();
+		
+		loginService.addSessionObjects(session,principal);
+		
 		modelAndView.setViewName("home");
 		return modelAndView;
 	}
+
+	
+	@RequestMapping(value = "/session/save", method = {RequestMethod.POST})
+    public @ResponseBody Map<String, Object> saveSession(HttpSession httpSession,@RequestBody Session session,Principal principal) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		System.out.println("sessionKey:"+httpSession.getId());
+		Module module = new Module();
+		module.setName(Constants.MODULE);
+		User user = new User();
+		user.setUserName(principal.getName());
+		session.setModule(module);
+		session.setUser(user);
+		session.setSessionKey(httpSession.getId());
+		loginService.saveSession(session);
+		map.put(Constants.STATUS, Constants.OK);
+		return map;
+    }
 	
 }

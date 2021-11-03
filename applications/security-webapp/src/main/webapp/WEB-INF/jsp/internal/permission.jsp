@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1" isELIgnored="false" session="true"%>
 <%@ taglib prefix ="c" uri="http://java.sun.com/jsp/jstl/core" %> 
-<%@ taglib prefix="display" uri="http://displaytag.sf.net"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
@@ -16,9 +15,7 @@
 	<title></title>
 	<script type="text/javascript">
 	
-	$('#Add').on('shown.bs.modal', function () {
-	  
-	})
+	
 	
 	var contexPath = "<%=request.getContextPath() %>";
 	
@@ -112,7 +109,9 @@
        			$("#parentPermissionId").val(response.viewBean.parentPermission.id);
        			$("#type").val(response.viewBean.type);
        			
+       			populateModulesSelectByModuleId(response.viewBean.module.id);
        			populateParentPermissionSelectByModuleId(response.viewBean.module.id, response.viewBean.parentPermission.id);
+       			populatePermissionTypeSelectByType(response.viewBean.type);
        		}
        };
        
@@ -194,11 +193,28 @@
     
     
     function populateModulesSelect(){
+    	populateModulesSelectByModuleId(null);
+    }
+    function populateParentPermissionSelect(){
+        var moduleId = $('#moduleId').val();
+        populateParentPermissionSelectByModuleId(moduleId,null);
+     }
+     function populatePermissionTypeSelect(){
+     	populatePermissionTypeSelectByType(null);
+     }
+     
+    function populateModulesSelectByModuleId(moduleId){
     	var ajaxUrl = contexPath+'/module/enabledModules.json';
     	var successFunction = function(response){
        		if(response.data.length>0){
+       			$('#moduleId').empty();
+	       		$('#moduleId').append('<option value="">-- Select Option --</option>');
        			$.each(response.data, function(i, row) {
-                    $('#moduleId').append('<option value="' + row.id + '">' + row.name + '</option>');
+       				if (row.id == moduleId) {
+       					$('#moduleId').append('<option value="' + row.id + '" selected>' + row.name + '</option>');
+					} else {
+						$('#moduleId').append('<option value="' + row.id + '">' + row.name + '</option>');
+					}
                 });
        		}
        };
@@ -232,23 +248,24 @@
    			$('#parentPermissionId').append('<option value="">-- Select Option --</option>');
  		}
      }
-    
-    function populateParentPermissionSelect(){
-       var moduleId = $('#moduleId').val();
-       populateParentPermissionSelectByModuleId(moduleId,null);
-    }
-    
-    function populatePermissionTypeSelect(){
+    function populatePermissionTypeSelectByType(type){
     	var ajaxUrl = contexPath+'/permission/permissionType.json';
     	var successFunction = function(response){
        		if(response.data.length>0){
+       			$('#type').empty();
+	       		$('#type').append('<option value="">-- Select Option --</option>');
        			$.each(response.data, function(i, row) {
-                    $('#type').append('<option value="' + row.codigo + '">' + row.codigo + '</option>');
+       				if (row.codigo == type) {
+       					$('#type').append('<option value="' + row.codigo + '" selected>' + row.descripcion + '</option>');
+					} else {
+						$('#type').append('<option value="' + row.codigo + '">' + row.descripcion + '</option>');
+					}
                 });
        		}
        };
        ajaxPostWithoutForm(ajaxUrl,successFunction);
     }
+    
     
     
     function clearFields(){
@@ -258,20 +275,22 @@
 		$("#description").val("");
 		$('#enabled').prop('checked', false);
 		$("#path").val("");
-		$("#moduleId").val("");
-		$("#parentPermissionId").val("");
-		$("#type").val("");
+		populateModulesSelect();
+		populateParentPermissionSelect();
+		populatePermissionTypeSelect();
 	}
     
     $(document).ready(function(){
+//     	$('select').select2({
+//             dropdownParent: $('#Form'),
+//             theme: 'bootstrap4'
+//         });
+    	
     	load();
-    	populateModulesSelect();
-    	populatePermissionTypeSelect();
     	
     	$('#moduleId').on('change', function() {
     		populateParentPermissionSelect();
       	});
-    	
     });
     
     
@@ -343,7 +362,7 @@
 		        	<div class="form-group">
 					    <label for="moduleId" class="col-sm-3 control-label">Module</label>
 					    <div class="col-sm-7">
-					      <select id="moduleId" class="form-control input-sm">
+					      <select id="moduleId" class="form-control selectpicker" data-style="btn-default" data-live-search="true">
 					      	<option value="">-- Select Option --</option>
 					      </select>
 					    </div>
@@ -351,7 +370,7 @@
 					<div class="form-group">
 					    <label for="parentPermissionId" class="col-sm-3 control-label">Parent</label>
 					    <div class="col-sm-7">
-					      <select id="parentPermissionId" class="form-control input-sm">
+					      <select id="parentPermissionId" class="form-control">
 					      	<option value="">-- Select Option --</option>
 					      </select>
 					    </div>
@@ -359,7 +378,7 @@
 					<div class="form-group">
 					    <label for="type" class="col-sm-3 control-label">Permission Type</label>
 					    <div class="col-sm-7">
-					      <select id="type" class="form-control input-sm">
+					      <select id="type" class="form-control">
 					      	<option value="">-- Select Option --</option>
 					      </select>
 					    </div>

@@ -4,8 +4,6 @@
 package com.security.facade;
 
 
-import java.security.Principal;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.security.domain.Module;
 import com.security.domain.Permission;
 import com.security.domain.Role;
-import com.security.domain.RolePermission;
 import com.security.domain.Session;
 import com.security.domain.User;
 import com.security.service.ModuleService;
@@ -51,6 +48,11 @@ public class SecurityFacade {
 	
 	public User findUserByUserName(String userName) {
 		User user = userService.findByUserName(userName);
+		return user!=null?setRolesToUser(user):null;
+	}
+	
+	public User findUserByUserNameActive(String userName) {
+		User user = userService.findByUserNameActive(userName);
 		return user!=null?setRolesToUser(user):null;
 	}
 	

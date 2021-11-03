@@ -17,6 +17,7 @@ import com.security.domain.BusinessException;
 import com.security.domain.Role;
 import com.security.domain.RoleUser;
 import com.security.domain.User;
+import com.security.enums.UserStatus;
 import com.security.repository.RoleUserRepository;
 import com.security.repository.UserRepository;
 import com.security.util.BeanParser;
@@ -102,6 +103,12 @@ public class UserServiceImpl implements UserService{
 		userStored.setUpdatedBy(user.getUpdatedBy());
 		userStored.setDateUpdated(new Date());
 		userRepository.save(userStored);
+	}
+
+	@Override
+	public User findByUserNameActive(String userName) {
+		// TODO Auto-generated method stub
+		return userRepository.findByUserNameAndStatus(userName, UserStatus.ACTIVE.getCode());
 	}
 
 	

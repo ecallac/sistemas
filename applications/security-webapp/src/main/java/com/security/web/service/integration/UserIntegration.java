@@ -28,6 +28,9 @@ public class UserIntegration extends ServiceIntegrationAbstract<User> {
 	public User findByUserName(String userName) {
 		return getObjectFromGetRequest(appsecurityapi+"/"+basePath+"/findByUserName?userName="+userName, User.class);
 	}
+	public User findByUserNameActive(String userName) {
+		return getObjectFromGetRequest(appsecurityapi+"/"+basePath+"/findByUserNameActive?userName="+userName, User.class);
+	}
 	public User findById(Long id) {
 		return getObjectFromGetRequest(appsecurityapi+"/"+basePath+"/findById?id="+id, User.class);
 	}
