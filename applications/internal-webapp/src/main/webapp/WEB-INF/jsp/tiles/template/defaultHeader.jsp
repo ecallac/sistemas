@@ -7,9 +7,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Insert title here</title>
 
+<style type="text/css">
+/* .navbar{ */
+/*     box-shadow: 0 0 2rem 0 rgb(41 48 66 / 10%); */
+/*     } */
+</style>
 </head>
 <script type="text/javascript">
-var sessionContexPath = "<%=request.getContextPath() %>";
 $(document).ready(function(){
 	getIp();
 });
@@ -38,63 +42,90 @@ function saveSession(ip){
 </script>
 <body>
 
-<c:url value="/j_spring_security_logout" var="logoutUrl" />
+
+
+
+
+
+
+
+<nav class="navbar navbar-expand-lg navbar-light navbar-bg">
+  <div class="container-fluid">
+  	
+    <a class="navbar-brand" href="${pageContext.request.contextPath}/"><i class="bi bi-windows"></i></a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <c:forEach var="permission" items="${sessionScope.permissions}">
+      		<li class="nav-item"><a class="nav-link"  href="${pageContext.request.contextPath}${permission.path}">${permission.description}</a></li>
+        </c:forEach>
+        </li>
+      </ul>
+      <form class="d-flex">
+        <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Search">
+        <button class="btn btn-outline-success" type="submit">Buscar</button>
+      </form>
+      
+      
+      <c:url value="/j_spring_security_logout" var="logoutUrl" />
 <form id="logout" action="${logoutUrl}" method="post" >
   <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 </form>
 
-<nav class="navbar navbar-inverse navbar-fixed-top">
-  <div class="container-fluid">
-    <!-- Brand and toggle get grouped for better mobile display -->
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="${pageContext.request.contextPath}/">Root</a>
-    </div>
-
-    <!-- Collect the nav links, forms, and other content for toggling -->
-    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      <ul class="nav navbar-nav">
-      <c:forEach var="permission" items="${sessionScope.permissions}">
-      		<li><a href="${pageContext.request.contextPath}${permission.path}">${permission.description}</a></li>
-            </c:forEach>
-<!--         <li class="dropdown"> -->
-<!--           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a> -->
-<!--           <ul class="dropdown-menu"> -->
-<!--             <li><a href="#">Action</a></li> -->
-<!--             <li><a href="#">Another action</a></li> -->
-<!--             <li><a href="#">Something else here</a></li> -->
-<!--             <li role="separator" class="divider"></li> -->
-<!--             <li><a href="#">Separated link</a></li> -->
-<!--             <li role="separator" class="divider"></li> -->
-<!--             <li><a href="#">One more separated link</a></li> -->
-<!--           </ul> -->
-<!--         </li> -->
-      </ul>
-      
-      <ul class="nav navbar-nav navbar-right">
-		<li>
-		<form class="navbar-form navbar-left">
-        <div class="form-group">
-          <input type="text" class="form-control" placeholder="Search">
-        </div>
-      </form>
-      </li>
-
 <c:if test="${pageContext.request.userPrincipal.name != null}">
-<li><p class="navbar-text">Welcome : ${pageContext.request.userPrincipal.name} | <a href="javascript:document.getElementById('logout').submit()" title="Logout" class="toltip"><img src="<c:url value='/resources/img/icons/white/on-off_icon&16.png' />"> </a></p></li>
+ <ul class="navbar-nav d-flex mb-2 mb-lg-0">
+      <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="${pageContext.request.contextPath}/#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+             
+			
+			<div class="container">
+			  <div class="row">
+			    <div class="col">
+			      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+					  <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+					  <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
+					</svg>
+			    </div>
+			    <div class="col">
+			      <div class="row">
+			        <div class="col">
+			          <span>${pageContext.request.userPrincipal.name}</span>
+			        </div>
+			      </div>
+			      <div class="row">
+			        <div class="col">
+			          <span>
+			          	<c:forEach var="roles" items="${sessionScope.user.roles}">
+				      		${roles.description}
+				        </c:forEach>
+			          </span>
+			        </div>
+			      </div>
+			    </div>
+			  </div>
+			</div>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+            
+            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/profile"><i class="bi bi-person-circle"></i> Mi Cuenta</a></li>
+<!--             <li><a class="dropdown-item" href="#">Ajustes</a></li> -->
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="javascript:document.getElementById('logout').submit()" title="Cerrar sesión" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="bi bi-power"></i> Cerrar sesión </a></li>
+            
+          </ul>
+        </li>
+</ul>
+
 
 </c:if>
-
-      </ul>
-    </div><!-- /.navbar-collapse -->
-  </div><!-- /.container-fluid -->
+      
+      
+    </div>
+  </div>
 </nav>
-
 
 
 

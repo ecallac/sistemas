@@ -28,4 +28,10 @@ public interface Constants {
 	
 	static final String TIPOBASE_CODIGO_PERSONA = "E_PERSONA";
 	static final String TIPOBASE_CODIGO_ORGANIZACION = "E_ORGANIZACION";
+	
+	static final String SUCCESS = "success";
+	static final String DANGER = "danger";
+	
+	static final String SUCCESS_MESSAGE="Su registro se ha guardado con éxito";
+	
 }

@@ -38,14 +38,14 @@ public class LoginController {
 	public ModelAndView login(@RequestParam(value = "error",required = false) String error,@RequestParam(value = "logout",	required = false) String logout){
 		ModelAndView modelAndView = new ModelAndView();
 		if (error != null) {
-			modelAndView.addObject("error", "Username or password is incorrect!");
+			modelAndView.addObject("error", "Nombre de Usuario o clave es incorrecto!");
 		}
 		
 //		String sessionId = RequestContextHolder.currentRequestAttributes().getSessionId();
 		
 		
 		if (logout != null) {
-			modelAndView.addObject("message", "Logged out from page successfully.");
+			modelAndView.addObject("message", "Desconectado de la página con éxito.");
 		}
 		modelAndView.setViewName("login");
 		return modelAndView;
@@ -61,7 +61,7 @@ public class LoginController {
 	    	modelAndView.addObject("msg",
 	                "You do not have permission to access this page!");
 	    }
-		modelAndView.setViewName("403Page");
+		modelAndView.setViewName("403page");
 		return modelAndView;
 	}
 	

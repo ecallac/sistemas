@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.BeanParser;
+import com.security.Module;
 import com.security.Permission;
 import com.security.Role;
 import com.security.web.bean.PermissionRoleView;
@@ -207,7 +208,11 @@ public class RoleController {
 		Map<String, Object> map = new HashMap<String, Object>();
         map.put("validated", true);
         try {
-        	roleIntegration.savePermissionAssociation(getRoleAndPermissions(view.getRoleId(), view.getPermissionIds()));
+        	Long moduleId=null;
+        	if (StringUtils.isNotBlank(view.getModuleId())) {
+        		moduleId = Long.valueOf(view.getModuleId());
+			} 
+        	roleIntegration.savePermissionAssociation(getRoleAndPermissions(view.getRoleId(), view.getPermissionIds()),moduleId);
 
             map.put(SecurityConstants.STATUS, SecurityConstants.OK);
             map.put(SecurityConstants.MESSAGE, "Your record have been updated successfully at "+SecurityUtil.dateToString(new Date(), "yyyy-MM-dd HH:mm:ss"));

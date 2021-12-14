@@ -75,7 +75,7 @@ public class RoleController {
     }
     
     @RequestMapping(value = "/saveRolePermissionAssociation", method = {RequestMethod.POST})
-    public ResponseEntity<?> saveRolePermissionAssociation(@RequestBody Role bean) {
+    public ResponseEntity<?> saveRolePermissionAssociation(@RequestParam(value = "id", required = false) Long id,@RequestBody Role bean) {
     	try {
     		securityFacade.saveRolePermission(bean);
     		return new ResponseEntity(HttpStatus.OK);

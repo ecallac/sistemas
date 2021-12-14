@@ -1,11 +1,68 @@
 	function showSuccessMessage(message){
-    	$.bootstrapGrowl("<b>Success!</b> "+message, { type: 'success' });
-    	
+//    	$.bootstrapGrowl("<b>Success!</b> "+message, { type: 'success' });
+		var notyf = new Notyf();
+    	notyf.success({
+		    message: message,
+		    dismissible: true,
+		    ripple: false,
+		   duration:5000,
+		   position: {
+			x: 'center',
+			y: 'bottom'
+		}
+		  });
     }
     function showErrorMessage(message){
-    	$.bootstrapGrowl("<b>Error!</b> "+message, { type: 'danger' });
-    	
+//    	$.bootstrapGrowl("<b>Error!</b> "+message, { type: 'danger' });
+    	var notyf = new Notyf();
+    	notyf.error({
+			    message: message,
+			    dismissible: true,
+			    ripple: false,
+			   duration:5000,
+			   position: {
+				x: 'center',
+				y: 'bottom'
+			}
+			  });
     }
+    
+    function alertError(message){
+		$.confirm({
+		    title: 'I found an error!',
+		    content: message,
+		    type: 'red',
+		    typeAnimated: true,
+		    buttons: {
+		        ok: {
+		            text: 'OK',
+		            btnClass: 'btn-red',
+		            action: function(){
+		            }
+		        }
+		    }
+		});
+	}
+    
+    function processjqXHR(jqXHR){
+		console.log(jqXHR);
+ 	   if (jqXHR.status === 0) {
+ 		   alertError('Error: Not connect.\n Verify Network.');
+        } else if (jqXHR.status == 404) {
+        	alertError('Error: Requested page not found. [404]');
+        } else if (jqXHR.status == 500) {
+        	alertError('Error: Internal Server Error [500].');
+        } else if (exception === 'parsererror') {
+        	alertError('Error: Requested JSON parse failed.');
+        } else if (exception === 'timeout') {
+        	alertError('Error: Time out error.');
+        } else if (exception === 'abort') {
+        	alertError('Error: Ajax request aborted.');
+        } else {
+        	alertError('Error: Uncaught Error.\n' + jqXHR.responseText);
+        }
+	}
+    
     function showErrorMessageByField(object,key,message,extra){
     	$(object+'[id='+key+']').after('<span class="bindingError" style="color:red;font-weight: bold;" id="bindingError'+key+'" '+extra+'>'+message+'</span>');
     }
@@ -55,8 +112,7 @@
 		    },
                success: successFunction,
                error: function (jqXHR, exception) {
-                 console.log(jqXHR);
-			  alert('Error: ' + jqXHR);
+            	   processjqXHR(jqXHR);
 		  }  
         });
 	}
@@ -78,8 +134,7 @@
 		    },
                success: successFunction,
                error: function (jqXHR, exception) {
-                 console.log(jqXHR);
-			  alert('Error: ' + jqXHR);
+            	   processjqXHR(jqXHR);
 		  }  
         });
 	}
@@ -100,8 +155,7 @@
 		    },
                success: successFunction,
                error: function (jqXHR, exception) {
-                 console.log(jqXHR);
-			  alert('Error: ' + jqXHR);
+            	   processjqXHR(jqXHR);
 		  }  
         });
 	}

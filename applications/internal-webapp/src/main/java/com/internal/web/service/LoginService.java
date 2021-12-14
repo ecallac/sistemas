@@ -22,7 +22,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import com.common.Persona;
 import com.internal.web.service.integration.PermissionIntegration;
+import com.internal.web.service.integration.PersonaIntegration;
 import com.internal.web.service.integration.UserIntegration;
 import com.internal.web.utils.Constants;
 import com.security.Permission;
@@ -40,6 +42,9 @@ public class LoginService implements UserDetailsService {
 	static final String ROLE_PREFIX_SPRING_ECURITY="ROLE_";
 	@Autowired
 	UserIntegration userIntegration;
+	
+	@Autowired
+	PersonaIntegration personaIntegration;
 	
 	@Autowired
 	PermissionIntegration permissionIntegration;
@@ -96,6 +101,18 @@ public class LoginService implements UserDetailsService {
 		List sessionlist = (List) httpSession.getAttribute("permissions");
 		if (CollectionUtils.isEmpty(sessionlist)) {
 			httpSession.setAttribute("permissions", getPermissions());
+		}
+		
+		User user =  (User) httpSession.getAttribute("user");
+		if (user==null) {
+			user = userIntegration.findByUserNameActive(principal.getName());
+			httpSession.setAttribute("user", user);
+			Persona  person = (Persona) httpSession.getAttribute("person");
+			if (person==null) {
+				person = personaIntegration.findByEntidadRolId(user.getEntidadRoleId());
+				httpSession.setAttribute("person", person);
+			}
+			
 		}
 	}
 	

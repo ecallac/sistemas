@@ -22,6 +22,9 @@ public class UserIntegration extends ServiceIntegrationAbstract<User> {
 	
 	String basePath="user";
 	
+	public User findByUserName(String userName) {
+		return getObjectFromGetRequest(appsecurityapi+"/"+basePath+"/findByUserName?userName="+userName, User.class);
+	}
 	public User findByUserNameActive(String userName) {
 		return getObjectFromGetRequest(appsecurityapi+"/"+basePath+"/findByUserNameActive?userName="+userName, User.class);
 	}
@@ -30,5 +33,8 @@ public class UserIntegration extends ServiceIntegrationAbstract<User> {
 	}
 	public void saveSession(Session bean) {
 		setObjectToPostRequest(appsecurityapi+"/"+basePath+"/saveSession", bean);
+	}
+	public User findById(Long id) {
+		return getObjectFromGetRequest(appsecurityapi+"/"+basePath+"/findById?id="+id, User.class);
 	}
 }
