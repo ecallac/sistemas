@@ -26,18 +26,18 @@ import com.common.TipoBase;
 public class TipoBaseIntegration extends ServiceIntegrationAbstract<TipoBase> {
 	@Autowired
 	@Value("${app.common.api}")
-	private String appsecurityapi;
+	private String api;
 	
 	String basePath="tipobase";
 	
 	public TipoBase findById(Long id) {
-		return getObjectFromGetRequest(appsecurityapi+"/"+basePath+"/findById?id="+id, TipoBase.class);
+		return getObjectFromGetRequest(api+"/"+basePath+"/findById?id="+id, TipoBase.class);
 	}
 	public TipoBase findByCodigo(String codigo) {
-		return getObjectFromGetRequest(appsecurityapi+"/"+basePath+"/findByCodigo?codigo="+codigo, TipoBase.class);
+		return getObjectFromGetRequest(api+"/"+basePath+"/findByCodigo?codigo="+codigo, TipoBase.class);
 	}
 	public List<TipoBase> findByCategoriaActivos(String categoria) {
-		return getObjectListFromGetRequest(appsecurityapi+"/"+basePath+"/findByCategoriaActivos?categoria="+categoria,new TypeReference<List<TipoBase>>(){});
+		return getObjectListFromGetRequest(api+"/"+basePath+"/findByCategoriaActivos?categoria="+categoria,new TypeReference<List<TipoBase>>(){});
 	}
 	public Map<String, TipoBase> findByCategoriaActivosMap(String categoria) {
 		List<TipoBase> tipoBases = findByCategoriaActivos(categoria);

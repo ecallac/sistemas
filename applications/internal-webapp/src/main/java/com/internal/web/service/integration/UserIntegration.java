@@ -18,23 +18,23 @@ import com.security.User;
 public class UserIntegration extends ServiceIntegrationAbstract<User> {
 	@Autowired
 	@Value("${app.security.api}")
-	private String appsecurityapi;
+	private String api;
 	
 	String basePath="user";
 	
 	public User findByUserName(String userName) {
-		return getObjectFromGetRequest(appsecurityapi+"/"+basePath+"/findByUserName?userName="+userName, User.class);
+		return getObjectFromGetRequest(api+"/"+basePath+"/findByUserName?userName="+userName, User.class);
 	}
 	public User findByUserNameActive(String userName) {
-		return getObjectFromGetRequest(appsecurityapi+"/"+basePath+"/findByUserNameActive?userName="+userName, User.class);
+		return getObjectFromGetRequest(api+"/"+basePath+"/findByUserNameActive?userName="+userName, User.class);
 	}
 	public void savePasswordById(User bean) {
-		setObjectToPostRequest(appsecurityapi+"/"+basePath+"/savePasswordById", bean);
+		setObjectToPostRequest(api+"/"+basePath+"/savePasswordById", bean);
 	}
 	public void saveSession(Session bean) {
-		setObjectToPostRequest(appsecurityapi+"/"+basePath+"/saveSession", bean);
+		setObjectToPostRequest(api+"/"+basePath+"/saveSession", bean);
 	}
 	public User findById(Long id) {
-		return getObjectFromGetRequest(appsecurityapi+"/"+basePath+"/findById?id="+id, User.class);
+		return getObjectFromGetRequest(api+"/"+basePath+"/findById?id="+id, User.class);
 	}
 }

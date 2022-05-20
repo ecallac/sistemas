@@ -21,11 +21,11 @@ import com.security.Permission;
 public class PermissionIntegration extends ServiceIntegrationAbstract<Permission> {
 	@Autowired
 	@Value("${app.security.api}")
-	private String appsecurityapi;
+	private String api;
 	
 	String basePath="permission";
 	
 	public List<Permission> findEnabledListByModuleName(String moduleName) {
-		return getObjectListFromGetRequest(appsecurityapi+"/"+basePath+"/findEnabledListByModuleName?moduleName="+moduleName,new TypeReference<List<Permission>>(){});
+		return getObjectListFromGetRequest(api+"/"+basePath+"/findEnabledListByModuleName?moduleName="+moduleName,new TypeReference<List<Permission>>(){});
 	}
 }
