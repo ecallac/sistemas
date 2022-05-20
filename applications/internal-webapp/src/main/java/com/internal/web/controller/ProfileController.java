@@ -5,6 +5,7 @@ package com.internal.web.controller;
 
 import java.security.Principal;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -25,11 +26,13 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.BeanParser;
 import com.common.Persona;
+import com.common.Telefono;
 import com.common.TipoBase;
 import com.internal.web.beans.PasswordView;
 import com.internal.web.beans.ProfileView;
 import com.internal.web.service.LoginService;
 import com.internal.web.service.integration.PersonaIntegration;
+import com.internal.web.service.integration.TelefonoIntegration;
 import com.internal.web.service.integration.TipoBaseIntegration;
 import com.internal.web.service.integration.UserIntegration;
 import com.internal.web.utils.Constants;
@@ -56,6 +59,9 @@ public class ProfileController {
 	
 	@Autowired
 	TipoBaseIntegration tipoBaseIntegration;
+	
+	@Autowired
+	TelefonoIntegration telefonoIntegration;
 	
 	@Autowired
     private PasswordEncoder passwordEncoder;
@@ -88,6 +94,8 @@ public class ProfileController {
         persona.setTipoDocumentoIdentificaion(tipoBaseIntegration.findByCodigo(persona.getTipoDocumentoIdentificaion()).getDescripcion());
         persona.setTipoEstadoCivil(tipoBaseIntegration.findByCodigo(persona.getTipoEstadoCivil()).getDescripcion());
         map.put("persona", persona);
+        List<Telefono> telefonos = telefonoIntegration.findByEntidadId(persona.getEntidad().getId());
+        map.put("telefonos", telefonos);
         map.put("view", view);
         map.put(Constants.STATUS, Constants.OK);
         return map;

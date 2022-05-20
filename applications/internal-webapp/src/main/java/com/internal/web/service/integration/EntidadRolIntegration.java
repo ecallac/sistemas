@@ -19,11 +19,11 @@ public class EntidadRolIntegration extends ServiceIntegrationAbstract<EntidadRol
 
 	@Autowired
 	@Value("${app.common.api}")
-	private String appsecurityapi;
+	private String api;
 	
 	String basePath="entidadRol";
 	
 	public EntidadRol save(EntidadRol entidadRol) {
-		return setObjectToPostRequest(appsecurityapi+"/"+basePath+"/save", entidadRol,EntidadRol.class);
+		return setObjectToPostRequest(api+"/"+basePath+"/save", entidadRol,EntidadRol.class);
 	}
 }

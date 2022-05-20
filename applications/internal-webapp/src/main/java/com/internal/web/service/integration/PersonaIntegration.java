@@ -22,17 +22,17 @@ public class PersonaIntegration extends ServiceIntegrationAbstract<Persona> {
 
 	@Autowired
 	@Value("${app.common.api}")
-	private String appsecurityapi;
+	private String api;
 	
 	String basePath="entidad";
 	
 	public Persona findByEntidadRolId(Long entidadRolId) {
-		return getObjectFromGetRequest(appsecurityapi+"/"+basePath+"/findPersonaByEntidadRolId?entidadRolId="+entidadRolId, Persona.class);
+		return getObjectFromGetRequest(api+"/"+basePath+"/findPersonaByEntidadRolId?entidadRolId="+entidadRolId, Persona.class);
 	}
 	public List<Persona> findByTermino(String termino) {
-		return getObjectListFromGetRequest(appsecurityapi+"/"+basePath+"/findPersonaByTermino?termino="+termino,new TypeReference<List<Persona>>(){});
+		return getObjectListFromGetRequest(api+"/"+basePath+"/findPersonaByTermino?termino="+termino,new TypeReference<List<Persona>>(){});
 	}
 	public Persona save(Persona persona) {
-		return setObjectToPostRequest(appsecurityapi+"/"+basePath+"/savePersona", persona,Persona.class);
+		return setObjectToPostRequest(api+"/"+basePath+"/savePersona", persona,Persona.class);
 	}
 }

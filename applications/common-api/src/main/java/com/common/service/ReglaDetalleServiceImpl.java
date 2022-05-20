@@ -5,14 +5,23 @@ package com.common.service;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.common.domain.ReglaDetalle;
+import com.common.repository.ReglaDetalleRepository;
 
 /**
  * @author efrain.calla
  *
  */
+@Service
+@Transactional
 public class ReglaDetalleServiceImpl implements ReglaDetalleService {
 
+	@Autowired
+	ReglaDetalleRepository reglaDetalleRepository; 
 	/* (non-Javadoc)
 	 * @see com.common.service.BaseService#findList()
 	 */
