@@ -156,13 +156,14 @@
     		title: exportTittle
     	};
     	var printCounter = 0;
-    	$(tableId).DataTable( {
-    		dom: 'Bfrtip',
+    	var table = $(tableId).DataTable( {
+    		//dom: 'Bfrtip',
     		"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
     		destroy: true,
 //    				"bProcessing" : true,
     		"data": jsonData,
-    		
+			lengthChange: false,
+			responsive: true,
     		buttons: [
     			'pageLength',
     			$.extend( true, {}, buttonCommon, {
@@ -200,21 +201,21 @@
     		"columns": jsonColumns,
     		"columnDefs": jsonColumnDefs
     	} );
+		table.buttons().container().appendTo( tableId+"_wrapper .col-md-6:eq(0)");
     }
 	
 	function createTableWithoutButtons(tableId,jsonData,jsonColumns,jsonColumnDefs){
     	var printCounter = 0;
-    	$(tableId).DataTable( {
-    		dom: 'Bfrtip',
+		var table = $(tableId).DataTable( {
+    		// dom: 'lfr<""t>ip',
     		"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
     		destroy: true,
 //    				"bProcessing" : true,
     		"data": jsonData,
-    		
-    		buttons: [
-    			'pageLength'
-    		],
+			lengthChange: true,
+			responsive: true,
     		"columns": jsonColumns,
     		"columnDefs": jsonColumnDefs
     	} );
+		table.buttons().container().appendTo( tableId+"_wrapper .col-md-6:eq(0)");
     }

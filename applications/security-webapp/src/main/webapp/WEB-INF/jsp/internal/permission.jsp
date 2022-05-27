@@ -161,6 +161,7 @@
        			var columnsExport = [ 0, 1, 2, 3, 4, 5, 6];
        			var jsonColumnDefs = [
        	            {
+						data: null,
        	            	"targets": 7,
        	                "render": function ( data, type, row ) {
       	                var checkedActive='';
@@ -171,10 +172,11 @@
        	                }
        	            },
        	        	{
+						data: null,
        	            	"targets": 8,
        	                "render": function ( data, type, row ) {
        	                    return "<td>"+
-		       	                 makeButton("Edit","edit("+row.id+")","data-toggle='modal' data-target='#Form'","<c:url value='/resources/img/icons/black/doc_edit_icon&16.png' />")+
+		       	                 makeButton("Edit","edit("+row.id+")","data-bs-toggle='modal' data-bs-target='#Form'","<c:url value='/resources/img/icons/black/doc_edit_icon&16.png' />")+
 // 		       	                 makeButton("Delete","remove("+row.id+")","","<c:url value='/resources/img/icons/black/trash_icon&16.png' />")+
 //        	                    "<button title='Edit' onclick='edit("+row.id+")' type='button' class='btn btn-link btn-xs toltip' data-toggle='modal' data-target='#Form'><img src='<c:url value='/resources/img/icons/black/doc_edit_icon&16.png' />'></button>"+
 //            	                 "<button title='Delete' onclick='remove("+row.id+")' type='button' class='btn btn-link btn-xs toltip'><img src='<c:url value='/resources/img/icons/black/trash_icon&16.png' />'></button> "
@@ -315,122 +317,125 @@
 
 <div class="panel panel-default">
 <!-- <div class="panel-heading">User List Display tag</div> -->
-  <div class="panel-body">   
-   
-<div id="button_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4 no-footer">
-<div class="dt-buttons btn-group">              
-<button data-target="#Form" title="Add New" type="button" class="btn btn-default toltip" data-toggle="modal" onclick="clearFields();">
-		<img src="<c:url value='/resources/img/icons/black/doc_new_icon&16.png' />"> Add New
-	</button>
-</div>
-</div>
-<br>
-   
-    
+  <div class="panel-body">
 
- <table id="table" align="center" class="table table-striped table-hover table-bordered">  
-<thead>
-<tr><th>Id</th><th>Module</th><th>Parent</th><th>Name</th><th>Description</th><th>Path</th><th>Type</th><th>Enabled</th><th>Actions</th></tr>  
-</thead>
-</table>
+	  <div class="card flex-fill">
+		  <div class="card-header">
+			  <div class="dt-buttons btn-group">
+				  <button data-bs-target="#Form" title="Add New" type="button" class="btn btn-light toltip" data-bs-toggle="modal" onclick="clearFields();">
+					  <img src="<c:url value='/resources/img/icons/black/doc_new_icon&16.png' />"> Add New
+				  </button>
+			  </div>
+		  </div>
+		  <div class="card-body">
+			  <table id="table" align="center" class="table table-striped table-hover table-bordered" style="width: 100%">
+				  <thead>
+				  <tr><th>Id</th><th>Module</th><th>Parent</th><th>Name</th><th>Description</th><th>Path</th><th>Type</th><th>Enabled</th><th>Actions</th></tr>
+				  </thead>
+			  </table>
+		  </div>
+	  </div>
+
+
 
 </div></div>
 
 
 <!-- </div> -->
 
-<div class="modal fade" id="Form" tabindex="-1" role="dialog">
-  <div class="modal-dialog" role="document">
-  
- <%--  <form id="permissionView" method="post" > --%>
-  
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">Permission</h4>
-      </div>
-      <div class="modal-body">
 
-		<input type="hidden" id="id" name="id"/>
 
-		<div class="form-container">
-		        
-		        
-		        
-		        
-		        <form class="form-horizontal">
-		        	<div class="form-group">
-					    <label for="moduleId" class="col-sm-3 control-label">Module</label>
-					    <div class="col-sm-7">
-					      <select id="moduleId" class="form-control selectpicker" data-style="btn-default" data-live-search="true">
-					      	<option value="">-- Select Option --</option>
-					      </select>
-					    </div>
-					</div>
-					<div class="form-group">
-					    <label for="parentPermissionId" class="col-sm-3 control-label">Parent</label>
-					    <div class="col-sm-7">
-					      <select id="parentPermissionId" class="form-control">
-					      	<option value="">-- Select Option --</option>
-					      </select>
-					    </div>
-					</div>
-					<div class="form-group">
-					    <label for="type" class="col-sm-3 control-label">Permission Type</label>
-					    <div class="col-sm-7">
-					      <select id="type" class="form-control">
-					      	<option value="">-- Select Option --</option>
-					      </select>
-					    </div>
-					</div>
-				  <div class="form-group">
-				    <label for="name" class="col-sm-3 control-label">Name</label>
-				    <div class="col-sm-7">
-				      <input type="text" class="form-control" id="name" placeholder="Name">
-				    </div>
-				  </div>
-				  <div class="form-group">
-				    <label for="description" class="col-sm-3 control-label">Description</label>
-				    <div class="col-sm-7">
-				      <input type="text" class="form-control" id="description" placeholder="Description">
-				    </div>
-				  </div>
-				  <div class="form-group">
-				    <label for="author" class="col-sm-3 control-label">Path</label>
-				    <div class="col-sm-7">
-				      <input type="text" class="form-control" id="path" placeholder="Path">
-				    </div>
-				  </div>
-				  <div class="form-group">
-				    <label for="enabled" class="col-sm-3 control-label">Enabled</label>
-				    <div class="col-sm-7">
-				      <div class="checkbox">
-				        <label>
-				          <input type="checkbox" id="enabled" name="enabled" />
-				        </label>
-				      </div>
-				    </div>
-				  </div>
-			  </form>
-		        
-		        
-		        
-		       
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="Form" tabindex="-1" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title">Permission</h4>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+
+				<input type="hidden" id="userId" name="userId"/>
+
+				<div class="form-container">
+
+
+
+
+					<form class="form-horizontal">
+						<div class="mb-3 row">
+							<label for="moduleId" class="col-sm-3 col-form-label">Module</label>
+							<div class="col-sm-7">
+								<select id="moduleId" class="form-control selectpicker" data-style="btn-default" data-live-search="true">
+									<option value="">-- Select Option --</option>
+								</select>
+							</div>
+						</div>
+						<div class="mb-3 row">
+							<label for="parentPermissionId" class="col-sm-3 col-form-label">Parent</label>
+							<div class="col-sm-7">
+								<select id="parentPermissionId" class="form-control">
+									<option value="">-- Select Option --</option>
+								</select>
+							</div>
+						</div>
+						<div class="mb-3 row">
+							<label for="type" class="col-sm-3 col-form-label">Permission Type</label>
+							<div class="col-sm-7">
+								<select id="type" class="form-control">
+									<option value="">-- Select Option --</option>
+								</select>
+							</div>
+						</div>
+						<div class="mb-3 row">
+							<label for="name" class="col-sm-3 col-form-label">Name</label>
+							<div class="col-sm-7">
+								<input type="text" class="form-control" id="name" placeholder="Name">
+							</div>
+						</div>
+						<div class="mb-3 row">
+							<label for="description" class="col-sm-3 col-form-label">Description</label>
+							<div class="col-sm-7">
+								<input type="text" class="form-control" id="description" placeholder="Description">
+							</div>
+						</div>
+						<div class="mb-3 row">
+							<label for="author" class="col-sm-3 col-form-label">Path</label>
+							<div class="col-sm-7">
+								<input type="text" class="form-control" id="path" placeholder="Path">
+							</div>
+						</div>
+						<div class="mb-3 row">
+							<label for="enabled" class="col-sm-3 col-form-label">Enabled</label>
+							<div class="col-sm-7">
+								<div class="checkbox">
+									<label>
+										<input type="checkbox" id="enabled" name="enabled" />
+									</label>
+								</div>
+							</div>
+						</div>
+					</form>
+
+
+
+
+				</div>
+
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+				<button type="button" class="btn btn-primary" onclick="save();">Guardar</button>
+			</div>
 		</div>
-
-
-
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" onclick="save();">Save</button>
-      </div>
-      
-    </div>
-    
-    <%-- </form> --%>
-  </div>
+	</div>
 </div>
+
+
+
 
 
 

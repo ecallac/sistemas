@@ -13,42 +13,99 @@
     <title><tiles:getAsString name="title" /></title>
     <jsp:include page="../../includes/styles.jsp" />
     <style type="text/css">
+    *{
+	  margin: 0;
+	  padding: 0;
+	  box-sizing: border-box;
+	  font-family: "Poppins" , sans-serif;
+	}
+
+    .content {
+	    direction: ltr;
+	    flex: 1;
+	    padding: 2.5rem 2.5rem 1.5rem;
+	}
+	
+	.sidebar {
+	    background: #293042;
+	    direction: ltr;
+	    transition: margin-left .35s ease-in-out,left .35s ease-in-out,margin-right .35s ease-in-out,right .35s ease-in-out;
+	}
+	
+	.main {
+	    display: flex;
+	    flex-direction: column;
+	    min-height: 100vh;
+	    min-width: 0;
+	    transition: margin-left .35s ease-in-out,left .35s ease-in-out,margin-right .35s ease-in-out,right .35s ease-in-out;
+	    width: 100%;
+	    padding-right: 0 !important;
+	    padding-left: 0 !important;
+	}
+	
+
     table{
     	font-size: small;
     }
     </style>
     
     <script type="text/javascript">
+    var sessionContexPath = "<%=request.getContextPath() %>";
+    
     $(document).ready(function(){
-        $('[data-toggle="tooltip"]').tooltip();
-        $('.toltip').tooltip({placement : 'bottom'});
+    	var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+          return new bootstrap.Tooltip(tooltipTriggerEl)
+        });
+    	
+    	$('nav').stalker();
         
-        $('.modal').draggable({
-    	  	cursor: "move",
-    	    handle: ".modal-header"
-    	  });
+//         var menu_btn = document.querySelector("#menu-btn");
+//         var sidebar = document.querySelector("#sidebar");
+//         var container = document.querySelector(".main");
+        
+//         $("#menu-btn").click(function() {
+//         	$("#sidebar").animate({width: 'toggle'}, "slow");
+//           });
     });
-    $('#bar').stalker();
     </script>
 </head>
   
-<body>
+<body data-theme="default" data-layout="fluid" data-sidebar-position="left" data-sidebar-behavior="sticky">
 
-<table border="0" width="100%" height=100%;" cellspacing="0" cellpadding="0" style="border-color: white;">
-<tbody>
-<tr>
-  <td style="height: 50px;width: 100%;"><tiles:insertAttribute name="header" /></td>
-</tr>
-<tr>
-<td style="height: 15px;width: 100%;"><tiles:insertAttribute name="navigation" /></td>
-</tr>
-<tr>
-<td style="height: 100%;width: 100%;" valign="top"><tiles:insertAttribute name="body" /></td>
-</tr>
-<tr>
-<td style="height: 15px;width: 100%;"><tiles:insertAttribute name="footer" /></td>
-</tr>
-</tbody>
-</table>
+<div class="wrapper">
+
+<div class="container-fluid">
+    <div class="row flex-nowrap">
+        
+        
+<%--         <tiles:insertAttribute name="menu" /> --%>
+        
+        <div class="main">
+        
+	        <div class="header"><tiles:insertAttribute name="header" /></div>
+	        <div class="navigation"><tiles:insertAttribute name="navigation" /></div>
+	        <div class="content"><tiles:insertAttribute name="body" /></div>
+	        <div class="footer"><tiles:insertAttribute name="footer" /></div>
+            
+            
+            
+
+
+
+
+        </div>
+    </div>
+</div>
+
+
+</div>
+
+
+
+
+
+    
+
 </body>
 </html>

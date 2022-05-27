@@ -322,6 +322,7 @@
        			var columnsExport = [ 0, 1, 2, 3, 4 , 5];
        			var jsonColumnDefs = [
        	        	{
+						data: null,
        	            	"targets": 6,
        	                "render": function ( data, type, row ) {
 //        	                    return "<td><button title='Edit' onclick='edit("+row.id+")' type='button' class='btn btn-link btn-xs toltip' data-toggle='modal' data-target='#EditUser'><img src='<c:url value='/resources/img/icons/black/doc_edit_icon&16.png' />'></button>"+
@@ -330,10 +331,10 @@
 //            	             "<button title='Change Roles by User' onclick='editUserRole("+row.id+")' type='button' class='btn btn-link btn-xs toltip' data-toggle='modal' data-target='#EditUserRole'><img src='<c:url value='/resources/img/icons/black/cogs_icon&16.png' />'></button></td>"
 //            	              ;
        	                 return "<td>"+
-       	                	makeButton("Edit","edit("+row.id+")","data-toggle='modal' data-target='#EditUser'","<c:url value='/resources/img/icons/black/doc_edit_icon&16.png' />")+
+       	                	makeButton("Edit","edit("+row.id+")","data-bs-toggle='modal' data-bs-target='#EditUser'","<c:url value='/resources/img/icons/black/doc_edit_icon&16.png' />")+
 //        	              		makeButton("Delete","remove("+row.id+")","","<c:url value='/resources/img/icons/black/trash_icon&16.png' />")+
-       	           			makeButton("Change Password","editPassword("+row.id+")","data-toggle='modal' data-target='#EditUserPassword'","<c:url value='/resources/img/icons/black/key_icon&16.png' />")+
-       	       				makeButton("Change Roles by User","editUserRole("+row.id+")","data-toggle='modal' data-target='#EditUserRole'","<c:url value='/resources/img/icons/black/cogs_icon&16.png' />")
+       	           			makeButton("Change Password","editPassword("+row.id+")","data-bs-toggle='modal' data-bs-target='#EditUserPassword'","<c:url value='/resources/img/icons/black/key_icon&16.png' />")+
+       	       				makeButton("Change Roles by User","editUserRole("+row.id+")","data-bs-toggle='modal' data-bs-target='#EditUserRole'","<c:url value='/resources/img/icons/black/cogs_icon&16.png' />")
        	        			"</td>";
        	              		;
        	                }
@@ -367,6 +368,7 @@
    		        ];
        			var jsonColumnDefs = [
        				{
+						data: null,
        	            	"targets": 2,
        	                "render": function ( data, type, row) {
       	                var checkedActive='';
@@ -595,29 +597,26 @@
 
 <div class="panel panel-default">
 <!-- <div class="panel-heading">User List Display tag</div> -->
-  <div class="panel-body">   
-   
-<div id="button_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4 no-footer">
-<div class="dt-buttons btn-group">
-	<button data-target="#AddUser" title="Add a new user" type="button" class="btn btn-default toltip" data-toggle="modal" onclick="clearFields();">
-		<img src="<c:url value='/resources/img/icons/black/user_icon&16.png' />"> Add New User
-	</button>
-	
-	
-	
-<!-- 	<button data-target="#AllChangePassword" title="Change Unknown User Password" type="button" class="btn btn-default toltip" data-toggle="modal" onclick="clearPassFields();"> -->
-<%-- 		<img src="<c:url value='/resources/img/icons/black/key_icon&16.png' />"> Change Password --%>
-<!-- 	</button> -->
-</div>
-</div>
-<br>
-    
+  <div class="panel-body">
 
- <table id="table" align="center" class="table table-striped table-hover table-bordered">  
-<thead>
-<tr><th>Id</th><th>Entity Name</th><th>Username</th><th>status</th><th>question</th><th>answer</th><th>Actions</th></tr>  
-</thead>
-</table>
+
+	  <div class="card flex-fill">
+		  <div class="card-header">
+			  <div class="dt-buttons btn-group">
+				  <button data-bs-target="#Form" title="Add New" type="button" class="btn btn-light toltip" data-bs-toggle="modal" onclick="clearFields();">
+					  <img src="<c:url value='/resources/img/icons/black/doc_new_icon&16.png' />"> Add New
+				  </button>
+			  </div>
+		  </div>
+		  <div class="card-body">
+			  <table id="table" align="center" class="table table-striped table-hover table-bordered" style="width: 100%">
+				  <thead>
+				  <tr><th>Id</th><th>Entity Name</th><th>Username</th><th>status</th><th>question</th><th>answer</th><th>Actions</th></tr>
+				  </thead>
+			  </table>
+		  </div>
+	  </div>
+	  
 
 <br/> 
    Custom Export:  
@@ -626,161 +625,77 @@
 </div></div>
 
 
-<!-- </div> -->
 
-<div class="modal fade" id="AddUser" tabindex="-1" role="dialog">
-  <div class="modal-dialog" role="document">
-  
- <%--  <form id="moduleView" method="post" > --%>
-  
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">User</h4>
-      </div>
-      <div class="modal-body">
+<!-- Modal -->
+<div class="modal fade" id="Form" tabindex="-1" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title">User</h4>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
 
-		<input type="hidden" id="Aid" name="Aid"/>
+				<div class="form-container">
 
-		<div class="form-container">
-		        
-		        
-		        
-		        
-		        <form class="form-horizontal">
-		        	<div class="form-group">
-				    <label for="AfullName" class="col-sm-3 control-label">Full Name</label>
-				    <div class="col-sm-7">
-				      <input type="text" class="form-control" id="AfullName" placeholder="Full Name"><button type="button" data-toggle="modal" class="btn btn-link" title="Register New" data-target="#AddPerson" onclick="clearPersonFields();">Register New</button>
-				      <input type="hidden" class="form-control" id="entidadId">
-				    </div>
-				  </div>
-				  <div class="form-group" id="div-AuserName">
-				    <label for="AuserName" class="col-sm-3 control-label">Username</label>
-				    <div class="col-sm-7">
-				      <input type="text" class="form-control" id="AuserName" placeholder="Username" onchange="verifyUserName(this);">
-				    </div>
-				  </div>
-				  <div class="form-group">
-				    <label for="Apassword" class="col-sm-3 control-label">Password</label>
-				    <div class="col-sm-7">
-				      <input type="password" class="form-control" id="Apassword" placeholder="Password">
-				    </div>
-				  </div>
-				  <div class="form-group">
-				    <label for="ApasswordAgain" class="col-sm-3 control-label">Password Again</label>
-				    <div class="col-sm-7">
-				      <input type="password" class="form-control" id="ApasswordAgain" placeholder="Password Again">
-				    </div>
-				  </div>
-				  <div class="form-group">
-				    <label for="Aquestion" class="col-sm-3 control-label">Question</label>
-				    <div class="col-sm-7">
-				      <input type="text" class="form-control" id="Aquestion" placeholder="Question">
-				    </div>
-				  </div>
-				  <div class="form-group">
-				    <label for="Aanswer" class="col-sm-3 control-label">Answer</label>
-				    <div class="col-sm-7">
-				      <input type="text" class="form-control" id="Aanswer" placeholder="Answer">
-				    </div>
-				  </div>
-				  <div class="form-group">
-				    <label for="Astatus" class="col-sm-3 control-label">Status</label>
-				    <div class="col-sm-7">
-				      <select id="Astatus" class="form-control input-sm">
-					      	<option value="">-- Select Option --</option>
-					      </select>
-				    </div>
-				  </div>
-			  </form>
-		        
-		        
-		        
-		       
+					<form class="form-horizontal">
+						<input type="hidden" id="Aid" name="Aid"/>
+						<div class="mb-3 row">
+							<label for="AfullName" class="col-sm-3 col-form-label">Full Name</label>
+							<div class="col-sm-7">
+								<input type="text" class="form-control" id="AfullName" placeholder="Full Name"><button type="button" data-bs-toggle="modal" class="btn btn-link" title="Register New" data-bs-target="#AddPerson" onclick="clearPersonFields();">Register New</button>
+								<input type="hidden" class="form-control" id="entidadId">
+							</div>
+						</div>
+						<div class="mb-3 row" id="div-AuserName">
+							<label for="AuserName" class="col-sm-3 col-form-label">Username</label>
+							<div class="col-sm-7">
+								<input type="text" class="form-control" id="AuserName" placeholder="Username" onchange="verifyUserName(this);">
+							</div>
+						</div>
+						<div class="mb-3 row">
+							<label for="Apassword" class="col-sm-3 col-form-label">Password</label>
+							<div class="col-sm-7">
+								<input type="password" class="form-control" id="Apassword" placeholder="Password">
+							</div>
+						</div>
+						<div class="mb-3 row">
+							<label for="ApasswordAgain" class="col-sm-3 col-form-label">Password Again</label>
+							<div class="col-sm-7">
+								<input type="password" class="form-control" id="ApasswordAgain" placeholder="Password Again">
+							</div>
+						</div>
+						<div class="mb-3 row">
+							<label for="Aquestion" class="col-sm-3 col-form-label">Question</label>
+							<div class="col-sm-7">
+								<input type="text" class="form-control" id="Aquestion" placeholder="Question">
+							</div>
+						</div>
+						<div class="mb-3 row">
+							<label for="Aanswer" class="col-sm-3 col-form-label">Answer</label>
+							<div class="col-sm-7">
+								<input type="text" class="form-control" id="Aanswer" placeholder="Answer">
+							</div>
+						</div>
+						<div class="mb-3 row">
+							<label for="Astatus" class="col-sm-3 col-form-label">Status</label>
+							<div class="col-sm-7">
+								<select id="Astatus" class="form-control input-sm">
+									<option value="">-- Select Option --</option>
+								</select>
+							</div>
+						</div>
+					</form>
+
+				</div>
+
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+				<button type="button" class="btn btn-primary" onclick="save();">Guardar</button>
+			</div>
 		</div>
-
-
-
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" onclick="save();">Save</button>
-      </div>
-      
-    </div>
-    
-    <%-- </form> --%>
-  </div>
-</div>
-
-
-
-<div class="modal fade" id="EditUser" tabindex="-1" role="dialog">
-  <div class="modal-dialog" role="document">
-  
- <%--  <form id="moduleView" method="post" > --%>
-  
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">User</h4>
-      </div>
-      <div class="modal-body">
-
-		<input type="hidden" id="Eid" name="Eid"/>
-
-		<div class="form-container">
-		        
-		        
-		        
-		        
-		        <form class="form-horizontal">
-				  <div class="form-group" id="div-EuserName">
-				    <label for="EuserName" class="col-sm-3 control-label">Username</label>
-				    <div class="col-sm-7">
-				      <input type="text" class="form-control" id="EuserName" placeholder="Username" readonly="readonly">
-				    </div>
-				  </div>
-				  <div class="form-group">
-				    <label for="Equestion" class="col-sm-3 control-label">Question</label>
-				    <div class="col-sm-7">
-				      <input type="text" class="form-control" id="Equestion" placeholder="Question">
-				    </div>
-				  </div>
-				  <div class="form-group">
-				    <label for="Eanswer" class="col-sm-3 control-label">Answer</label>
-				    <div class="col-sm-7">
-				      <input type="text" class="form-control" id="Eanswer" placeholder="Answer">
-				    </div>
-				  </div>
-				  <div class="form-group">
-				    <label for="Estatus" class="col-sm-3 control-label">Status</label>
-				    <div class="col-sm-7">
-				      <select id="Estatus" class="form-control input-sm">
-					      	<option value="">-- Select Option --</option>
-					      </select>
-				    </div>
-				  </div>
-			  </form>
-		        
-		        
-		        
-		       
-		</div>
-
-
-
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" onclick="saveEdit();">Save</button>
-      </div>
-      
-    </div>
-    
-    <%-- </form> --%>
-  </div>
+	</div>
 </div>
 
 
@@ -790,63 +705,56 @@
 
 
 
-<div class="modal fade" id="EditUserPassword" tabindex="-1" role="dialog">
-  <div class="modal-dialog" role="document">
-  
- <%--  <form id="moduleView" method="post" > --%>
-  
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">Change Password</h4>
-      </div>
-      <div class="modal-body">
 
-		<input type="hidden" id="Pid" name="Pid"/>
 
-		<div class="form-container">
-		        
-		        
-		        
-		        
-		        <form class="form-horizontal">
-				  <div class="form-group">
-				    <label for="PuserName" class="col-sm-3 control-label">Username</label>
-				    <div class="col-sm-7">
-				      <input type="text" class="form-control" id="PuserName" placeholder="Username" readonly="readonly">
-				    </div>
-				  </div>
-				  <div class="form-group">
-				    <label for="Ppassword" class="col-sm-3 control-label">Password</label>
-				    <div class="col-sm-7">
-				      <input type="password" class="form-control" id="Ppassword" placeholder="New Password">
-				    </div>
-				  </div>
-				  <div class="form-group">
-				    <label for="PpasswordAgain" class="col-sm-3 control-label">Password Again</label>
-				    <div class="col-sm-7">
-				      <input type="password" class="form-control" id="PpasswordAgain" placeholder="New Password Again">
-				    </div>
-				  </div>
-			  </form>
-		        
-		        
-		        
-		       
+<div class="modal fade" id="EditUser" tabindex="-1" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title">User</h4>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<div class="form-container">
+
+					<form class="form-horizontal">
+						<input type="hidden" id="Eid" name="Eid"/>
+						<div class="mb-3 row" id="div-EuserName">
+							<label for="EuserName" class="col-sm-3 col-form-label">Username</label>
+							<div class="col-sm-7">
+								<input type="text" class="form-control" id="EuserName" placeholder="Username" readonly="readonly">
+							</div>
+						</div>
+						<div class="mb-3 row">
+							<label for="Equestion" class="col-sm-3 col-form-label">Question</label>
+							<div class="col-sm-7">
+								<input type="text" class="form-control" id="Equestion" placeholder="Question">
+							</div>
+						</div>
+						<div class="mb-3 row">
+							<label for="Eanswer" class="col-sm-3 col-form-label">Answer</label>
+							<div class="col-sm-7">
+								<input type="text" class="form-control" id="Eanswer" placeholder="Answer">
+							</div>
+						</div>
+						<div class="mb-3 row">
+							<label for="Estatus" class="col-sm-3 col-form-label">Status</label>
+							<div class="col-sm-7">
+								<select id="Estatus" class="form-control input-sm">
+									<option value="">-- Select Option --</option>
+								</select>
+							</div>
+						</div>
+					</form>
+
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+				<button type="button" class="btn btn-primary" onclick="saveEdit();">Guardar</button>
+			</div>
 		</div>
-
-
-
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" onclick="saveEditPassword();">Save</button>
-      </div>
-      
-    </div>
-    
-    <%-- </form> --%>
-  </div>
+	</div>
 </div>
 
 
@@ -855,55 +763,88 @@
 
 
 
-<div class="modal fade" id="EditUserRole" tabindex="-1" role="dialog">
-  <div class="modal-dialog modal-lg" role="document">
-  
- <%--  <form id="moduleView" method="post" > --%>
-  
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">Edit Role of User</h4>
-      </div>
-      <div class="modal-body">
+<div class="modal fade" id="EditUserPassword" tabindex="-1" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title">Change Password</h4>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<div class="form-container">
 
-		<input type="hidden" id="userId" name="userId"/>
+					<form class="form-horizontal">
+						<input type="hidden" id="Pid" name="Pid"/>
+						<div class="mb-3 row">
+							<label for="PuserName" class="col-sm-3 col-form-label">Username</label>
+							<div class="col-sm-7">
+								<input type="text" class="form-control" id="PuserName" placeholder="Username" readonly="readonly">
+							</div>
+						</div>
+						<div class="mb-3 row">
+							<label for="Ppassword" class="col-sm-3 col-form-label">Password</label>
+							<div class="col-sm-7">
+								<input type="password" class="form-control" id="Ppassword" placeholder="New Password">
+							</div>
+						</div>
+						<div class="mb-3 row">
+							<label for="PpasswordAgain" class="col-sm-3 col-form-label">Password Again</label>
+							<div class="col-sm-7">
+								<input type="password" class="form-control" id="PpasswordAgain" placeholder="New Password Again">
+							</div>
+						</div>
+					</form>
 
-		<div class="form-container">
-		        
-		        <form class="form-horizontal">
-				  
-				  <div class="form-group">
-				    <label for="RuserName" class="col-sm-3 control-label">User : </label>
-				    <div class="col-sm-7">
-				     <label id="RpersonaFullName"  class="control-label"></label> ( <label id="RuserName"  class="control-label"></label> ) 
-				    </div>
-				  </div>
-			  
-		         <table id="roles" align="center" class="table table-striped table-hover table-bordered">  
-				<thead>
-				<tr><th>Id</th><th>Description</th><th>Select</th></tr>  
-				</thead>
-				</table>
-		        
-
-		       </form> 
-		        
-		        
-		       
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+				<button type="button" class="btn btn-primary" onclick="saveEditPassword();">Guardar</button>
+			</div>
 		</div>
+	</div>
+</div>
 
 
 
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      </div>
-      
-    </div>
-    
-    <%-- </form> --%>
-  </div>
+
+
+
+<div class="modal fade" id="EditUserRole" tabindex="-1" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title">Edit Role of User</h4>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<div class="form-container">
+
+					<form class="form-horizontal">
+						<input type="hidden" id="userId" name="userId"/>
+						<div class="mb-3 row">
+							<label for="RuserName" class="col-sm-3 col-form-label">User : </label>
+							<div class="col-sm-7">
+								<label id="RpersonaFullName"  class="col-form-label"></label> ( <label id="RuserName"  class="col-form-label"></label> )
+							</div>
+						</div>
+
+						<table id="roles" align="center" class="table table-striped table-hover table-bordered" style="width: 100%">
+							<thead>
+							<tr><th>Id</th><th>Description</th><th>Select</th></tr>
+							</thead>
+						</table>
+
+
+					</form>
+
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+			</div>
+		</div>
+	</div>
 </div>
 
 
@@ -912,103 +853,88 @@
 
 
 
+<div class="modal fade" id="AddPerson" tabindex="-1" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title">Add Person</h4>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<div class="form-container">
 
-<div class="modal fade" id="AddPerson" tabindex="-1" role="dialog">
-  <div class="modal-dialog" role="document">
-  
- <%--  <form id="moduleView" method="post" > --%>
-  
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">Add Person</h4>
-      </div>
-      <div class="modal-body">
+					<form class="form-horizontal">
+						<input type="hidden" id="tipoEntidadId" value="${tipoEntidadId}">
 
-		<div class="form-container">
-		        
-		        
-		        
-		        
-		        <form class="form-horizontal">
-		        <input type="hidden" id="tipoEntidadId" value="${tipoEntidadId}">
-		        
-		        <div class="form-group">
-				    <label for="tipoDocumentoIdentificaion" class="col-sm-3 control-label">Document Type</label>
-				    <div class="col-sm-7">
-				      <select id="tipoDocumentoIdentificaion" class="form-control input-sm">
-					      	<option value="">-- Select Option --</option>
-					      </select>
-				    </div>
-				  </div>
-				  <div class="form-group">
-				    <label for="numeroidentificacion" class="col-sm-3 control-label">Identification Number</label>
-				    <div class="col-sm-7">
-				      <input type="text" class="form-control" id="numeroidentificacion" placeholder="Identification Number">
-				    </div>
-				  </div>
-				  <div class="form-group">
-				    <label for="nombres" class="col-sm-3 control-label">First Name</label>
-				    <div class="col-sm-7">
-				      <input type="text" class="form-control" id="nombres" placeholder="First Name">
-				    </div>
-				  </div>
-				  <div class="form-group">
-				    <label for="apellidos" class="col-sm-3 control-label">Last Name</label>
-				    <div class="col-sm-7">
-				      <input type="text" class="form-control" id="apellidos" placeholder="Last Name">
-				    </div>
-				  </div>
-				  <div class="form-group">
-				    <label for="tipoEstadoCivil" class="col-sm-3 control-label">Civil Status</label>
-				    <div class="col-sm-7">
-				      <select id="tipoEstadoCivil" class="form-control input-sm">
-					      	<option value="">-- Select Option --</option>
-					      </select>
-				    </div>
-				  </div>
-				  <div class="form-group">
-				    <label for="sexo" class="col-sm-3 control-label">Gender</label>
-				    <div class="col-sm-7">
-				      <select id="sexo" class="form-control input-sm">
-					      	<option value="">-- Select Option --</option>
-					      	<option value="M">Male</option>
-					      	<option value="F">Female</option>
-					      </select>
-				    </div>
-				  </div>
-				  <div class="form-group">
-				    <label for="fechanacimiento" class="col-sm-3 control-label">Birth Date</label>
-				    <div class="col-sm-7">
-				      <input type="text" class="form-control" id="fechanacimiento" placeholder="Bith Date">
-				    </div>
-				  </div>
-				  <div class="form-group">
-				    <label for="email" class="col-sm-3 control-label">E-mail</label>
-				    <div class="col-sm-7">
-				      <input type="text" class="form-control" id="email" placeholder="E-mail">
-				    </div>
-				  </div>
-			  </form>
-		        
-		        
-		        
-		       
+						<div class="mb-3 row">
+							<label for="tipoDocumentoIdentificaion" class="col-sm-3 col-form-label">Document Type</label>
+							<div class="col-sm-7">
+								<select id="tipoDocumentoIdentificaion" class="form-control input-sm">
+									<option value="">-- Select Option --</option>
+								</select>
+							</div>
+						</div>
+						<div class="mb-3 row">
+							<label for="numeroidentificacion" class="col-sm-3 col-form-label">Identification Number</label>
+							<div class="col-sm-7">
+								<input type="text" class="form-control" id="numeroidentificacion" placeholder="Identification Number">
+							</div>
+						</div>
+						<div class="mb-3 row">
+							<label for="nombres" class="col-sm-3 col-form-label">First Name</label>
+							<div class="col-sm-7">
+								<input type="text" class="form-control" id="nombres" placeholder="First Name">
+							</div>
+						</div>
+						<div class="mb-3 row">
+							<label for="apellidos" class="col-sm-3 col-form-label">Last Name</label>
+							<div class="col-sm-7">
+								<input type="text" class="form-control" id="apellidos" placeholder="Last Name">
+							</div>
+						</div>
+						<div class="mb-3 row">
+							<label for="tipoEstadoCivil" class="col-sm-3 col-form-label">Civil Status</label>
+							<div class="col-sm-7">
+								<select id="tipoEstadoCivil" class="form-control input-sm">
+									<option value="">-- Select Option --</option>
+								</select>
+							</div>
+						</div>
+						<div class="mb-3 row">
+							<label for="sexo" class="col-sm-3 col-form-label">Gender</label>
+							<div class="col-sm-7">
+								<select id="sexo" class="form-control input-sm">
+									<option value="">-- Select Option --</option>
+									<option value="M">Male</option>
+									<option value="F">Female</option>
+								</select>
+							</div>
+						</div>
+						<div class="mb-3 row">
+							<label for="fechanacimiento" class="col-sm-3 col-form-label">Birth Date</label>
+							<div class="col-sm-7">
+								<input type="text" class="form-control" id="fechanacimiento" placeholder="Bith Date">
+							</div>
+						</div>
+						<div class="mb-3 row">
+							<label for="email" class="col-sm-3 col-form-label">E-mail</label>
+							<div class="col-sm-7">
+								<input type="text" class="form-control" id="email" placeholder="E-mail">
+							</div>
+						</div>
+					</form>
+
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+				<button type="button" class="btn btn-primary" onclick="savePerson();">Guardar</button>
+			</div>
 		</div>
-
-
-
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" onclick="savePerson();">Save</button>
-      </div>
-      
-    </div>
-    
-    <%-- </form> --%>
-  </div>
+	</div>
 </div>
+
+
 
 
 
