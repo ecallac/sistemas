@@ -18,10 +18,7 @@ import javax.persistence.Version;
  */
 @MappedSuperclass
 public class BaseEntity {
-	public String toString() {
-		return this.getClass().getCanonicalName() + " : ID=" + this.id;
-	}
-	
+
 	@Id
 	@Column(name = "id")
 	@GeneratedValue(strategy=GenerationType.AUTO)
@@ -79,5 +76,16 @@ public class BaseEntity {
 	public void setVersion(int version) {
 		this.version = version;
 	}
-	
+
+	@Override
+	public String toString() {
+		return "BaseEntity{" +
+				"id=" + id +
+				", dateCreated=" + dateCreated +
+				", dateUpdated=" + dateUpdated +
+				", createdBy='" + createdBy + '\'' +
+				", updatedBy='" + updatedBy + '\'' +
+				", version=" + version +
+				'}';
+	}
 }

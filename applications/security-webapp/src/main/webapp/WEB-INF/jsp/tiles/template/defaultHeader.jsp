@@ -113,7 +113,7 @@ function saveSession(ip){
             <li><a class="dropdown-item" href="${pageContext.request.contextPath}/profile"><i class="bi bi-person-circle"></i> Mi Cuenta</a></li>
 <!--             <li><a class="dropdown-item" href="#">Ajustes</a></li> -->
             <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="javascript:document.getElementById('logout').submit()" title="Cerrar sesión" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="bi bi-power"></i> Cerrar sesión </a></li>
+            <li><a class="dropdown-item" href="javascript:document.getElementById('logout').submit()" title="Cerrar sesi�n" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="bi bi-power"></i> Cerrar sesi&oacute;n </a></li>
             
           </ul>
         </li>

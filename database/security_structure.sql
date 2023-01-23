@@ -1,15 +1,15 @@
 CREATE DATABASE  IF NOT EXISTS `security` /*!40100 DEFAULT CHARACTER SET latin1 */;
 USE `security`;
--- MySQL dump 10.13  Distrib 5.5.24, for osx10.5 (i386)
+-- MySQL dump 10.13  Distrib 8.0.26, for Win64 (x86_64)
 --
--- Host: localhost    Database: security
+-- Host: 127.0.0.1    Database: security
 -- ------------------------------------------------------
--- Server version	5.5.32
+-- Server version	5.5.60
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
+/*!50503 SET NAMES utf8 */;
 /*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
 /*!40103 SET TIME_ZONE='+00:00' */;
 /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
@@ -23,7 +23,7 @@ USE `security`;
 
 DROP TABLE IF EXISTS `module`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `module` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(45) DEFAULT NULL,
@@ -37,18 +37,8 @@ CREATE TABLE `module` (
   `author` varchar(255) DEFAULT NULL,
   `moduleVersion` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `module`
---
-
-LOCK TABLES `module` WRITE;
-/*!40000 ALTER TABLE `module` DISABLE KEYS */;
-INSERT INTO `module` VALUES (1,'SECURITY','Security Application','Y',NULL,'2017-09-25 23:36:55',NULL,NULL,1,'1','1');
-/*!40000 ALTER TABLE `module` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `permission`
@@ -56,7 +46,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `permission`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `permission` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `module_id` int(11) NOT NULL,
@@ -76,18 +66,8 @@ CREATE TABLE `permission` (
   KEY `fk_permission_permission1_idx` (`parent_permission_id`),
   CONSTRAINT `fk_permission_module` FOREIGN KEY (`module_id`) REFERENCES `module` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_permission_permission1` FOREIGN KEY (`parent_permission_id`) REFERENCES `permission` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `permission`
---
-
-LOCK TABLES `permission` WRITE;
-/*!40000 ALTER TABLE `permission` DISABLE KEYS */;
-INSERT INTO `permission` VALUES (1,1,'root','root','/','1','2017-05-14 22:51:47',NULL,NULL,NULL,0,NULL,NULL),(2,1,'home','home','/home','1','2017-05-14 22:51:52',NULL,NULL,NULL,0,NULL,NULL),(3,1,'module','module management','/module','1','2017-05-14 22:51:52',NULL,NULL,NULL,0,NULL,NULL),(4,1,'permission','permission management','/permission','1','2017-05-14 22:51:52',NULL,NULL,NULL,0,NULL,NULL),(5,1,'assigneRolePermission','assigneRolePermission','/assigneRolePermission','1','2017-05-14 22:51:52',NULL,NULL,NULL,0,NULL,NULL),(6,1,'role','role management','/role','1','2017-05-14 22:51:53',NULL,NULL,NULL,0,NULL,NULL),(7,1,'user','user Management','/userList','1','2017-05-14 22:51:53',NULL,NULL,NULL,0,NULL,NULL),(8,1,'assigneRoleUser','assigneRoleUser','/assigneRoleUser','1','2017-05-14 22:51:53',NULL,NULL,NULL,0,NULL,NULL);
-/*!40000 ALTER TABLE `permission` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `role`
@@ -95,7 +75,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `role`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `role` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) DEFAULT NULL,
@@ -111,22 +91,12 @@ CREATE TABLE `role` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `role`
---
-
-LOCK TABLES `role` WRITE;
-/*!40000 ALTER TABLE `role` DISABLE KEYS */;
-INSERT INTO `role` VALUES (1,'ADMIN','Administrador','1','2017-05-14 22:38:07',NULL,NULL,NULL,0);
-/*!40000 ALTER TABLE `role` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `rolepermission`
 --
 
 DROP TABLE IF EXISTS `rolepermission`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `rolepermission` (
   `role_id` int(11) NOT NULL,
   `permission_id` int(11) NOT NULL,
@@ -139,36 +109,25 @@ CREATE TABLE `rolepermission` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `rolepermission`
---
-
-LOCK TABLES `rolepermission` WRITE;
-/*!40000 ALTER TABLE `rolepermission` DISABLE KEYS */;
-INSERT INTO `rolepermission` VALUES (1,1),(1,2),(1,3),(1,4),(1,5),(1,6),(1,7),(1,8);
-/*!40000 ALTER TABLE `rolepermission` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Temporary table structure for view `rolepermissionview`
+-- Temporary view structure for view `rolepermissionview`
 --
 
 DROP TABLE IF EXISTS `rolepermissionview`;
 /*!50001 DROP VIEW IF EXISTS `rolepermissionview`*/;
 SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
-/*!50001 CREATE TABLE `rolepermissionview` (
-  `module_id` int(11),
-  `permission_name` varchar(100),
-  `permission_description` varchar(255),
-  `path` varchar(100),
-  `permission_enabled` varchar(3),
-  `parent_permission_id` int(11),
-  `permission_id` int(11),
-  `role_id` int(11),
-  `role_name` varchar(100),
-  `role_description` varchar(255),
-  `role_enabled` varchar(3)
-) ENGINE=MyISAM */;
+/*!50503 SET character_set_client = utf8mb4 */;
+/*!50001 CREATE VIEW `rolepermissionview` AS SELECT 
+ 1 AS `module_id`,
+ 1 AS `permission_name`,
+ 1 AS `permission_description`,
+ 1 AS `path`,
+ 1 AS `permission_enabled`,
+ 1 AS `parent_permission_id`,
+ 1 AS `permission_id`,
+ 1 AS `role_id`,
+ 1 AS `role_name`,
+ 1 AS `role_description`,
+ 1 AS `role_enabled`*/;
 SET character_set_client = @saved_cs_client;
 
 --
@@ -177,7 +136,7 @@ SET character_set_client = @saved_cs_client;
 
 DROP TABLE IF EXISTS `roleuser`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `roleuser` (
   `role_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
@@ -190,38 +149,27 @@ CREATE TABLE `roleuser` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `roleuser`
---
-
-LOCK TABLES `roleuser` WRITE;
-/*!40000 ALTER TABLE `roleuser` DISABLE KEYS */;
-INSERT INTO `roleuser` VALUES (1,1);
-/*!40000 ALTER TABLE `roleuser` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Temporary table structure for view `roleuserview`
+-- Temporary view structure for view `roleuserview`
 --
 
 DROP TABLE IF EXISTS `roleuserview`;
 /*!50001 DROP VIEW IF EXISTS `roleuserview`*/;
 SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
-/*!50001 CREATE TABLE `roleuserview` (
-  `name` varchar(100),
-  `description` varchar(255),
-  `role_enabled` varchar(3),
-  `role_id` int(11),
-  `user_id` int(11),
-  `username` varchar(50),
-  `password` varchar(255),
-  `user_status` int(11),
-  `entidadrole_id` int(11),
-  `question` varchar(255),
-  `answer` varchar(255),
-  `activationdate` datetime,
-  `inactivationdate` datetime
-) ENGINE=MyISAM */;
+/*!50503 SET character_set_client = utf8mb4 */;
+/*!50001 CREATE VIEW `roleuserview` AS SELECT 
+ 1 AS `name`,
+ 1 AS `description`,
+ 1 AS `role_enabled`,
+ 1 AS `role_id`,
+ 1 AS `user_id`,
+ 1 AS `username`,
+ 1 AS `password`,
+ 1 AS `user_status`,
+ 1 AS `entidadrole_id`,
+ 1 AS `question`,
+ 1 AS `answer`,
+ 1 AS `activationdate`,
+ 1 AS `inactivationdate`*/;
 SET character_set_client = @saved_cs_client;
 
 --
@@ -230,7 +178,7 @@ SET character_set_client = @saved_cs_client;
 
 DROP TABLE IF EXISTS `session`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `session` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
@@ -238,20 +186,12 @@ CREATE TABLE `session` (
   `logoutDate` datetime DEFAULT NULL,
   `sessionKey` varchar(255) DEFAULT NULL,
   `hostAddress` varchar(45) DEFAULT NULL,
+  `module_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_session_user1_idx` (`user_id`),
   CONSTRAINT `fk_session_user1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=133 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `session`
---
-
-LOCK TABLES `session` WRITE;
-/*!40000 ALTER TABLE `session` DISABLE KEYS */;
-/*!40000 ALTER TABLE `session` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `user`
@@ -259,12 +199,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `user`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `user` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `username` varchar(50) DEFAULT NULL,
   `password` varchar(255) DEFAULT NULL,
-  `status` int(11) DEFAULT NULL,
+  `status` varchar(20) DEFAULT NULL,
   `entidadrole_id` int(11) DEFAULT NULL,
   `question` varchar(255) DEFAULT NULL,
   `answer` varchar(255) DEFAULT NULL,
@@ -276,24 +216,13 @@ CREATE TABLE `user` (
   `activationDate` datetime DEFAULT NULL,
   `inactivationDate` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `user`
---
-
-LOCK TABLES `user` WRITE;
-/*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'ecalla','$2a$10$gAzsxsY8QZyt2O0rfEoC2eUBHuJ0W0bgUIhyFTrMG7b/mjbQ3fdL6',1,NULL,'animal favorito','perro','2017-05-14 22:34:13',NULL,NULL,NULL,0,'2017-05-14 22:34:13','2017-05-31 22:34:06');
-/*!40000 ALTER TABLE `user` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Final view structure for view `rolepermissionview`
 --
 
-/*!50001 DROP TABLE IF EXISTS `rolepermissionview`*/;
 /*!50001 DROP VIEW IF EXISTS `rolepermissionview`*/;
 /*!50001 SET @saved_cs_client          = @@character_set_client */;
 /*!50001 SET @saved_cs_results         = @@character_set_results */;
@@ -312,7 +241,6 @@ UNLOCK TABLES;
 -- Final view structure for view `roleuserview`
 --
 
-/*!50001 DROP TABLE IF EXISTS `roleuserview`*/;
 /*!50001 DROP VIEW IF EXISTS `roleuserview`*/;
 /*!50001 SET @saved_cs_client          = @@character_set_client */;
 /*!50001 SET @saved_cs_results         = @@character_set_results */;
@@ -336,4 +264,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-09-26 23:48:02
+-- Dump completed on 2023-01-23  0:38:45

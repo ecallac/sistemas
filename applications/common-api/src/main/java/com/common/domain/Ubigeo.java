@@ -24,13 +24,9 @@ import org.hibernate.annotations.FetchMode;
  */
 @Entity
 @Table(name = "ubigeo")
-public class Ubigeo{
-	@Id
-	@Column(name = "id")
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	private Long id;
-	@Column(name = "codigoubigeo")
-	private String codigoUbigeo;
+public class Ubigeo extends BaseEntity {
+	@Column(name = "status")
+	private String codigo;
 	private String descripcion;
 	private String abreviatura;
 	@ManyToOne(fetch=FetchType.EAGER)
@@ -42,8 +38,6 @@ public class Ubigeo{
 	private String tipoubigeo;
 	transient
 	private List<Ubigeo> childubigeos;
-	transient
-	private List<CentroPoblado> centroPoblados;
 	transient
 	private List<Direccion> direccions;
 	
@@ -58,18 +52,6 @@ public class Ubigeo{
 	}
 	public void setTipoubigeo(String tipoubigeo) {
 		this.tipoubigeo = tipoubigeo;
-	}
-	public Long getId() {
-		return id;
-	}
-	public void setId(Long id) {
-		this.id = id;
-	}
-	public String getCodigoUbigeo() {
-		return codigoUbigeo;
-	}
-	public void setCodigoUbigeo(String codigoUbigeo) {
-		this.codigoUbigeo = codigoUbigeo;
 	}
 	public String getDescripcion() {
 		return descripcion;
@@ -95,23 +77,32 @@ public class Ubigeo{
 	public void setChildubigeos(List<Ubigeo> childubigeos) {
 		this.childubigeos = childubigeos;
 	}
-	public List<CentroPoblado> getCentroPoblados() {
-		return centroPoblados;
-	}
-	public void setCentroPoblados(List<CentroPoblado> centroPoblados) {
-		this.centroPoblados = centroPoblados;
-	}
 	public List<Direccion> getDireccions() {
 		return direccions;
 	}
 	public void setDireccions(List<Direccion> direccions) {
 		this.direccions = direccions;
 	}
+
+	public String getCodigo() {
+		return codigo;
+	}
+
+	public void setCodigo(String codigo) {
+		this.codigo = codigo;
+	}
+
 	@Override
 	public String toString() {
-		return "Ubigeo [id=" + id + ", codigoUbigeo=" + codigoUbigeo + ", descripcion=" + descripcion + ", abreviatura="
-				+ abreviatura + ", parentUbigeo=" + parentUbigeo + ", childubigeos=" + childubigeos
-				+ ", centroPoblados=" + centroPoblados + ", direccions=" + direccions + "]";
+		return "Ubigeo{" +
+				"codigo='" + codigo + '\'' +
+				", descripcion='" + descripcion + '\'' +
+				", abreviatura='" + abreviatura + '\'' +
+				", parentUbigeo=" + parentUbigeo +
+				", estado='" + estado + '\'' +
+				", tipoubigeo='" + tipoubigeo + '\'' +
+				", childubigeos=" + childubigeos +
+				", direccions=" + direccions +
+				'}';
 	}
-	
 }

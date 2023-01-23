@@ -20,7 +20,7 @@ import com.common.repository.TelefonoRepository;
  */
 @Service
 @Transactional
-public class TelefonoServiceImp implements TelefonoService {
+public class TelefonoServiceImpl implements TelefonoService {
 
 	@Autowired
 	TelefonoRepository telefonoRepository;

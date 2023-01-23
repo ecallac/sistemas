@@ -95,6 +95,9 @@ public class ProfileController {
         persona.setTipoEstadoCivil(tipoBaseIntegration.findByCodigo(persona.getTipoEstadoCivil()).getDescripcion());
         map.put("persona", persona);
         List<Telefono> telefonos = telefonoIntegration.findByEntidadId(persona.getEntidad().getId());
+		for (Telefono telefono:telefonos) {
+			telefono.setTipo(tipoBaseIntegration.findByCodigo(telefono.getTipo()).getDescripcion());
+		}
         map.put("telefonos", telefonos);
         map.put("view", view);
         map.put(Constants.STATUS, Constants.OK);

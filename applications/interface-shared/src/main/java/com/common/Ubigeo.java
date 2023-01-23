@@ -3,35 +3,34 @@
  */
 package com.common;
 
+import com.BaseEntity;
 import java.util.List;
 
 /**
  * @author efrain.calla
  *
  */
-public class Ubigeo{
-	private Long id;
-	private String codigoUbigeo;
+public class Ubigeo extends BaseEntity {
+	private String codigo;
 	private String descripcion;
 	private String abreviatura;
 	private Ubigeo parentUbigeo;
-	transient
+	private String estado;
+	private String tipoubigeo;
 	private List<Ubigeo> childubigeos;
-	transient
-	private List<CentroPoblado> centroPoblados;
-	transient
 	private List<Direccion> direccions;
-	public Long getId() {
-		return id;
+	
+	public String getEstado() {
+		return estado;
 	}
-	public void setId(Long id) {
-		this.id = id;
+	public void setEstado(String estado) {
+		this.estado = estado;
 	}
-	public String getCodigoUbigeo() {
-		return codigoUbigeo;
+	public String getTipoubigeo() {
+		return tipoubigeo;
 	}
-	public void setCodigoUbigeo(String codigoUbigeo) {
-		this.codigoUbigeo = codigoUbigeo;
+	public void setTipoubigeo(String tipoubigeo) {
+		this.tipoubigeo = tipoubigeo;
 	}
 	public String getDescripcion() {
 		return descripcion;
@@ -57,23 +56,32 @@ public class Ubigeo{
 	public void setChildubigeos(List<Ubigeo> childubigeos) {
 		this.childubigeos = childubigeos;
 	}
-	public List<CentroPoblado> getCentroPoblados() {
-		return centroPoblados;
-	}
-	public void setCentroPoblados(List<CentroPoblado> centroPoblados) {
-		this.centroPoblados = centroPoblados;
-	}
 	public List<Direccion> getDireccions() {
 		return direccions;
 	}
 	public void setDireccions(List<Direccion> direccions) {
 		this.direccions = direccions;
 	}
+
+	public String getCodigo() {
+		return codigo;
+	}
+
+	public void setCodigo(String codigo) {
+		this.codigo = codigo;
+	}
+
 	@Override
 	public String toString() {
-		return "Ubigeo [id=" + id + ", codigoUbigeo=" + codigoUbigeo + ", descripcion=" + descripcion + ", abreviatura="
-				+ abreviatura + ", parentUbigeo=" + parentUbigeo + ", childubigeos=" + childubigeos
-				+ ", centroPoblados=" + centroPoblados + ", direccions=" + direccions + "]";
+		return "Ubigeo{" +
+				"codigo='" + codigo + '\'' +
+				", descripcion='" + descripcion + '\'' +
+				", abreviatura='" + abreviatura + '\'' +
+				", parentUbigeo=" + parentUbigeo +
+				", estado='" + estado + '\'' +
+				", tipoubigeo='" + tipoubigeo + '\'' +
+				", childubigeos=" + childubigeos +
+				", direccions=" + direccions +
+				'}';
 	}
-	
 }

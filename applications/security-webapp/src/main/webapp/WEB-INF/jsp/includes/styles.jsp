@@ -44,7 +44,8 @@
 <script src="<c:url value='/resources/js/dataTables.bootstrap5.min.js' />"></script>
 
 <script src="<c:url value='/resources/js/dataTables.responsive.js' />"></script>
-<link href="<c:url value='/resources/css/dataTables.bootstrap5.min.css' />"  rel="stylesheet"></link>
+<%--<link href="<c:url value='/resources/css/dataTables.bootstrap5.min.css' />"  rel="stylesheet"></link>--%>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css">
 <link href="<c:url value='/resources/css/buttons.bootstrap5.min.css' />"  rel="stylesheet"></link>
 
 <script src="<c:url value='/resources/js/dataTables.buttons.min.js' />"></script>

@@ -5,15 +5,11 @@ package com.common.facade;
 
 import java.util.List;
 
+import com.common.domain.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.common.domain.EntidadRol;
-import com.common.domain.Organizacion;
-import com.common.domain.Persona;
-import com.common.domain.Telefono;
-import com.common.domain.TipoBase;
 import com.common.service.EntidadRolService;
 import com.common.service.EntidadService;
 import com.common.service.ReglaDetalleService;
@@ -41,6 +37,7 @@ public class CommonFacade {
 	
 	@Autowired
 	TelefonoService telefonoService;
+
 	
 	public TipoBase findTipoBaseById(Long id) {
 		return tipoBaseService.findById(id);
@@ -86,4 +83,18 @@ public class CommonFacade {
 		telefono.setEntidad(entidadService.findById(telefono.getEntidad().getId()));
 		telefonoService.save(telefono);
 	}
+
+	public  List<ReglaDetalle> findReglaByCategoria(String categoria) {
+		return reglaDetalleService.findByReglaCategoria(categoria);
+	}
+
+	public ReglaDetalle findReglaDetalleById(Long id) {
+		return reglaDetalleService.findById(id);
+	}
+
+	@Transactional(readOnly = false,rollbackFor=Exception.class)
+	public void saveReglaDetalle(ReglaDetalle entidad) {
+		reglaDetalleService.save(entidad);
+	}
+
 }

@@ -94,8 +94,8 @@
 		              </span>
 									<input type="password" id="password" name="password" class="form-control form-control-lg" placeholder="contraseña" aria-describedby="password-group"/>
 									<span class="input-group-text" onclick="password_show_hide();">
-		                  <i class="fas fa-eye" id="show_eye"></i>
-		                  <i class="fas fa-eye-slash d-none" id="hide_eye"></i>
+						  <i class="bi bi-eye-fill" id="show_eye"></i>
+		                  <i class="bi bi-eye-slash d-none" id="hide_eye"></i>
 		                </span>
 								</div>
 

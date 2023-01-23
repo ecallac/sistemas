@@ -64,6 +64,10 @@ function load(){
   			$("#lsexo").text(response.persona.sexo);
   			$("#lfechanacimiento").text(response.persona.fechanacimiento);
   			$("#lemail").text(response.persona.email);
+
+			$.each(response.telefonos, function(i, row) {
+				$('#ltelefonos').append("<tr><td 'width=100px' style='' class='ms-2'>"+row.tipo+"</td><td 'width=50px' style='' class='ms-2'>"+row.codigoarea+" "+row.numero+"</td><td 'width=50px' class='ms-2'></td></tr>");
+			});
   			
   		}
   };
@@ -240,13 +244,10 @@ function clearPasswordFields(){
                                             <p class="text-muted"><strong>Telefonos :</strong> </p>
                                             <div class="container">
 											  <div class="row row-cols-auto">
-											    <div class="col">
-											      <span class="ms-2" id="ltipotelefono">asd</span>
-											    </div>
-											    <div class="col">
-											      <span class="ms-2" id="lcodigoareatelefono">asd</span>
-											      <span class="ms-2" id="lnumerotelefono">asd</span>
-											    </div>
+												  <table class="table-sm">
+													<tbody id="ltelefonos">
+													</tbody>
+													</table>
 											  </div>
 											</div>
                                         </div>
@@ -259,10 +260,10 @@ function clearPasswordFields(){
 											<div class="container">
 											  <div class="row row-cols-auto">
 											    <div class="col">
-											      <span class="ms-2" id="ltipotelefono">asd</span>
+											      <span class="ms-2" id="ldir">asd</span>
 											    </div>
 											    <div class="col">
-											      <span class="ms-2" id="lcodigoarea">asd</span>
+											      <span class="ms-2" id="lval">asd</span>
 											    </div>
 											  </div>
 											</div>
