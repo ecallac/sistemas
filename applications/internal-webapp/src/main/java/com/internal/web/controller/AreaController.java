@@ -32,20 +32,15 @@ import java.util.stream.Collectors;
  */
 @Controller
 public class AreaController {
-	/*
-	@Autowired
-	LoginService loginService;
-	@Autowired
-	ModuleIntegration moduleIntegration;
+
 	
-	@RequestMapping(value={"/module"}, method={RequestMethod.GET,RequestMethod.POST})
+	@RequestMapping(value={"/area"}, method={RequestMethod.GET,RequestMethod.POST})
 	public ModelAndView list(HttpSession session,Principal principal){
 		ModelAndView modelAndView = new ModelAndView();
-		loginService.addSessionObjects(session,principal);
-		modelAndView.setViewName("module");
+		modelAndView.setViewName("area");
 		return modelAndView;
 	}
-	
+	/*
 	@RequestMapping(value = "/module/enabledModules", method = {RequestMethod.GET,RequestMethod.POST})
 	public @ResponseBody Map<String, Object> initializeEnableModules() {
 		Map<String, Object> map = new HashMap<String, Object>();
