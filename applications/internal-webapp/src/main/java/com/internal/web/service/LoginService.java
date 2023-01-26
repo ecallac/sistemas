@@ -9,9 +9,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpSession;
 
+import com.common.Entidad;
+import com.common.EntidadRol;
+import com.common.EntidadRolAtributo;
+import com.internal.web.service.integration.EntidadRolAtributoIntegration;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -48,6 +56,9 @@ public class LoginService implements UserDetailsService {
 	
 	@Autowired
 	PermissionIntegration permissionIntegration;
+
+	@Autowired
+	EntidadRolAtributoIntegration entidadRolAtributoIntegration;
 	
 	public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
 		User userBean = userIntegration.findByUserNameActive(userName);
@@ -86,37 +97,63 @@ public class LoginService implements UserDetailsService {
 	}
 	
 	
-	public List<Permission> getPermissions(){
-		List<Permission> permissions= permissionIntegration.findEnabledListByModuleName(Constants.MODULE);
-		List<Permission> list = new ArrayList<Permission>();
-		for (Permission permission : permissions) {
-			if (permission.getParentPermission()!=null) {
-				list.add(permission);
+	public List<Permission> getPermissions(List<Role> roles){
+		List<Permission> permissions = new ArrayList<Permission>();
+		for (Role role: roles){
+			List<Permission> permissionList = permissionIntegration.findEnabledListByRoleIdAndModuleName(role.getId(),Constants.MODULE);
+			if (!CollectionUtils.isEmpty(permissionList)){
+				permissions.addAll(permissionList);
 			}
 		}
-		return list;
+		permissions = permissions.stream().distinct().collect( Collectors.toList() );
+		return permissions;
 	}
 	
 	public void addSessionObjects(HttpSession httpSession,Principal principal) {
-		List sessionlist = (List) httpSession.getAttribute("permissions");
-		if (CollectionUtils.isEmpty(sessionlist)) {
-			httpSession.setAttribute("permissions", getPermissions());
-		}
-		
 		User user =  (User) httpSession.getAttribute("user");
 		if (user==null) {
-			user = userIntegration.findByUserNameActive(principal.getName());
-			httpSession.setAttribute("user", user);
+			httpSession.setAttribute("user", userIntegration.findByUserNameActive(principal.getName()));
+
+			List sessionlist = (List) httpSession.getAttribute("permissions");
+			if (CollectionUtils.isEmpty(sessionlist)) {
+				httpSession.setAttribute("permissions", getPermissions(user.getRoles()));
+			}
+
 			Persona  person = (Persona) httpSession.getAttribute("person");
 			if (person==null) {
 				person = personaIntegration.findByEntidadRolId(user.getEntidadRoleId());
 				httpSession.setAttribute("person", person);
 			}
-			
+			List<EntidadRolAtributo> atributos = (List<EntidadRolAtributo>) httpSession.getAttribute("atributos");
+			if (CollectionUtils.isEmpty(atributos)){
+				atributos = entidadRolAtributoIntegration.findByEntidadRolId(user.getEntidadRoleId());
+				httpSession.setAttribute("atributos", atributos);
+			}
 		}
 	}
 	
 	public void saveSession(Session session) {
 		userIntegration.saveSession(session);
+	}
+
+	public void saveEntidadRolAtributo(HttpSession httpSession,EntidadRolAtributo entidadRolAtributo){
+		List<EntidadRolAtributo> atributos = (List<EntidadRolAtributo>) httpSession.getAttribute("atributos");
+		if (!CollectionUtils.isEmpty(atributos)){
+			for (EntidadRolAtributo atributo:atributos ) {
+				if (atributo.getTipoAtributo().equals("ERA_THEME")){
+					entidadRolAtributo.setId(atributo.getId());
+				}
+			}
+		}
+		entidadRolAtributo.setTipoAtributo("ERA_THEME");
+		EntidadRol entidadRol = new EntidadRol();
+		User user =  (User) httpSession.getAttribute("user");
+		entidadRol.setId(user.getEntidadRoleId());
+		entidadRolAtributo.setEntidadRol(entidadRol);
+		entidadRolAtributoIntegration.save(entidadRolAtributo);
+		atributos = entidadRolAtributoIntegration.findByEntidadRolId(user.getEntidadRoleId());
+		httpSession.setAttribute("atributos", atributos);
+
+
 	}
 }

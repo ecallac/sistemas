@@ -4,6 +4,7 @@
 package com.internal.web.controller;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +13,9 @@ import java.util.stream.Collectors;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
+import com.common.*;
+import com.internal.web.beans.DireccionView;
+import com.internal.web.service.integration.*;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,16 +29,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.BeanParser;
-import com.common.Persona;
-import com.common.Telefono;
-import com.common.TipoBase;
 import com.internal.web.beans.PasswordView;
 import com.internal.web.beans.ProfileView;
 import com.internal.web.service.LoginService;
-import com.internal.web.service.integration.PersonaIntegration;
-import com.internal.web.service.integration.TelefonoIntegration;
-import com.internal.web.service.integration.TipoBaseIntegration;
-import com.internal.web.service.integration.UserIntegration;
 import com.internal.web.utils.Constants;
 import com.security.User;
 
@@ -62,7 +59,13 @@ public class ProfileController {
 	
 	@Autowired
 	TelefonoIntegration telefonoIntegration;
-	
+
+	@Autowired
+	DireccionIntegration direccionIntegration;
+
+	@Autowired
+	ReglaIntegration reglaIntegration;
+
 	@Autowired
     private PasswordEncoder passwordEncoder;
 	
@@ -80,11 +83,14 @@ public class ProfileController {
         User user = userIntegration.findByUserName(principal.getName());
         TipoBase status = tipoBaseIntegration.findByCodigo(user.getStatus());
         ProfileView view = new ProfileView();
-        
-        if (user.getStatus().equals("S_ACTIVE")) {
-        	view.setUserStatusType(Constants.SUCCESS);
-		} else if (user.getStatus().equals("S_INACTIVE")) {
-			view.setUserStatusType(Constants.DANGER);
+
+		Map<String,ReglaDetalle> reglaDetallesMap = reglaIntegration.getReglasMap(reglaIntegration.findByCodigo(Constants.RULE_USER_STATUS_LABEL_TYPE));
+
+		if (reglaDetallesMap.containsKey(user.getStatus())){
+			ReglaDetalle regla = reglaDetallesMap.get(user.getStatus());
+			view.setUserStatusType(regla.getValorcadena());
+		}else{
+			view.setUserStatusType("secondary");
 		}
         
         user.setStatus(status.getDescripcion());
@@ -99,11 +105,37 @@ public class ProfileController {
 			telefono.setTipo(tipoBaseIntegration.findByCodigo(telefono.getTipo()).getDescripcion());
 		}
         map.put("telefonos", telefonos);
+		List<DireccionView> direcciones = setViewFields(direccionIntegration.findByEntidadId(persona.getEntidad().getId()));
+		map.put("direcciones", direcciones);
         map.put("view", view);
         map.put(Constants.STATUS, Constants.OK);
         return map;
     }
-	
+
+	public List<DireccionView> setViewFields(List<Direccion> direcciones){
+		List<DireccionView> direccions = new ArrayList<DireccionView>();
+		for (Direccion direccion:direcciones) {
+			DireccionView view = (DireccionView) BeanParser.parseBetweenObjects(direccion, new DireccionView());
+			if ("Y".equals(direccion.getEsprincipal())){
+				view.setEsprincipal("Principal");
+				view.setEsprincipalStyle("success");
+			}else{
+				view.setEsprincipal("");
+				view.setEsprincipalStyle("");
+			}
+			view.setUbicaionTotal(getUbicacionTotal("",direccion.getUbigeo()));
+			direccions.add(view);
+		}
+		return direccions;
+	}
+	public String getUbicacionTotal(String ubicacion,Ubigeo ubigeo){
+		String utotal ="";
+		if (ubigeo!=null){
+			utotal = ubicacion+ubigeo.getDescripcion();
+			return getUbicacionTotal(utotal+" ",ubigeo.getParentUbigeo());
+		}
+		return ubicacion;
+	}
 	@RequestMapping(value = "/saveEditPassword", method = {RequestMethod.POST})
     public @ResponseBody  Map<String, Object> saveEditPassword(@RequestBody @Valid PasswordView passwordView,BindingResult result,Principal principal) {
 		Map<String, Object> map = new HashMap<String, Object>();

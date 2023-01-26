@@ -31,6 +31,7 @@ public interface Constants {
 	
 	static final String SUCCESS = "success";
 	static final String DANGER = "danger";
+	static final String RULE_USER_STATUS_LABEL_TYPE="USER_STATUS_LABEL_TYPE";
 	
 	static final String SUCCESS_MESSAGE="Su registro se ha guardado con éxito";
 	

@@ -66,9 +66,11 @@ function load(){
   			$("#lemail").text(response.persona.email);
 
 			$.each(response.telefonos, function(i, row) {
-				$('#ltelefonos').append("<tr><td 'width=100px' style='' class='ms-2'>"+row.tipo+"</td><td 'width=50px' style='' class='ms-2'>"+row.codigoarea+" "+row.numero+"</td><td 'width=50px' class='ms-2'></td></tr>");
+				$('#ltelefonos').append("<div class='col'><span class='ms-2' id='ldir'>"+row.tipo+"</span></div><div class='col'><span class='ms-2' id='lval'>"+row.codigoarea+" "+row.numero+"</span></div>");
 			});
-  			
+			$.each(response.direcciones, function(i, row) {
+				$('#ldirecciones').append("<div class='col'><span class='ms-2' id='ldir'>"+row.direccionexacta+" "+row.ubicaionTotal+" <span class='ms-2 badge bg-"+row.esprincipalStyle+"' id= 'dirprincipal'>"+row.esprincipal+"</span></span></div>");
+			});
   		}
   };
   ajaxWithoutForm(ajaxUrl,"GET",successFunction);
@@ -189,9 +191,8 @@ function clearPasswordFields(){
 								<div class="card-body">
 									<h5 class="h6 card-title">Ajustes</h5>
 									<div class="text-start">
-                                            <p class="text-muted"><strong>Tema :</strong> <span class="ms-2"><a onclick="setStyleSheet('/resources/css/light.css')" href="#">light</a>
-<a onclick="setStyleSheet('/resources/css/dark.css')" href="#">dark</a>
-</span></p>
+                                            <!--p class="text-muted"><strong>Tema :</strong> <span class="ms-2"><a onclick="setStyleSheet('/resources/css/light.css')" href="#">light</a><a onclick="setStyleSheet('/resources/css/dark.css')" href="#">dark</a></span></p-->
+										<p class="text-muted"><strong>Tema :</strong> <span class="ms-2"><a onclick="setTheme('light')" href="#">light</a> <a onclick="setTheme('dark')" href="#">dark</a></span></p>
                                             </p>
 
                                         </div>
@@ -243,11 +244,7 @@ function clearPasswordFields(){
 											<p class="text-muted"><strong>Email :</strong><span class="ms-2" id="lemail">asd</span></p>
                                             <p class="text-muted"><strong>Telefonos :</strong> </p>
                                             <div class="container">
-											  <div class="row row-cols-auto">
-												  <table class="table-sm">
-													<tbody id="ltelefonos">
-													</tbody>
-													</table>
+											  <div class="row row-cols-auto" id="ltelefonos">
 											  </div>
 											</div>
                                         </div>
@@ -258,17 +255,13 @@ function clearPasswordFields(){
 									<div class="text-start">
 											
 											<div class="container">
-											  <div class="row row-cols-auto">
-											    <div class="col">
-											      <span class="ms-2" id="ldir">asd</span>
-											    </div>
-											    <div class="col">
-											      <span class="ms-2" id="lval">asd</span>
-											    </div>
+
+											  <div class="row row-cols-auto" id="ldirecciones">
+
 											  </div>
-											</div>
 											
-                                        </div>
+                                    		</div>
+									</div>
 								</div>
 								<hr class="my-0">
 								<div class="card-body">

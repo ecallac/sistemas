@@ -174,11 +174,14 @@ public class Permission extends BaseEntity {
 
 	@Override
 	public String toString() {
-		return "Permission [name=" + name + ", description=" + description + ", path=" + path + ", enabled=" + enabled
-				+ ", module=" + module + ", parentPermission=" + parentPermission + ", childPermissions="
-				+ childPermissions + ", roles=" + roles + ", type=" + type + "]";
+		return "Permission{" +
+				"name='" + name + '\'' +
+				", description='" + description + '\'' +
+				", path='" + path + '\'' +
+				", enabled='" + enabled + '\'' +
+				", module=" + module +
+				", parentPermission=" + parentPermission +
+				", type='" + type + '\'' +
+				'}';
 	}
-
-	
-	
 }

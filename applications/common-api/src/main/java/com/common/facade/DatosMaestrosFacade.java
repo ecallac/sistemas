@@ -6,15 +6,10 @@ package com.common.facade;
 import java.util.List;
 
 import com.common.domain.*;
+import com.common.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.common.service.EntidadRolService;
-import com.common.service.EntidadService;
-import com.common.service.ReglaDetalleService;
-import com.common.service.TelefonoService;
-import com.common.service.TipoBaseService;
 
 /**
  * @author efrain.calla
@@ -22,7 +17,7 @@ import com.common.service.TipoBaseService;
  */
 @Service
 @Transactional(readOnly = true)
-public class CommonFacade {
+public class DatosMaestrosFacade {
 	@Autowired
 	TipoBaseService tipoBaseService;
 	
@@ -37,6 +32,15 @@ public class CommonFacade {
 	
 	@Autowired
 	TelefonoService telefonoService;
+
+	@Autowired
+	UbigeoService ubigeoService;
+
+	@Autowired
+	DireccionService direccionService;
+
+	@Autowired
+	EntidadRolAtributoService entidadRolAtributoService;
 
 	
 	public TipoBase findTipoBaseById(Long id) {
@@ -88,6 +92,10 @@ public class CommonFacade {
 		return reglaDetalleService.findByReglaCategoria(categoria);
 	}
 
+	public  List<ReglaDetalle> findReglaByCodigo(String codigo) {
+		return reglaDetalleService.findByReglaCodigo(codigo);
+	}
+
 	public ReglaDetalle findReglaDetalleById(Long id) {
 		return reglaDetalleService.findById(id);
 	}
@@ -97,4 +105,37 @@ public class CommonFacade {
 		reglaDetalleService.save(entidad);
 	}
 
+	public List<Ubigeo> findUbigeoByParentUbigeoId(Long parentUbigeoId){
+		return ubigeoService.findByParentUbigeoId(parentUbigeoId);
+	}
+	public Ubigeo findUbigeoById(Long id){
+		return ubigeoService.findById(id);
+	}
+	@Transactional(readOnly = false,rollbackFor=Exception.class)
+	public void saveUbigeo(Ubigeo ubigeo) {
+		ubigeo.setParentUbigeo(ubigeoService.findById(ubigeo.getParentUbigeo().getId()));
+		ubigeoService.save(ubigeo);
+	}
+	public List<Direccion> findDireccionByEntidadId(Long entidadId){
+		return direccionService.findByEntidadId(entidadId);
+	}
+	public Direccion findDireccionById(Long id){
+		return direccionService.findById(id);
+	}
+	@Transactional(readOnly = false,rollbackFor=Exception.class)
+	public void saveDireccion(Direccion direccion) {
+		direccion.setUbigeo(ubigeoService.findById(direccion.getUbigeo().getId()));
+		direccionService.save(direccion);
+	}
+	public EntidadRolAtributo findEntidadRolAtributoById(Long id){
+		return entidadRolAtributoService.findById(id);
+	}
+	public List<EntidadRolAtributo> findEntidadRolAtributoByEntidadRolId(Long entidadRolId){
+		return entidadRolAtributoService.findByEntidadRolId(entidadRolId);
+	}
+	@Transactional(readOnly = false,rollbackFor=Exception.class)
+	public void saveEntidadRolAtributo(EntidadRolAtributo entidadRolAtributo) {
+		entidadRolAtributo.setEntidadRol(entidadRolService.findById(entidadRolAtributo.getEntidadRol().getId()));
+		entidadRolAtributoService.save(entidadRolAtributo);
+	}
 }

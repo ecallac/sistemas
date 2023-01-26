@@ -16,4 +16,5 @@ public interface PermissionService extends BaseService<Permission>{
 	List<Permission> findEnabledList();
 	List<Permission> findListByRoleId(Long roleId);
 	List<Permission> findEnabledPermissionsByModuleName(String moduleName);
+	List<Permission> findAllByParentPermissionId(Long parentPermissionId);
 }

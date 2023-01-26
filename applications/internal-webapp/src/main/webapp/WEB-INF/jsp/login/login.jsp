@@ -4,6 +4,7 @@
 <html>
 <head>
 <jsp:include page="../includes/styles.jsp" />
+	<link href="<c:url value='/resources/css/light.css' />"  rel="stylesheet" id="style-file"></link>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>login page</title>
 <style type="text/css">

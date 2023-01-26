@@ -90,4 +90,9 @@ public class PermissionServiceImpl implements PermissionService {
 		return permissionRepository.findAllByModuleNameAndEnabledOrderByDescription(moduleName, EnableIndicator.ENABLED.getCode());
 	}
 
+	@Override
+	public List<Permission> findAllByParentPermissionId(Long parentPermissionId) {
+		return permissionRepository.findAllByParentPermissionId(parentPermissionId);
+	}
+
 }

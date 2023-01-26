@@ -24,6 +24,9 @@
    <definition name="profile" extends="template"> 
        <put-attribute name="body" value="/WEB-INF/jsp/internal/profile.jsp" />  
    </definition>
+    <definition name="area" extends="template">
+        <put-attribute name="body" value="/WEB-INF/jsp/internal/area.jsp" />
+    </definition>
    
   
 </tiles-definitions>

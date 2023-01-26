@@ -11,6 +11,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 
 /**
@@ -28,5 +31,12 @@ public class ReglaIntegration extends ServiceIntegrationAbstract<ReglaDetalle> {
 	public List<ReglaDetalle> findByCategoria(String categoria) {
 		return getObjectListFromGetRequest(api+"/"+basePath+"/findByCategoria?categoria="+categoria,new TypeReference<List<ReglaDetalle>>(){});
 	}
+	public List<ReglaDetalle> findByCodigo(String codigo) {
+		return getObjectListFromGetRequest(api+"/"+basePath+"/findByCodigo?codigo="+codigo,new TypeReference<List<ReglaDetalle>>(){});
+	}
 
+	public Map<String,ReglaDetalle> getReglasMap(List<ReglaDetalle> reglas){
+		Map<String, ReglaDetalle> map = reglas.stream().collect(Collectors.toMap(ReglaDetalle::getCondicion, Function.identity()));
+		return map;
+	}
 }

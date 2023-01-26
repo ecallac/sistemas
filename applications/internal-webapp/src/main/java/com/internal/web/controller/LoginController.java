@@ -9,6 +9,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import com.common.EntidadRolAtributo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -66,10 +67,10 @@ public class LoginController {
 	}
 	
 	@RequestMapping(value={"/","/home"}, method=RequestMethod.GET)
-	public ModelAndView home(HttpSession session,Principal principal){
+	public ModelAndView home(HttpSession httpSession,Principal principal){
 		ModelAndView modelAndView = new ModelAndView();
 		
-		loginService.addSessionObjects(session,principal);
+		loginService.addSessionObjects(httpSession,principal);
 		
 		modelAndView.setViewName("home");
 		return modelAndView;
@@ -91,5 +92,15 @@ public class LoginController {
 		map.put(Constants.STATUS, Constants.OK);
 		return map;
     }
+
+	@RequestMapping(value = "/session/saveTheme", method = {RequestMethod.POST})
+	public @ResponseBody Map<String, Object> saveSessionTheme(HttpSession httpSession, @RequestBody EntidadRolAtributo entidadRolAtributo, Principal principal) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		System.out.println("sessionKey:"+httpSession.getId());
+		loginService.addSessionObjects(httpSession,principal);
+		loginService.saveEntidadRolAtributo(httpSession,entidadRolAtributo);
+		map.put(Constants.STATUS, Constants.OK);
+		return map;
+	}
 	
 }

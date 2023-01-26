@@ -17,4 +17,5 @@ import com.common.domain.ReglaDetalle;
 @Repository
 public interface ReglaDetalleRepository extends JpaRepository<ReglaDetalle, Long>{
 	List<ReglaDetalle> findByReglaCategoria(String categoria);
+	List<ReglaDetalle> findByReglaCodigo(String codigo);
 }

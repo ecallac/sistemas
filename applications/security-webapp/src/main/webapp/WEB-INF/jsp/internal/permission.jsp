@@ -358,7 +358,7 @@
 			</div>
 			<div class="modal-body">
 
-				<input type="hidden" id="userId" name="userId"/>
+				<input type="hidden" id="id" name="id"/>
 
 				<div class="form-container">
 

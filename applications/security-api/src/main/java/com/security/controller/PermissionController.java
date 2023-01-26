@@ -86,6 +86,7 @@ public class PermissionController {
     @RequestMapping(value = "/save", method = {RequestMethod.POST})
     public ResponseEntity<?> save(@RequestBody Permission bean) {
     	try {
+			bean.setName(bean.getName().replaceAll("\\W", ""));
     		securityFacade.savePermission(bean);
     		return new ResponseEntity(bean,HttpStatus.OK);
 		} catch (Exception e) {
@@ -93,4 +94,13 @@ public class PermissionController {
 		}
     	return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+	@RequestMapping(value = "/findEnabledListByRoleIdAndModuleName", method = {RequestMethod.GET})
+	public ResponseEntity<?> findEnabledListByModuleName(@RequestParam(value = "roleId", required = true) Long roleId,@RequestParam(value = "moduleName", required = true) String moduleName) {
+		List<Permission> entityList = securityFacade.findPermissionListByRoleIdAndModuleName(roleId,moduleName);
+		if (CollectionUtils.isEmpty(entityList)) {
+			return new ResponseEntity(new ArrayList<>(),HttpStatus.NO_CONTENT);
+		}
+		return new ResponseEntity(entityList,HttpStatus.OK);
+	}
 }

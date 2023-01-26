@@ -23,6 +23,7 @@ import com.security.service.RoleService;
 import com.security.service.RoleUserService;
 import com.security.service.SessionService;
 import com.security.service.UserService;
+import org.springframework.util.CollectionUtils;
 
 /**
  * @author efrain.calla
@@ -78,6 +79,26 @@ public class SecurityFacade {
 	private Permission setRolesToPermission(Permission permission) {
 		permission.setRoles(rolePermissionService.findRoleListByPermissionId(permission.getId()));
 		return permission;
+	}
+
+	public List<Permission> findPermissionListByRoleIdAndModuleName(Long roleId, String moduleName){
+		List<Permission> permissions = rolePermissionService.findRootPermissionListByRoleIdAndModuleName(roleId,moduleName);
+		fillChildPermissions(permissions);
+		return permissions;
+	}
+
+	private void fillChildPermissions(List<Permission> permissions){
+
+		for (Permission permission : permissions){
+			List<Permission> children = permissionService.findAllByParentPermissionId(permission.getId());
+			for (Permission child : children){
+				child.setParentPermission(null);
+			}
+			if (!CollectionUtils.isEmpty(children)){
+				permission.setChildPermissions(children);
+				fillChildPermissions(children);
+			}
+		}
 	}
 	
 	

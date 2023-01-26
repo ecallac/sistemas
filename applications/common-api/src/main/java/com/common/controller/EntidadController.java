@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.common.domain.Organizacion;
 import com.common.domain.Persona;
-import com.common.facade.CommonFacade;
+import com.common.facade.DatosMaestrosFacade;
 
 /**
  * @author efrain.calla
@@ -31,11 +31,11 @@ public class EntidadController {
     private Logger logger = Logger.getLogger(this.getClass());
     
     @Autowired
-    CommonFacade commonFacade;
+    DatosMaestrosFacade datosMaestrosFacade;
     
     @RequestMapping(value = "/findPersonaByEntidadRolId", method = {RequestMethod.GET})
     public ResponseEntity<?> findPersonaByEntidadRolId(@RequestParam(value = "entidadRolId", required = true) Long entidadRolId) {
-    	Persona entity = commonFacade.findPersonaByEntidadId(entidadRolId);
+    	Persona entity = datosMaestrosFacade.findPersonaByEntidadId(entidadRolId);
 		if (entity==null) {
 			return new ResponseEntity(HttpStatus.NO_CONTENT);
         }
@@ -44,7 +44,7 @@ public class EntidadController {
     
     @RequestMapping(value = "/findOrganizationByEntidadRolId", method = {RequestMethod.GET})
     public ResponseEntity<?> findOrganizationByEntidadRolId(@RequestParam(value = "entidadRolId", required = true) Long entidadRolId) {
-    	Organizacion entity = commonFacade.findOrganizacionByEntidadId(entidadRolId);
+    	Organizacion entity = datosMaestrosFacade.findOrganizacionByEntidadId(entidadRolId);
 		if (entity==null) {
 			return new ResponseEntity(HttpStatus.NO_CONTENT);
         }
@@ -53,7 +53,7 @@ public class EntidadController {
     
     @RequestMapping(value = "/findPersonaByTermino", method = {RequestMethod.GET})
     public ResponseEntity<?> findPersonaByTermino(@RequestParam(value = "termino", required = true) String termino) {
-    	List<Persona> list = commonFacade.findByNombreOApellidoONumeroDocumento(termino);
+    	List<Persona> list = datosMaestrosFacade.findByNombreOApellidoONumeroDocumento(termino);
 		if (CollectionUtils.isEmpty(list)) {
 			return new ResponseEntity(HttpStatus.NO_CONTENT);
         }
@@ -63,7 +63,7 @@ public class EntidadController {
     @RequestMapping(value = "/savePersona", method = {RequestMethod.POST})
     public ResponseEntity<?> save(@RequestBody Persona bean) {
     	try {
-    		commonFacade.savePersona(bean);
+    		datosMaestrosFacade.savePersona(bean);
     		return new ResponseEntity(bean,HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -25,7 +25,7 @@ import org.hibernate.annotations.FetchMode;
 @Entity
 @Table(name = "ubigeo")
 public class Ubigeo extends BaseEntity {
-	@Column(name = "status")
+
 	private String codigo;
 	private String descripcion;
 	private String abreviatura;
@@ -33,6 +33,7 @@ public class Ubigeo extends BaseEntity {
 	@JoinColumn(name = "parent_ubigeo_id")
 	@Fetch(value = FetchMode.SELECT)
 	private Ubigeo parentUbigeo;
+	@Column(name = "status")
 	private String estado;
 	@Column(name = "tipo_ubigeo")
 	private String tipoubigeo;

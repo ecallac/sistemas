@@ -5,6 +5,7 @@ package com.security.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
@@ -43,29 +44,13 @@ public class RoleUserServiceImpl implements RoleUserService {
 	@Override
 	public List<User> findUserListByRoleId(Long roleId) {
 		// TODO Auto-generated method stub
-		return getUsers(roleUserRepository.findByRoleId(roleId));
-	}
-
-	private List<User> getUsers(List<RoleUser> roleUsrs){
-		List<User> roles = new ArrayList<User>();
-		for (RoleUser roleUser : roleUsrs) {
-			roles.add(roleUser.getUser());
-		}
-		return roles;
+		return roleUserRepository.findByRoleId(roleId).stream().map(l->l.getUser()).collect(Collectors.toList());
 	}
 	
 	@Override
 	public List<Role> findRoleListByUserId(Long userId) {
 		// TODO Auto-generated method stub
-		return getRolesByUser(roleUserRepository.findByUserId(userId));
-	}
-
-	private List<Role> getRolesByUser(List<RoleUser> roleUsrs){
-		List<Role> roles = new ArrayList<Role>();
-		for (RoleUser roleUser : roleUsrs) {
-			roles.add(roleUser.getRole());
-		}
-		return roles;
+		return roleUserRepository.findByUserId(userId).stream().map(l->l.getRole()).collect(Collectors.toList());
 	}
 
 	@Override

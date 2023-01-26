@@ -101,6 +101,7 @@ public class PermissionController {
 	
 	@RequestMapping(value = "/permission/save", method = {RequestMethod.POST})
     public @ResponseBody  Map<String, Object> save(@RequestBody @Valid PermissionView permissionView,BindingResult result,Principal principal) {
+		permissionView.setName(permissionView.getName().replaceAll("\\W", ""));
 		Map<String, Object> map = new HashMap<String, Object>();
 		if(result.hasErrors()){
 	         

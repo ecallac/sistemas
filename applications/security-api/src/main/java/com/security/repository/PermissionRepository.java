@@ -22,4 +22,5 @@ public interface PermissionRepository extends JpaRepository<Permission, Long>{
 	List<Permission> findEnabledPermissionsByModuleId(@Param("moduleId")Long moduleId);
 	List<Permission> findAllByEnabledOrderByDescription(String enabled);
 	List<Permission> findAllByModuleNameAndEnabledOrderByDescription(String name,String enabled);
+	List<Permission> findAllByParentPermissionId(Long parentPermissionId);
 }

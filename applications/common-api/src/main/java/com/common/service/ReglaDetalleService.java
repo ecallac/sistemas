@@ -14,5 +14,5 @@ import java.util.List;
 public interface ReglaDetalleService extends BaseService<ReglaDetalle> {
 
     List<ReglaDetalle> findByReglaCategoria(String categoria);
-
+    List<ReglaDetalle> findByReglaCodigo(String codigo);
 }

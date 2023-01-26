@@ -3,30 +3,25 @@
  */
 package com.common.controller;
 
-import java.util.List;
-
+import com.common.domain.Direccion;
+import com.common.facade.DatosMaestrosFacade;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import com.common.domain.Telefono;
-import com.common.facade.DatosMaestrosFacade;
+import java.util.List;
 
 /**
  * @author efrain.calla
  *
  */
 @RestController
-@RequestMapping("/"+TelefonoController.NAME)
-public class TelefonoController {
-    public static final String NAME="telefono";
+@RequestMapping("/"+ DireccionController.NAME)
+public class DireccionController {
+    public static final String NAME="direccion";
     private Logger logger = Logger.getLogger(this.getClass());
     
     @Autowired
@@ -34,7 +29,7 @@ public class TelefonoController {
     
     @RequestMapping(value = "/findByEntidadId", method = {RequestMethod.GET})
     public ResponseEntity<?> findByEntidadId(@RequestParam(value = "entidadId", required = true) Long entidadId) {
-    	List<Telefono> list = datosMaestrosFacade.findTelefonoByEntidadId(entidadId);
+    	List<Direccion> list = datosMaestrosFacade.findDireccionByEntidadId(entidadId);
 		if (CollectionUtils.isEmpty(list)) {
         	return new ResponseEntity(HttpStatus.NO_CONTENT);
         }
@@ -43,7 +38,7 @@ public class TelefonoController {
     
     @RequestMapping(value = "/findById", method = {RequestMethod.GET})
     public ResponseEntity<?> findById(@RequestParam(value = "id", required = true) Long id) {
-    	Telefono entity = datosMaestrosFacade.findTelefonoById(id);
+    	Direccion entity = datosMaestrosFacade.findDireccionById(id);
 		if (entity==null) {
 			return new ResponseEntity(HttpStatus.NO_CONTENT);
         }
@@ -51,9 +46,9 @@ public class TelefonoController {
     }
     
     @RequestMapping(value = "/save", method = {RequestMethod.POST})
-    public ResponseEntity<?> save(@RequestBody Telefono bean) {
+    public ResponseEntity<?> save(@RequestBody Direccion bean) {
     	try {
-    		datosMaestrosFacade.saveTelefono(bean);
+    		datosMaestrosFacade.saveDireccion(bean);
     		return new ResponseEntity(bean,HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();

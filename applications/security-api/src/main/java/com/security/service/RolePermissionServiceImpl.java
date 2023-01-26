@@ -5,6 +5,7 @@ package com.security.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
@@ -35,7 +36,7 @@ public class RolePermissionServiceImpl implements RolePermissionService {
 	@Override
 	public List<Permission> findPermissionListByRoleId(Long roleId) {
 		// TODO Auto-generated method stub
-		return null;
+		return rolePermissionRepository.findByRoleId(roleId).stream().map(l -> l.getPermission()).collect(Collectors.toList());
 	}
 
 	/* (non-Javadoc)
@@ -44,17 +45,9 @@ public class RolePermissionServiceImpl implements RolePermissionService {
 	@Override
 	public List<Role> findRoleListByPermissionId(Long permissionId) {
 		// TODO Auto-generated method stub
-		return getRolesByUser(rolePermissionRepository.findByPermissionId(permissionId));
+		return rolePermissionRepository.findByPermissionId(permissionId).stream().map(l->l.getRole()).collect(Collectors.toList());
 	}
-	
-	private List<Role> getRolesByUser(List<RolePermission> rolePermissions){
-		List<Role> roles = new ArrayList<Role>();
-		for (RolePermission rolePermission : rolePermissions) {
-			roles.add(rolePermission.getRole());
-		}
-		return roles;
-	}
-	
+
 	@Override
 	public void save(Role role, Permission permission) {
 		// TODO Auto-generated method stub
@@ -73,5 +66,8 @@ public class RolePermissionServiceImpl implements RolePermissionService {
 		rolePermissionRepository.deleteByRoleId(roleId);
 	}
 
-
+	@Override
+	public List<Permission> findRootPermissionListByRoleIdAndModuleName(Long roleId, String moduleName) {
+		return rolePermissionRepository.findByRoleIdAndPermissionModuleName(roleId,moduleName).stream().map(l->l.getPermission()).filter(l -> l.getParentPermission()!=null && l.getParentPermission().getPath().equals("/")).collect(Collectors.toList());
+	}
 }

@@ -65,4 +65,9 @@ public class ReglaDetalleServiceImpl implements ReglaDetalleService {
 	public List<ReglaDetalle> findByReglaCategoria(String categoria) {
 		return reglaDetalleRepository.findByReglaCategoria(categoria);
 	}
+
+	@Override
+	public List<ReglaDetalle> findByReglaCodigo(String codigo) {
+		return reglaDetalleRepository.findByReglaCodigo(codigo);
+	}
 }

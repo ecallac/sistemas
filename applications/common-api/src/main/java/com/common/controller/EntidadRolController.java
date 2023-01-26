@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.common.domain.EntidadRol;
-import com.common.facade.CommonFacade;
+import com.common.facade.DatosMaestrosFacade;
 
 /**
  * @author efrain.calla
@@ -26,12 +26,12 @@ public class EntidadRolController {
     private Logger logger = Logger.getLogger(this.getClass());
     
     @Autowired
-    CommonFacade commonFacade;
+    DatosMaestrosFacade datosMaestrosFacade;
     
     @RequestMapping(value = "/save", method = {RequestMethod.POST})
     public ResponseEntity<?> save(@RequestBody EntidadRol bean) {
     	try {
-    		commonFacade.saveEntidadRol(bean);
+    		datosMaestrosFacade.saveEntidadRol(bean);
     		return new ResponseEntity(bean,HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
