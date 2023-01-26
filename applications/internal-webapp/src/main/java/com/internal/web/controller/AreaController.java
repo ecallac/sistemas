@@ -3,28 +3,13 @@
  */
 package com.internal.web.controller;
 
-import com.BeanParser;
-import com.security.Module;
-import com.security.web.bean.ModuleView;
-import com.security.web.service.LoginService;
-import com.security.web.service.integration.ModuleIntegration;
-import com.security.web.utils.SecurityConstants;
-import com.security.web.utils.SecurityUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
-import javax.validation.Valid;
 import java.security.Principal;
-import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * @author efrain
