@@ -65,19 +65,22 @@
 	
 	
 <!-- 	datatables -->
-<%-- 	<script src="<c:url value='/resources/js/datatables.min.js' />"></script> --%>
-<%-- 	<script src="<c:url value='/resources/js/dataTables.bootstrap4.min.js' />"></script> --%>
-<%-- 	<script src="<c:url value='/resources/js/dataTables.buttons.min.js' />"></script> --%>
-<%-- 	<script src="<c:url value='/resources/js/buttons.bootstrap.min.js' />"></script> --%>
-<%-- 	<script src="<c:url value='/resources/js/jszip.min.js' />"></script> --%>
-<%-- 	<script src="<c:url value='/resources/js/pdfmake.min.js' />"></script> --%>
-<%-- 	<script src="<c:url value='/resources/js/vfs_fonts.js' />"></script> --%>
-<%-- 	<script src="<c:url value='/resources/js/buttons.html5.min.js' />"></script> --%>
-<%-- 	<script src="<c:url value='/resources/js/buttons.print.min.js' />"></script> --%>
+ 	<script src="<c:url value='/resources/js/datatables.min.js' />"></script>
+ 	<script src="<c:url value='/resources/js/dataTables.bootstrap5.min.js' />"></script>
+	<script src="<c:url value='/resources/js/dataTables.responsive.js' />"></script>
+ 	<script src="<c:url value='/resources/js/dataTables.buttons.min.js' />"></script>
+ 	<script src="<c:url value='/resources/js/buttons.bootstrap5.min.js' />"></script>
+ 	<script src="<c:url value='/resources/js/jszip.min.js' />"></script>
+ 	<script src="<c:url value='/resources/js/pdfmake.min.js' />"></script>
+ 	<script src="<c:url value='/resources/js/vfs_fonts.js' />"></script>
+ 	<script src="<c:url value='/resources/js/buttons.html5.min.js' />"></script>
+ 	<script src="<c:url value='/resources/js/buttons.print.min.js' />"></script>
+	<script src="https://cdn.datatables.net/responsive/2.4.0/js/responsive.bootstrap5.min.js"></script>
 	
-<%-- 	<link href="<c:url value='/resources/css/dataTables.bootstrap4.css' />"  rel="stylesheet"></link> --%>
-<%-- 	<link href="<c:url value='/resources/css/buttons.bootstrap4.min.css' />"  rel="stylesheet"></link> --%>
-	
+ 	<link href="<c:url value='/resources/css/dataTables.bootstrap5.min.css' />"  rel="stylesheet"></link>
+	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css">
+ 	<link href="<c:url value='/resources/css/buttons.bootstrap5.min.css' />"  rel="stylesheet"></link>
+	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.4.0/css/responsive.bootstrap5.min.css">
 	
 	
 	

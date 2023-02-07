@@ -20,6 +20,8 @@ import java.util.List;
 public class RecurrsosHumanosFacade {
 	@Autowired
 	AreaService areaService;
+	@Autowired
+	CargoService cargoService;
 
 	public List<Area> findAreaList() {
 		return areaService.findList();
@@ -31,12 +33,35 @@ public class RecurrsosHumanosFacade {
 		return areaService.findById(id);
 	}
 	@Transactional(readOnly = false,rollbackFor=Exception.class)
-	public void saveArea(Area ubigeo) {
-		ubigeo.setParentArea(areaService.findById(ubigeo.getParentArea().getId()));
-		areaService.save(ubigeo);
+	public void saveArea(Area area) {
+		if (area.getParentArea()!=null){
+			area.setParentArea(areaService.findById(area.getParentArea().getId()));
+		}
+		areaService.save(area);
 	}
 	public List<Area> findAreaByActivo(String activo) {
 		return areaService.findByActivo(activo);
+	}
+
+
+	public List<Cargo> findCargoList() {
+		return cargoService.findList();
+	}
+	public List<Cargo> findCargoByParentCargoId(Long parentCargoId){
+		return cargoService.findByParentCargoId(parentCargoId);
+	}
+	public Cargo findCargoById(Long id){
+		return cargoService.findById(id);
+	}
+	@Transactional(readOnly = false,rollbackFor=Exception.class)
+	public void saveCargo(Cargo cargo) {
+		if (cargo.getParentCargo()!=null){
+			cargo.setParentCargo(cargoService.findById(cargo.getParentCargo().getId()));
+		}
+		cargoService.save(cargo);
+	}
+	public List<Cargo> findCargoByActivo(String activo) {
+		return cargoService.findByActivo(activo);
 	}
 	
 }

@@ -27,6 +27,20 @@
     <definition name="area" extends="template">
         <put-attribute name="body" value="/WEB-INF/jsp/internal/area.jsp" />
     </definition>
-   
+    <definition name="cargo" extends="template">
+        <put-attribute name="body" value="/WEB-INF/jsp/internal/cargo.jsp" />
+    </definition>
+    <definition name="sucursal" extends="template">
+        <put-attribute name="body" value="/WEB-INF/jsp/internal/sucursal.jsp" />
+    </definition>
+    <definition name="marca" extends="template">
+        <put-attribute name="body" value="/WEB-INF/jsp/internal/marca.jsp" />
+    </definition>
+    <definition name="componente" extends="template">
+        <put-attribute name="body" value="/WEB-INF/jsp/internal/componente.jsp" />
+    </definition>
+    <definition name="tipoBase" extends="template">
+        <put-attribute name="body" value="/WEB-INF/jsp/internal/tipoBase.jsp" />
+    </definition>
   
 </tiles-definitions>

@@ -5,6 +5,10 @@ package com.common.facade;
 
 import java.util.List;
 
+import com.DataTablesInput;
+import com.DataTablesOutput;
+import com.common.Column;
+import com.common.Table;
 import com.common.domain.*;
 import com.common.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +46,15 @@ public class DatosMaestrosFacade {
 	@Autowired
 	EntidadRolAtributoService entidadRolAtributoService;
 
+	@Autowired
+	DatabaseService databaseService;
+
+	public List<Table> findDatabaseTables(String catalog) throws Exception {
+		return databaseService.findTables(catalog);
+	}
+	public List<Column> findDatabaseColumnsByTable(String table) throws Exception {
+		return databaseService.findColumnsByTable(table);
+	}
 	
 	public TipoBase findTipoBaseById(Long id) {
 		return tipoBaseService.findById(id);
@@ -51,6 +64,19 @@ public class DatosMaestrosFacade {
 	}
 	public List<TipoBase> findTipoBaseByCategoriaActivos(String categoria){
 		return tipoBaseService.findByCategoriaActivos(categoria);
+	}
+	public List<TipoBase> findTipoBaseList(){
+		return tipoBaseService.findAll();
+	}
+	public List<TipoBase> findTipoBaseByDescripcionContaining(String description) {
+		return tipoBaseService.findByDescripcionContaining(description);
+	}
+	@Transactional(readOnly = false,rollbackFor=Exception.class)
+	public void saveTipoPBase(TipoBase tipoBase) {
+		tipoBaseService.save(tipoBase);
+	}
+	public DataTablesOutput<TipoBase> findTipoBaseDataTablesList(DataTablesInput<TipoBase> dataTablesInput){
+		return tipoBaseService.findDataTablesList(dataTablesInput);
 	}
 	
 	public Persona findPersonaByEntidadId(Long entidadRolId) {

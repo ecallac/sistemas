@@ -3,16 +3,21 @@
  */
 package com.common.controller;
 
+import com.DataTablesInput;
+import com.DataTablesOutput;
 import com.common.domain.Area;
+import com.common.domain.Componente;
 import com.common.enums.EnableIndicator;
 import com.common.facade.RecurrsosHumanosFacade;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,16 +37,16 @@ public class AreaController {
     public ResponseEntity<?> findList() {
         List<Area> list = recurrsosHumanosFacade.findAreaList();
         if (CollectionUtils.isEmpty(list)) {
-            return new ResponseEntity(HttpStatus.NO_CONTENT);
+            return new ResponseEntity(new ArrayList<Area>(),HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity(list,HttpStatus.OK);
     }
 
     @RequestMapping(value = "/findActivos", method = {RequestMethod.GET})
-    public ResponseEntity<?> findByParentAreaId() {
+    public ResponseEntity<?> findByActivos() {
         List<Area> list = recurrsosHumanosFacade.findAreaByActivo(EnableIndicator.ENABLED.getCode());
         if (CollectionUtils.isEmpty(list)) {
-            return new ResponseEntity(HttpStatus.NO_CONTENT);
+            return new ResponseEntity(new ArrayList<Area>(),HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity(list,HttpStatus.OK);
     }
@@ -50,7 +55,7 @@ public class AreaController {
     public ResponseEntity<?> findByParentAreaId(@RequestParam(value = "parentAreaId", required = true) Long parentAreaId) {
     	List<Area> list = recurrsosHumanosFacade.findAreaByParentAreaId(parentAreaId);
 		if (CollectionUtils.isEmpty(list)) {
-        	return new ResponseEntity(HttpStatus.NO_CONTENT);
+        	return new ResponseEntity(new ArrayList<Area>(),HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity(list,HttpStatus.OK);
     }
@@ -59,7 +64,7 @@ public class AreaController {
     public ResponseEntity<?> findById(@RequestParam(value = "id", required = true) Long id) {
     	Area entity = recurrsosHumanosFacade.findAreaById(id);
 		if (entity==null) {
-			return new ResponseEntity(HttpStatus.NO_CONTENT);
+			return new ResponseEntity(new Area(),HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity(entity,HttpStatus.OK);
     }
@@ -74,4 +79,5 @@ public class AreaController {
 		}
     	return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
 } 

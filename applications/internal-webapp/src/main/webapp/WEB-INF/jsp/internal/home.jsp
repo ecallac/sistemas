@@ -1,5 +1,8 @@
+<%@ page import="java.util.List" %>
+<%@ page import="com.common.Persona" %>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1" isELIgnored="false" session="true"%>
-<%@ taglib prefix ="c" uri="http://java.sun.com/jsp/jstl/core" %> 
+<%@ taglib prefix ="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<% Persona persona = (Persona) request.getSession().getAttribute("person");%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -54,12 +57,12 @@
 									<div class="row g-0 w-100">
 										<div class="col-6">
 											<div class="illustration-text p-3 m-1">
-												<h4 class="illustration-text">Welcome Back, Chris!</h4>
-												<p class="mb-0">AppStack Dashboard</p>
+												<h4 class="illustration-text">Bienvenido, <%=persona.getNombres() %>!</h4>
+												<p class="mb-0">Dashboard</p>
 											</div>
 										</div>
 										<div class="col-6 align-self-end text-end">
-											<img src="img/illustrations/customer-support.png" alt="Customer Support" class="img-fluid illustration-img">
+											<img src="<c:url value='/resources/img/customer-support.png' />" alt="Customer Support" class="img-fluid illustration-img">
 										</div>
 									</div>
 								</div>

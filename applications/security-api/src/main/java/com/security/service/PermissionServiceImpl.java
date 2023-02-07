@@ -87,12 +87,12 @@ public class PermissionServiceImpl implements PermissionService {
 	@Override
 	public List<Permission> findEnabledPermissionsByModuleName(String moduleName) {
 		// TODO Auto-generated method stub
-		return permissionRepository.findAllByModuleNameAndEnabledOrderByDescription(moduleName, EnableIndicator.ENABLED.getCode());
+		return permissionRepository.findAllByModuleNameAndEnabledOrderByDescriptionAsc(moduleName, EnableIndicator.ENABLED.getCode());
 	}
 
 	@Override
 	public List<Permission> findAllByParentPermissionId(Long parentPermissionId) {
-		return permissionRepository.findAllByParentPermissionId(parentPermissionId);
+		return permissionRepository.findAllByParentPermissionIdOrderByDescriptionAsc(parentPermissionId);
 	}
 
 }

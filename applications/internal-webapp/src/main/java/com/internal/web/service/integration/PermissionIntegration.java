@@ -25,11 +25,11 @@ public class PermissionIntegration extends ServiceIntegrationAbstract<Permission
 	
 	String basePath="permission";
 	
-	public List<Permission> findEnabledListByModuleName(String moduleName) {
+	public List<Permission> findEnabledListByModuleName(String moduleName)  throws Exception {
 		return getObjectListFromGetRequest(api+"/"+basePath+"/findEnabledListByModuleName?moduleName="+moduleName,new TypeReference<List<Permission>>(){});
 	}
 
-	public List<Permission> findEnabledListByRoleIdAndModuleName(Long roleId,String moduleName) {
+	public List<Permission> findEnabledListByRoleIdAndModuleName(Long roleId,String moduleName) throws Exception  {
 		return getObjectListFromGetRequest(api+"/"+basePath+"/findEnabledListByRoleIdAndModuleName?roleId="+roleId+"&moduleName="+moduleName,new TypeReference<List<Permission>>(){});
 	}
 }

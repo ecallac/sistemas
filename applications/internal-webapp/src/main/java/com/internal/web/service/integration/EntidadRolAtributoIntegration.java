@@ -24,13 +24,13 @@ public class EntidadRolAtributoIntegration extends ServiceIntegrationAbstract<En
 	
 	String basePath="entidadRolAtributo";
 	
-	public EntidadRolAtributo findById(Long id) {
+	public EntidadRolAtributo findById(Long id)  throws Exception {
 		return getObjectFromGetRequest(api+"/"+basePath+"/findById?id="+id, EntidadRolAtributo.class);
 	}
-	public List<EntidadRolAtributo> findByEntidadRolId(Long entidadRolId) {
+	public List<EntidadRolAtributo> findByEntidadRolId(Long entidadRolId)  throws Exception {
 		return getObjectListFromGetRequest(api+"/"+basePath+"/findByEntidadRolId?entidadRolId="+entidadRolId,new TypeReference<List<EntidadRolAtributo>>(){});
 	}
-	public EntidadRolAtributo save(EntidadRolAtributo objeto) {
+	public EntidadRolAtributo save(EntidadRolAtributo objeto)  throws Exception {
 		return setObjectToPostRequest(api+"/"+basePath+"/save", objeto,EntidadRolAtributo.class);
 	}
 }

@@ -24,13 +24,13 @@ public class UbigeoIntegration extends ServiceIntegrationAbstract<Ubigeo> {
 	
 	String basePath="ubigeo";
 	
-	public Ubigeo findById(Long id) {
+	public Ubigeo findById(Long id)  throws Exception {
 		return getObjectFromGetRequest(api+"/"+basePath+"/findById?id="+id, Ubigeo.class);
 	}
-	public List<Ubigeo> findByParentUbigeoId(Long parentUbigeoId) {
+	public List<Ubigeo> findByParentUbigeoId(Long parentUbigeoId)  throws Exception {
 		return getObjectListFromGetRequest(api+"/"+basePath+"/findByParentUbigeoId?parentUbigeoId="+parentUbigeoId,new TypeReference<List<Ubigeo>>(){});
 	}
-	public Ubigeo save(Ubigeo ubigeo) {
+	public Ubigeo save(Ubigeo ubigeo)  throws Exception {
 		return setObjectToPostRequest(api+"/"+basePath+"/save", ubigeo,Ubigeo.class);
 	}
 }

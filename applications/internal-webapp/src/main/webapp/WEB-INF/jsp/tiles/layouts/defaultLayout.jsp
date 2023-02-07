@@ -59,6 +59,15 @@
         table{
             font-size: small;
         }
+
+
+        .notyf__toast {
+            max-width: 50em !important;
+            .notyf__ripple {
+                height: 60em;
+                width: 60em;
+            }
+        }
     </style>
 
     <script type="text/javascript">
@@ -108,6 +117,10 @@
 
         $(document).ready(function(){
             getIp();
+
+            $('.modal-dialog').draggable({
+                handle: ".modal-header"
+            });
         });
 
         function getIp(){
@@ -348,9 +361,9 @@
                             </div>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end">
-                            <a class="dropdown-item" href="${pageContext.request.contextPath}/profile"><i class="align-middle me-1" data-feather="user"></i> Profile</a>
+                            <a class="dropdown-item" href="${pageContext.request.contextPath}/profile"><i class="align-middle me-1" data-feather="user"></i> Mi Perfil</a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="javascript:document.getElementById('logout').submit()">Sign out</a>
+                            <a class="dropdown-item" href="javascript:document.getElementById('logout').submit()">Cerrar Session</a>
                         </div>
                     </li>
                 </ul>

@@ -3,6 +3,7 @@
  */
 package com;
 
+import java.io.Serializable;
 import java.util.Date;
 
 
@@ -10,7 +11,8 @@ import java.util.Date;
  * @author efrain.calla
  *
  */
-public class BaseEntity {
+public class BaseEntity implements Serializable {
+
 	public String toString() {
 		return this.getClass().getCanonicalName() + " : ID=" + this.id;
 	}

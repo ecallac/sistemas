@@ -36,42 +36,47 @@ function load(){
    var ajaxUrl = sessionContexPath+'/profile/load.json';
 	var successFunction = function(response){
 		if(response.status=="OK"){
-			$("#userId").val(response.user.id);
-  			$("#lusername").text(response.user.userName);
-  			if(response.user.roles.length>0){
-  				var i = 0;
-       			$.each(response.user.roles, function(i, row) {
-       				i++;
-       				if (i>1) {
-       					$('#lrole').append(", "); 
-					}
-                    $('#lrole').append(row.description); 
-                });
-       		}
-  			
-  			$("#lstatus").addClass("badge bg-"+response.view.userStatusType);
-  			$("#lstatus").text(response.user.status);
-  			
-  			$("#lactivationdate").text(response.user.activationDate);
-  			
-  			$("#lfullname").text(response.persona.fullName);
-  			
-  			$("#ltipodcumento").text(response.persona.tipoDocumentoIdentificaion);
-  			$("#lnumeroidentificacion").text(response.persona.numeroidentificacion);
-  			$("#lnombres").text(response.persona.nombres);
-  			$("#lapellidos").text(response.persona.apellidos);
-  			$("#lestadocivil").text(response.persona.tipoEstadoCivil);
-  			$("#lsexo").text(response.persona.sexo);
-  			$("#lfechanacimiento").text(response.persona.fechanacimiento);
-  			$("#lemail").text(response.persona.email);
+			if(response.status=="OK"){
+				$("#userId").val(response.user.id);
+				$("#lusername").text(response.user.userName);
+				if(response.user.roles.length>0){
+					var i = 0;
+					$.each(response.user.roles, function(i, row) {
+						i++;
+						if (i>1) {
+							$('#lrole').append(", ");
+						}
+						$('#lrole').append(row.description);
+					});
+				}
 
-			$.each(response.telefonos, function(i, row) {
-				$('#ltelefonos').append("<div class='col'><span class='ms-2' id='ldir'>"+row.tipo+"</span></div><div class='col'><span class='ms-2' id='lval'>"+row.codigoarea+" "+row.numero+"</span></div>");
-			});
-			$.each(response.direcciones, function(i, row) {
-				$('#ldirecciones').append("<div class='col'><span class='ms-2' id='ldir'>"+row.direccionexacta+" "+row.ubicaionTotal+" <span class='ms-2 badge bg-"+row.esprincipalStyle+"' id= 'dirprincipal'>"+row.esprincipal+"</span></span></div>");
-			});
-  		}
+				$("#lstatus").addClass("badge bg-"+response.view.userStatusType);
+				$("#lstatus").text(response.user.status);
+
+				$("#lactivationdate").text(response.user.activationDate);
+
+				$("#lfullname").text(response.persona.fullName);
+
+				$("#ltipodcumento").text(response.persona.tipoDocumentoIdentificaion);
+				$("#lnumeroidentificacion").text(response.persona.numeroidentificacion);
+				$("#lnombres").text(response.persona.nombres);
+				$("#lapellidos").text(response.persona.apellidos);
+				$("#lestadocivil").text(response.persona.tipoEstadoCivil);
+				$("#lsexo").text(response.persona.sexo);
+				$("#lfechanacimiento").text(response.persona.fechanacimiento);
+				$("#lemail").text(response.persona.email);
+
+				$.each(response.telefonos, function(i, row) {
+					$('#ltelefonos').append("<div class='col'><span class='ms-2' id='ldir'>"+row.tipo+"</span></div><div class='col'><span class='ms-2' id='lval'>"+row.codigoarea+" "+row.numero+"</span></div>");
+				});
+				$.each(response.direcciones, function(i, row) {
+					$('#ldirecciones').append("<div class='col'><span class='ms-2' id='ldir'>"+row.direccionexacta+" "+row.ubicaionTotal+" <span class='ms-2 badge bg-"+row.esprincipalStyle+"' id= 'dirprincipal'>"+row.esprincipal+"</span></span></div>");
+				});
+			}
+		}else{
+			showErrorMessage(response.message);
+		}
+
   };
   ajaxWithoutForm(ajaxUrl,"GET",successFunction);
 }

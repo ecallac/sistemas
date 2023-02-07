@@ -21,6 +21,7 @@ import com.common.EntidadRol;
 import com.common.EntidadRolAtributo;
 import com.internal.web.service.integration.EntidadRolAtributoIntegration;
 import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -47,6 +48,7 @@ import com.security.User;
  */
 @Service
 public class LoginService implements UserDetailsService {
+	private Logger logger = Logger.getLogger(this.getClass());
 	static final String ROLE_PREFIX_SPRING_ECURITY="ROLE_";
 	@Autowired
 	UserIntegration userIntegration;
@@ -61,9 +63,16 @@ public class LoginService implements UserDetailsService {
 	EntidadRolAtributoIntegration entidadRolAtributoIntegration;
 	
 	public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-		User userBean = userIntegration.findByUserNameActive(userName);
-		UserDetails userDetails = new org.springframework.security.core.userdetails.User(userBean.getUserName(), userBean.getPassword(), getGrantedAuthorityList(userBean.getRoles()));
-		return userDetails;
+		try{
+			User userBean = userIntegration.findByUserNameActive(userName);
+			UserDetails userDetails = new org.springframework.security.core.userdetails.User(userBean.getUserName(), userBean.getPassword(), getGrantedAuthorityList(userBean.getRoles()));
+			return userDetails;
+		}catch (UsernameNotFoundException e){
+			throw e;
+		}catch (Exception e){
+			logger.error(e.getMessage(),e);
+		}
+		return null;
 	}
 	
 	protected List<GrantedAuthority> getGrantedAuthorityList(List<Role> roleBeans){
@@ -92,12 +101,12 @@ public class LoginService implements UserDetailsService {
 		for (Map.Entry<String,List<String>> entry : permissionBeans.entrySet()){
 			map.put(entry.getKey(), "'" + StringUtils.join(entry.getValue(), "','") + "'");
 		}
-		System.out.println(map);
+		logger.info(map);
 		return map;
 	}
 	
 	
-	public List<Permission> getPermissions(List<Role> roles){
+	public List<Permission> getPermissions(List<Role> roles) throws Exception {
 		List<Permission> permissions = new ArrayList<Permission>();
 		for (Role role: roles){
 			List<Permission> permissionList = permissionIntegration.findEnabledListByRoleIdAndModuleName(role.getId(),Constants.MODULE);
@@ -109,10 +118,11 @@ public class LoginService implements UserDetailsService {
 		return permissions;
 	}
 	
-	public void addSessionObjects(HttpSession httpSession,Principal principal) {
+	public void addSessionObjects(HttpSession httpSession,Principal principal)  throws Exception {
 		User user =  (User) httpSession.getAttribute("user");
 		if (user==null) {
-			httpSession.setAttribute("user", userIntegration.findByUserNameActive(principal.getName()));
+			user = userIntegration.findByUserNameActive(principal.getName());
+			httpSession.setAttribute("user", user);
 
 			List sessionlist = (List) httpSession.getAttribute("permissions");
 			if (CollectionUtils.isEmpty(sessionlist)) {
@@ -132,11 +142,11 @@ public class LoginService implements UserDetailsService {
 		}
 	}
 	
-	public void saveSession(Session session) {
+	public void saveSession(Session session)  throws Exception {
 		userIntegration.saveSession(session);
 	}
 
-	public void saveEntidadRolAtributo(HttpSession httpSession,EntidadRolAtributo entidadRolAtributo){
+	public void saveEntidadRolAtributo(HttpSession httpSession,EntidadRolAtributo entidadRolAtributo) throws Exception {
 		List<EntidadRolAtributo> atributos = (List<EntidadRolAtributo>) httpSession.getAttribute("atributos");
 		if (!CollectionUtils.isEmpty(atributos)){
 			for (EntidadRolAtributo atributo:atributos ) {

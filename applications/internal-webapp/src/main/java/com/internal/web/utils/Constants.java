@@ -3,6 +3,10 @@
  */
 package com.internal.web.utils;
 
+import com.Utils;
+
+import java.util.Date;
+
 /**
  * @author EFRAIN
  * @dateCreated 26 mar. 2017 13:59:23
@@ -33,6 +37,7 @@ public interface Constants {
 	static final String DANGER = "danger";
 	static final String RULE_USER_STATUS_LABEL_TYPE="USER_STATUS_LABEL_TYPE";
 	
-	static final String SUCCESS_MESSAGE="Su registro se ha guardado con éxito";
-	
+	static final String SUCCESS_MESSAGE="Sus cambios se han guardado con exito";
+	static final String ERROR_MESSAGE="! Sus cambios no pudieron ser guardados. Contactese con su administrador de sistema o soporte tectico";
+	static final String ERROR_MESSAGE_GET="! Hubo un problema al obteger la informacion. Contactese con su administrador de sistema o soporte tectico";
 }

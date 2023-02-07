@@ -28,10 +28,10 @@ public class ReglaIntegration extends ServiceIntegrationAbstract<ReglaDetalle> {
 	
 	String basePath="regla";
 
-	public List<ReglaDetalle> findByCategoria(String categoria) {
+	public List<ReglaDetalle> findByCategoria(String categoria) throws Exception  {
 		return getObjectListFromGetRequest(api+"/"+basePath+"/findByCategoria?categoria="+categoria,new TypeReference<List<ReglaDetalle>>(){});
 	}
-	public List<ReglaDetalle> findByCodigo(String codigo) {
+	public List<ReglaDetalle> findByCodigo(String codigo)  throws Exception {
 		return getObjectListFromGetRequest(api+"/"+basePath+"/findByCodigo?codigo="+codigo,new TypeReference<List<ReglaDetalle>>(){});
 	}
 

@@ -26,13 +26,13 @@ public class PersonaIntegration extends ServiceIntegrationAbstract<Persona> {
 	
 	String basePath="entidad";
 	
-	public Persona findByEntidadRolId(Long entidadRolId) {
+	public Persona findByEntidadRolId(Long entidadRolId) throws Exception  {
 		return getObjectFromGetRequest(api+"/"+basePath+"/findPersonaByEntidadRolId?entidadRolId="+entidadRolId, Persona.class);
 	}
-	public List<Persona> findByTermino(String termino) {
+	public List<Persona> findByTermino(String termino) throws Exception  {
 		return getObjectListFromGetRequest(api+"/"+basePath+"/findPersonaByTermino?termino="+termino,new TypeReference<List<Persona>>(){});
 	}
-	public Persona save(Persona persona) {
+	public Persona save(Persona persona)  throws Exception {
 		return setObjectToPostRequest(api+"/"+basePath+"/savePersona", persona,Persona.class);
 	}
 }

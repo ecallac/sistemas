@@ -3,10 +3,18 @@
  */
 package com.common.service;
 
+import java.util.Date;
 import java.util.List;
 
+import com.BeanParser;
+import com.DataTablesInput;
+import com.DataTablesOutput;
+import com.common.domain.Cargo;
+import com.common.domain.Componente;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,7 +28,7 @@ import com.common.repository.TipoBaseRepository;
  */
 @Service
 @Transactional
-public class TipoBaseServiceImpl implements TipoBaseService {
+public class TipoBaseServiceImpl extends CommonServiceAbstract<TipoBase> implements TipoBaseService {
 
 	@Autowired
 	TipoBaseRepository tipoBaseRepository;
@@ -29,32 +37,16 @@ public class TipoBaseServiceImpl implements TipoBaseService {
 	 */
 	@Override
 	public void save(TipoBase entity) {
-		// TODO Auto-generated method stub
 		if (entity.getId()!=null){
 			TipoBase enrityFromDb = findById(entity.getId());
-            BeanUtils.copyProperties(entity,enrityFromDb);
-            tipoBaseRepository.save(enrityFromDb);
-        }else{
-        	tipoBaseRepository.save(entity);
-        }
-	}
-
-	/* (non-Javadoc)
-	 * @see com.common.service.TipoBaseService#updateEnableById(java.lang.Long)
-	 */
-	@Override
-	public void updateEnableById(Long id) {
-		// TODO Auto-generated method stub
-
-	}
-
-	/* (non-Javadoc)
-	 * @see com.common.service.TipoBaseService#updateDisableById(java.lang.Long)
-	 */
-	@Override
-	public void updateDisableById(Long id) {
-		// TODO Auto-generated method stub
-
+			entity.setVersion(enrityFromDb.getVersion()+1);
+			enrityFromDb = (TipoBase) BeanParser.parseBetweenObjects(entity, enrityFromDb);
+			enrityFromDb.setDateUpdated(new Date());
+			tipoBaseRepository.save(enrityFromDb);
+		}else{
+			entity.setDateCreated(new Date());
+			tipoBaseRepository.save(entity);
+		}
 	}
 
 	/* (non-Javadoc)
@@ -102,4 +94,17 @@ public class TipoBaseServiceImpl implements TipoBaseService {
 		return tipoBaseRepository.findFirstByCodigo(codigo);
 	}
 
+	@Override
+	public DataTablesOutput<TipoBase> findDataTablesList(DataTablesInput<TipoBase> dataTablesInput) {
+		DataTablesOutput dataTablesOutput = super.getSearchedElements(
+				tipoBaseRepository.findPageByParameters(dataTablesInput.getSearchValue(),super.getPageRequest(dataTablesInput),dataTablesInput.getObject()),
+				tipoBaseRepository.count());
+		dataTablesOutput.setDraw(dataTablesInput.getDraw());
+		return dataTablesOutput;
+	}
+
+	@Override
+	public List<TipoBase> findByDescripcionContaining(String description) {
+		return tipoBaseRepository.findByDescripcionIgnoreCaseContaining(description);
+	}
 }

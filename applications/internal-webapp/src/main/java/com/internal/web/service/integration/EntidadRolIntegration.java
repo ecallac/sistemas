@@ -23,7 +23,7 @@ public class EntidadRolIntegration extends ServiceIntegrationAbstract<EntidadRol
 	
 	String basePath="entidadRol";
 	
-	public EntidadRol save(EntidadRol entidadRol) {
+	public EntidadRol save(EntidadRol entidadRol)  throws Exception {
 		return setObjectToPostRequest(api+"/"+basePath+"/save", entidadRol,EntidadRol.class);
 	}
 }

@@ -24,13 +24,13 @@ public class DireccionIntegration extends ServiceIntegrationAbstract<Direccion> 
 	
 	String basePath="direccion";
 	
-	public Direccion findById(Long id) {
+	public Direccion findById(Long id)  throws Exception {
 		return getObjectFromGetRequest(api+"/"+basePath+"/findById?id="+id, Direccion.class);
 	}
-	public List<Direccion> findByEntidadId(Long entidadId) {
+	public List<Direccion> findByEntidadId(Long entidadId)  throws Exception {
 		return getObjectListFromGetRequest(api+"/"+basePath+"/findByEntidadId?entidadId="+entidadId,new TypeReference<List<Direccion>>(){});
 	}
-	public Direccion save(Direccion direccion) {
+	public Direccion save(Direccion direccion)  throws Exception {
 		return setObjectToPostRequest(api+"/"+basePath+"/save", direccion,Direccion.class);
 	}
 }

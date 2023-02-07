@@ -21,6 +21,6 @@ public interface PermissionRepository extends JpaRepository<Permission, Long>{
 	@Query("select rp from Permission rp where rp.enabled='Y' and rp.module.id=:moduleId order by rp.description asc")
 	List<Permission> findEnabledPermissionsByModuleId(@Param("moduleId")Long moduleId);
 	List<Permission> findAllByEnabledOrderByDescription(String enabled);
-	List<Permission> findAllByModuleNameAndEnabledOrderByDescription(String name,String enabled);
-	List<Permission> findAllByParentPermissionId(Long parentPermissionId);
+	List<Permission> findAllByModuleNameAndEnabledOrderByDescriptionAsc(String name,String enabled);
+	List<Permission> findAllByParentPermissionIdOrderByDescriptionAsc(Long parentPermissionId);
 }

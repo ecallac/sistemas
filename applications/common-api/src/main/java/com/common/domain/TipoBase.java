@@ -14,12 +14,13 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "tipobase")
 public class TipoBase extends BaseEntity {
+	@Searchable
 	@Column(name = "categoria",nullable = false)
 	private String categoria;
-	
+	@Searchable
 	@Column(name = "codigo",nullable = false)
 	private String codigo;
-	
+	@Searchable
 	@Column(name = "descripcion")
 	private String descripcion;
 	
