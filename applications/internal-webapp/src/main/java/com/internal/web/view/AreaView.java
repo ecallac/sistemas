@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.internal.web.beans;
+package com.internal.web.view;
 
 import com.BaseEntity;
 import org.apache.commons.lang.StringUtils;
@@ -18,6 +18,8 @@ public class AreaView extends BaseEntity {
 	private String nombre;
 	@NotEmpty
 	private String activo;
+	private String activoDescripcion;
+	private String activoType;
 	private AreaView parentArea;
 	@NotEmpty
 	private String parentAreaId;
@@ -72,11 +74,29 @@ public class AreaView extends BaseEntity {
 		this.childAreas = childAreas;
 	}
 
+	public String getActivoDescripcion() {
+		return activoDescripcion;
+	}
+
+	public void setActivoDescripcion(String activoDescripcion) {
+		this.activoDescripcion = activoDescripcion;
+	}
+
+	public String getActivoType() {
+		return activoType;
+	}
+
+	public void setActivoType(String activoType) {
+		this.activoType = activoType;
+	}
+
 	@Override
 	public String toString() {
 		return "AreaView{" +
 				"nombre='" + nombre + '\'' +
 				", activo='" + activo + '\'' +
+				", activoDescripcion='" + activoDescripcion + '\'' +
+				", activoType='" + activoType + '\'' +
 				", parentArea=" + parentArea +
 				", parentAreaId='" + parentAreaId + '\'' +
 				", childAreas=" + childAreas +

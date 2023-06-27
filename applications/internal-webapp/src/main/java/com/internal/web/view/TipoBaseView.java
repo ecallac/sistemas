@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.internal.web.beans;
+package com.internal.web.view;
 
 import com.BaseEntity;
 import org.hibernate.validator.constraints.NotEmpty;

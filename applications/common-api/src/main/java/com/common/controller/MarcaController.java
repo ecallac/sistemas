@@ -62,8 +62,9 @@ public class MarcaController {
             inventarioFacade.saveMarca(bean);
     		return new ResponseEntity(bean,HttpStatus.OK);
 		} catch (Exception e) {
-			e.printStackTrace();
+            logger.error(e.getMessage(),e);
+            e.printStackTrace();
+            return new ResponseEntity(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-    	return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 } 

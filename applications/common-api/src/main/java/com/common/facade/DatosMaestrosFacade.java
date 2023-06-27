@@ -33,6 +33,9 @@ public class DatosMaestrosFacade {
 	
 	@Autowired
 	ReglaDetalleService reglaDetalleService;
+
+	@Autowired
+	ReglaService reglaService;
 	
 	@Autowired
 	TelefonoService telefonoService;
@@ -70,6 +73,9 @@ public class DatosMaestrosFacade {
 	}
 	public List<TipoBase> findTipoBaseByDescripcionContaining(String description) {
 		return tipoBaseService.findByDescripcionContaining(description);
+	}
+	public List<TipoBase> findTipoBaseByCategoriaAndCodigo(String categoria,String codigo) {
+		return tipoBaseService.findByCategoriaAndCodigo(categoria,codigo);
 	}
 	@Transactional(readOnly = false,rollbackFor=Exception.class)
 	public void saveTipoPBase(TipoBase tipoBase) {
@@ -118,17 +124,35 @@ public class DatosMaestrosFacade {
 		return reglaDetalleService.findByReglaCategoria(categoria);
 	}
 
-	public  List<ReglaDetalle> findReglaByCodigo(String codigo) {
+	public  List<ReglaDetalle> findReglaDetalleByCodigo(String codigo) {
 		return reglaDetalleService.findByReglaCodigo(codigo);
 	}
 
 	public ReglaDetalle findReglaDetalleById(Long id) {
 		return reglaDetalleService.findById(id);
 	}
-
+	public DataTablesOutput<ReglaDetalle> findReglaDetalleDataTablesList(DataTablesInput<ReglaDetalle> dataTablesInput){
+		return reglaDetalleService.findDataTablesList(dataTablesInput);
+	}
 	@Transactional(readOnly = false,rollbackFor=Exception.class)
 	public void saveReglaDetalle(ReglaDetalle entidad) {
+		entidad.setRegla(reglaService.findById(entidad.getRegla().getId()));
 		reglaDetalleService.save(entidad);
+	}
+
+	public  Regla findReglaByCodigo(String codigo) {
+		return reglaService.findByCodigo(codigo);
+	}
+
+	public Regla findReglaById(Long id) {
+		return reglaService.findById(id);
+	}
+	public DataTablesOutput<Regla> findReglaDataTablesList(DataTablesInput<Regla> dataTablesInput){
+		return reglaService.findDataTablesList(dataTablesInput);
+	}
+	@Transactional(readOnly = false,rollbackFor=Exception.class)
+	public void saveRegla(Regla entidad) {
+		reglaService.save(entidad);
 	}
 
 	public List<Ubigeo> findUbigeoByParentUbigeoId(Long parentUbigeoId){

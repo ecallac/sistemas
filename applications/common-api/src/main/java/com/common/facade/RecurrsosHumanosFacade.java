@@ -3,6 +3,8 @@
  */
 package com.common.facade;
 
+import com.DataTablesInput;
+import com.DataTablesOutput;
 import com.common.domain.*;
 import com.common.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,8 +44,12 @@ public class RecurrsosHumanosFacade {
 	public List<Area> findAreaByActivo(String activo) {
 		return areaService.findByActivo(activo);
 	}
-
-
+	public Area findAreaByNombre(String nombre) {
+		return areaService.findByNombre(nombre);
+	}
+	public DataTablesOutput<Area> findAreaDataTablesList(DataTablesInput<Area> dataTablesInput) {
+		return areaService.findDataTablesList(dataTablesInput);
+	}
 	public List<Cargo> findCargoList() {
 		return cargoService.findList();
 	}

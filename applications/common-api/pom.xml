@@ -85,6 +85,12 @@
 	       <artifactId>interface-shared</artifactId>
 	       <version>${interface.shared}</version>
 	   </dependency>
+
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-ui</artifactId>
+			<version>1.2.32</version>
+		</dependency>
 	</dependencies>
 
 	<build>

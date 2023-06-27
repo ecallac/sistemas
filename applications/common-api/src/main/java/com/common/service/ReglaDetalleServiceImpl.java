@@ -7,6 +7,8 @@ import java.util.Date;
 import java.util.List;
 
 import com.BeanParser;
+import com.DataTablesInput;
+import com.DataTablesOutput;
 import com.common.domain.Telefono;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,7 +23,7 @@ import com.common.repository.ReglaDetalleRepository;
  */
 @Service
 @Transactional
-public class ReglaDetalleServiceImpl implements ReglaDetalleService {
+public class ReglaDetalleServiceImpl extends CommonServiceAbstract<ReglaDetalle> implements ReglaDetalleService {
 
 	@Autowired
 	ReglaDetalleRepository reglaDetalleRepository; 
@@ -69,5 +71,18 @@ public class ReglaDetalleServiceImpl implements ReglaDetalleService {
 	@Override
 	public List<ReglaDetalle> findByReglaCodigo(String codigo) {
 		return reglaDetalleRepository.findByReglaCodigo(codigo);
+	}
+
+	/**
+	 * @param dataTablesInput
+	 * @return
+	 */
+	@Override
+	public DataTablesOutput<ReglaDetalle> findDataTablesList(DataTablesInput<ReglaDetalle> dataTablesInput) {
+		DataTablesOutput dataTablesOutput = super.getSearchedElements(
+				reglaDetalleRepository.findPageByParameters(dataTablesInput.getSearchValue(),super.getPageRequest(dataTablesInput),dataTablesInput.getObject()),
+				reglaDetalleRepository.count());
+		dataTablesOutput.setDraw(dataTablesInput.getDraw());
+		return dataTablesOutput;
 	}
 }

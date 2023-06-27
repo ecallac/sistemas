@@ -107,4 +107,14 @@ public class TipoBaseServiceImpl extends CommonServiceAbstract<TipoBase> impleme
 	public List<TipoBase> findByDescripcionContaining(String description) {
 		return tipoBaseRepository.findByDescripcionIgnoreCaseContaining(description);
 	}
+
+	/**
+	 * @param categoria
+	 * @param codigo
+	 * @return
+	 */
+	@Override
+	public List<TipoBase> findByCategoriaAndCodigo(String categoria, String codigo) {
+		return tipoBaseRepository.findByCategoriaAndCodigo(categoria, codigo);
+	}
 }

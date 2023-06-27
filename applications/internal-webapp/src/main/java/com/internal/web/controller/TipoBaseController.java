@@ -8,7 +8,7 @@ import com.DataTablesInput;
 import com.DataTablesOutput;
 import com.Utils;
 import com.common.TipoBase;
-import com.internal.web.beans.TipoBaseView;
+import com.internal.web.view.TipoBaseView;
 import com.internal.web.service.LoginService;
 import com.internal.web.service.integration.TipoBaseIntegration;
 import com.internal.web.utils.Constants;

@@ -9,7 +9,7 @@ import com.DataTablesOutput;
 import com.Utils;
 import com.common.Componente;
 import com.common.TipoBase;
-import com.internal.web.beans.ComponenteView;
+import com.internal.web.view.ComponenteView;
 import com.internal.web.service.LoginService;
 import com.internal.web.service.integration.ComponenteIntegration;
 import com.internal.web.service.integration.TipoBaseIntegration;

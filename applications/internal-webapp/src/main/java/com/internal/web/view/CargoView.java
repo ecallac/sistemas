@@ -1,14 +1,12 @@
 /**
  * 
  */
-package com.internal.web.beans;
+package com.internal.web.view;
 
 import com.BaseEntity;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.validator.constraints.NotEmpty;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.util.List;
 

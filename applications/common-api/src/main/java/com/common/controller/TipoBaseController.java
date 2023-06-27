@@ -72,9 +72,10 @@ public class TipoBaseController {
             datosMaestrosFacade.saveTipoPBase(bean);
             return new ResponseEntity(bean,HttpStatus.OK);
         } catch (Exception e) {
+            logger.error(e.getMessage(),e);
             e.printStackTrace();
+            return new ResponseEntity(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
     }
     @RequestMapping(value = "/findDataTables", method = {RequestMethod.GET,RequestMethod.POST})
     public ResponseEntity<?> findDatatables(@RequestBody DataTablesInput<TipoBase> bean) {

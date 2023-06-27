@@ -1,4 +1,4 @@
-package com.internal.web.beans;
+package com.internal.web.view;
 
 import com.common.Direccion;
 

@@ -6,7 +6,7 @@ package com.internal.web.controller;
 import com.BeanParser;
 import com.Utils;
 import com.common.Cargo;
-import com.internal.web.beans.CargoView;
+import com.internal.web.view.CargoView;
 import com.internal.web.service.LoginService;
 import com.internal.web.service.integration.CargoIntegration;
 import com.internal.web.utils.Constants;

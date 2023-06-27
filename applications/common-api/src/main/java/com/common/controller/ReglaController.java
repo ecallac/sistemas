@@ -3,7 +3,10 @@
  */
 package com.common.controller;
 
-import com.common.domain.ReglaDetalle;
+import com.DataTablesInput;
+import com.DataTablesOutput;
+import com.common.domain.Regla;
+import com.common.domain.TipoBase;
 import com.common.facade.DatosMaestrosFacade;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,21 +29,42 @@ public class ReglaController {
     
     @Autowired
     DatosMaestrosFacade datosMaestrosFacade;
-    
-    @RequestMapping(value = "/findByCategoria", method = {RequestMethod.GET})
-    public ResponseEntity<?> findByCategoria(@RequestParam(value = "categoria", required = true) String categoria) {
-    	List<ReglaDetalle> list = datosMaestrosFacade.findReglaByCategoria(categoria);
-		if (CollectionUtils.isEmpty(list)) {
-        	return new ResponseEntity(HttpStatus.NO_CONTENT);
+
+    @RequestMapping(value = "/findById", method = {RequestMethod.GET})
+    public ResponseEntity<?> findById(@RequestParam(value = "id", required = true) Long id) {
+    	Regla entity = datosMaestrosFacade.findReglaById(id);
+		if (entity==null) {
+			return new ResponseEntity(HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity(list,HttpStatus.OK);
+        return new ResponseEntity(entity,HttpStatus.OK);
     }
+    @RequestMapping(value = "/save", method = {RequestMethod.POST})
+    public ResponseEntity<?> save(@RequestBody Regla bean) {
+        try {
+            datosMaestrosFacade.saveRegla(bean);
+            return new ResponseEntity(bean,HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error(e.getMessage(),e);
+            e.printStackTrace();
+            return new ResponseEntity(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @RequestMapping(value = "/findDataTables", method = {RequestMethod.GET,RequestMethod.POST})
+    public ResponseEntity<?> findDatatables(@RequestBody DataTablesInput<Regla> bean) {
+
+        DataTablesOutput dataTablesOutput =  datosMaestrosFacade.findReglaDataTablesList(bean);
+        if (dataTablesOutput==null) {
+            return new ResponseEntity(new DataTablesOutput<Regla>(),HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity(dataTablesOutput,HttpStatus.OK);
+    }
+
     @RequestMapping(value = "/findByCodigo", method = {RequestMethod.GET})
     public ResponseEntity<?> findByCodigo(@RequestParam(value = "codigo", required = true) String codigo) {
-        List<ReglaDetalle> list = datosMaestrosFacade.findReglaByCodigo(codigo);
-        if (CollectionUtils.isEmpty(list)) {
+        Regla entity = datosMaestrosFacade.findReglaByCodigo(codigo);
+        if (entity==null) {
             return new ResponseEntity(HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity(list,HttpStatus.OK);
+        return new ResponseEntity(entity,HttpStatus.OK);
     }
 } 

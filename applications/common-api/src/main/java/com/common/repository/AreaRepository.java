@@ -15,7 +15,8 @@ import java.util.List;
  *
  */
 @Repository
-public interface AreaRepository extends JpaRepository<Area, Long>{
+public interface AreaRepository extends JpaRepository<Area, Long>,CommonRepositoryCustom<Area>{
 	List<Area> findByParentAreaId(Long parentAreaId);
+	Area findFirstByNombre(String nombre);
 	List<Area> findByActivo(String activo);
 }

@@ -16,7 +16,7 @@ import java.util.List;
 @Entity
 @Table(name = "area")
 public class Area extends BaseEntity {
-
+	@Searchable
 	private String nombre;
 	private String activo;
 	@ManyToOne(fetch=FetchType.EAGER)

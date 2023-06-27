@@ -7,6 +7,7 @@ import com.DataTablesInput;
 import com.DataTablesOutput;
 import com.common.domain.Area;
 import com.common.domain.Componente;
+import com.common.domain.TipoBase;
 import com.common.enums.EnableIndicator;
 import com.common.facade.RecurrsosHumanosFacade;
 import org.apache.log4j.Logger;
@@ -75,9 +76,28 @@ public class AreaController {
             recurrsosHumanosFacade.saveArea(bean);
     		return new ResponseEntity(bean,HttpStatus.OK);
 		} catch (Exception e) {
-			e.printStackTrace();
+            logger.error(e.getMessage(),e);
+            e.printStackTrace();
+            return new ResponseEntity(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-    	return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @RequestMapping(value = "/findByNombre", method = {RequestMethod.GET})
+    public ResponseEntity<?> findByNombre(@RequestParam(value = "nombre", required = true) String nombre) {
+        Area entity = recurrsosHumanosFacade.findAreaByNombre(nombre);
+        if (entity==null) {
+            return new ResponseEntity(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity(entity,HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/findDataTables", method = {RequestMethod.GET,RequestMethod.POST})
+    public ResponseEntity<?> findDatatables(@RequestBody DataTablesInput<Area> bean) {
+
+        DataTablesOutput dataTablesOutput =  recurrsosHumanosFacade.findAreaDataTablesList(bean);
+        if (dataTablesOutput==null) {
+            return new ResponseEntity(new DataTablesOutput<Area>(),HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity(dataTablesOutput,HttpStatus.OK);
+    }
 } 

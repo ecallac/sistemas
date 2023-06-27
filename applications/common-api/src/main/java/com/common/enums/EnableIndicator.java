@@ -8,8 +8,8 @@ package com.common.enums;
  *
  */
 public enum EnableIndicator {
-    ENABLED("Y"),
-    DISABLED("N");
+    ENABLED("ENABLED"),
+    DISABLED("DISABLED");
     private String code;
 
     private EnableIndicator(String code) {

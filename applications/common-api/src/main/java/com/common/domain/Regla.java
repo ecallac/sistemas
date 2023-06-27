@@ -22,12 +22,17 @@ import org.hibernate.annotations.FetchMode;
 @Entity
 @Table(name = "regla")
 public class Regla extends BaseEntity {
+	@Searchable
 	private String categoria;
+	@Searchable
 	private String nombre;
+	@Searchable
 	private String codigo;
+	@Searchable
 	private String descripcion;
 	@Column(name = "tipo_valor")
 	private String tipoValor;
+	@Searchable
 	private String activo;
 //	@OneToMany(cascade = CascadeType.ALL, mappedBy = "regla", fetch = FetchType.EAGER)
 //	@Fetch(value = FetchMode.SELECT)

@@ -23,4 +23,5 @@ public interface TipoBaseService {
 	TipoBase findByCodigo(String codigo);
 	DataTablesOutput<TipoBase> findDataTablesList(DataTablesInput<TipoBase> dataTablesInput);
 	List<TipoBase> findByDescripcionContaining(String description);
+	List<TipoBase> findByCategoriaAndCodigo(String categoria,String codigo);
 }

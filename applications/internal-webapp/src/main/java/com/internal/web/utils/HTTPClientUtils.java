@@ -33,17 +33,7 @@ public class HTTPClientUtils {
 													 .setDefaultRequestConfig(requestConfig)
 													 .build()
 													 .execute(request);
-		HttpEntity entity = httpResponse.getEntity();
-		String response = null;
-		if (entity!=null) {
-			response = EntityUtils.toString(entity, "UTF-8");
-		}
-		logger.info("Response : "+response);
-		if (httpResponse.getStatusLine().getStatusCode() == HttpStatus.SC_OK || httpResponse.getStatusLine().getStatusCode() == HttpStatus.SC_NO_CONTENT) {
-			return response;
-		} else {
-			throw new HttpResponseException(httpResponse.getStatusLine().getStatusCode(), response);
-		}
+		return manageResponse(httpResponse);
 	}
 	
 	public static String sendPostRequest(String url, String contentType, String requestData) throws Exception {
@@ -57,12 +47,19 @@ public class HTTPClientUtils {
 		StringEntity input = new StringEntity(requestData);
 		input.setContentType(contentType);
 		httpPost.setEntity(input);
-		CloseableHttpResponse httpResponse = httpClient.execute(httpPost);
 
+		HttpResponse httpResponse = httpClient.execute(httpPost);
+		return manageResponse(httpResponse);
+	}
+
+	private static String manageResponse(HttpResponse httpResponse) throws Exception{
 		HttpEntity entity = httpResponse.getEntity();
-		String response = EntityUtils.toString(entity, "UTF-8");
+		String response= null;
+		if (entity!=null){
+			response = EntityUtils.toString(entity, "UTF-8");
+		}
 		logger.info("Response : "+response);
-		if (httpResponse.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+		if (httpResponse.getStatusLine().getStatusCode() == HttpStatus.SC_OK || httpResponse.getStatusLine().getStatusCode() == HttpStatus.SC_NO_CONTENT) {
 			return response;
 		} else {
 			throw new HttpResponseException(httpResponse.getStatusLine().getStatusCode(), response);

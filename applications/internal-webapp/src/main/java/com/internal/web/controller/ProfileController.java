@@ -12,7 +12,7 @@ import javax.validation.Valid;
 
 import com.Utils;
 import com.common.*;
-import com.internal.web.beans.DireccionView;
+import com.internal.web.view.DireccionView;
 import com.internal.web.service.integration.*;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +27,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.BeanParser;
-import com.internal.web.beans.PasswordView;
-import com.internal.web.beans.ProfileView;
+import com.internal.web.view.PasswordView;
+import com.internal.web.view.ProfileView;
 import com.internal.web.service.LoginService;
 import com.internal.web.utils.Constants;
 import com.security.User;
@@ -62,7 +62,7 @@ public class ProfileController {
 	DireccionIntegration direccionIntegration;
 
 	@Autowired
-	ReglaIntegration reglaIntegration;
+	ReglaDetalleIntegration reglaDetalleIntegration;
 
 	@Autowired
     private PasswordEncoder passwordEncoder;
@@ -88,7 +88,7 @@ public class ProfileController {
 			TipoBase status = tipoBaseIntegration.findByCodigo(user.getStatus());
 			ProfileView view = new ProfileView();
 
-			Map<String,ReglaDetalle> reglaDetallesMap = reglaIntegration.getReglasMap(reglaIntegration.findByCodigo(Constants.RULE_USER_STATUS_LABEL_TYPE));
+			Map<String,ReglaDetalle> reglaDetallesMap = reglaDetalleIntegration.getReglasMap(reglaDetalleIntegration.findByCodigo(Constants.RULE_USER_STATUS_LABEL_TYPE));
 
 			if (reglaDetallesMap.containsKey(user.getStatus())){
 				ReglaDetalle regla = reglaDetallesMap.get(user.getStatus());
@@ -166,7 +166,7 @@ public class ProfileController {
 		try{
 			if (!passwordView.getNewPassword().equals(passwordView.getNewPasswordAgain())) {
 				map.put(Constants.STATUS, Constants.ERROR);
-				map.put(Constants.MESSAGE, "¡La nueva contraseña no es la misma! Por favor, inténtalo de nuevo.");
+				map.put(Constants.MESSAGE, "ï¿½La nueva contraseï¿½a no es la misma! Por favor, intï¿½ntalo de nuevo.");
 				return map;
 			}
 
@@ -174,7 +174,7 @@ public class ProfileController {
 			boolean matches= passwordEncoder.matches(passwordView.getOldPassword(), user.getPassword());
 			if (user!=null && !matches) {
 				map.put(Constants.STATUS, Constants.ERROR);
-				map.put(Constants.MESSAGE, "La contraseña actual es incorrecta.");
+				map.put(Constants.MESSAGE, "La contraseï¿½a actual es incorrecta.");
 				return map;
 			}
 

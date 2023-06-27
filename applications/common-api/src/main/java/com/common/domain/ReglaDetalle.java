@@ -19,9 +19,13 @@ import org.hibernate.annotations.FetchMode;
 @Entity
 @Table(name = "regladetalle")
 public class ReglaDetalle extends BaseEntity {
+	@Searchable
 	private String condicion;
+	@Searchable
 	private Double valornumero;
+	@Searchable
 	private String valorcadena;
+	@Searchable
 	private String activo;
 	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name = "regla_id")

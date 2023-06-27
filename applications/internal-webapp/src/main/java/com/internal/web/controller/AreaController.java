@@ -6,7 +6,9 @@ package com.internal.web.controller;
 import com.BeanParser;
 import com.Utils;
 import com.common.Area;
-import com.internal.web.beans.AreaView;
+import com.internal.web.service.integration.ReglaDetalleIntegration;
+import com.internal.web.service.integration.TipoBaseIntegration;
+import com.internal.web.view.AreaView;
 import com.internal.web.service.LoginService;
 import com.internal.web.service.integration.AreaIntegration;
 import com.internal.web.utils.Constants;
@@ -41,6 +43,10 @@ public class AreaController {
 	LoginService loginService;
 	@Autowired
 	AreaIntegration areaIntegration;
+	@Autowired
+	ReglaDetalleIntegration reglaDetalleIntegration;
+	@Autowired
+	TipoBaseIntegration tipoBaseIntegration;
 	
 	@RequestMapping(value={"","/"}, method={RequestMethod.GET,RequestMethod.POST})
 	public ModelAndView list(HttpSession session,Principal principal){
@@ -51,7 +57,7 @@ public class AreaController {
 		}catch (Exception e){
 			logger.error(e.getMessage(),e);
 		}
-		modelAndView.setViewName("area");
+		modelAndView.setViewName(AreaController.NAME);
 		return modelAndView;
 	}
 	
@@ -95,7 +101,7 @@ public class AreaController {
   }
 	
 	@RequestMapping(value = "/save", method = {RequestMethod.POST})
-    public @ResponseBody  Map<String, Object> save(@RequestBody @Valid AreaView areaView, BindingResult result, Principal principal) {
+    public @ResponseBody  Map<String, Object> save(@RequestBody @Valid AreaView view, BindingResult result, Principal principal) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		if(result.hasErrors()){
 	         
@@ -112,16 +118,16 @@ public class AreaController {
 	      }
 		try {
 
-			Area area = (Area) BeanParser.parseObjectToNewClass(areaView, Area.class, null);
-			if (StringUtils.isNotBlank(areaView.getParentAreaId())) {
-				area.setParentArea((Area)BeanParser.parseObjectToNewClass(areaView.getParentArea(), Area.class, null));
+			Area bean = (Area) BeanParser.parseObjectToNewClass(view, Area.class, null);
+			if (StringUtils.isNotBlank(view.getParentAreaId())) {
+				bean.setParentArea((Area)BeanParser.parseObjectToNewClass(view.getParentArea(), Area.class, null));
 			}
-			if (area.getId()==null) {
-				area.setCreatedBy(principal.getName());
+			if (bean.getId()==null) {
+				bean.setCreatedBy(principal.getName());
 			} else {
-				area.setUpdatedBy(principal.getName());
+				bean.setUpdatedBy(principal.getName());
 			}
-			areaIntegration.save(area);
+			areaIntegration.save(bean);
 
 			map.put(Constants.STATUS, Constants.OK);
 			map.put(Constants.MESSAGE, Utils.getSuccessMessage(Constants.SUCCESS_MESSAGE));
@@ -137,13 +143,13 @@ public class AreaController {
     }
 	
 	@RequestMapping(value = "/load", method = {RequestMethod.POST})
-    public @ResponseBody  Map<String, Object> load(@RequestBody AreaView areaView) {
+    public @ResponseBody  Map<String, Object> load(@RequestBody AreaView view) {
         Map<String, Object> map = new HashMap<String, Object>();
 		try{
-			Area area = areaIntegration.findById(areaView.getId());
-			AreaView areaViewStored = (AreaView)BeanParser.parseObjectToNewClass(area, AreaView.class, null);
-			areaViewStored.setParentArea((AreaView)BeanParser.parseObjectToNewClass(area.getParentArea(), AreaView.class, null));
-			map.put("areaView", areaViewStored);
+			Area bean = areaIntegration.findById(view.getId());
+			AreaView viewStored = (AreaView)BeanParser.parseObjectToNewClass(bean, AreaView.class, null);
+			viewStored.setParentArea((AreaView)BeanParser.parseObjectToNewClass(bean.getParentArea(), AreaView.class, null));
+			map.put("areaView", viewStored);
 			map.put(Constants.STATUS, Constants.OK);
 		}catch (Exception e){
 			logger.error(e.getMessage(),e);
@@ -154,13 +160,13 @@ public class AreaController {
     }
 	
 	@RequestMapping(value = "/enableDisable", method = {RequestMethod.POST})
-    public @ResponseBody  Map<String, Object> enableDisable(@RequestBody AreaView areaView,Principal principal) {
+    public @ResponseBody  Map<String, Object> enableDisable(@RequestBody AreaView view,Principal principal) {
         Map<String, Object> map = new HashMap<String, Object>();
 
 		try{
-			Area area = (Area) BeanParser.parseObjectToNewClass(areaView, Area.class, null);
-			area.setUpdatedBy(principal.getName());
-			areaIntegration.save(area);
+			Area bean = (Area) BeanParser.parseObjectToNewClass(view, Area.class, null);
+			bean.setUpdatedBy(principal.getName());
+			areaIntegration.save(bean);
 			map.put(Constants.STATUS, Constants.OK);
 			map.put(Constants.MESSAGE, Utils.getSuccessMessage(Constants.SUCCESS_MESSAGE));
 
