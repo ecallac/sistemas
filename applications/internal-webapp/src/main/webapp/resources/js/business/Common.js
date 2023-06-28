@@ -52,12 +52,6 @@
         	alertError('Error: Requested page not found. [404]');
         } else if (jqXHR.status == 500) {
         	alertError('Error: Internal Server Error [500].');
-        } else if (exception === 'parsererror') {
-        	alertError('Error: Requested JSON parse failed.');
-        } else if (exception === 'timeout') {
-        	alertError('Error: Time out error.');
-        } else if (exception === 'abort') {
-        	alertError('Error: Ajax request aborted.');
         } else {
         	alertError('Error: Uncaught Error.\n' + jqXHR.responseText);
         }
@@ -161,19 +155,21 @@
 	}
 
 
-	function createTable(tableId,fileTitle,jsonData,jsonColumns,jsonColumnDefs,columnsExport){
+	function createTable(tableId,fileTitle,jsonData,jsonColumns,jsonColumnDefs,columnsExport,exportFormat){
+		if (exportFormat==null) {
+			exportFormat = {
+				body: function (data,row,column,node) {
+					//Strip S from salary column to make it numeric
+					//return column === 5?data.replace(/[$,]/g, ''):data
+					return data;
+				}
+			}
+		}
 		var exportTittle=fileTitle;
 		var buttonCommon = {
 			exportOptions: {
-				format: {
-					body: function ( data, row, column, node ) {
-						// Strip $ from salary column to make it numeric
-//         	                    return column === 5 ?
-//         	                        data.replace( /[$,]/g, '' ) :
-//         	                        data;
-						return data;
-					}
-				},
+				orthogonal: "export",
+				format: exportFormat,
 				columns: columnsExport
 			},
 			title: exportTittle
@@ -189,39 +185,46 @@
 			responsive: true,
 			buttons: [
 				'pageLength',
-				$.extend( true, {}, buttonCommon, {
-					extend: 'copyHtml5',
-					text: 'Copiar'
-				} ),
-				$.extend( true, {}, buttonCommon, {
-					extend: 'excelHtml5'
-				} ),
-				$.extend( true, {}, buttonCommon, {
-					extend: 'pdfHtml5',
-					download: 'open'
-				} ),
-				$.extend( true, {}, buttonCommon, {
-					extend: 'csvHtml5',
-					text: 'CSV',
-					fieldSeparator: '\t',
-					extension: '.csv',
-				} ),
-				$.extend( true, {}, buttonCommon, {
-					extend: 'print',
-					text: 'Imprimir',
-					// messageTop: function () {
-					// 	printCounter++;
-					//
-					// 	if ( printCounter === 1 ) {
-					// 		return 'This is the first time you have printed this document.';
-					// 	}
-					// 	else {
-					// 		return 'You have printed this document '+printCounter+' times';
-					// 	}
-					// },
-					messageBottom: null,
-					autoPrint: true
-				} )
+				{
+					extend: 'collection',
+					text: 'Exportar',
+					className: "custom-html-collection",
+					buttons:[
+						$.extend( true, {}, buttonCommon, {
+							extend: 'copyHtml5',
+							text: 'Copiar'
+						} ),
+						$.extend( true, {}, buttonCommon, {
+							extend: 'excelHtml5'
+						} ),
+						$.extend( true, {}, buttonCommon, {
+							extend: 'pdfHtml5',
+							download: 'open'
+						} ),
+						$.extend( true, {}, buttonCommon, {
+							extend: 'csvHtml5',
+							text: 'CSV',
+							fieldSeparator: '\t',
+							extension: '.csv',
+						} ),
+						$.extend( true, {}, buttonCommon, {
+							extend: 'print',
+							text: 'Imprimir',
+							// messageTop: function () {
+							// 	printCounter++;
+							//
+							// 	if ( printCounter === 1 ) {
+							// 		return 'This is the first time you have printed this document.';
+							// 	}
+							// 	else {
+							// 		return 'You have printed this document '+printCounter+' times';
+							// 	}
+							// },
+							messageBottom: null,
+							autoPrint: true
+						} )
+					]
+				}
 			],
 			"columns": jsonColumns,
 			"columnDefs": jsonColumnDefs,
@@ -337,19 +340,21 @@
 		});
 	}
 
-	function createTableAjax(tableId,fileTitle,ajaxUrl,formData,jsonColumns,jsonColumnDefs,columnsExport){
+	function createTableAjax(tableId,fileTitle,ajaxUrl,formData,jsonColumns,jsonColumnDefs,columnsExport,exportFormat){
+		if (exportFormat==null) {
+			exportFormat = {
+				body: function (data,row,column,node) {
+					//Strip S from salary column to make it numeric
+					//return column === 5?data.replace(/[$,]/g, ''):data
+					return data;
+				}
+			}
+		}
 		var exportTittle=fileTitle;
 		var buttonCommon = {
 			exportOptions: {
-				format: {
-					body: function ( data, row, column, node ) {
-						// Strip $ from salary column to make it numeric
-//         	                    return column === 5 ?
-//         	                        data.replace( /[$,]/g, '' ) :
-//         	                        data;
-						return data;
-					}
-				},
+				orthogonal: "export",
+				format: exportFormat,
 				columns: columnsExport
 			},
 			title: exportTittle
@@ -377,39 +382,46 @@
 			},
 			buttons: [
 				'pageLength',
-				$.extend( true, {}, buttonCommon, {
-					extend: 'copyHtml5',
-					text: 'Copiar'
-				} ),
-				$.extend( true, {}, buttonCommon, {
-					extend: 'excelHtml5'
-				} ),
-				$.extend( true, {}, buttonCommon, {
-					extend: 'pdfHtml5',
-					download: 'open'
-				} ),
-				$.extend( true, {}, buttonCommon, {
-					extend: 'csvHtml5',
-					text: 'CSV',
-					fieldSeparator: '\t',
-					extension: '.csv',
-				} ),
-				$.extend( true, {}, buttonCommon, {
-					extend: 'print',
-					text: 'Imprimir',
-					// messageTop: function () {
-					// 	printCounter++;
-					//
-					// 	if ( printCounter === 1 ) {
-					// 		return 'This is the first time you have printed this document.';
-					// 	}
-					// 	else {
-					// 		return 'You have printed this document '+printCounter+' times';
-					// 	}
-					// },
-					messageBottom: null,
-					autoPrint: true
-				} )
+				{
+					extend: 'collection',
+					text: 'Exportar',
+					className: "custom-html-collection",
+					buttons:[
+						$.extend( true, {}, buttonCommon, {
+							extend: 'copyHtml5',
+							text: 'Copiar'
+						} ),
+						$.extend( true, {}, buttonCommon, {
+							extend: 'excelHtml5'
+						} ),
+						$.extend( true, {}, buttonCommon, {
+							extend: 'pdfHtml5',
+							download: 'open'
+						} ),
+						$.extend( true, {}, buttonCommon, {
+							extend: 'csvHtml5',
+							text: 'CSV',
+							fieldSeparator: '\t',
+							extension: '.csv',
+						} ),
+						$.extend( true, {}, buttonCommon, {
+							extend: 'print',
+							text: 'Imprimir',
+							// messageTop: function () {
+							// 	printCounter++;
+							//
+							// 	if ( printCounter === 1 ) {
+							// 		return 'This is the first time you have printed this document.';
+							// 	}
+							// 	else {
+							// 		return 'You have printed this document '+printCounter+' times';
+							// 	}
+							// },
+							messageBottom: null,
+							autoPrint: true
+						} )
+					]
+				}
 			],
 			"columns": jsonColumns,
 			"columnDefs": jsonColumnDefs,
@@ -437,7 +449,8 @@
 					"sortDescending": ": activar para ordenar la columna descendente"
 				},
 				buttons : {
-					pageLength: {_: "Mostrar %d filas",
+					pageLength: {
+						_: "Mostrar %d filas",
 						'-1': "Mostrar todo"}
 				}
 			}

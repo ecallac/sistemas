@@ -3,11 +3,12 @@
  */
 package com.internal.web.controller;
 
-import com.BeanParser;
-import com.DataTablesInput;
-import com.DataTablesOutput;
-import com.Utils;
+import com.*;
 import com.common.TipoBase;
+import com.common.ReglaDetalle;
+import com.common.TipoBase;
+import com.internal.web.service.integration.ReglaDetalleIntegration;
+import com.internal.web.view.TipoBaseView;
 import com.internal.web.view.TipoBaseView;
 import com.internal.web.service.LoginService;
 import com.internal.web.service.integration.TipoBaseIntegration;
@@ -18,10 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -44,6 +42,8 @@ public class TipoBaseController {
 	LoginService loginService;
 	@Autowired
 	TipoBaseIntegration tipoBaseIntegration;
+	@Autowired
+	ReglaDetalleIntegration reglaDetalleIntegration;
 	
 	@RequestMapping(value={"","/"}, method={RequestMethod.GET,RequestMethod.POST})
 	public ModelAndView list(HttpSession session,Principal principal){
@@ -146,7 +146,7 @@ public class TipoBaseController {
 
 			DataTablesOutput<TipoBase> dataTablesOutput = tipoBaseIntegration.findDataTables(dataTablesInput);
 			if (dataTablesOutput != null) {
-				map.put("data", dataTablesOutput.getData());
+				map.put("data", castTipoBaseToTipoBaseViewList(dataTablesOutput.getData()));
 				map.put("draw", dataTablesOutput.getDraw());
 				map.put("recordsTotal", dataTablesOutput.getRecordsTotal());
 				map.put("recordsFiltered", dataTablesOutput.getRecordsFiltered());
@@ -163,5 +163,53 @@ public class TipoBaseController {
 			map.put(Constants.MESSAGE, Utils.getErrorMessage(Constants.ERROR_MESSAGE,e.getMessage()));
 		}
 		return map;
+	}
+	@RequestMapping(value = "/verifyCodigo", method = {RequestMethod.POST,RequestMethod.GET})
+	public @ResponseBody  Map<String, Object> verifyCodigo(@RequestParam(value = "codigo",required = true) String codigo) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		try{
+			TipoBase bean = tipoBaseIntegration.findByCodigo(codigo);
+			if (bean!=null){
+				map.put(Constants.STATUS, Constants.OK);
+			}else{
+				map.put(Constants.STATUS, Constants.ERROR);
+				map.put(Constants.MESSAGE, Constants.ERROR_MESSAGE_EXIST);
+			}
+
+		}catch (Exception e){
+			logger.error(e.getMessage(),e);
+			map.put(Constants.STATUS, Constants.ERROR);
+			map.put(Constants.MESSAGE, Utils.getErrorMessage(Constants.ERROR_MESSAGE_GET,e.getMessage()));
+		}
+		return map;
+	}
+	@RequestMapping(value = "/listStatus", method = {RequestMethod.POST,RequestMethod.GET})
+	public @ResponseBody  Map<String, Object> listStatus() {
+		Map<String, Object> map = new HashMap<String, Object>();
+		try{
+			List<TipoBase> list = tipoBaseIntegration.findByCategoriaActivos(Constants.TIPOBASE_CATEGORIA_TYPE_SWITCH);
+			if (list != null) {
+				map.put(Constants.DATA,list);
+			}else {
+				map.put(Constants.DATA,new ArrayList<TipoBase>());
+			}
+			map.put(Constants.STATUS, Constants.OK);
+
+		}catch (Exception e){
+			logger.error(e.getMessage(),e);
+			map.put(Constants.STATUS, Constants.ERROR);
+			map.put(Constants.MESSAGE, Utils.getErrorMessage(Constants.ERROR_MESSAGE,e.getMessage()));
+		}
+		return map;
+	}
+	public List<TipoBaseView> castTipoBaseToTipoBaseViewList(List<TipoBase> list) throws Exception {
+		Map<String, ReglaDetalle> reglaDetalleMap = reglaDetalleIntegration.getReglasMap(reglaDetalleIntegration.findByCodigo(GeneralConstant.SWITH_LABEL_TIPE.getCode()));
+		Map<String, TipoBase> tipoBaseMap = tipoBaseIntegration.findAllMap();
+		return list.stream().map(bean -> {
+			TipoBaseView view =(TipoBaseView)BeanParser.parseObjectToNewClass(bean,TipoBaseView.class,null);
+			view.setActivoDescripcion(tipoBaseMap.containsKey(view.getActivo())?tipoBaseMap.get(view.getActivo()).getDescripcion():null);
+			view.setActivoType(reglaDetalleMap.containsKey(view.getActivo())?reglaDetalleMap.get(view.getActivo()).getValorcadena():null);
+			return view;
+		}).collect(Collectors.toList());
 	}
 }

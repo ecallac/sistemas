@@ -42,4 +42,5 @@ public interface Constants {
 	static final String SUCCESS_MESSAGE="Sus cambios se han guardado con exito";
 	static final String ERROR_MESSAGE="! Sus cambios no pudieron ser guardados.";
 	static final String ERROR_MESSAGE_GET="! Hubo un problema al obteger la informacion. Contactese con su administrador de sistema o soporte tectico";
+	static final String ERROR_MESSAGE_EXIST="Este valor ya existe";
 }

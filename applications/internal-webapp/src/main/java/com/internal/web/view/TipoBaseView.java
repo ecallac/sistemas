@@ -4,12 +4,20 @@
 package com.internal.web.view;
 
 import com.BaseEntity;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  * @author efrain
  *
  */
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
 public class TipoBaseView extends BaseEntity {
 	@NotEmpty
 	private String categoria;
@@ -19,46 +27,6 @@ public class TipoBaseView extends BaseEntity {
 	private String descripcion;
 	@NotEmpty
 	private String activo;
-
-	public String getCategoria() {
-		return categoria;
-	}
-
-	public void setCategoria(String categoria) {
-		this.categoria = categoria;
-	}
-
-	public String getCodigo() {
-		return codigo;
-	}
-
-	public void setCodigo(String codigo) {
-		this.codigo = codigo;
-	}
-
-	public String getDescripcion() {
-		return descripcion;
-	}
-
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
-	}
-
-	public String getActivo() {
-		return activo;
-	}
-
-	public void setActivo(String activo) {
-		this.activo = activo;
-	}
-
-	@Override
-	public String toString() {
-		return "TipoBaseView{" +
-				"categoria='" + categoria + '\'' +
-				", codigo='" + codigo + '\'' +
-				", descripcion='" + descripcion + '\'' +
-				", activo='" + activo + '\'' +
-				'}';
-	}
+	private String activoDescripcion;
+	private String activoType;
 }
