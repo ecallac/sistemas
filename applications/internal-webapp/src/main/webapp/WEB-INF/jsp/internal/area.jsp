@@ -20,14 +20,10 @@
 	var contexPath = "<%=request.getContextPath() %>";
 	
     function save(){
-    	var activo = "N";
-    	if ($('#activo').is(':checked')) {
-			activo = "Y";
-		}
 		var formData= {
 				id: parseInt($("#id").val()), 
                	nombre: $('#nombre').val(),
-               	activo: activo,
+               	activo: $('#activo').val(),
                	parentAreaId: $('#parentAreaId').val()
 		}
 		$('.bindingError').remove();
@@ -69,15 +65,11 @@
     	var ajaxUrl = contexPath+'/area/load.json';
     	var successFunction = function(response){
        		if(response.status=="OK"){
+				clearFields();
        			$("#id").val(response.areaView.id);
        			$("#nombre").val(response.areaView.nombre);
-       			if (response.areaView.activo == 'Y'){
-       				$('#activo').prop('checked', true);
-       			}else{
-       				$('#activo').prop('checked', false);
-       			}
-       			$("#parentAreaId").val(response.areaView.parentArea.id);
-       			//populateParentAreaSelectByModuleId(response.areaView.module.id, response.areaView.parentArea.id);
+       			$('#activo').val(response.areaView.activo).change();
+       			$("#parentAreaId").val(response.areaView.parentArea.id).change();
        		}else{
 				showErrorMessage(response.message);
 			}
@@ -86,10 +78,10 @@
        ajaxPost(ajaxUrl,formData,successFunction);
     }
     
-    function enableAndDisable(object,idVal){
-    	var activo = "N";
-    	if (object.checked) {
-			activo = "Y";
+    function enableAndDisable(idVal,status){
+    	var activo = "DISABLED";
+    	if (status===1) {
+			activo = "ENABLED";
 		}
     	var formData= {
 				id: idVal,
@@ -99,6 +91,7 @@
     	var successFunction = function(response){
        		if(response.status=="OK"){
        			showSuccessMessage(response.message);
+				load();
        		}else{
        			showErrorMessage(response.message);
        		}
@@ -108,59 +101,36 @@
     	
     	
     }
-    
-    function load(){
-    	var ajaxUrl = contexPath+'/area/list.json';
-    	var successFunction = function(response){
+    function verifyNombre(object){
+		$('.bindingError').remove();
+		var ajaxUrl = contexPath+'/area/verifyNombre?nombre='+object.value;
+		var key = object.id;
+		var successFunction = function(response){
+			if(response.status=="OK"){
+				$("#"+id).removeClass("is-invalid").addClass("is-valid");
+			}else{
+				$("#"+id).removeClass("is-valid").addClass("is-invalid");
+				showErrorMessageByField('input' , key , response.message , '');
+			}
+		};
+
+		ajaxWithoutForm(ajaxUrl,"GET",successFunction);
+	}
+
+	function populateStatusSelect(){
+		var ajaxUrl = contexPath+'/tipoBase/listStatus.json';
+		var successFunction = function(response){
 			if(response.status=="OK"){
 				if(response.data.length>0){
-
-					var tableId = "#table";
-					var fileTitle = "Areas";
-					var jsonData = response.data;
-					var jsonColumns = [
-						{ "data": "id" },
-						{ "data": "nombre"},
-						{ "data": "parentArea.nombre" ,"defaultContent": ""}
-					];
-					var columnsExport = [ 0, 1, 2];
-					var jsonColumnDefs = [
-						{
-							data: null,
-							"targets": 3,
-							"render": function ( data, type, row ) {
-								var checkedActive='';
-								if (row.activo == 'Y'){
-									checkedActive = "checked='true'";
-								}
-								return "<td><input type='checkbox' name='select' id='select' "+checkedActive+" onclick='enableAndDisable(this,"+row.id+");'></td>";
-							}
-						},
-						{
-							data: null,
-							"targets": 4,
-							"render": function ( data, type, row ) {
-								return "<td>"+
-										makeButton("Edit","edit("+row.id+")","data-bs-toggle='modal' data-bs-target='#Form'","<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-edit align-middle me-2'><path d='M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7'></path><path d='M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z'></path></svg>")+
-										// 		       	                 makeButton("Delete","remove("+row.id+")","","<c:url value='/resources/img/icons/black/trash_icon&16.png' />")+
-										//        	                    "<button title='Edit' onclick='edit("+row.id+")' type='button' class='btn btn-link btn-xs toltip' data-toggle='modal' data-target='#Form'><img src='<c:url value='/resources/img/icons/black/doc_edit_icon&16.png' />'></button>"+
-										//            	                 "<button title='Delete' onclick='remove("+row.id+")' type='button' class='btn btn-link btn-xs toltip'><img src='<c:url value='/resources/img/icons/black/trash_icon&16.png' />'></button> "
-										"</td>" ;
-
-							}
-						}
-					];
-
-					createTable(tableId,fileTitle,jsonData,jsonColumns,jsonColumnDefs,columnsExport);
-
+					$('#activo').append('<option value="' + row.codigo + '">' + row.descripcion + '</option>');
+					$('#activoSearch').append('<option value="' + row.codigo + '">' + row.descripcion + '</option>');
 				}
-				populateParentAreaSelect();
 			}else{
 				showErrorMessage(response.message);
 			}
-       };
-       ajaxPostWithoutForm(ajaxUrl,successFunction);
-    }
+		};
+		ajaxPostWithoutForm(ajaxUrl,successFunction);
+	}
 
 	function populateParentAreaSelect(){
 		var ajaxUrl = contexPath+'/area/enabledAreas.json';
@@ -180,21 +150,91 @@
 		ajaxPostWithoutForm(ajaxUrl,successFunction);
 	}
 
+    function load(){
+		var activoSearch = $('#activoSearch').val();
+		var parentSearch = $('#parentSearch').val();
+    	var ajaxUrl = contexPath+'/area/findByPage.json';
+		var formData = {
+			activo: activoSearch,
+			parentAreaId: parentSearch
+		}
+
+		var tableId = "#table";
+		var fileTitle = "Areas";
+		var jsonColumns = [
+			{ "data": "id" },
+			{ "data": "nombre"},
+			{ "data": "parentArea.nombre" ,"defaultContent": ""}
+		];
+		var columnsExport = [ 0, 1, 2,3];
+		var jsonColumnDefs = [
+			{
+				data: null,
+				"targets": 3,
+				"render": function ( data, type, row ) {
+					if (type==="export"){
+						return row.activoDescripcion;
+					}else{
+						return "<td><span class='badge rounded-pill bg-"+row.activoType+"'>"+row.activoDescripcion+"</span></td>";
+					}
+				}
+			},
+			{
+				data: null,
+				"targets": 4,
+				"render": function ( data, type, row ) {
+					var value = "";
+					if (){
+						
+					}
+					return "<td>"+
+							makeButton("Edit","edit("+row.id+")","data-bs-toggle='modal' data-bs-target='#Form'","<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-edit align-middle me-2'><path d='M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7'></path><path d='M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z'></path></svg>")+
+							// 		       	                 makeButton("Delete","remove("+row.id+")","","<c:url value='/resources/img/icons/black/trash_icon&16.png' />")+
+							//        	                    "<button title='Edit' onclick='edit("+row.id+")' type='button' class='btn btn-link btn-xs toltip' data-toggle='modal' data-target='#Form'><img src='<c:url value='/resources/img/icons/black/doc_edit_icon&16.png' />'></button>"+
+							//            	                 "<button title='Delete' onclick='remove("+row.id+")' type='button' class='btn btn-link btn-xs toltip'><img src='<c:url value='/resources/img/icons/black/trash_icon&16.png' />'></button> "
+							"</td>" ;
+
+				}
+			}
+		];
+
+		createTable(tableId,fileTitle,jsonData,jsonColumns,jsonColumnDefs,columnsExport);
+
+				populateParentAreaSelect();
+				showErrorMessage(response.message);
+       ajaxPostWithoutForm(ajaxUrl,successFunction);
+    }
+
+
+
     function clearFields(){
 		$('.bindingError').remove();
+		$("#nombre").removeClass("is-invalid").removeClass("is-valid");
 		$("#id").val("");
 		$("#nombre").val("");
-		$('#activo').prop('checked', false);
-		populateParentAreaSelect();
+		$('#activo').val("").change();
+		$('#parentAreaId').val("").change();
 	}
     
     $(document).ready(function(){
-//     	$('select').select2({
-//             dropdownParent: $('#Form'),
-//             theme: 'bootstrap4'
-//         });
+
     	
     	load();
+		load();
+		populateStatusSelect();
+		populateParentAreaSelect();
+
+		// all select
+		$('.select').select2({
+            width: '100%',
+            theme: 'bootstrap4'
+        });
+		//modal select
+		$('.selectModal').select2({
+			dropdownParent: $('#Form'),
+			width: '100%',
+			theme: 'bootstrap4'
+		});
     });
     
     
