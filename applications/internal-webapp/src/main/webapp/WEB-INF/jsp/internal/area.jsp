@@ -188,9 +188,9 @@
 				"render": function ( data, type, row ) {
 					var value = "";
 					if (row.activo==="ENABLED"){
-						value = makeButton("Disable","enableAndDisable("+row.id+",0)","","")
+						value = makeButton("Disable","enableAndDisable("+row.id+",0)","","Disable")
 					}else if (row.activo==="DISABLED"){
-						value = makeButton("Enable","enableAndDisable("+row.id+",1)","","")
+						value = makeButton("Enable","enableAndDisable("+row.id+",1)","","Enable")
 					}
 					return "<td>"+
 							makeButton("Edit","edit("+row.id+")","data-bs-toggle='modal' data-bs-target='#Form'","<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-edit align-middle me-2'><path d='M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7'></path><path d='M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z'></path></svg>")+
@@ -211,6 +211,9 @@
 		createTableAjax(tableId,fileTitle,ajaxUrl,jsonData,jsonColumns,jsonColumnDefs,columnsExport,exportColumnCustom);
     }
 
+	function search(){
+		load();
+	}
 
 
     function clearFields(){
@@ -220,6 +223,11 @@
 		$("#nombre").val("");
 		$('#activo').val("").change();
 		$('#parentAreaId').val("").change();
+	}
+
+	function cleanFilter(){
+		$('#activoSearch').val("").change();
+		$('#parentSearch').val("").change();
 	}
     
     $(document).ready(function(){
@@ -235,7 +243,12 @@
             theme: 'bootstrap4'
         });
 		//modal select
-		$('.selectModal').select2({
+		$('.selectform').select2({
+			dropdownParent: $('#Form'),
+			width: '100%',
+			theme: 'bootstrap4'
+		});
+		$('.selectfilter').select2({
 			dropdownParent: $('#Form'),
 			width: '100%',
 			theme: 'bootstrap4'
@@ -269,6 +282,10 @@
 	  <div class="card flex-fill">
 		  <div class="card-header">
 			  <div class="dt-buttons btn-group">
+				  <button data-bs-target="#Filter" title="Filtrar" type="button" class="btn btn-outline-primary toltip" data-bs-toggle="modal">
+					  <svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-file-plus align-middle me-2'><path d='M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z'></path><polyline points='14 2 14 8 20 8'></polyline><line x1='12' y1='18' x2='12' y2='12'></line><line x1='9' y1='15' x2='15' y2='15'></line></svg>
+					  Filtrar
+				  </button>
 				  <button data-bs-target="#Form" title="Agregar Nuevo" type="button" class="btn btn-outline-primary toltip" data-bs-toggle="modal" onclick="clearFields();">
 					  <svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-file-plus align-middle me-2'><path d='M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z'></path><polyline points='14 2 14 8 20 8'></polyline><line x1='12' y1='18' x2='12' y2='12'></line><line x1='9' y1='15' x2='15' y2='15'></line></svg>
 					  Agregar Nuevo
@@ -278,7 +295,7 @@
 		  <div class="card-body">
 			  <table id="table" align="center" class="table table-striped table-sm table-hover" style="width: 100%">
 				  <thead>
-				  <tr><th>Id</th><th>Nombre</th><th>Parent</th><th>Enabled</th><th>Acciones</th></tr>
+				  <tr><th>Id</th><th>Nombre</th><th>Parent</th><th>Estado</th><th>Acciones</th></tr>
 				  </thead>
 			  </table>
 		  </div>
@@ -317,7 +334,7 @@
 						<div class="mb-3 row">
 							<label for="parentAreaId" class="col-sm-3 col-form-label">Parent</label>
 							<div class="col-sm-7">
-								<select id="parentAreaId" class="form-control">
+								<select id="parentAreaId" class="form-control input-sm selectform">
 									<option value="">-- Select Option --</option>
 								</select>
 							</div>
@@ -325,17 +342,14 @@
 						<div class="mb-3 row">
 							<label for="nombre" class="col-sm-3 col-form-label">Nombre</label>
 							<div class="col-sm-7">
-								<input type="text" class="form-control" id="nombre" placeholder="Nombre">
+								<input type="text" class="form-control" id="nombre" placeholder="Nombre" onchange="verifyNombre(this);">
 							</div>
 						</div>
 						<div class="mb-3 row">
-							<label for="activo" class="col-sm-3 col-form-label">Activo</label>
+							<label for="activo" class="col-sm-3 col-form-label">Estado</label>
 							<div class="col-sm-7">
-								<div class="checkbox">
-									<label>
-										<input type="checkbox" id="activo" name="activo" />
-									</label>
-								</div>
+								<select id="activo" class="form-control input-sm selectform">
+								</select>
 							</div>
 						</div>
 					</form>
@@ -356,6 +370,53 @@
 
 
 
+<div class="modal fade" id="Filter" tabindex="-1" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title">Filter</h4>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+
+				<div class="form-container">
+
+
+
+
+					<form class="form-horizontal">
+						<div class="mb-3 row">
+							<label for="activoSearch" class="col-sm-3 col-form-label">Estado</label>
+							<div class="col-sm-7">
+								<select id="activoSearch" class="form-control input-sm selectfilter">
+									<option value="">-- Seleccionar --</option>
+								</select>
+							</div>
+						</div>
+						<div class="mb-3 row">
+							<label for="parentSearch" class="col-sm-3 col-form-label">Parent</label>
+							<div class="col-sm-7">
+								<select id="parentSearch" class="form-control input-sm selectfilter">
+									<option value="">-- Seleccionar --</option>
+								</select>
+							</div>
+						</div>
+					</form>
+
+
+
+
+				</div>
+
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+				<button type="button" class="btn btn-secondary" onclick="cleanFilter();">Limpiar</button>
+				<button type="button" class="btn btn-primary" onclick="search();">Aplicar</button>
+			</div>
+		</div>
+	</div>
+</div>
 
 
 
