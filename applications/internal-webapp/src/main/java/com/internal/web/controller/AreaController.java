@@ -228,7 +228,7 @@ public class AreaController {
 		return map;
 	}
 	public List<AreaView> castAreaToAreaViewList(List<Area> list) throws Exception {
-		Map<String,ReglaDetalle> reglaDetalleMap = reglaDetalleIntegration.getReglasMap(reglaDetalleIntegration.findByCodigo(GeneralConstant.SWITH_LABEL_TIPE.getCode()));
+		Map<String,ReglaDetalle> reglaDetalleMap = reglaDetalleIntegration.getReglasMap(reglaDetalleIntegration.findByCodigo(GeneralConstant.SWITH_LABEL_TYPE.getCode()));
 		Map<String, TipoBase> tipoBaseMap = tipoBaseIntegration.findAllMap();
 		return list.stream().map(bean -> {
 			AreaView view =(AreaView)BeanParser.parseObjectToNewClass(bean,AreaView.class,null);

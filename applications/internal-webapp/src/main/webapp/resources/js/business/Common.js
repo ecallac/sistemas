@@ -154,111 +154,111 @@
         });
 	}
 
-
-	function createTable(tableId,fileTitle,jsonData,jsonColumns,jsonColumnDefs,columnsExport,exportFormat){
-		if (exportFormat==null) {
-			exportFormat = {
-				body: function (data,row,column,node) {
-					//Strip S from salary column to make it numeric
-					//return column === 5?data.replace(/[$,]/g, ''):data
-					return data;
-				}
-			}
-		}
-		var exportTittle=fileTitle;
-		var buttonCommon = {
-			exportOptions: {
-				orthogonal: "export",
-				format: exportFormat,
-				columns: columnsExport
-			},
-			title: exportTittle
-		};
-		var printCounter = 0;
-		var table = $(tableId).DataTable( {
-			//dom: 'Bfrtip',
-			"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "Todo"]],
-			destroy: true,
-//    				"bProcessing" : true,
-			"data": jsonData,
-			lengthChange: false,
-			responsive: true,
-			buttons: [
-				'pageLength',
-				{
-					extend: 'collection',
-					text: 'Exportar',
-					className: "custom-html-collection",
-					buttons:[
-						$.extend( true, {}, buttonCommon, {
-							extend: 'copyHtml5',
-							text: 'Copiar'
-						} ),
-						$.extend( true, {}, buttonCommon, {
-							extend: 'excelHtml5'
-						} ),
-						$.extend( true, {}, buttonCommon, {
-							extend: 'pdfHtml5',
-							download: 'open'
-						} ),
-						$.extend( true, {}, buttonCommon, {
-							extend: 'csvHtml5',
-							text: 'CSV',
-							fieldSeparator: '\t',
-							extension: '.csv',
-						} ),
-						$.extend( true, {}, buttonCommon, {
-							extend: 'print',
-							text: 'Imprimir',
-							// messageTop: function () {
-							// 	printCounter++;
-							//
-							// 	if ( printCounter === 1 ) {
-							// 		return 'This is the first time you have printed this document.';
-							// 	}
-							// 	else {
-							// 		return 'You have printed this document '+printCounter+' times';
-							// 	}
-							// },
-							messageBottom: null,
-							autoPrint: true
-						} )
-					]
-				}
-			],
-			"columns": jsonColumns,
-			"columnDefs": jsonColumnDefs,
-			"language": {
-				"decimal":        "",
-				"emptyTable":     "No hay datos disponibles en la table",
-				"info":           "Mostrando _START_ a _END_ de _TOTAL_ registros",
-				"infoEmpty":      "Mostrando 0 a 0 de 0 registros",
-				"infoFiltered":   "(filtrado de _MAX_ registros en total)",
-				"infoPostFix":    "",
-				"thousands":      ",",
-				"lengthMenu":     "Mostrar _MENU_ Registros",
-				"loadingRecords": "Cargando...",
-				"processing":     "",
-				"search":         "Buscar:",
-				"zeroRecords":    "No se encontraron registros coincidentes",
-				"paginate": {
-					"first":      "Primero",
-					"last":       "Ultimo",
-					"next":       "Siguiente",
-					"previous":   "Anterior"
-				},
-				"aria": {
-					"sortAscending":  ": activar para ordenar columna ascendenteg",
-					"sortDescending": ": activar para ordenar la columna descendente"
-				},
-				buttons : {
-					pageLength: {_: "Mostrar %d filas",
-						'-1': "Mostrar todo"}
-				}
-			}
-		} );
-		table.buttons().container().appendTo( tableId+"_wrapper .col-md-6:eq(0)");
-	}
+//
+// 	function createTable(tableId,fileTitle,jsonData,jsonColumns,jsonColumnDefs,columnsExport,exportFormat){
+// 		if (exportFormat==null) {
+// 			exportFormat = {
+// 				body: function (data,row,column,node) {
+// 					//Strip S from salary column to make it numeric
+// 					//return column === 5?data.replace(/[$,]/g, ''):data
+// 					return data;
+// 				}
+// 			}
+// 		}
+// 		var exportTittle=fileTitle;
+// 		var buttonCommon = {
+// 			exportOptions: {
+// 				orthogonal: "export",
+// 				format: exportFormat,
+// 				columns: columnsExport
+// 			},
+// 			title: exportTittle
+// 		};
+// 		var printCounter = 0;
+// 		var table = $(tableId).DataTable( {
+// 			//dom: 'Bfrtip',
+// 			"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "Todo"]],
+// 			destroy: true,
+// //    				"bProcessing" : true,
+// 			"data": jsonData,
+// 			lengthChange: false,
+// 			responsive: true,
+// 			buttons: [
+// 				'pageLength',
+// 				{
+// 					extend: 'collection',
+// 					text: 'Exportar',
+// 					className: "custom-html-collection",
+// 					buttons:[
+// 						$.extend( true, {}, buttonCommon, {
+// 							extend: 'copyHtml5',
+// 							text: 'Copiar'
+// 						} ),
+// 						$.extend( true, {}, buttonCommon, {
+// 							extend: 'excelHtml5'
+// 						} ),
+// 						$.extend( true, {}, buttonCommon, {
+// 							extend: 'pdfHtml5',
+// 							download: 'open'
+// 						} ),
+// 						$.extend( true, {}, buttonCommon, {
+// 							extend: 'csvHtml5',
+// 							text: 'CSV',
+// 							fieldSeparator: '\t',
+// 							extension: '.csv',
+// 						} ),
+// 						$.extend( true, {}, buttonCommon, {
+// 							extend: 'print',
+// 							text: 'Imprimir',
+// 							// messageTop: function () {
+// 							// 	printCounter++;
+// 							//
+// 							// 	if ( printCounter === 1 ) {
+// 							// 		return 'This is the first time you have printed this document.';
+// 							// 	}
+// 							// 	else {
+// 							// 		return 'You have printed this document '+printCounter+' times';
+// 							// 	}
+// 							// },
+// 							messageBottom: null,
+// 							autoPrint: true
+// 						} )
+// 					]
+// 				}
+// 			],
+// 			"columns": jsonColumns,
+// 			"columnDefs": jsonColumnDefs,
+// 			"language": {
+// 				"decimal":        "",
+// 				"emptyTable":     "No hay datos disponibles en la table",
+// 				"info":           "Mostrando _START_ a _END_ de _TOTAL_ registros",
+// 				"infoEmpty":      "Mostrando 0 a 0 de 0 registros",
+// 				"infoFiltered":   "(filtrado de _MAX_ registros en total)",
+// 				"infoPostFix":    "",
+// 				"thousands":      ",",
+// 				"lengthMenu":     "Mostrar _MENU_ Registros",
+// 				"loadingRecords": "Cargando...",
+// 				"processing":     "",
+// 				"search":         "Buscar:",
+// 				"zeroRecords":    "No se encontraron registros coincidentes",
+// 				"paginate": {
+// 					"first":      "Primero",
+// 					"last":       "Ultimo",
+// 					"next":       "Siguiente",
+// 					"previous":   "Anterior"
+// 				},
+// 				"aria": {
+// 					"sortAscending":  ": activar para ordenar columna ascendenteg",
+// 					"sortDescending": ": activar para ordenar la columna descendente"
+// 				},
+// 				buttons : {
+// 					pageLength: {_: "Mostrar %d filas",
+// 						'-1': "Mostrar todo"}
+// 				}
+// 			}
+// 		} );
+// 		table.buttons().container().appendTo( tableId+"_wrapper .col-md-6:eq(0)");
+// 	}
 
 	function createTableWithoutButtons(tableId,jsonData,jsonColumns,jsonColumnDefs){
 		var printCounter = 0;
@@ -340,6 +340,7 @@
 		});
 	}
 
+	var table;
 	function createTableAjax(tableId,fileTitle,ajaxUrl,formData,jsonColumns,jsonColumnDefs,columnsExport,exportFormat){
 		if (exportFormat==null) {
 			exportFormat = {
@@ -360,14 +361,14 @@
 			title: exportTittle
 		};
 		var printCounter = 0;
-		$(tableId).DataTable( {
+		table = $(tableId).DataTable( {
 			// dom: 'Bfrtip',
 			dom: '<<"row"<"col"B><"col"f>>>rt<<"row"<"col"i><"col"p>>>',
 			"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "Todo"]],
 			destroy: true,
 //    				"bProcessing" : true,
 			lengthChange: false,
-			responsive: true,
+			responsive: false,
 
 			'processing': true,
 			'serverSide': true,
@@ -453,6 +454,10 @@
 						_: "Mostrar %d filas",
 						'-1': "Mostrar todo"}
 				}
+			},
+			'select': {
+				'style': 'multi'
 			}
 		} );
+		table.buttons().container().appendTo( tableId+"_wrapper .col-md-6:eq(0)");
 	}

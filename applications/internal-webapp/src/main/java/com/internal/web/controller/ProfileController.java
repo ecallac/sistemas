@@ -14,6 +14,7 @@ import com.Utils;
 import com.common.*;
 import com.internal.web.view.DireccionView;
 import com.internal.web.service.integration.*;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -124,17 +125,19 @@ public class ProfileController {
 
 	public List<DireccionView> setViewFields(List<Direccion> direcciones){
 		List<DireccionView> direccions = new ArrayList<DireccionView>();
-		for (Direccion direccion:direcciones) {
-			DireccionView view = (DireccionView) BeanParser.parseBetweenObjects(direccion, new DireccionView());
-			if ("Y".equals(direccion.getEsprincipal())){
-				view.setEsprincipal("Principal");
-				view.setEsprincipalStyle("success");
-			}else{
-				view.setEsprincipal("");
-				view.setEsprincipalStyle("");
+		if (CollectionUtils.isNotEmpty(direcciones)){
+			for (Direccion direccion:direcciones) {
+				DireccionView view = (DireccionView) BeanParser.parseBetweenObjects(direccion, new DireccionView());
+				if ("Y".equals(direccion.getEsprincipal())){
+					view.setEsprincipal("Principal");
+					view.setEsprincipalStyle("success");
+				}else{
+					view.setEsprincipal("");
+					view.setEsprincipalStyle("");
+				}
+				view.setUbicaionTotal(getUbicacionTotal("",direccion.getUbigeo()));
+				direccions.add(view);
 			}
-			view.setUbicaionTotal(getUbicacionTotal("",direccion.getUbigeo()));
-			direccions.add(view);
 		}
 		return direccions;
 	}

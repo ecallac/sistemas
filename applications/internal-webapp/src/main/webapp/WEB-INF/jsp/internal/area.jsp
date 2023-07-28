@@ -208,7 +208,7 @@
 				return data;
 			}
 		}
-		createTableAjax(tableId,fileTitle,ajaxUrl,jsonData,jsonColumns,jsonColumnDefs,columnsExport,exportColumnCustom);
+		createTableAjax(tableId,fileTitle,ajaxUrl,formData,jsonColumns,jsonColumnDefs,columnsExport,exportColumnCustom);
     }
 
 	function search(){
@@ -225,7 +225,7 @@
 		$('#parentAreaId').val("").change();
 	}
 
-	function cleanFilter(){
+	function clearFilter(){
 		$('#activoSearch').val("").change();
 		$('#parentSearch').val("").change();
 	}
@@ -243,13 +243,13 @@
             theme: 'bootstrap4'
         });
 		//modal select
-		$('.selectform').select2({
+		$('.selectForm').select2({
 			dropdownParent: $('#Form'),
 			width: '100%',
 			theme: 'bootstrap4'
 		});
-		$('.selectfilter').select2({
-			dropdownParent: $('#Form'),
+		$('.selectFilter').select2({
+			dropdownParent: $('#Filter'),
 			width: '100%',
 			theme: 'bootstrap4'
 		});
@@ -334,7 +334,7 @@
 						<div class="mb-3 row">
 							<label for="parentAreaId" class="col-sm-3 col-form-label">Parent</label>
 							<div class="col-sm-7">
-								<select id="parentAreaId" class="form-control input-sm selectform">
+								<select id="parentAreaId" class="form-control input-sm selectForm">
 									<option value="">-- Select Option --</option>
 								</select>
 							</div>
@@ -348,7 +348,7 @@
 						<div class="mb-3 row">
 							<label for="activo" class="col-sm-3 col-form-label">Estado</label>
 							<div class="col-sm-7">
-								<select id="activo" class="form-control input-sm selectform">
+								<select id="activo" class="form-control input-sm selectForm">
 								</select>
 							</div>
 						</div>
@@ -388,7 +388,7 @@
 						<div class="mb-3 row">
 							<label for="activoSearch" class="col-sm-3 col-form-label">Estado</label>
 							<div class="col-sm-7">
-								<select id="activoSearch" class="form-control input-sm selectfilter">
+								<select id="activoSearch" class="form-control input-sm selectFilter">
 									<option value="">-- Seleccionar --</option>
 								</select>
 							</div>
@@ -396,7 +396,7 @@
 						<div class="mb-3 row">
 							<label for="parentSearch" class="col-sm-3 col-form-label">Parent</label>
 							<div class="col-sm-7">
-								<select id="parentSearch" class="form-control input-sm selectfilter">
+								<select id="parentSearch" class="form-control input-sm selectFilter">
 									<option value="">-- Seleccionar --</option>
 								</select>
 							</div>
@@ -411,7 +411,7 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-				<button type="button" class="btn btn-secondary" onclick="cleanFilter();">Limpiar</button>
+				<button type="button" class="btn btn-secondary" onclick="clearFilter();">Limpiar</button>
 				<button type="button" class="btn btn-primary" onclick="search();">Aplicar</button>
 			</div>
 		</div>

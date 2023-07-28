@@ -203,7 +203,7 @@ public class TipoBaseController {
 		return map;
 	}
 	public List<TipoBaseView> castTipoBaseToTipoBaseViewList(List<TipoBase> list) throws Exception {
-		Map<String, ReglaDetalle> reglaDetalleMap = reglaDetalleIntegration.getReglasMap(reglaDetalleIntegration.findByCodigo(GeneralConstant.SWITH_LABEL_TIPE.getCode()));
+		Map<String, ReglaDetalle> reglaDetalleMap = reglaDetalleIntegration.getReglasMap(reglaDetalleIntegration.findByCodigo(GeneralConstant.SWITH_LABEL_TYPE.getCode()));
 		Map<String, TipoBase> tipoBaseMap = tipoBaseIntegration.findAllMap();
 		return list.stream().map(bean -> {
 			TipoBaseView view =(TipoBaseView)BeanParser.parseObjectToNewClass(bean,TipoBaseView.class,null);

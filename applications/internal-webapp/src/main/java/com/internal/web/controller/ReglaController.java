@@ -207,7 +207,7 @@ public class ReglaController {
 		return map;
 	}
 	public List<ReglaView> castReglaToReglaViewList(List<Regla> list) throws Exception {
-		Map<String,ReglaDetalle> reglaDetalleMap = reglaDetalleIntegration.getReglasMap(reglaDetalleIntegration.findByCodigo(GeneralConstant.SWITH_LABEL_TIPE.getCode()));
+		Map<String,ReglaDetalle> reglaDetalleMap = reglaDetalleIntegration.getReglasMap(reglaDetalleIntegration.findByCodigo(GeneralConstant.SWITH_LABEL_TYPE.getCode()));
 		Map<String, TipoBase> tipoBaseMap = tipoBaseIntegration.findAllMap();
 		return list.stream().map(bean -> {
 			ReglaView view =(ReglaView)BeanParser.parseObjectToNewClass(bean,ReglaView.class,null);
