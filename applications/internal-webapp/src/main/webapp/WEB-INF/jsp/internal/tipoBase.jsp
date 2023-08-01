@@ -69,8 +69,8 @@
 					clearFields();
 					$("#id").val(response.tipoBaseView.id);
 					$('#categoria').val(response.tipoBaseView.categoria),
-					$('#codigo').val(response.tipoBaseView.codigo),
-					$("#descripcion").val(response.tipoBaseView.descripcion);
+							$('#codigo').val(response.tipoBaseView.codigo),
+							$("#descripcion").val(response.tipoBaseView.descripcion);
 					$('#activo').val(response.tipoBaseView.activo).change();
 				}else{
 					showErrorMessage(response.message);
@@ -81,13 +81,9 @@
 		}
 
 		function enableAndDisable(idVal,status){
-			var activo = "DISABLED";
-			if (status===1) {
-				activo = "ENABLED";
-			}
 			var formData= {
 				id: idVal,
-				activo:activo
+				activo:status
 			}
 			var ajaxUrl = contexPath+'/tipoBase/enableDisable.json';
 			var successFunction = function(response){
@@ -105,6 +101,26 @@
 
 		}
 
+		function activate(){
+			const selectedRows = table.column(0).checkboxes.selected();
+			if (selectedRows.length>0){
+				$.each(selectedRows, function(index, rowId){
+					enableAndDisable(rowId,'ENABLED');
+				});
+			}
+		}
+		function deactivate(){
+			var rowIds= [];
+			$.each(table.column(0).checkboxes.selected(), function(index, rowId){
+				rowIds  [index]= rowId;
+			});
+			if (rowIds.length>0){
+				console.log("saving");
+				$.each(rowIds, function(index, rowId){
+					enableAndDisable(rowId,'DISABLED');
+				});
+			}
+		}
 		function verifyCodigo(object){
 			$('.bindingError'+object.id).remove();
 			var ajaxUrl = contexPath+'/tipoBase/verifyCodigo?codigo='+object.value;
@@ -178,9 +194,9 @@
 					"render": function ( data, type, row ) {
 						var value = "";
 						if (row.activo==="ENABLED"){
-							value = makeButton("Inactivar","enableAndDisable("+row.id+",0)","","<svg viewBox='0 0 24 24' width='16' height='16' stroke='currentColor' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round' class='css-i6dzq1'><path d='M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24'></path><line x1='1' y1='1' x2='23' y2='23'></line></svg>")
+							value = makeButton("Inactivar","enableAndDisable("+row.id+",\"DISABLED\")","","<svg viewBox='0 0 24 24' width='16' height='16' stroke='currentColor' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round' class='css-i6dzq1'><path d='M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24'></path><line x1='1' y1='1' x2='23' y2='23'></line></svg>")
 						}else if (row.activo==="DISABLED"){
-							value = makeButton("Activar","enableAndDisable("+row.id+",1)","","<svg viewBox='0 0 24 24' width='16' height='16' stroke='currentColor' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round' class='css-i6dzq1'><path d='M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z'></path><circle cx='12' cy='12' r='3'></circle></svg>")
+							value = makeButton("Activar","enableAndDisable("+row.id+",\"ENABLED\")","","<svg viewBox='0 0 24 24' width='16' height='16' stroke='currentColor' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round' class='css-i6dzq1'><path d='M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z'></path><circle cx='12' cy='12' r='3'></circle></svg>")
 						}
 						return "<td>"+
 								makeButton("Edit","edit("+row.id+")","data-bs-toggle='modal' data-bs-target='#Form'","<svg viewBox='0 0 24 24' width='16' height='16' stroke='currentColor' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round' class='css-i6dzq1'><path d='M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7'></path><path d='M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z'></path></svg>")+
@@ -242,9 +258,25 @@
 				theme: 'bootstrap4'
 			});
 
-			const selectedRows = table.column(0).checkboxes.selected();
-			alert(selectedRows);
 
+			$('#table').change(function() {
+				var cheked=false;
+				const collection = document.getElementsByClassName("dt-checkboxes");
+				for (let i = 0; i < collection.length; i++) {
+					// console.log(collection[i].checked);
+					if(collection[i].checked){
+						cheked=true;
+					}
+				}
+				if(cheked){
+					$("#activar").attr("disabled", false);
+					$("#inactivar").attr("disabled", false);
+				}else{
+					$("#activar").attr("disabled", true);
+					$("#inactivar").attr("disabled", true);
+				}
+
+			});
 		});
 
 
@@ -278,17 +310,17 @@
 						<svg viewBox='0 0 24 24' width='16' height='16' stroke='currentColor' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round' class='css-i6dzq1'><polygon points='22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3'></polygon></svg>
 						Filtrar
 					</button>
-					<button data-bs-target="#Form" title="Agregar Nuevo" type="button" class="btn btn-outline-primary toltip" data-bs-toggle="modal" onclick="clearFields();">
-						<svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="12" y1="18" x2="12" y2="12"></line><line x1="9" y1="15" x2="15" y2="15"></line></svg>
-						Agregar Nuevo
-					</button>
-					<button id="activar" title="Activar" type="button" class="btn btn-outline-primary toltip">
+					<button id="activar" title="Activar" type="button" class="btn btn-outline-primary toltip" onclick="activate();" disabled="true">
 						<svg viewBox='0 0 24 24' width='16' height='16' stroke='currentColor' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round' class='css-i6dzq1'><path d='M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z'></path><circle cx='12' cy='12' r='3'></circle></svg>
 						Activar
 					</button>
-					<button id="inactivar" title="Inactivar" type="button" class="btn btn-outline-primary toltip">
+					<button id="inactivar" title="Inactivar" type="button" class="btn btn-outline-primary toltip" onclick="deactivate();" disabled="true">
 						<svg viewBox='0 0 24 24' width='16' height='16' stroke='currentColor' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round' class='css-i6dzq1'><path d='M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24'></path><line x1='1' y1='1' x2='23' y2='23'></line></svg>
 						Inactivar
+					</button>
+					<button data-bs-target="#Form" title="Agregar Nuevo" type="button" class="btn btn-outline-primary toltip" data-bs-toggle="modal" onclick="clearFields();">
+						<svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="12" y1="18" x2="12" y2="12"></line><line x1="9" y1="15" x2="15" y2="15"></line></svg>
+						Agregar Nuevo
 					</button>
 				</div>
 			</div>

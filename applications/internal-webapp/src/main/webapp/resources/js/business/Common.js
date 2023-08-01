@@ -457,7 +457,8 @@
 			},
 			'select': {
 				'style': 'multi'
-			}
+			},
+			'order': [[1, 'asc']]
 		} );
 		table.buttons().container().appendTo( tableId+"_wrapper .col-md-6:eq(0)");
 	}
