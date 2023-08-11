@@ -47,8 +47,6 @@
 					$.each(response.messages,function(key,value){
 						showErrorMessageByField('input' , key , value , '');
 						showErrorMessageByField('select' , key , value , '');
-//   	            $('input[id='+key+']').after('<span class="bindingError" style="color:red;font-weight: bold;">'+value+'</span>');
-//   	          	$('select[id='+key+']').after('<span class="bindingError" style="color:red;font-weight: bold;">'+value+'</span>');
 					});
 				}
 
