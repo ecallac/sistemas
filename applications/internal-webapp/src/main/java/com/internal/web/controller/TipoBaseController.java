@@ -120,9 +120,13 @@ public class TipoBaseController {
         Map<String, Object> map = new HashMap<String, Object>();
 
 		try{
-			TipoBase tipoBase = (TipoBase) BeanParser.parseObjectToNewClass(tipoBaseView, TipoBase.class, null);
-			tipoBase.setUpdatedBy(principal.getName());
-			tipoBaseIntegration.save(tipoBase);
+			if (tipoBaseView.getIds()!=null){
+				tipoBaseIntegration.save(castTipoBaseViewToTipoBaseList(tipoBaseView,principal));
+			}else {
+				TipoBase tipoBase = (TipoBase) BeanParser.parseObjectToNewClass(tipoBaseView, TipoBase.class, null);
+				tipoBase.setUpdatedBy(principal.getName());
+				tipoBaseIntegration.save(tipoBase);
+			}
 			map.put(Constants.STATUS, Constants.OK);
 			map.put(Constants.MESSAGE, Utils.getSuccessMessage(Constants.SUCCESS_MESSAGE));
 
@@ -133,6 +137,18 @@ public class TipoBaseController {
 		}
         return map;
     }
+
+	public List<TipoBase> castTipoBaseViewToTipoBaseList(TipoBaseView tipoBaseView,Principal principal){
+		List<TipoBase> list = new ArrayList<>();
+		for (int i = 0; i < tipoBaseView.getIds().length; i++) {
+			String id = tipoBaseView.getIds()[i];
+			TipoBase tipoBase = (TipoBase) BeanParser.parseObjectToNewClass(tipoBaseView, TipoBase.class, null);
+			tipoBase.setId(Long.valueOf(id));
+			tipoBase.setUpdatedBy(principal.getName());
+			list.add(tipoBase);
+		}
+		return list;
+	}
 
 	@RequestMapping(value = "/findByPage", method = {RequestMethod.POST,RequestMethod.GET})
 	public @ResponseBody  Map<String, Object> findByPage(HttpServletRequest request) {

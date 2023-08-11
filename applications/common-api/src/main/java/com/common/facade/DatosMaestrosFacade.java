@@ -78,8 +78,15 @@ public class DatosMaestrosFacade {
 		return tipoBaseService.findByCategoriaAndCodigo(categoria,codigo);
 	}
 	@Transactional(readOnly = false,rollbackFor=Exception.class)
-	public void saveTipoPBase(TipoBase tipoBase) {
+	public void saveTipoBase(TipoBase tipoBase) {
 		tipoBaseService.save(tipoBase);
+	}
+	@Transactional(readOnly = false,rollbackFor=Exception.class)
+	public void saveTipoBase(List<TipoBase> tipoBaseList) {
+		for (TipoBase tipoBase:
+			 tipoBaseList) {
+			tipoBaseService.save(tipoBase);
+		}
 	}
 	public DataTablesOutput<TipoBase> findTipoBaseDataTablesList(DataTablesInput<TipoBase> dataTablesInput){
 		return tipoBaseService.findDataTablesList(dataTablesInput);

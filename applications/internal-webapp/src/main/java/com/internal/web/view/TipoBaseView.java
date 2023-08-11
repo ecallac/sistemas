@@ -29,4 +29,5 @@ public class TipoBaseView extends BaseEntity {
 	private String activo;
 	private String activoDescripcion;
 	private String activoType;
+	private String ids[];
 }

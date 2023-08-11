@@ -69,8 +69,19 @@ public class TipoBaseController {
     @RequestMapping(value = "/save", method = {RequestMethod.POST})
     public ResponseEntity<?> save(@RequestBody TipoBase bean) {
         try {
-            datosMaestrosFacade.saveTipoPBase(bean);
+            datosMaestrosFacade.saveTipoBase(bean);
             return new ResponseEntity(bean,HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error(e.getMessage(),e);
+            e.printStackTrace();
+            return new ResponseEntity(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @RequestMapping(value = "/saveList", method = {RequestMethod.POST})
+    public ResponseEntity<?> saveList(@RequestBody List<TipoBase> beanList) {
+        try {
+            datosMaestrosFacade.saveTipoBase(beanList);
+            return new ResponseEntity(beanList,HttpStatus.OK);
         } catch (Exception e) {
             logger.error(e.getMessage(),e);
             e.printStackTrace();

@@ -57,6 +57,9 @@ public class TipoBaseIntegration extends ServiceIntegrationAbstract<TipoBase> {
 	public TipoBase save(TipoBase entity) throws Exception  {
 		return setObjectToPostRequest(api+"/"+basePath+"/save", entity,TipoBase.class);
 	}
+	public List<TipoBase> save(List<TipoBase> entity) throws Exception  {
+		return (List<TipoBase>) doPostRequestGeneral(api+"/"+basePath+"/saveList", entity,new TypeReference<List<TipoBase>>(){});
+	}
 	public DataTablesOutput findDataTables(DataTablesInput entity) throws Exception  {
 		return (DataTablesOutput) doPostRequestGeneral(api+"/"+basePath+"/findDataTables", entity,new TypeReference<DataTablesOutput<TipoBase>>(){});
 	}
