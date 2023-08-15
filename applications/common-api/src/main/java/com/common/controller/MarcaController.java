@@ -67,4 +67,15 @@ public class MarcaController {
             return new ResponseEntity(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
 		}
     }
+    @RequestMapping(value = "/saveList", method = {RequestMethod.POST})
+    public ResponseEntity<?> saveList(@RequestBody List<Marca> beanList) {
+        try {
+            inventarioFacade.saveMarca(beanList);
+            return new ResponseEntity(beanList,HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error(e.getMessage(),e);
+            e.printStackTrace();
+            return new ResponseEntity(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 } 

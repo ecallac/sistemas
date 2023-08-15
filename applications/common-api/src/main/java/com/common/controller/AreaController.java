@@ -82,6 +82,18 @@ public class AreaController {
 		}
     }
 
+    @RequestMapping(value = "/saveList", method = {RequestMethod.POST})
+    public ResponseEntity<?> saveList(@RequestBody List<Area> beanList) {
+        try {
+            recurrsosHumanosFacade.saveArea(beanList);
+            return new ResponseEntity(beanList,HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error(e.getMessage(),e);
+            e.printStackTrace();
+            return new ResponseEntity(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @RequestMapping(value = "/findByNombre", method = {RequestMethod.GET})
     public ResponseEntity<?> findByNombre(@RequestParam(value = "nombre", required = true) String nombre) {
         Area entity = recurrsosHumanosFacade.findAreaByNombre(nombre);

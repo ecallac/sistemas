@@ -146,6 +146,14 @@ public class DatosMaestrosFacade {
 		entidad.setRegla(reglaService.findById(entidad.getRegla().getId()));
 		reglaDetalleService.save(entidad);
 	}
+	@Transactional(readOnly = false,rollbackFor=Exception.class)
+	public void saveReglaDetalle(List<ReglaDetalle> entidadList) {
+		for (ReglaDetalle reglaDetalle :
+				entidadList) {
+			reglaDetalle.setRegla(reglaService.findById(reglaDetalle.getRegla().getId()));
+			reglaDetalleService.save(reglaDetalle);
+		}
+	}
 
 	public  Regla findReglaByCodigo(String codigo) {
 		return reglaService.findByCodigo(codigo);

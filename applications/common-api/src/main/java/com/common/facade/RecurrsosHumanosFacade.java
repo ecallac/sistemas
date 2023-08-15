@@ -41,6 +41,17 @@ public class RecurrsosHumanosFacade {
 		}
 		areaService.save(area);
 	}
+	@Transactional(readOnly = false,rollbackFor=Exception.class)
+	public void saveArea(List<Area> areaList) {
+		for (Area area :
+				areaList) {
+			if (area.getParentArea()!=null){
+				area.setParentArea(areaService.findById(area.getParentArea().getId()));
+			}
+			areaService.save(area);
+		}
+
+	}
 	public List<Area> findAreaByActivo(String activo) {
 		return areaService.findByActivo(activo);
 	}
@@ -66,8 +77,22 @@ public class RecurrsosHumanosFacade {
 		}
 		cargoService.save(cargo);
 	}
+	@Transactional(readOnly = false,rollbackFor=Exception.class)
+	public void saveCargo(List<Cargo> cargoList) {
+		for (Cargo cargo :
+				cargoList) {
+			if (cargo.getParentCargo()!=null){
+				cargo.setParentCargo(cargoService.findById(cargo.getParentCargo().getId()));
+			}
+			cargoService.save(cargo);
+		}
+
+	}
 	public List<Cargo> findCargoByActivo(String activo) {
 		return cargoService.findByActivo(activo);
 	}
-	
+
+	public DataTablesOutput findCargoDataTablesList(DataTablesInput<Cargo> bean) {
+		return cargoService.findDataTablesList(bean);
+	}
 }

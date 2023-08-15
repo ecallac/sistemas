@@ -50,7 +50,7 @@ public class ReglaController {
         }
     }
     @RequestMapping(value = "/saveList", method = {RequestMethod.POST})
-    public ResponseEntity<?> save(@RequestBody List<Regla> beanList) {
+    public ResponseEntity<?> saveList(@RequestBody List<Regla> beanList) {
         try {
             datosMaestrosFacade.saveRegla(beanList);
             return new ResponseEntity(beanList,HttpStatus.OK);

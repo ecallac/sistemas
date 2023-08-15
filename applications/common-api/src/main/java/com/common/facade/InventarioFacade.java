@@ -42,6 +42,13 @@ public class InventarioFacade {
 	public void saveMarca(Marca marca) {
 		marcaService.save(marca);
 	}
+	@Transactional(readOnly = false,rollbackFor=Exception.class)
+	public void saveMarca(List<Marca> marcaList) {
+		for (Marca marca :
+				marcaList) {
+			marcaService.save(marca);
+		}
+	}
 	public List<Marca> findMarcaByStatus(String status) {
 		return marcaService.findByStatus(status);
 	}
@@ -56,6 +63,13 @@ public class InventarioFacade {
 	@Transactional(readOnly = false,rollbackFor=Exception.class)
 	public void saveComponente(Componente componente) {
 		componenteService.save(componente);
+	}
+	@Transactional(readOnly = false,rollbackFor=Exception.class)
+	public void saveComponente(List<Componente> componenteList) {
+		for (Componente componente :
+				componenteList) {
+			componenteService.save(componente);
+		}
 	}
 	public List<Componente> findComponenteByStatus(String status) {
 		return componenteService.findByStatus(status);

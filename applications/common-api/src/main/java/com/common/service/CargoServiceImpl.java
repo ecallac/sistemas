@@ -4,6 +4,9 @@
 package com.common.service;
 
 import com.BeanParser;
+import com.DataTablesInput;
+import com.DataTablesOutput;
+import com.common.domain.Area;
 import com.common.domain.Cargo;
 import com.common.repository.CargoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +22,7 @@ import java.util.List;
  */
 @Service
 @Transactional
-public class CargoServiceImpl implements CargoService {
+public class CargoServiceImpl extends CommonServiceAbstract<Cargo> implements CargoService {
 
 	@Autowired
 	CargoRepository cargoRepository;
@@ -67,5 +70,19 @@ public class CargoServiceImpl implements CargoService {
 	@Override
 	public List<Cargo> findByActivo(String activo) {
 		return cargoRepository.findByActivo(activo);
+	}
+
+	@Override
+	public Cargo findByNombre(String nombre) {
+		return cargoRepository.findFirstByNombre(nombre);
+	}
+
+	@Override
+	public DataTablesOutput<Cargo> findDataTablesList(DataTablesInput<Cargo> dataTablesInput) {
+		DataTablesOutput dataTablesOutput = super.getSearchedElements(
+				cargoRepository.findPageByParameters(dataTablesInput.getSearchValue(),super.getPageRequest(dataTablesInput),dataTablesInput.getObject()),
+				cargoRepository.count());
+		dataTablesOutput.setDraw(dataTablesInput.getDraw());
+		return dataTablesOutput;
 	}
 }

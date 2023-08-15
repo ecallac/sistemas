@@ -3,8 +3,11 @@
  */
 package com.common.controller;
 
+import com.DataTablesInput;
+import com.DataTablesOutput;
 import com.common.domain.Area;
 import com.common.domain.Cargo;
+import com.common.domain.Componente;
 import com.common.enums.EnableIndicator;
 import com.common.facade.RecurrsosHumanosFacade;
 import org.apache.log4j.Logger;
@@ -77,5 +80,26 @@ public class CargoController {
             return new ResponseEntity(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
+    }
+    @RequestMapping(value = "/saveList", method = {RequestMethod.POST})
+    public ResponseEntity<?> saveList(@RequestBody List<Cargo> beanList) {
+        try {
+            recurrsosHumanosFacade.saveCargo(beanList);
+            return new ResponseEntity(beanList,HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error(e.getMessage(),e);
+            e.printStackTrace();
+            return new ResponseEntity(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+    }
+    @RequestMapping(value = "/findDataTables", method = {RequestMethod.GET,RequestMethod.POST})
+    public ResponseEntity<?> findDatatables(@RequestBody DataTablesInput<Cargo> bean) {
+
+        DataTablesOutput dataTablesOutput =  recurrsosHumanosFacade.findCargoDataTablesList(bean);
+        if (dataTablesOutput==null) {
+            return new ResponseEntity(new DataTablesOutput<Cargo>(),HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity(dataTablesOutput,HttpStatus.OK);
     }
 } 

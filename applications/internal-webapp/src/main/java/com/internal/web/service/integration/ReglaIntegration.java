@@ -6,6 +6,7 @@ package com.internal.web.service.integration;
 import com.DataTablesInput;
 import com.DataTablesOutput;
 import com.common.Regla;
+import com.common.TipoBase;
 import org.codehaus.jackson.type.TypeReference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,6 +32,9 @@ public class ReglaIntegration extends ServiceIntegrationAbstract<Regla> {
 	}
 	public Regla save(Regla entity) throws Exception  {
 		return setObjectToPostRequest(api+"/"+basePath+"/save", entity,Regla.class);
+	}
+	public List<Regla> save(List<Regla> entity) throws Exception  {
+		return (List<Regla>) doPostRequestGeneral(api+"/"+basePath+"/saveList", entity,new TypeReference<List<Regla>>(){});
 	}
 	public DataTablesOutput findDataTables(DataTablesInput entity) throws Exception  {
 		return (DataTablesOutput) doPostRequestGeneral(api+"/"+basePath+"/findDataTables", entity,new TypeReference<DataTablesOutput<Regla>>(){});
