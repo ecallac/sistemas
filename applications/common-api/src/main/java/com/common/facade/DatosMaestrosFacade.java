@@ -161,6 +161,14 @@ public class DatosMaestrosFacade {
 	public void saveRegla(Regla entidad) {
 		reglaService.save(entidad);
 	}
+	@Transactional(readOnly = false,rollbackFor=Exception.class)
+	public void saveRegla(List<Regla> entidadList) {
+		for (Regla regla:
+				entidadList) {
+			reglaService.save(regla);
+		}
+
+	}
 
 	public List<Ubigeo> findUbigeoByParentUbigeoId(Long parentUbigeoId){
 		return ubigeoService.findByParentUbigeoId(parentUbigeoId);
