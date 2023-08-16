@@ -185,7 +185,7 @@ public class TipoBaseController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		try{
 			TipoBase bean = tipoBaseIntegration.findByCodigo(codigo);
-			if (bean!=null){
+			if (bean==null){
 				map.put(Constants.STATUS, Constants.OK);
 			}else{
 				map.put(Constants.STATUS, Constants.ERROR);

@@ -161,7 +161,7 @@ public class ReglaController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		try{
 			Regla bean = reglaIntegration.findByCodigo(codigo);
-			if (bean!=null){
+			if (bean==null){
 				map.put(Constants.STATUS, Constants.OK);
 			}else{
 				map.put(Constants.STATUS, Constants.ERROR);

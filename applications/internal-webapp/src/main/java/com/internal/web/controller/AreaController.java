@@ -79,26 +79,6 @@ public class AreaController {
 		}
 		return map;
 	}
-//
-//  @RequestMapping(value = "/list", method = {RequestMethod.GET,RequestMethod.POST})
-//  public @ResponseBody Map<String, Object> getAll() {
-//      Map<String, Object> map = new HashMap<String, Object>();
-//	  try{
-//		  List<Area> list = areaIntegration.findList();
-//		  if (list != null) {
-//			  map.put("data", list);
-//		  } else {
-//			  map.put("data", new ArrayList<Area>());
-//		  }
-//		  map.put(Constants.STATUS, Constants.OK);
-//	  }catch (Exception e){
-//		  logger.error(e.getMessage(),e);
-//		  map.put(Constants.STATUS, Constants.ERROR);
-//		  map.put(Constants.MESSAGE, Utils.getErrorMessage(Constants.ERROR_MESSAGE_GET,e.getMessage()));
-//	  }
-//
-//      return map;
-//  }
 	
 	@RequestMapping(value = "/save", method = {RequestMethod.POST})
     public @ResponseBody  Map<String, Object> save(@RequestBody @Valid AreaView view, BindingResult result, Principal principal) {
@@ -182,7 +162,7 @@ public class AreaController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		try{
 			Area bean = areaIntegration.findByNombre(nombre);
-			if (bean!=null){
+			if (bean==null){
 				map.put(Constants.STATUS, Constants.OK);
 			}else{
 				map.put(Constants.STATUS, Constants.ERROR);
@@ -214,7 +194,7 @@ public class AreaController {
 				map.put("recordsTotal", dataTablesOutput.getRecordsTotal());
 				map.put("recordsFiltered", dataTablesOutput.getRecordsFiltered());
 			} else {
-				map.put("data", new ArrayList<TipoBase>());
+				map.put("data", new ArrayList<Area>());
 			}
 
 			map.put(Constants.STATUS, Constants.OK);

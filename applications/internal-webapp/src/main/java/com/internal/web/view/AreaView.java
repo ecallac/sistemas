@@ -4,6 +4,7 @@
 package com.internal.web.view;
 
 import com.BaseEntity;
+import lombok.Getter;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -20,11 +21,17 @@ public class AreaView extends BaseEntity {
 	private String activo;
 	private String activoDescripcion;
 	private String activoType;
+	@Getter
+	private String ids[];
 	private AreaView parentArea;
 	@NotEmpty
 	private String parentAreaId;
 	transient
 	private List<AreaView> childAreas;
+
+	public void setIds(String[] ids) {
+		this.ids = ids;
+	}
 
 	public String getParentAreaId() {
 		return parentAreaId;

@@ -5,6 +5,7 @@ package com.internal.web.service.integration;
 
 import com.DataTablesInput;
 import com.DataTablesOutput;
+import com.common.Area;
 import com.common.Marca;
 import org.codehaus.jackson.type.TypeReference;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,9 @@ public class MarcaIntegration extends ServiceIntegrationAbstract<Marca> {
 	}
 	public List<Marca> save(List<Marca> entity) throws Exception  {
 		return (List<Marca>) doPostRequestGeneral(api+"/"+basePath+"/saveList", entity,new TypeReference<List<Marca>>(){});
+	}
+	public Marca findByNombre(String nombre) throws Exception  {
+		return getObjectFromGetRequest(api+"/"+basePath+"/findByNombre?nombre="+nombre, Marca.class);
 	}
 	public DataTablesOutput findDataTables(DataTablesInput entity) throws Exception  {
 		return (DataTablesOutput) doPostRequestGeneral(api+"/"+basePath+"/findDataTables", entity,new TypeReference<DataTablesOutput<Marca>>(){});

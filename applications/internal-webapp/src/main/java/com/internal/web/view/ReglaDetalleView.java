@@ -21,6 +21,7 @@ public class ReglaDetalleView extends BaseEntity {
     private String activo;
     private String activoDescripcion;
     private String activoType;
+    private String ids[];
     private ReglaView regla;
     private String reglaId;
 }

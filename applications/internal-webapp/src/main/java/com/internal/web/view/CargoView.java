@@ -4,6 +4,7 @@
 package com.internal.web.view;
 
 import com.BaseEntity;
+import lombok.Getter;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -19,6 +20,12 @@ public class CargoView extends BaseEntity {
 	private String nombre;
 	@NotEmpty
 	private String activo;
+	@Getter
+	private String activoDescripcion;
+	@Getter
+	private String activoType;
+	@Getter
+	private String ids[];
 	@NotEmpty
 	private BigDecimal salariomin;
 	@NotEmpty
@@ -28,6 +35,18 @@ public class CargoView extends BaseEntity {
 	private String parentCargoId;
 	transient
 	private List<CargoView> childCargos;
+
+	public void setActivoDescripcion(String activoDescripcion) {
+		this.activoDescripcion = activoDescripcion;
+	}
+
+	public void setActivoType(String activoType) {
+		this.activoType = activoType;
+	}
+
+	public void setIds(String[] ids) {
+		this.ids = ids;
+	}
 
 	public String getParentCargoId() {
 		return parentCargoId;
