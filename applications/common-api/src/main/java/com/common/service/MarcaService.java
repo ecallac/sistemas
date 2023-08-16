@@ -3,8 +3,9 @@
  */
 package com.common.service;
 
+import com.DataTablesInput;
+import com.DataTablesOutput;
 import com.common.domain.Marca;
-import com.common.domain.Telefono;
 
 import java.util.List;
 
@@ -14,4 +15,6 @@ import java.util.List;
  */
 public interface MarcaService extends BaseService<Marca> {
 	List<Marca> findByStatus(String status);
+	Marca findByNombre(String nombre);
+	DataTablesOutput<Marca> findDataTablesList(DataTablesInput<Marca> dataTablesInput);
 }

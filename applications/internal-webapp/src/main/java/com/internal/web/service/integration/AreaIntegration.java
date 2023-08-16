@@ -6,8 +6,6 @@ package com.internal.web.service.integration;
 import com.DataTablesInput;
 import com.DataTablesOutput;
 import com.common.Area;
-import com.common.TipoBase;
-import com.security.Module;
 import org.codehaus.jackson.type.TypeReference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -42,6 +40,9 @@ public class AreaIntegration extends ServiceIntegrationAbstract<Area> {
 	}
 	public Area save(Area entity) throws Exception {
 		return setObjectToPostRequest(api+"/"+basePath+"/save", entity,Area.class);
+	}
+	public List<Area> save(List<Area> entity) throws Exception  {
+		return (List<Area>) doPostRequestGeneral(api+"/"+basePath+"/saveList", entity,new TypeReference<List<Area>>(){});
 	}
 	public Area findByNombre(String nombre) throws Exception  {
 		return getObjectFromGetRequest(api+"/"+basePath+"/findByNombre?id="+nombre, Area.class);

@@ -4,6 +4,9 @@
 package com.common.service;
 
 import com.BeanParser;
+import com.DataTablesInput;
+import com.DataTablesOutput;
+import com.common.domain.Area;
 import com.common.domain.Marca;
 import com.common.repository.MarcaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +22,7 @@ import java.util.List;
  */
 @Service
 @Transactional
-public class MarcaServiceImpl implements MarcaService {
+public class MarcaServiceImpl extends CommonServiceAbstract<Marca> implements MarcaService {
 
 	@Autowired
 	MarcaRepository marcaRepository;
@@ -62,5 +65,19 @@ public class MarcaServiceImpl implements MarcaService {
 	@Override
 	public List<Marca> findByStatus(String status) {
 		return marcaRepository.findByStatusOrderByDescripcionAsc(status);
+	}
+
+	@Override
+	public Marca findByNombre(String nombre) {
+		return marcaRepository.findFirstByNombre(nombre);
+	}
+
+	@Override
+	public DataTablesOutput<Marca> findDataTablesList(DataTablesInput<Marca> dataTablesInput) {
+		DataTablesOutput dataTablesOutput = super.getSearchedElements(
+				marcaRepository.findPageByParameters(dataTablesInput.getSearchValue(),super.getPageRequest(dataTablesInput),dataTablesInput.getObject()),
+				marcaRepository.count());
+		dataTablesOutput.setDraw(dataTablesInput.getDraw());
+		return dataTablesOutput;
 	}
 }

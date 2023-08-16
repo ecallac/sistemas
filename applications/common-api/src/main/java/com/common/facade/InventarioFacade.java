@@ -5,6 +5,7 @@ package com.common.facade;
 
 import com.DataTablesInput;
 import com.DataTablesOutput;
+import com.common.domain.Cargo;
 import com.common.domain.Marca;
 import com.common.domain.Componente;
 import com.common.domain.TipoBase;
@@ -52,7 +53,13 @@ public class InventarioFacade {
 	public List<Marca> findMarcaByStatus(String status) {
 		return marcaService.findByStatus(status);
 	}
-
+	public Marca findMarcaByNombre(String nombre) {
+		return marcaService.findByNombre(nombre);
+	}
+	public DataTablesOutput findMarcaDataTablesList(DataTablesInput<Marca> dataTablesInput) {
+		DataTablesOutput dataTablesOutput = marcaService.findDataTablesList(dataTablesInput);
+		return dataTablesOutput;
+	}
 
 	public List<Componente> findComponenteList() {
 		return componenteService.findList();
@@ -74,17 +81,11 @@ public class InventarioFacade {
 	public List<Componente> findComponenteByStatus(String status) {
 		return componenteService.findByStatus(status);
 	}
-	public DataTablesOutput<Componente> findComponenteDataTablesList(DataTablesInput<Componente> dataTablesInput) {
+	public Componente findComponenteByNombre(String nombre) {
+		return componenteService.findByNombre(nombre);
+	}
+	public DataTablesOutput findComponenteDataTablesList(DataTablesInput<Componente> dataTablesInput) {
 		DataTablesOutput dataTablesOutput = componenteService.findDataTablesList(dataTablesInput);
-//		List<TipoBase> list = datosMaestrosFacade.findTipoBaseByDescripcionContaining(dataTablesInput.getSearchValue());
-//		for (TipoBase tipoBase : list){
-//			Componente componente = new Componente();
-//			componente.setTipoComponnte(tipoBase.getCodigo());
-//			dataTablesInput.setObject(componente);
-//			dataTablesInput.setSearchValue(null);
-//			dataTablesOutput.getData().addAll(componenteService.findDataTablesList(dataTablesInput).getData());
-//		}
-//		dataTablesOutput.getData().stream().distinct().collect( Collectors.toList() );
 		return dataTablesOutput;
 	}
 }

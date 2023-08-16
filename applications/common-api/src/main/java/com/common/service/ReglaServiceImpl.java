@@ -66,6 +66,11 @@ public class ReglaServiceImpl extends CommonServiceAbstract<Regla> implements Re
 		return reglaRepository.findFirstByCodigo(codigo);
 	}
 
+	@Override
+	public List<Regla> findByActivo(String activo) {
+		return reglaRepository.findByActivo(activo);
+	}
+
 	/**
 	 * @param dataTablesInput
 	 * @return

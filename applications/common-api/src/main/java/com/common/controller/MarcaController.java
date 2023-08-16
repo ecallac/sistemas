@@ -3,6 +3,9 @@
  */
 package com.common.controller;
 
+import com.DataTablesInput;
+import com.DataTablesOutput;
+import com.common.domain.Area;
 import com.common.domain.Marca;
 import com.common.enums.EnableIndicator;
 import com.common.facade.InventarioFacade;
@@ -77,5 +80,23 @@ public class MarcaController {
             e.printStackTrace();
             return new ResponseEntity(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+    @RequestMapping(value = "/findByNombre", method = {RequestMethod.GET})
+    public ResponseEntity<?> findByNombre(@RequestParam(value = "nombre", required = true) String nombre) {
+        Marca entity = inventarioFacade.findMarcaByNombre(nombre);
+        if (entity==null) {
+            return new ResponseEntity(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity(entity,HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/findDataTables", method = {RequestMethod.GET,RequestMethod.POST})
+    public ResponseEntity<?> findDatatables(@RequestBody DataTablesInput<Marca> bean) {
+
+        DataTablesOutput dataTablesOutput =  inventarioFacade.findMarcaDataTablesList(bean);
+        if (dataTablesOutput==null) {
+            return new ResponseEntity(new DataTablesOutput<Marca>(),HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity(dataTablesOutput,HttpStatus.OK);
     }
 } 

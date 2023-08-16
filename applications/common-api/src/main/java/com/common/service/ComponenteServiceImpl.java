@@ -68,6 +68,12 @@ public class ComponenteServiceImpl extends CommonServiceAbstract<Componente> imp
 	public List<Componente> findByStatus(String status) {
 		return componenteRepository.findByStatusOrderByDescripcionAsc(status);
 	}
+
+	@Override
+	public Componente findByNombre(String nombre) {
+		return componenteRepository.findFirstByNombre(nombre);
+	}
+
 	@Override
 	public DataTablesOutput<Componente> findDataTablesList(DataTablesInput<Componente> dataTablesInput) {
 			DataTablesOutput dataTablesOutput = super.getSearchedElements(

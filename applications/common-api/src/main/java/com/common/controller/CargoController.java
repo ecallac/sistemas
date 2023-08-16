@@ -93,6 +93,14 @@ public class CargoController {
         }
 
     }
+    @RequestMapping(value = "/findByNombre", method = {RequestMethod.GET})
+    public ResponseEntity<?> findByNombre(@RequestParam(value = "nombre", required = true) String nombre) {
+        Cargo entity = recurrsosHumanosFacade.findCargoByNombre(nombre);
+        if (entity==null) {
+            return new ResponseEntity(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity(entity,HttpStatus.OK);
+    }
     @RequestMapping(value = "/findDataTables", method = {RequestMethod.GET,RequestMethod.POST})
     public ResponseEntity<?> findDatatables(@RequestBody DataTablesInput<Cargo> bean) {
 

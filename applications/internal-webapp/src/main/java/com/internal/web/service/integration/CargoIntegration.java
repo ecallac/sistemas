@@ -3,6 +3,8 @@
  */
 package com.internal.web.service.integration;
 
+import com.DataTablesInput;
+import com.DataTablesOutput;
 import com.common.Cargo;
 import org.codehaus.jackson.type.TypeReference;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,5 +40,11 @@ public class CargoIntegration extends ServiceIntegrationAbstract<Cargo> {
 	}
 	public Cargo save(Cargo entity)  throws Exception {
 		return setObjectToPostRequest(api+"/"+basePath+"/save", entity,Cargo.class);
+	}
+	public List<Cargo> save(List<Cargo> entity) throws Exception  {
+		return (List<Cargo>) doPostRequestGeneral(api+"/"+basePath+"/saveList", entity,new TypeReference<List<Cargo>>(){});
+	}
+	public DataTablesOutput findDataTables(DataTablesInput entity) throws Exception  {
+		return (DataTablesOutput) doPostRequestGeneral(api+"/"+basePath+"/findDataTables", entity,new TypeReference<DataTablesOutput<Cargo>>(){});
 	}
 }

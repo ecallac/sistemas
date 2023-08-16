@@ -5,6 +5,7 @@ package com.common.controller;
 
 import com.DataTablesInput;
 import com.DataTablesOutput;
+import com.common.domain.Area;
 import com.common.domain.Componente;
 import com.common.enums.EnableIndicator;
 import com.common.facade.InventarioFacade;
@@ -80,6 +81,15 @@ public class ComponenteController {
             e.printStackTrace();
             return new ResponseEntity(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @RequestMapping(value = "/findByNombre", method = {RequestMethod.GET})
+    public ResponseEntity<?> findByNombre(@RequestParam(value = "nombre", required = true) String nombre) {
+        Componente entity = inventarioFacade.findComponenteByNombre(nombre);
+        if (entity==null) {
+            return new ResponseEntity(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity(entity,HttpStatus.OK);
     }
 
     @RequestMapping(value = "/findDataTables", method = {RequestMethod.GET,RequestMethod.POST})

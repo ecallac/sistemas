@@ -6,7 +6,6 @@ package com.internal.web.service.integration;
 import com.DataTablesInput;
 import com.DataTablesOutput;
 import com.common.Regla;
-import com.common.TipoBase;
 import org.codehaus.jackson.type.TypeReference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

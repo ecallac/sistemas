@@ -20,4 +20,5 @@ import java.util.List;
 @Repository
 public interface ComponenteRepository extends JpaRepository<Componente, Long>,CommonRepositoryCustom<Componente>{
 	List<Componente> findByStatusOrderByDescripcionAsc(String status);
+	Componente findFirstByNombre(String nombre);
 }

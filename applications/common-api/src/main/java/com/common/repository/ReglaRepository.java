@@ -17,4 +17,5 @@ import java.util.List;
 @Repository
 public interface ReglaRepository extends JpaRepository<Regla, Long>,CommonRepositoryCustom<Regla>{
 	Regla findFirstByCodigo(String codigo);
+	List<Regla> findByActivo(String activo);
 }

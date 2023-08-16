@@ -17,5 +17,6 @@ import java.util.List;
 public interface ReglaService extends BaseService<Regla> {
 
     Regla findByCodigo(String codigo);
+    List<Regla> findByActivo(String activo);
     DataTablesOutput<Regla> findDataTablesList(DataTablesInput<Regla> dataTablesInput);
 }

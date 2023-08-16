@@ -138,7 +138,7 @@ public class DatosMaestrosFacade {
 	public ReglaDetalle findReglaDetalleById(Long id) {
 		return reglaDetalleService.findById(id);
 	}
-	public DataTablesOutput<ReglaDetalle> findReglaDetalleDataTablesList(DataTablesInput<ReglaDetalle> dataTablesInput){
+	public DataTablesOutput findReglaDetalleDataTablesList(DataTablesInput<ReglaDetalle> dataTablesInput){
 		return reglaDetalleService.findDataTablesList(dataTablesInput);
 	}
 	@Transactional(readOnly = false,rollbackFor=Exception.class)
@@ -162,7 +162,7 @@ public class DatosMaestrosFacade {
 	public Regla findReglaById(Long id) {
 		return reglaService.findById(id);
 	}
-	public DataTablesOutput<Regla> findReglaDataTablesList(DataTablesInput<Regla> dataTablesInput){
+	public DataTablesOutput findReglaDataTablesList(DataTablesInput<Regla> dataTablesInput){
 		return reglaService.findDataTablesList(dataTablesInput);
 	}
 	@Transactional(readOnly = false,rollbackFor=Exception.class)
@@ -176,6 +176,9 @@ public class DatosMaestrosFacade {
 			reglaService.save(regla);
 		}
 
+	}
+	public  List<Regla> findReglaByActivo(String activo) {
+		return reglaService.findByActivo(activo);
 	}
 
 	public List<Ubigeo> findUbigeoByParentUbigeoId(Long parentUbigeoId){

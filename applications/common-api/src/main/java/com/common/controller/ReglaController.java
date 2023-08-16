@@ -5,8 +5,10 @@ package com.common.controller;
 
 import com.DataTablesInput;
 import com.DataTablesOutput;
+import com.common.domain.Marca;
 import com.common.domain.Regla;
 import com.common.domain.TipoBase;
+import com.common.enums.EnableIndicator;
 import com.common.facade.DatosMaestrosFacade;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -37,6 +40,14 @@ public class ReglaController {
 			return new ResponseEntity(HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity(entity,HttpStatus.OK);
+    }
+    @RequestMapping(value = "/findActivos", method = {RequestMethod.GET})
+    public ResponseEntity<?> findActivos() {
+        List<Regla> list = datosMaestrosFacade.findReglaByActivo(EnableIndicator.ENABLED.getCode());
+        if (CollectionUtils.isEmpty(list)) {
+            return new ResponseEntity(new ArrayList<Regla>(),HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity(list,HttpStatus.OK);
     }
     @RequestMapping(value = "/save", method = {RequestMethod.POST})
     public ResponseEntity<?> save(@RequestBody Regla bean) {

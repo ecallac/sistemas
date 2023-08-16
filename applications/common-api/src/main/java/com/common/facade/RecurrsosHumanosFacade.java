@@ -58,7 +58,7 @@ public class RecurrsosHumanosFacade {
 	public Area findAreaByNombre(String nombre) {
 		return areaService.findByNombre(nombre);
 	}
-	public DataTablesOutput<Area> findAreaDataTablesList(DataTablesInput<Area> dataTablesInput) {
+	public DataTablesOutput findAreaDataTablesList(DataTablesInput<Area> dataTablesInput) {
 		return areaService.findDataTablesList(dataTablesInput);
 	}
 	public List<Cargo> findCargoList() {
@@ -91,7 +91,9 @@ public class RecurrsosHumanosFacade {
 	public List<Cargo> findCargoByActivo(String activo) {
 		return cargoService.findByActivo(activo);
 	}
-
+	public Cargo findCargoByNombre(String nombre) {
+		return cargoService.findByNombre(nombre);
+	}
 	public DataTablesOutput findCargoDataTablesList(DataTablesInput<Cargo> bean) {
 		return cargoService.findDataTablesList(bean);
 	}
