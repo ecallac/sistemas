@@ -462,3 +462,20 @@
 		} );
 		table.buttons().container().appendTo( tableId+"_wrapper .col-md-6:eq(0)");
 	}
+
+	function populateSelect(key, categoria){
+		var ajaxUrl = contexPath+'/tipoBase/listByCategoria?categoria='+categoria;
+		var successFunction = function(response){
+			if(response.status=="OK"){
+				if(response.data.length>0){
+					$.each(response.data, function (i,row){
+						$('#'+key).append('<option value="' + row.codigo + '">' + row.descripcion + '</option>');
+						$('#'+key+'Search').append('<option value="' + row.codigo + '">' + row.descripcion + '</option>');
+					});
+				}
+			}else{
+				showErrorMessage(response.message);
+			}
+		};
+		ajaxPostWithoutForm(ajaxUrl,successFunction);
+	}

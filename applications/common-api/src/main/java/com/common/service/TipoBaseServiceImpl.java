@@ -82,7 +82,7 @@ public class TipoBaseServiceImpl extends CommonServiceAbstract<TipoBase> impleme
 	@Override
 	public List<TipoBase> findByCategoriaActivos(String categoria) {
 		// TODO Auto-generated method stub
-		return tipoBaseRepository.findByCategoriaAndActivo(categoria, EnableIndicator.ENABLED.getCode());
+		return tipoBaseRepository.findByCategoriaAndActivoOrderByCodigoAsc(categoria, EnableIndicator.ENABLED.getCode());
 	}
 
 	/* (non-Javadoc)

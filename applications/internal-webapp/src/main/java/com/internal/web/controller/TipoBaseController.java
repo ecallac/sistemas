@@ -59,7 +59,7 @@ public class TipoBaseController {
 	}
 	
 	@RequestMapping(value = "/save", method = {RequestMethod.POST})
-    public @ResponseBody  Map<String, Object> save(@RequestBody @Valid TipoBaseView tipoBaseView, BindingResult result, Principal principal) {
+    public @ResponseBody  Map<String, Object> save(@RequestBody @Valid TipoBaseView view, BindingResult result, Principal principal) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		if(result.hasErrors()){
 	         
@@ -77,7 +77,7 @@ public class TipoBaseController {
 
 		try{
 
-			TipoBase tipoBase = (TipoBase) BeanParser.parseObjectToNewClass(tipoBaseView, TipoBase.class, null);
+			TipoBase tipoBase = (TipoBase) BeanParser.parseObjectToNewClass(view, TipoBase.class, null);
 			if (tipoBase.getId()==null) {
 				tipoBase.setCreatedBy(principal.getName());
 			} else {
@@ -99,13 +99,13 @@ public class TipoBaseController {
     }
 	
 	@RequestMapping(value = "/load", method = {RequestMethod.POST})
-    public @ResponseBody  Map<String, Object> load(@RequestBody TipoBaseView tipoBaseView) {
+    public @ResponseBody  Map<String, Object> load(@RequestBody TipoBaseView view) {
         Map<String, Object> map = new HashMap<String, Object>();
 
 		try{
-			TipoBase tipoBase = tipoBaseIntegration.findById(tipoBaseView.getId());
-			TipoBaseView tipoBaseViewStored = (TipoBaseView)BeanParser.parseObjectToNewClass(tipoBase, TipoBaseView.class, null);
-			map.put("tipoBaseView", tipoBaseViewStored);
+			TipoBase tipoBase = tipoBaseIntegration.findById(view.getId());
+			TipoBaseView viewStored = (TipoBaseView)BeanParser.parseObjectToNewClass(tipoBase, TipoBaseView.class, null);
+			map.put("viewBean", viewStored);
 			map.put(Constants.STATUS, Constants.OK);
 		}catch (Exception e){
 			logger.error(e.getMessage(),e);
@@ -116,14 +116,14 @@ public class TipoBaseController {
     }
 	
 	@RequestMapping(value = "/enableDisable", method = {RequestMethod.POST})
-    public @ResponseBody  Map<String, Object> enableDisable(@RequestBody TipoBaseView tipoBaseView,Principal principal) {
+    public @ResponseBody  Map<String, Object> enableDisable(@RequestBody TipoBaseView view,Principal principal) {
         Map<String, Object> map = new HashMap<String, Object>();
 
 		try{
-			if (tipoBaseView.getIds()!=null){
-				tipoBaseIntegration.save(castTipoBaseViewToTipoBaseList(tipoBaseView,principal));
+			if (view.getIds()!=null){
+				tipoBaseIntegration.save(castTipoBaseViewToTipoBaseList(view,principal));
 			}else {
-				TipoBase tipoBase = (TipoBase) BeanParser.parseObjectToNewClass(tipoBaseView, TipoBase.class, null);
+				TipoBase tipoBase = (TipoBase) BeanParser.parseObjectToNewClass(view, TipoBase.class, null);
 				tipoBase.setUpdatedBy(principal.getName());
 				tipoBaseIntegration.save(tipoBase);
 			}
@@ -138,11 +138,11 @@ public class TipoBaseController {
         return map;
     }
 
-	public List<TipoBase> castTipoBaseViewToTipoBaseList(TipoBaseView tipoBaseView,Principal principal){
+	public List<TipoBase> castTipoBaseViewToTipoBaseList(TipoBaseView view,Principal principal){
 		List<TipoBase> list = new ArrayList<>();
-		for (int i = 0; i < tipoBaseView.getIds().length; i++) {
-			String id = tipoBaseView.getIds()[i];
-			TipoBase tipoBase = (TipoBase) BeanParser.parseObjectToNewClass(tipoBaseView, TipoBase.class, null);
+		for (int i = 0; i < view.getIds().length; i++) {
+			String id = view.getIds()[i];
+			TipoBase tipoBase = (TipoBase) BeanParser.parseObjectToNewClass(view, TipoBase.class, null);
 			tipoBase.setId(Long.valueOf(id));
 			tipoBase.setUpdatedBy(principal.getName());
 			list.add(tipoBase);
@@ -204,6 +204,26 @@ public class TipoBaseController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		try{
 			List<TipoBase> list = tipoBaseIntegration.findByCategoriaActivos(Constants.TIPOBASE_CATEGORIA_TYPE_SWITCH);
+			if (list != null) {
+				map.put(Constants.DATA,list);
+			}else {
+				map.put(Constants.DATA,new ArrayList<TipoBase>());
+			}
+			map.put(Constants.STATUS, Constants.OK);
+
+		}catch (Exception e){
+			logger.error(e.getMessage(),e);
+			map.put(Constants.STATUS, Constants.ERROR);
+			map.put(Constants.MESSAGE, Utils.getErrorMessage(Constants.ERROR_MESSAGE,e.getMessage()));
+		}
+		return map;
+	}
+
+	@RequestMapping(value = "/listByCategoria", method = {RequestMethod.POST,RequestMethod.GET})
+	public @ResponseBody  Map<String, Object> listByCategoria(@RequestParam(value = "categoria",required = true) String categoria) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		try{
+			List<TipoBase> list = tipoBaseIntegration.findByCategoriaActivos(categoria);
 			if (list != null) {
 				map.put(Constants.DATA,list);
 			}else {

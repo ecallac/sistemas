@@ -3,26 +3,26 @@
  */
 package com.internal.web.controller;
 
-import com.BeanParser;
-import com.DataTablesInput;
-import com.DataTablesOutput;
-import com.Utils;
+import com.*;
 import com.common.Componente;
+import com.common.Marca;
+import com.common.ReglaDetalle;
 import com.common.TipoBase;
+import com.internal.web.service.integration.ReglaDetalleIntegration;
+import com.internal.web.utils.InternalUtils;
 import com.internal.web.view.ComponenteView;
 import com.internal.web.service.LoginService;
 import com.internal.web.service.integration.ComponenteIntegration;
 import com.internal.web.service.integration.TipoBaseIntegration;
 import com.internal.web.utils.Constants;
+import com.internal.web.view.MarcaView;
+import com.internal.web.view.TipoBaseView;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -47,6 +47,8 @@ public class ComponenteController {
 	ComponenteIntegration componenteIntegration;
 	@Autowired
 	TipoBaseIntegration tipoBaseIntegration;
+	@Autowired
+	ReglaDetalleIntegration reglaDetalleIntegration;
 	
 	@RequestMapping(value={"","/"}, method={RequestMethod.GET,RequestMethod.POST})
 	public ModelAndView list(HttpSession session,Principal principal){
@@ -100,7 +102,7 @@ public class ComponenteController {
   }
 	
 	@RequestMapping(value = "/save", method = {RequestMethod.POST})
-    public @ResponseBody  Map<String, Object> save(@RequestBody @Valid ComponenteView componenteView, BindingResult result, Principal principal) {
+    public @ResponseBody  Map<String, Object> save(@RequestBody @Valid ComponenteView view, BindingResult result, Principal principal) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		if(result.hasErrors()){
 	         
@@ -118,13 +120,13 @@ public class ComponenteController {
 
 		try{
 
-			Componente componente = (Componente) BeanParser.parseObjectToNewClass(componenteView, Componente.class, null);
-			if (componente.getId()==null) {
-				componente.setCreatedBy(principal.getName());
+			Componente bean = (Componente) BeanParser.parseObjectToNewClass(view, Componente.class, null);
+			if (bean.getId()==null) {
+				bean.setCreatedBy(principal.getName());
 			} else {
-				componente.setUpdatedBy(principal.getName());
+				bean.setUpdatedBy(principal.getName());
 			}
-			componenteIntegration.save(componente);
+			componenteIntegration.save(bean);
 
 			map.put(Constants.STATUS, Constants.OK);
 			map.put(Constants.MESSAGE, Utils.getSuccessMessage(Constants.SUCCESS_MESSAGE));
@@ -140,13 +142,13 @@ public class ComponenteController {
     }
 	
 	@RequestMapping(value = "/load", method = {RequestMethod.POST})
-    public @ResponseBody  Map<String, Object> load(@RequestBody ComponenteView componenteView) {
+    public @ResponseBody  Map<String, Object> load(@RequestBody ComponenteView view) {
         Map<String, Object> map = new HashMap<String, Object>();
 
 		try{
-			Componente componente = componenteIntegration.findById(componenteView.getId());
-			ComponenteView componenteViewStored = (ComponenteView)BeanParser.parseObjectToNewClass(componente, ComponenteView.class, null);
-			map.put("componenteView", componenteViewStored);
+			Componente bean = componenteIntegration.findById(view.getId());
+			ComponenteView viewStored = (ComponenteView)BeanParser.parseObjectToNewClass(bean, ComponenteView.class, null);
+			map.put("view", viewStored);
 			map.put(Constants.STATUS, Constants.OK);
 		}catch (Exception e){
 			logger.error(e.getMessage(),e);
@@ -157,13 +159,18 @@ public class ComponenteController {
     }
 	
 	@RequestMapping(value = "/enableDisable", method = {RequestMethod.POST})
-    public @ResponseBody  Map<String, Object> enableDisable(@RequestBody ComponenteView componenteView,Principal principal) {
+    public @ResponseBody  Map<String, Object> enableDisable(@RequestBody ComponenteView view,Principal principal) {
         Map<String, Object> map = new HashMap<String, Object>();
 
 		try{
-			Componente componente = (Componente) BeanParser.parseObjectToNewClass(componenteView, Componente.class, null);
-			componente.setUpdatedBy(principal.getName());
-			componenteIntegration.save(componente);
+			if (view.getIds()!=null){
+				componenteIntegration.save(castViewBeanToBaseList(view,principal));
+			}else{
+				Componente bean = (Componente) BeanParser.parseObjectToNewClass(view, Componente.class, null);
+				bean.setUpdatedBy(principal.getName());
+				componenteIntegration.save(bean);
+			}
+
 			map.put(Constants.STATUS, Constants.OK);
 			map.put(Constants.MESSAGE, Utils.getSuccessMessage(Constants.SUCCESS_MESSAGE));
 
@@ -174,28 +181,49 @@ public class ComponenteController {
 		}
         return map;
     }
+	public List<Componente> castViewBeanToBaseList(ComponenteView view, Principal principal){
+		List<Componente> list = new ArrayList<>();
+		for (int i = 0; i < view.getIds().length; i++) {
+			String id = view.getIds()[i];
+			Componente bean = (Componente) BeanParser.parseObjectToNewClass(view, Componente.class, null);
+			bean.setId(Long.valueOf(id));
+			bean.setUpdatedBy(principal.getName());
+			list.add(bean);
+		}
+		return list;
+	}
+	@RequestMapping(value = "/verifyNombre", method = {RequestMethod.POST,RequestMethod.GET})
+	public @ResponseBody  Map<String, Object> verifyNombre(@RequestParam(value = "nombre",required = true) String nombre) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		try{
+			Componente bean = componenteIntegration.findByNombre(nombre);
+			if (bean==null){
+				map.put(Constants.STATUS, Constants.OK);
+			}else{
+				map.put(Constants.STATUS, Constants.ERROR);
+				map.put(Constants.MESSAGE, Constants.ERROR_MESSAGE_EXIST);
+			}
 
+		}catch (Exception e){
+			logger.error(e.getMessage(),e);
+			map.put(Constants.STATUS, Constants.ERROR);
+			map.put(Constants.MESSAGE, Utils.getErrorMessage(Constants.ERROR_MESSAGE_GET,e.getMessage()));
+		}
+		return map;
+	}
 	@RequestMapping(value = "/findByPage", method = {RequestMethod.POST,RequestMethod.GET})
 	public @ResponseBody  Map<String, Object> findByPage(HttpServletRequest request) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		try{
-			Map<String, Object> parameterMap = getParameterMap(request);
-			DataTablesInput<Componente> dataTablesInput = createDataTablesInput(parameterMap);
-			Componente componente = new Componente();
-			componente.setStatus((String) parameterMap.get("status"));
-			dataTablesInput.setObject(componente);
+			Map<String, Object> parameterMap = InternalUtils.getParameterMap(request);
+			DataTablesInput<Componente> dataTablesInput = InternalUtils.createDataTablesInput(parameterMap);
+			Componente bean = new Componente();
+			bean.setStatus((String) parameterMap.get("status"));
+			dataTablesInput.setObject(bean);
 
 			DataTablesOutput<Componente> dataTablesOutput = componenteIntegration.findDataTables(dataTablesInput);
 			if (dataTablesOutput != null) {
-				List<Componente> componentes = dataTablesOutput.getData();
-				Map<String, TipoBase> tipoBaseMap = tipoBaseIntegration.findAllMap();
-				for (Componente  componenteL : componentes){
-					if (tipoBaseMap.containsKey(componenteL.getTipoComponnte())){
-						TipoBase tipoBase = tipoBaseMap.get(componenteL.getTipoComponnte());
-						componenteL.setTipoComponnte(tipoBase.getDescripcion());
-					}
-				}
-				map.put("data", componentes);
+				map.put("data", castComponenteToComponenteViewList(dataTablesOutput.getData()));
 				map.put("draw", dataTablesInput.getDraw());
 				map.put("recordsTotal", dataTablesOutput.getRecordsTotal());
 				map.put("recordsFiltered", dataTablesOutput.getRecordsFiltered());
@@ -214,24 +242,15 @@ public class ComponenteController {
 		return map;
 	}
 
-	public Map<String, Object> getParameterMap(HttpServletRequest request){
-		Enumeration enumeration = request.getParameterNames();
-		Map<String, Object> parameterMap = new HashMap<>();
-		while(enumeration.hasMoreElements()){
-			String parameterName = (String) enumeration.nextElement();
-			parameterMap.put(parameterName, request.getParameter(parameterName));
-		}
-		return parameterMap;
-	}
-
-	public DataTablesInput createDataTablesInput(Map<String, Object> parameterMap){
-		DataTablesInput dataTablesInput = new DataTablesInput();
-		dataTablesInput.setDraw((String) parameterMap.get("draw"));
-		dataTablesInput.setStart((String) parameterMap.get("start"));
-		dataTablesInput.setRowPerPage((String) parameterMap.get("length"));
-		dataTablesInput.setColumnSortOrderDirection((String) parameterMap.get("order[0][dir]"));
-		dataTablesInput.setSearchValue((String) parameterMap.get("search[value]"));
-		dataTablesInput.setColumnName((String) parameterMap.get("columns["+(String) parameterMap.get("order[0][column]")+"][data]"));
-		return dataTablesInput;
+	public List<ComponenteView> castComponenteToComponenteViewList(List<Componente> list) throws Exception {
+		Map<String, ReglaDetalle> reglaDetalleMap = reglaDetalleIntegration.getReglasMap(reglaDetalleIntegration.findByCodigo(GeneralConstant.SWITH_LABEL_TYPE.getCode()));
+		Map<String, TipoBase> tipoBaseMap = tipoBaseIntegration.findAllMap();
+		return list.stream().map(bean -> {
+			ComponenteView view =(ComponenteView)BeanParser.parseObjectToNewClass(bean,ComponenteView.class,null);
+			view.setTipoComponenteDescripcion(tipoBaseMap.containsKey(view.getTipoComponente())?tipoBaseMap.get(view.getTipoComponente()).getDescripcion():null);
+			view.setStatusDescripcion(tipoBaseMap.containsKey(view.getStatus())?tipoBaseMap.get(view.getStatus()).getDescripcion():null);
+			view.setStatusType(reglaDetalleMap.containsKey(view.getStatus())?reglaDetalleMap.get(view.getStatus()).getValorcadena():null);
+			return view;
+		}).collect(Collectors.toList());
 	}
 }

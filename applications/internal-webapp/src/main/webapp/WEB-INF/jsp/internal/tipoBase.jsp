@@ -1,3 +1,4 @@
+<%@ page import="com.internal.web.controller.TipoBaseController" %>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1" isELIgnored="false" session="true"%>
 <%@ taglib prefix ="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
@@ -17,6 +18,7 @@
 
 
 		var contexPath = "<%=request.getContextPath() %>";
+		var controllerName = "<%=TipoBaseController.NAME %>";
 		var sEnabled="ENABLED";
 		var sDisabled="DISABLED";
 
@@ -30,7 +32,7 @@
 			}
 			$('.bindingError').remove();
 
-			var ajaxUrl = contexPath+'/tipoBase/save.json';
+			var ajaxUrl = contexPath+'/'+controllerName+'/save.json';
 			var successFunction = function(response){
 				if(response.validated){
 					//Set response
@@ -62,15 +64,15 @@
 				id: idVal
 			}
 			$('.bindingError').remove();
-			var ajaxUrl = contexPath+'/tipoBase/load.json';
+			var ajaxUrl = contexPath+'/'+controllerName+'/load.json';
 			var successFunction = function(response){
 				if(response.status=="OK"){
 					clearFields();
-					$("#id").val(response.tipoBaseView.id);
-					$('#categoria').val(response.tipoBaseView.categoria),
-							$('#codigo').val(response.tipoBaseView.codigo),
-							$("#descripcion").val(response.tipoBaseView.descripcion);
-					$('#activo').val(response.tipoBaseView.activo).change();
+					$("#id").val(response.viewBean.id);
+					$('#categoria').val(response.viewBean.categoria),
+							$('#codigo').val(response.viewBean.codigo),
+							$("#descripcion").val(response.viewBean.descripcion);
+					$('#activo').val(response.viewBean.activo).change();
 				}else{
 					showErrorMessage(response.message);
 				}
@@ -84,7 +86,7 @@
 				id: idVal,
 				activo:status
 			}
-			var ajaxUrl = contexPath+'/tipoBase/enableDisable.json';
+			var ajaxUrl = contexPath+'/'+controllerName+'/enableDisable.json';
 			var successFunction = function(response){
 				if(response.status=="OK"){
 					showSuccessMessage(response.message);
@@ -110,7 +112,7 @@
 					ids: rowIds,
 					activo:status
 				}
-				var ajaxUrl = contexPath+'/tipoBase/enableDisable.json';
+				var ajaxUrl = contexPath+'/'+controllerName+'/enableDisable.json';
 				var successFunction = function(response){
 					if(response.status=="OK"){
 						showSuccessMessage(response.message);
@@ -128,7 +130,7 @@
 
 		function verifyCodigo(object){
 			$('.bindingError'+object.id).remove();
-			var ajaxUrl = contexPath+'/tipoBase/verifyCodigo?codigo='+object.value;
+			var ajaxUrl = contexPath+'/'+controllerName+'/verifyCodigo?codigo='+object.value;
 			var key = object.id;
 			var successFunction = function(response){
 				if(response.status=="OK"){
@@ -160,7 +162,7 @@
 		}
 
 		function load(activoSearch){
-			var ajaxUrl = contexPath+'/tipoBase/findByPage.json';
+			var ajaxUrl = contexPath+'/'+controllerName+'/findByPage.json';
 			var formData= {
 				activo: activoSearch
 			}
@@ -243,6 +245,24 @@
 		function clearFilter(){
 			$('#activoSearch').val("").change();
 		}
+		function enableDisableButtons(){
+			var cheked=false;
+			const collection = document.getElementsByClassName("dt-checkboxes");
+			for (let i = 0; i < collection.length; i++) {
+				// console.log(collection[i].checked);
+				if(collection[i].checked){
+					cheked=true;
+				}
+			}
+			if(cheked){
+				$("#activar").attr("disabled", false);
+				$("#inactivar").attr("disabled", false);
+			}else{
+				$("#activar").attr("disabled", true);
+				$("#inactivar").attr("disabled", true);
+			}
+		}
+
 		$(document).ready(function(){
 			load('');
 			populateStatusSelect();
@@ -265,21 +285,7 @@
 
 
 			$('#table').change(function() {
-				var cheked=false;
-				const collection = document.getElementsByClassName("dt-checkboxes");
-				for (let i = 0; i < collection.length; i++) {
-					// console.log(collection[i].checked);
-					if(collection[i].checked){
-						cheked=true;
-					}
-				}
-				if(cheked){
-					$("#activar").attr("disabled", false);
-					$("#inactivar").attr("disabled", false);
-				}else{
-					$("#activar").attr("disabled", true);
-					$("#inactivar").attr("disabled", true);
-				}
+				enableDisableButtons();
 
 			});
 		});

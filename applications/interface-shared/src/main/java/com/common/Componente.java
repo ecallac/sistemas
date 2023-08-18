@@ -21,6 +21,6 @@ public class Componente extends BaseEntity {
 	private String nombre;
 	private String descripcion;
 	private String status;
-	private String tipoComponnte;
+	private String tipoComponente;
 
 }

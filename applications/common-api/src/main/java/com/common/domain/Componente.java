@@ -24,7 +24,15 @@ public class Componente extends BaseEntity {
 	private String descripcion;
 	private String status;
 	@Column(name = "tipo_componente")
-	private String tipoComponnte;
+	private String tipoComponente;
+
+	public String getNombre() {
+		return nombre;
+	}
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
 
 	public String getDescripcion() {
 		return descripcion;
@@ -42,20 +50,12 @@ public class Componente extends BaseEntity {
 		this.status = status;
 	}
 
-	public String getNombre() {
-		return nombre;
+	public String getTipoComponente() {
+		return tipoComponente;
 	}
 
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
-	}
-
-	public String getTipoComponnte() {
-		return tipoComponnte;
-	}
-
-	public void setTipoComponnte(String tipoComponnte) {
-		this.tipoComponnte = tipoComponnte;
+	public void setTipoComponente(String tipoComponente) {
+		this.tipoComponente = tipoComponente;
 	}
 
 	@Override
@@ -64,7 +64,7 @@ public class Componente extends BaseEntity {
 				"nombre='" + nombre + '\'' +
 				", descripcion='" + descripcion + '\'' +
 				", status='" + status + '\'' +
-				", tipoComponnte='" + tipoComponnte + '\'' +
+				", tipoComponente='" + tipoComponente + '\'' +
 				'}';
 	}
 }

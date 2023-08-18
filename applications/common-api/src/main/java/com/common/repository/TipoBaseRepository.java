@@ -19,7 +19,7 @@ import com.common.domain.TipoBase;
 public interface TipoBaseRepository  extends JpaRepository<TipoBase, Long>,CommonRepositoryCustom<TipoBase>{
 	TipoBase findFirstByCodigo(String codigo);
 	List<TipoBase> findByCategoria(String categoria);
-	List<TipoBase> findByCategoriaAndActivo(String categoria,String activo);
+	List<TipoBase> findByCategoriaAndActivoOrderByCodigoAsc(String categoria,String activo);
 	List<TipoBase> findByDescripcionIgnoreCaseContaining(String description);
 	List<TipoBase> findByCategoriaAndCodigo(String categoria, String codigo);
 

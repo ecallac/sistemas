@@ -12,8 +12,8 @@ public class ComponenteRepositoryCustomImpl extends CommonRepositoryAbstract<Com
         if (entity!=null && StringUtils.isNotBlank(entity.getStatus())){
             where = where+" AND o.status='"+entity.getStatus()+"' ";
         }
-        if (entity!=null && StringUtils.isNotBlank(entity.getTipoComponnte())){
-            where = where+" AND o.tipoComponente='"+entity.getTipoComponnte()+"' ";
+        if (entity!=null && StringUtils.isNotBlank(entity.getTipoComponente())){
+            where = where+" AND o.tipoComponente='"+entity.getTipoComponente()+"' ";
         }
         return super.getPage(Componente.class, where,super.getSortQuery(pageable), pageable);
     }

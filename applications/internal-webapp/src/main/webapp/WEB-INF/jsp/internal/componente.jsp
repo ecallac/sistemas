@@ -1,194 +1,301 @@
+<%@ page import="com.internal.web.controller.ComponenteController" %>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1" isELIgnored="false" session="true"%>
-<%@ taglib prefix ="c" uri="http://java.sun.com/jsp/jstl/core" %> 
+<%@ taglib prefix ="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<%-- <jsp:include page="../includes/styles.jsp" /> --%>
-<%-- <script type='text/javascript' src='<c:url value='/resources/js/jquery.1.10.2.min.js' />'></script> --%>
+	<%-- <jsp:include page="../includes/styles.jsp" /> --%>
+	<%-- <script type='text/javascript' src='<c:url value='/resources/js/jquery.1.10.2.min.js' />'></script> --%>
 	<meta charset="utf-8" />
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title></title>
 	<script type="text/javascript">
-	
-	
-	
-	var contexPath = "<%=request.getContextPath() %>";
-	
-    function save(){
-    	var status = "N";
-    	if ($('#status').is(':checked')) {
-			status = "Y";
-		}
-		var formData= {
+
+
+		var contexPath = "<%=request.getContextPath() %>";
+		var controllerName = "<%=ComponenteController.NAME %>";
+		var sEnabled="ENABLED";
+		var sDisabled="DISABLED";
+
+		function save(){
+			var formData= {
 				id: parseInt($("#id").val()),
 				nombre: $('#nombre').val(),
+				descripcion: $('#descripcion').val(),
 				tipoComponente: $('#tipoComponente').val(),
-               	descripcion: $('#descripcion').val(),
-               	status: status
-		}
-		$('.bindingError').remove();
-		
-    	var ajaxUrl = contexPath+'/componente/save.json';
-    	var successFunction = function(response){
-     	   if(response.validated){
-               //Set response
-    		   if(response.status=="OK"){
-         			showSuccessMessage(response.message);
-         			load();
-         			$('#Form').modal('hide');
-         		}else{
-         			showErrorMessage(response.message);
-         		}
-            }else{
-              //Set error messages
-              $.each(response.messages,function(key,value){
-            	  showErrorMessageByField('input' , key , value , '');
-            	  showErrorMessageByField('select' , key , value , '');
-//   	            $('input[id='+key+']').after('<span class="bindingError" style="color:red;font-weight: bold;">'+value+'</span>');
-//   	          	$('select[id='+key+']').after('<span class="bindingError" style="color:red;font-weight: bold;">'+value+'</span>');
-              });
-            }
-    	   
-       };
-       
-       ajaxPost(ajaxUrl,formData,successFunction);
-              
-    }
-
-    
-    function edit(idVal){
-    	var formData= {
-				id: idVal
-		}
-    	$('.bindingError').remove();
-    	var ajaxUrl = contexPath+'/componente/load.json';
-    	var successFunction = function(response){
-       		if(response.status=="OK"){
-       			$("#id").val(response.componenteView.id);
-       			$("#descripcion").val(response.componenteView.descripcion);
-				$("#nombre").val(response.componenteView.nombre);
-				$("#tipoComponnte").val(response.tipoComponnte.descripcion);
-       			if (response.componenteView.status == 'Y'){
-       				$('#status').prop('checked', true);
-       			}else{
-       				$('#status').prop('checked', false);
-       			}
-       		}else{
-				showErrorMessage(response.message);
+				status: $('#status').val()
 			}
-       };
-       
-       ajaxPost(ajaxUrl,formData,successFunction);
-    }
-    
-    function enableAndDisable(object,idVal){
-    	var status = "N";
-    	if (object.checked) {
-			status = "Y";
+			$('.bindingError').remove();
+
+			var ajaxUrl = contexPath+'/'+controllerName+'/save.json';
+			var successFunction = function(response){
+				if(response.validated){
+					//Set response
+					if(response.status=="OK"){
+						showSuccessMessage(response.message);
+						var status = $('#statusSearch').val();
+						load(status);
+						$('#Form').modal('hide');
+					}else{
+						showErrorMessage(response.message);
+					}
+				}else{
+					//Set error messages
+					$.each(response.messages,function(key,value){
+						showErrorMessageByField('input' , key , value , '');
+						showErrorMessageByField('select' , key , value , '');
+					});
+				}
+
+			};
+
+			ajaxPost(ajaxUrl,formData,successFunction);
+
 		}
-    	var formData= {
+
+
+		function edit(idVal){
+			var formData= {
+				id: idVal
+			}
+			$('.bindingError').remove();
+			var ajaxUrl = contexPath+'/'+controllerName+'/load.json';
+			var successFunction = function(response){
+				if(response.status=="OK"){
+					clearFields();
+					$("#id").val(response.viewBean.id);
+					$('#nombre').val(response.viewBean.nombre),
+					$("#descripcion").val(response.viewBean.descripcion);
+					$('#tipoComponente').val(response.viewBean.tipoComponente).change();
+					$('#status').val(response.viewBean.status).change();
+				}else{
+					showErrorMessage(response.message);
+				}
+			};
+
+			ajaxPost(ajaxUrl,formData,successFunction);
+		}
+
+		function enableAndDisable(idVal,status){
+			var formData= {
 				id: idVal,
 				status:status
-		}
-    	var ajaxUrl = contexPath+'/componente/enableDisable.json';
-    	var successFunction = function(response){
-       		if(response.status=="OK"){
-       			showSuccessMessage(response.message);
-       		}else{
-       			showErrorMessage(response.message);
-       		}
-       };
-       
-       ajaxPost(ajaxUrl,formData,successFunction);
-    	
-    	
-    }
-    
-    function load(statusSearch){
-    	var ajaxUrl = contexPath+'/componente/findByPage.json';
-		var formData= {
-			status: statusSearch
-		}
-    	// var successFunction = function(response){
-		// 	if(response.status=="OK"){
-		// 		if(response.data.length>0){
+			}
+			var ajaxUrl = contexPath+'/'+controllerName+'/enableDisable.json';
+			var successFunction = function(response){
+				if(response.status=="OK"){
+					showSuccessMessage(response.message);
+					var status = $('#statusSearch').val();
+					load(status);
+				}else{
+					showErrorMessage(response.message);
+				}
+			};
 
-					var tableId = "#table";
-					var fileTitle = "Componentes";
-					// var jsonData = response.data;
-					var jsonColumns = [
-						{ "data": "id" },
-						{ "data": "nombre","defaultContent": ""},
-						{ "data": "descripcion","defaultContent": ""},
-						{ "data": "tipoComponente","defaultContent": ""},
-					];
-					var columnsExport = [ 0, 1,2,3];
-					var jsonColumnDefs = [
-						{
-							data: null,
-							"targets": 4,
-							"render": function ( data, type, row ) {
-								var checkedActive='';
-								if (row.status == 'Y'){
-									checkedActive = "checked='true'";
-								}
-								return "<td><input type='checkbox' name='select' id='select' "+checkedActive+" onclick='enableAndDisable(this,"+row.id+");'></td>";
-							}
-						},
-						{
-							data: null,
-							"targets": 5,
-							"render": function ( data, type, row ) {
-								return "<td>"+
-										makeButton("Edit","edit("+row.id+")","data-bs-toggle='modal' data-bs-target='#Form'","<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-edit align-middle me-2'><path d='M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7'></path><path d='M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z'></path></svg>")+
-										// 		       	                 makeButton("Delete","remove("+row.id+")","","<c:url value='/resources/img/icons/black/trash_icon&16.png' />")+
-										//        	                    "<button title='Edit' onclick='edit("+row.id+")' type='button' class='btn btn-link btn-xs toltip' data-toggle='modal' data-target='#Form'><img src='<c:url value='/resources/img/icons/black/doc_edit_icon&16.png' />'></button>"+
-										//            	                 "<button title='Delete' onclick='remove("+row.id+")' type='button' class='btn btn-link btn-xs toltip'><img src='<c:url value='/resources/img/icons/black/trash_icon&16.png' />'></button> "
-										"</td>" ;
+			ajaxPost(ajaxUrl,formData,successFunction);
 
-							}
+
+		}
+
+		function enableAndDisableList(status){
+			var rowIds= [];
+			$.each(table.column(0).checkboxes.selected(), function(index, rowId){
+				rowIds  [index]= rowId;
+			});
+			if (rowIds.length>0){
+				var formData= {
+					ids: rowIds,
+					status:status
+				}
+				var ajaxUrl = contexPath+'/'+controllerName+'/enableDisable.json';
+				var successFunction = function(response){
+					if(response.status=="OK"){
+						showSuccessMessage(response.message);
+						var status = $('#statusSearch').val();
+						load(status);
+					}else{
+						showErrorMessage(response.message);
+					}
+				};
+
+				ajaxPost(ajaxUrl,formData,successFunction);
+			}
+		}
+
+		function verifyNombre(object){
+			$('.bindingError'+object.id).remove();
+			var ajaxUrl = contexPath+'/'+controllerName+'/verifyNombre?nombre='+object.value;
+			var key = object.id;
+			var successFunction = function(response){
+				if(response.status=="OK"){
+					$("#"+key).removeClass("is-invalid").addClass("is-valid");
+				}else{
+					$("#"+key).removeClass("is-valid").addClass("is-invalid");
+					showErrorMessageByField('input' , key , response.message , '');
+				}
+			};
+
+			ajaxWithoutForm(ajaxUrl,"GET",successFunction);
+		}
+
+		// function populateStatusSelect(){
+		// 	var ajaxUrl = contexPath+'/tipoBase/listStatus.json';
+		// 	var successFunction = function(response){
+		// 		if(response.status=="OK"){
+		// 			if(response.data.length>0){
+		// 				$.each(response.data, function (i,row){
+		// 					$('#status').append('<option value="' + row.codigo + '">' + row.descripcion + '</option>');
+		// 					$('#statusSearch').append('<option value="' + row.codigo + '">' + row.descripcion + '</option>');
+		// 				});
+		// 			}
+		// 		}else{
+		// 			showErrorMessage(response.message);
+		// 		}
+		// 	};
+		// 	ajaxPostWithoutForm(ajaxUrl,successFunction);
+		// }
+
+
+		function load(statusSearch){
+			var ajaxUrl = contexPath+'/'+controllerName+'/findByPage.json';
+			var formData= {
+				status: statusSearch
+			}
+			var tableId = "#table";
+			var fileTitle = "Componente";
+			// var jsonData = response.data;
+			var jsonColumns = [
+				{ "data": "id" },
+				{ "data": "nombre"},
+				{ "data": "descripcion"},
+				{ "data": "tipoComponenteDescripcion"},
+			];
+			var columnsExport = [ 1,2,3,4];
+			var jsonColumnDefs = [
+				{
+					data: null,
+					"targets": 0,
+					'checkboxes': {
+						'selectRow': true
+					}
+				},
+				{
+					data: null,
+					"targets": 4,
+					"render": function ( data, type, row ) {
+						if (type === "export"){
+							return row.statusDescripcion;
+						}else{
+							return "<td><span class='badge rounded-pill bg-"+row.statusType+"'>"+row.statusDescripcion+"</span></td>";
 						}
-					];
+					}
+				},
+				{
+					data: null,
+					"targets": 5,
+					"render": function ( data, type, row ) {
+						var value = "";
+						if (row.status===sEnabled){
+							value = makeButton("Inactivar","enableAndDisable("+row.id+",sDisabled)","","<svg viewBox='0 0 24 24' width='16' height='16' stroke='currentColor' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round' class='css-i6dzq1'><path d='M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24'></path><line x1='1' y1='1' x2='23' y2='23'></line></svg>")
+						}else if (row.status===sDisabled){
+							value = makeButton("Activar","enableAndDisable("+row.id+",sEnabled)","","<svg viewBox='0 0 24 24' width='16' height='16' stroke='currentColor' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round' class='css-i6dzq1'><path d='M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z'></path><circle cx='12' cy='12' r='3'></circle></svg>")
+						}
+						return "<td>"+
+								makeButton("Edit","edit("+row.id+")","data-bs-toggle='modal' data-bs-target='#Form'","<svg viewBox='0 0 24 24' width='16' height='16' stroke='currentColor' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round' class='css-i6dzq1'><path d='M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7'></path><path d='M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z'></path></svg>")+
+								value+
+								"</td>" ;
 
-					createTableAjax(tableId,fileTitle,ajaxUrl,formData,jsonColumns,jsonColumnDefs,columnsExport);
+					}
+				}
+			];
 
-				// }
-		// 	}else{
-		// 		showErrorMessage(response.message);
-		// 	}
-       // };
-       // ajaxPostWithoutForm(ajaxUrl,successFunction);
-    }
+			var exportColumnCustom = {
+				header: function (data, columnIdx) {
+					return columnIdx === 4 ? "Estado" : data;
+				},
+				body: function (data, row, column, node) {
+					return data;
+				}
+			}
+			createTableAjax(tableId,fileTitle,ajaxUrl,formData,jsonColumns,jsonColumnDefs,columnsExport,exportColumnCustom);
 
-    function clearFields(){
-		$('.bindingError').remove();
-		$("#id").val("");
-		$("#descripcion").val("");
-		$("#nombre").val("");
-		$("#tipoComponente").val("");
-		$('#status').prop('checked', false);
-	}
-    
-    $(document).ready(function(){
-//     	$('select').select2({
-//             dropdownParent: $('#Form'),
-//             theme: 'bootstrap4'
-//         });
-    	
-    	load('');
+		}
+
+		function search(){
+			var status = $("#statusSearch").val();
+			load(status);
+			$('#Filter').modal('hide');
+		}
+
+		function clearFields(){
+			$('.bindingError').remove();
+			$("#nombre").removeClass("is-invalid").removeClass("is-valid");
+			$("#id").val("");
+			$("#nombre").val("");
+			$("#descripcion").val("");
+			$('#tipoComponente').val("").change();
+			$('#status').val("").change();
+		}
+
+		function clearFilter(){
+			$('#tipoComponenteSearch').val("").change();
+			$('#statusSearch').val("").change();
+		}
+		function enableDisableButtons(){
+			var cheked=false;
+			const collection = document.getElementsByClassName("dt-checkboxes");
+			for (let i = 0; i < collection.length; i++) {
+				// console.log(collection[i].checked);
+				if(collection[i].checked){
+					cheked=true;
+				}
+			}
+			if(cheked){
+				$("#activar").attr("disabled", false);
+				$("#inactivar").attr("disabled", false);
+			}else{
+				$("#activar").attr("disabled", true);
+				$("#inactivar").attr("disabled", true);
+			}
+		}
+		$(document).ready(function(){
+			load('');
+			// populateStatusSelect();
+			populateSelect('status','TYPE_SWITCH');
+			populateSelect('tipoComponente','TYPE_COMPONENTE');
+
+			$('.select').select2({
+				width: '100%',
+				theme: 'bootstrap4'
+			});
+			//modal select
+			$('.selectForm').select2({
+				dropdownParent: $('#Form'),
+				width: '100%',
+				theme: 'bootstrap4'
+			});
+			$('.selectFilter').select2({
+				dropdownParent: $('#Filter'),
+				width: '100%',
+				theme: 'bootstrap4'
+			});
 
 
-    });
-    
-    
+			$('#table').change(function() {
+				enableDisableButtons();
+
+			});
+		});
+
+
 	</script>
 	<style type="text/css">
-	
+
 	</style>
 
 </head>
@@ -201,35 +308,47 @@
 
 
 
-<h1>Componentes</h1>
+<h1>Componente</h1>
 
 
 
 <div class="panel panel-default">
-<!-- <div class="panel-heading">User List Display tag</div> -->
-  <div class="panel-body">
+	<!-- <div class="panel-heading">User List Display tag</div> -->
+	<div class="panel-body">
 
-	  <div class="card flex-fill">
-		  <div class="card-header">
-			  <div class="dt-buttons btn-group">
-				  <button data-bs-target="#Form" title="Agregar Nuevo" type="button" class="btn btn-outline-primary toltip" data-bs-toggle="modal" onclick="clearFields();">
-					  <svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-file-plus align-middle me-2'><path d='M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z'></path><polyline points='14 2 14 8 20 8'></polyline><line x1='12' y1='18' x2='12' y2='12'></line><line x1='9' y1='15' x2='15' y2='15'></line></svg>
-					  Agregar Nuevo
-				  </button>
-			  </div>
-		  </div>
-		  <div class="card-body">
-			  <table id="table" align="center" class="table table-striped table-sm table-hover" style="width: 100%">
-				  <thead>
-				  <tr><th>Id</th><th>Nombre</th><th>Descripcion</th><th>Tipo de Componente</th><th>Activo</th><th>Acciones</th></tr>
-				  </thead>
-			  </table>
-		  </div>
-	  </div>
+		<div class="card flex-fill">
+			<div class="card-header">
+				<div class="dt-buttons btn-group">
+					<button data-bs-target="#Filter" title="Filtrar" type="button" class="btn btn-outline-primary toltip" data-bs-toggle="modal">
+						<svg viewBox='0 0 24 24' width='16' height='16' stroke='currentColor' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round' class='css-i6dzq1'><polygon points='22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3'></polygon></svg>
+						Filtrar
+					</button>
+					<button id="activar" title="Activar" type="button" class="btn btn-outline-primary toltip" onclick="enableAndDisableList(sEnabled);" disabled="true">
+						<svg viewBox='0 0 24 24' width='16' height='16' stroke='currentColor' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round' class='css-i6dzq1'><path d='M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z'></path><circle cx='12' cy='12' r='3'></circle></svg>
+						Activar
+					</button>
+					<button id="inactivar" title="Inactivar" type="button" class="btn btn-outline-primary toltip" onclick="enableAndDisableList(sDisabled);" disabled="true">
+						<svg viewBox='0 0 24 24' width='16' height='16' stroke='currentColor' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round' class='css-i6dzq1'><path d='M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24'></path><line x1='1' y1='1' x2='23' y2='23'></line></svg>
+						Inactivar
+					</button>
+					<button data-bs-target="#Form" title="Agregar Nuevo" type="button" class="btn btn-outline-primary toltip" data-bs-toggle="modal" onclick="clearFields();">
+						<svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="12" y1="18" x2="12" y2="12"></line><line x1="9" y1="15" x2="15" y2="15"></line></svg>
+						Agregar Nuevo
+					</button>
+				</div>
+			</div>
+			<div class="card-body">
+				<table id="table" align="center" class="table table-striped table-sm table-hover" style="width: 100%">
+					<thead>
+					<tr><th></th><th>Nombre</th><th>Descripcion</th><th>Tipo de Componente</th><th>Estado</th><th>Acciones</th></tr>
+					</thead>
+				</table>
+			</div>
+		</div>
 
 
 
-</div></div>
+	</div></div>
 
 
 <!-- </div> -->
@@ -257,10 +376,10 @@
 
 
 					<form class="form-horizontal">
-						<div class="mb-3 row">
+						<div class="mb-3 row" id="div-codigo">
 							<label for="nombre" class="col-sm-3 col-form-label">Nombre</label>
 							<div class="col-sm-7">
-								<input type="text" class="form-control" id="nombre" placeholder="Nombre">
+								<input type="text" class="form-control" id="nombre" placeholder="Nombre" onchange="verifyNombre(this);">
 							</div>
 						</div>
 						<div class="mb-3 row">
@@ -270,19 +389,19 @@
 							</div>
 						</div>
 						<div class="mb-3 row">
-							<label for="tipoCOmponente" class="col-sm-3 col-form-label">tipoCOmponente</label>
+							<label for="tipoComponente" class="col-sm-3 col-form-label">Tipo de Componente</label>
 							<div class="col-sm-7">
-								<input type="text" class="form-control" id="tipoCOmponente" placeholder="tipoCOmponente">
+								<select id="tipoComponente" class="form-control input-sm selectForm">
+									<option value="">-- Seleccionar --</option>
+								</select>
 							</div>
 						</div>
 						<div class="mb-3 row">
-							<label for="status" class="col-sm-3 col-form-label">Activo</label>
+							<label for="status" class="col-sm-3 col-form-label">Estado</label>
 							<div class="col-sm-7">
-								<div class="checkbox">
-									<label>
-										<input type="checkbox" id="status" name="status" />
-									</label>
-								</div>
+								<select id="status" class="form-control input-sm selectForm">
+									<option value="">-- Seleccionar --</option>
+								</select>
 							</div>
 						</div>
 					</form>
@@ -302,7 +421,53 @@
 </div>
 
 
+<div class="modal fade" id="Filter" tabindex="-1" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title">Filtrar</h4>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
 
+				<div class="form-container">
+
+
+
+
+					<form class="form-horizontal">
+						<div class="mb-3 row">
+							<label for="tipoComponenteSearch" class="col-sm-3 col-form-label">Tipo Componente</label>
+							<div class="col-sm-7">
+								<select id="tipoComponenteSearch" class="form-control input-sm selectFilter">
+									<option value="">-- Seleccionar --</option>
+								</select>
+							</div>
+						</div>
+						<div class="mb-3 row">
+							<label for="statusSearch" class="col-sm-3 col-form-label">Estado</label>
+							<div class="col-sm-7">
+								<select id="statusSearch" class="form-control input-sm selectFilter">
+									<option value="">-- Seleccionar --</option>
+								</select>
+							</div>
+						</div>
+					</form>
+
+
+
+
+				</div>
+
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+				<button type="button" class="btn btn-secondary" onclick="clearFilter();">Limpiar</button>
+				<button type="button" class="btn btn-primary" onclick="search();">Aplicar</button>
+			</div>
+		</div>
+	</div>
+</div>
 
 
 
