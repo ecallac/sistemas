@@ -30,32 +30,7 @@
 				tipoComponente: $('#tipoComponente').val(),
 				status: $('#status').val()
 			}
-			$('.bindingError').remove();
-
-			var ajaxUrl = contexPath+'/'+controllerName+'/save.json';
-			var successFunction = function(response){
-				if(response.validated){
-					//Set response
-					if(response.status=="OK"){
-						showSuccessMessage(response.message);
-						var status = $('#statusSearch').val();
-						load(status);
-						$('#Form').modal('hide');
-					}else{
-						showErrorMessage(response.message);
-					}
-				}else{
-					//Set error messages
-					$.each(response.messages,function(key,value){
-						showErrorMessageByField('input' , key , value , '');
-						showErrorMessageByField('select' , key , value , '');
-					});
-				}
-
-			};
-
-			ajaxPost(ajaxUrl,formData,successFunction);
-
+			saveCRUD(controllerName,formData,"Form");
 		}
 
 
@@ -63,22 +38,14 @@
 			var formData= {
 				id: idVal
 			}
-			$('.bindingError').remove();
-			var ajaxUrl = contexPath+'/'+controllerName+'/load.json';
-			var successFunction = function(response){
-				if(response.status=="OK"){
-					clearFields();
-					$("#id").val(response.viewBean.id);
-					$('#nombre').val(response.viewBean.nombre),
-					$("#descripcion").val(response.viewBean.descripcion);
-					$('#tipoComponente').val(response.viewBean.tipoComponente).change();
-					$('#status').val(response.viewBean.status).change();
-				}else{
-					showErrorMessage(response.message);
-				}
-			};
-
-			ajaxPost(ajaxUrl,formData,successFunction);
+			editCRUD(controllerName,formData);
+		}
+		function setFormFieldsFromServiceResponse(response){
+			$("#id").val(response.viewBean.id);
+			$('#nombre').val(response.viewBean.nombre),
+			$("#descripcion").val(response.viewBean.descripcion);
+			$('#tipoComponente').val(response.viewBean.tipoComponente).change();
+			$('#status').val(response.viewBean.status).change();
 		}
 
 		function enableAndDisable(idVal,status){
@@ -86,79 +53,28 @@
 				id: idVal,
 				status:status
 			}
-			var ajaxUrl = contexPath+'/'+controllerName+'/enableDisable.json';
-			var successFunction = function(response){
-				if(response.status=="OK"){
-					showSuccessMessage(response.message);
-					var status = $('#statusSearch').val();
-					load(status);
-				}else{
-					showErrorMessage(response.message);
-				}
-			};
-
-			ajaxPost(ajaxUrl,formData,successFunction);
-
-
+			enableAndDisableCRUD(controllerName,formData);
 		}
 
 		function enableAndDisableList(status){
-			var rowIds= [];
-			$.each(table.column(0).checkboxes.selected(), function(index, rowId){
-				rowIds  [index]= rowId;
-			});
+			var rowIds= datatableCheckboxSelectedRowList();
 			if (rowIds.length>0){
 				var formData= {
 					ids: rowIds,
 					status:status
 				}
-				var ajaxUrl = contexPath+'/'+controllerName+'/enableDisable.json';
-				var successFunction = function(response){
-					if(response.status=="OK"){
-						showSuccessMessage(response.message);
-						var status = $('#statusSearch').val();
-						load(status);
-					}else{
-						showErrorMessage(response.message);
-					}
-				};
-
-				ajaxPost(ajaxUrl,formData,successFunction);
+				enableAndDisableCRUD(controllerName,formData);
 			}
 		}
 
 		function verifyNombre(object){
-			$('.bindingError'+object.id).remove();
-			var ajaxUrl = contexPath+'/'+controllerName+'/verifyNombre?nombre='+object.value;
-			var key = object.id;
-			var successFunction = function(response){
-				if(response.status=="OK"){
-					$("#"+key).removeClass("is-invalid").addClass("is-valid");
-				}else{
-					$("#"+key).removeClass("is-valid").addClass("is-invalid");
-					showErrorMessageByField('input' , key , response.message , '');
-				}
-			};
-
-			ajaxWithoutForm(ajaxUrl,"GET",successFunction);
+			verifyField(controllerName,'verifyNombre','nombre',object.id,object.value);
 		}
 
-		// function populateStatusSelect(){
-		// 	var ajaxUrl = contexPath+'/tipoBase/listStatus.json';
-		// 	var successFunction = function(response){
-		// 		if(response.status=="OK"){
-		// 			if(response.data.length>0){
-		// 				$.each(response.data, function (i,row){
-		// 					$('#status').append('<option value="' + row.codigo + '">' + row.descripcion + '</option>');
-		// 					$('#statusSearch').append('<option value="' + row.codigo + '">' + row.descripcion + '</option>');
-		// 				});
-		// 			}
-		// 		}else{
-		// 			showErrorMessage(response.message);
-		// 		}
-		// 	};
-		// 	ajaxPostWithoutForm(ajaxUrl,successFunction);
-		// }
+		function enableDisableButtons(){
+			const arrayKey = ["activar","inactivar"];
+			datatableEnableDisableButtons(arrayKey);
+		}
 
 
 		function load(statusSearch){
@@ -246,28 +162,13 @@
 			$('#tipoComponenteSearch').val("").change();
 			$('#statusSearch').val("").change();
 		}
-		function enableDisableButtons(){
-			var cheked=false;
-			const collection = document.getElementsByClassName("dt-checkboxes");
-			for (let i = 0; i < collection.length; i++) {
-				// console.log(collection[i].checked);
-				if(collection[i].checked){
-					cheked=true;
-				}
-			}
-			if(cheked){
-				$("#activar").attr("disabled", false);
-				$("#inactivar").attr("disabled", false);
-			}else{
-				$("#activar").attr("disabled", true);
-				$("#inactivar").attr("disabled", true);
-			}
-		}
+
 		$(document).ready(function(){
 			load('');
 			// populateStatusSelect();
-			populateSelect('status','TYPE_SWITCH');
-			populateSelect('tipoComponente','TYPE_COMPONENTE');
+			populateSelectByCategoriaType('status','TYPE_SWITCH');
+			populateSelectByCategoriaType('statusSearch','TYPE_SWITCH');
+			populateSelectByCategoriaType('tipoComponente','TYPE_COMPONENTE');
 
 			$('.select').select2({
 				width: '100%',

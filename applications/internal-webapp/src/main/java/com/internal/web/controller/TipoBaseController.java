@@ -199,25 +199,6 @@ public class TipoBaseController {
 		}
 		return map;
 	}
-	@RequestMapping(value = "/listStatus", method = {RequestMethod.POST,RequestMethod.GET})
-	public @ResponseBody  Map<String, Object> listStatus() {
-		Map<String, Object> map = new HashMap<String, Object>();
-		try{
-			List<TipoBase> list = tipoBaseIntegration.findByCategoriaActivos(Constants.TIPOBASE_CATEGORIA_TYPE_SWITCH);
-			if (list != null) {
-				map.put(Constants.DATA,list);
-			}else {
-				map.put(Constants.DATA,new ArrayList<TipoBase>());
-			}
-			map.put(Constants.STATUS, Constants.OK);
-
-		}catch (Exception e){
-			logger.error(e.getMessage(),e);
-			map.put(Constants.STATUS, Constants.ERROR);
-			map.put(Constants.MESSAGE, Utils.getErrorMessage(Constants.ERROR_MESSAGE,e.getMessage()));
-		}
-		return map;
-	}
 
 	@RequestMapping(value = "/listByCategoria", method = {RequestMethod.POST,RequestMethod.GET})
 	public @ResponseBody  Map<String, Object> listByCategoria(@RequestParam(value = "categoria",required = true) String categoria) {

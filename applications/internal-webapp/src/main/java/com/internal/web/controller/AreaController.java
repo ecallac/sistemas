@@ -5,6 +5,7 @@ package com.internal.web.controller;
 
 import com.*;
 import com.common.Area;
+import com.common.Marca;
 import com.common.ReglaDetalle;
 import com.common.TipoBase;
 import com.internal.web.service.integration.ReglaDetalleIntegration;
@@ -14,6 +15,7 @@ import com.internal.web.view.AreaView;
 import com.internal.web.service.LoginService;
 import com.internal.web.service.integration.AreaIntegration;
 import com.internal.web.utils.Constants;
+import com.internal.web.view.MarcaView;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -100,7 +102,9 @@ public class AreaController {
 
 			Area bean = (Area) BeanParser.parseObjectToNewClass(view, Area.class, null);
 			if (StringUtils.isNotBlank(view.getParentAreaId())) {
-				bean.setParentArea((Area)BeanParser.parseObjectToNewClass(view.getParentArea(), Area.class, null));
+				Area parent = new Area();
+				parent.setId(Long.valueOf(view.getParentAreaId()));
+				bean.setParentArea(parent);
 			}
 			if (bean.getId()==null) {
 				bean.setCreatedBy(principal.getName());
@@ -129,7 +133,7 @@ public class AreaController {
 			Area bean = areaIntegration.findById(view.getId());
 			AreaView viewStored = (AreaView)BeanParser.parseObjectToNewClass(bean, AreaView.class, null);
 			viewStored.setParentArea((AreaView)BeanParser.parseObjectToNewClass(bean.getParentArea(), AreaView.class, null));
-			map.put("areaView", viewStored);
+			map.put("viewBean", viewStored);
 			map.put(Constants.STATUS, Constants.OK);
 		}catch (Exception e){
 			logger.error(e.getMessage(),e);
@@ -144,9 +148,13 @@ public class AreaController {
         Map<String, Object> map = new HashMap<String, Object>();
 
 		try{
-			Area bean = (Area) BeanParser.parseObjectToNewClass(view, Area.class, null);
-			bean.setUpdatedBy(principal.getName());
-			areaIntegration.save(bean);
+			if (view.getIds()!=null){
+				areaIntegration.save(castViewBeanToBaseList(view,principal));
+			}else {
+				Area bean = (Area) BeanParser.parseObjectToNewClass(view, Area.class, null);
+				bean.setUpdatedBy(principal.getName());
+				areaIntegration.save(bean);
+			}
 			map.put(Constants.STATUS, Constants.OK);
 			map.put(Constants.MESSAGE, Utils.getSuccessMessage(Constants.SUCCESS_MESSAGE));
 
@@ -157,6 +165,17 @@ public class AreaController {
 		}
         return map;
     }
+	public List<Area> castViewBeanToBaseList(AreaView view, Principal principal){
+		List<Area> list = new ArrayList<>();
+		for (int i = 0; i < view.getIds().length; i++) {
+			String id = view.getIds()[i];
+			Area bean = (Area) BeanParser.parseObjectToNewClass(view, Area.class, null);
+			bean.setId(Long.valueOf(id));
+			bean.setUpdatedBy(principal.getName());
+			list.add(bean);
+		}
+		return list;
+	}
 	@RequestMapping(value = "/verifyNombre", method = {RequestMethod.POST,RequestMethod.GET})
 	public @ResponseBody  Map<String, Object> verifyNombre(@RequestParam(value = "nombre",required = true) String nombre) {
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -185,9 +204,15 @@ public class AreaController {
 			DataTablesInput<Area> dataTablesInput = InternalUtils.createDataTablesInput(parameterMap);
 			Area bean = new Area();
 			bean.setActivo((String) parameterMap.get("activo"));
+			Area parent = new Area();
+			String parentId = (String) parameterMap.get("parentAreaId");
+			if (StringUtils.isNotBlank(parentId)){
+				parent.setId(Long.valueOf(parentId));
+			}
+			bean.setParentArea(parent);
 			dataTablesInput.setObject(bean);
 
-			DataTablesOutput<Area> dataTablesOutput = tipoBaseIntegration.findDataTables(dataTablesInput);
+			DataTablesOutput<Area> dataTablesOutput = areaIntegration.findDataTables(dataTablesInput);
 			if (dataTablesOutput != null) {
 				map.put("data", castAreaToAreaViewList(dataTablesOutput.getData()));
 				map.put("draw", dataTablesOutput.getDraw());

@@ -12,6 +12,9 @@ public class AreaRepositoryCustomImpl extends CommonRepositoryAbstract<Area> imp
         if (entity!=null && StringUtils.isNotBlank(entity.getActivo())){
             where = where+" AND o.activo='"+entity.getActivo()+"' ";
         }
+        if (entity!=null && entity.getParentArea()!=null && entity.getParentArea().getId()!=null){
+            where = where+" AND o.parentArea.id='"+entity.getParentArea().getId()+"' ";
+        }
         return super.getPage(Area.class, where,super.getSortQuery(pageable), pageable);
     }
 }

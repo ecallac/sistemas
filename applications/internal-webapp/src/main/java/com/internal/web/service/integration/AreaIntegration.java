@@ -45,7 +45,7 @@ public class AreaIntegration extends ServiceIntegrationAbstract<Area> {
 		return (List<Area>) doPostRequestGeneral(api+"/"+basePath+"/saveList", entity,new TypeReference<List<Area>>(){});
 	}
 	public Area findByNombre(String nombre) throws Exception  {
-		return getObjectFromGetRequest(api+"/"+basePath+"/findByNombre?id="+nombre, Area.class);
+		return getObjectFromGetRequest(api+"/"+basePath+"/findByNombre?nombre="+nombre, Area.class);
 	}
 	public DataTablesOutput findDataTables(DataTablesInput entity) throws Exception  {
 		return (DataTablesOutput) doPostRequestGeneral(api+"/"+basePath+"/findDataTables", entity,new TypeReference<DataTablesOutput<Area>>(){});

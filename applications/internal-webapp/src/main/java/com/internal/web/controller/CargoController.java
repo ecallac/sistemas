@@ -144,7 +144,7 @@ public class CargoController {
 			Cargo cargo = cargoIntegration.findById(cargoView.getId());
 			CargoView cargoViewStored = (CargoView)BeanParser.parseObjectToNewClass(cargo, CargoView.class, null);
 			cargoViewStored.setParentCargo((CargoView)BeanParser.parseObjectToNewClass(cargo.getParentCargo(), CargoView.class, null));
-			map.put("cargoView", cargoViewStored);
+			map.put("viewBean", cargoViewStored);
 			map.put(Constants.STATUS, Constants.OK);
 		}catch (Exception e){
 			logger.error(e.getMessage(),e);

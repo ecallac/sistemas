@@ -463,14 +463,14 @@
 		table.buttons().container().appendTo( tableId+"_wrapper .col-md-6:eq(0)");
 	}
 
-	function populateSelect(key, categoria){
+	function populateSelectByCategoriaType(key, categoria){
 		var ajaxUrl = contexPath+'/tipoBase/listByCategoria?categoria='+categoria;
 		var successFunction = function(response){
 			if(response.status=="OK"){
 				if(response.data.length>0){
 					$.each(response.data, function (i,row){
 						$('#'+key).append('<option value="' + row.codigo + '">' + row.descripcion + '</option>');
-						$('#'+key+'Search').append('<option value="' + row.codigo + '">' + row.descripcion + '</option>');
+						// $('#'+key+'Search').append('<option value="' + row.codigo + '">' + row.descripcion + '</option>');
 					});
 				}
 			}else{
@@ -478,4 +478,132 @@
 			}
 		};
 		ajaxPostWithoutForm(ajaxUrl,successFunction);
+	}
+
+	function populateSelect(controller,serice,key){
+		var ajaxUrl = contexPath+'/'+controller+'/'+serice+'.json';
+		var successFunction = function(response){
+			if(response.status=="OK"){
+				if(response.data.length>0){
+					$('#'+key).empty();
+					$('#'+key).append('<option value="">-- Seleccionar --</option>');
+					$.each(response.data, function(i, row) {
+						$('#'+key).append('<option value="' + row.id + '">' + row.nombre + '</option>');
+					});
+				}
+			}else{
+				showErrorMessage(response.message);
+			}
+
+		};
+		ajaxPostWithoutForm(ajaxUrl,successFunction);
+	}
+
+	function datatableEnableDisableButtons(arrayKey){
+		var cheked=false;
+		const collection = document.getElementsByClassName("dt-checkboxes");
+		for (let i = 0; i < collection.length; i++) {
+			// console.log(collection[i].checked);
+			if(collection[i].checked){
+				cheked=true;
+			}
+		}
+		if(cheked){
+			for (const key of arrayKey) {
+				$("#"+key).attr("disabled", false);
+			}
+		}else{
+			for (const key of arrayKey) {
+				$("#"+key).attr("disabled", true);
+			}
+		}
+	}
+
+	function saveCRUD(controllerName,formData,modalId){
+		$('.bindingError').remove();
+
+		var ajaxUrl = contexPath+'/'+controllerName+'/save.json';
+		var successFunction = function(response){
+			if(response.validated){
+				//Set response
+				if(response.status=="OK"){
+					showSuccessMessage(response.message);
+					load();
+					$('#'+modalId).modal('hide');
+				}else{
+					showErrorMessage(response.message);
+				}
+			}else{
+				//Set error messages
+				$.each(response.messages,function(key,value){
+					showErrorMessageByField('input' , key , value , '');
+					showErrorMessageByField('select' , key , value , '');
+				});
+			}
+
+		};
+
+		ajaxPost(ajaxUrl,formData,successFunction);
+
+	}
+
+	function enableAndDisableCRUD(controllerName,formData){
+		var ajaxUrl = contexPath+'/'+controllerName+'/enableDisable.json';
+		var successFunction = function(response){
+			if(response.status=="OK"){
+				showSuccessMessage(response.message);
+				load();
+			}else{
+				showErrorMessage(response.message);
+			}
+		};
+
+		ajaxPost(ajaxUrl,formData,successFunction);
+
+
+	}
+
+
+	function verifyField(controllerName,serviceName,parameterName,key,value){
+		$('.bindingError'+key).remove();
+		var ajaxUrl = contexPath+'/'+controllerName+'/'+serviceName+'?'+parameterName+'='+value;
+		var successFunction = function(response){
+			if(response.status=="OK"){
+				$("#"+key).removeClass("is-invalid").addClass("is-valid");
+			}else{
+				$("#"+key).removeClass("is-valid").addClass("is-invalid");
+				showErrorMessageByField('input' , key , response.message , '');
+			}
+		};
+
+		ajaxWithoutForm(ajaxUrl,"GET",successFunction);
+	}
+
+	function datatableCheckboxSelectedRowList(){
+		var rowIds= [];
+		$.each(table.column(0).checkboxes.selected(), function(index, rowId){
+			rowIds  [index]= rowId;
+		});
+		return rowIds;
+	}
+
+
+
+	function editCRUD(controllerName,formData){
+		$('.bindingError').remove();
+		var ajaxUrl = contexPath+'/'+controllerName+'/load.json';
+		var successFunction = function(response){
+			if(response.status=="OK"){
+				clearFields();
+				setFormFieldsFromServiceResponse(response);
+				// $("#id").val(response.viewBean.id);
+				// $('#nombre').val(response.viewBean.nombre);
+				// $('#activo').val(response.viewBean.activo).change();
+				// $("#parentAreaId").val(response.viewBean.parentArea.id).change();
+			}else{
+				showErrorMessage(response.message);
+			}
+		};
+
+		ajaxPost(ajaxUrl,formData,successFunction);
 	}
