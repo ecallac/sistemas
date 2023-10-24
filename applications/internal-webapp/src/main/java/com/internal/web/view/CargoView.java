@@ -8,6 +8,7 @@ import lombok.*;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -27,9 +28,9 @@ public class CargoView extends BaseEntity {
 	private String activoDescripcion;
 	private String activoType;
 	private String ids[];
-	@NotEmpty
+	@NotNull
 	private BigDecimal salariomin;
-	@NotEmpty
+	@NotNull
 	private BigDecimal salariomax;
 	private CargoView parentCargo;
 	private String parentCargoId;

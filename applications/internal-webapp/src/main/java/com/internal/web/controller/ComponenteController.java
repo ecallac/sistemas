@@ -148,7 +148,7 @@ public class ComponenteController {
 		try{
 			Componente bean = componenteIntegration.findById(view.getId());
 			ComponenteView viewStored = (ComponenteView)BeanParser.parseObjectToNewClass(bean, ComponenteView.class, null);
-			map.put("view", viewStored);
+			map.put("viewBean", viewStored);
 			map.put(Constants.STATUS, Constants.OK);
 		}catch (Exception e){
 			logger.error(e.getMessage(),e);

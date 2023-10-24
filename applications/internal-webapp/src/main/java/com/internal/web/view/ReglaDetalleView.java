@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import java.util.Date;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -17,6 +19,7 @@ public class ReglaDetalleView extends BaseEntity {
     private String condicion;
     private Double valornumero;
     private String valorcadena;
+    private Date valorfecha;
     @NotEmpty
     private String activo;
     private String activoDescripcion;

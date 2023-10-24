@@ -32,5 +32,6 @@ public class Persona extends BaseEntity {
 	private Entidad entidad;
 	private List<Organizacion> organizacions;
 	private String fullName;
+	private String status;
 
 }

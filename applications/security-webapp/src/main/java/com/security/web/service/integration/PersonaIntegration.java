@@ -24,7 +24,7 @@ public class PersonaIntegration extends ServiceIntegrationAbstract<Persona> {
 	@Value("${app.common.api}")
 	private String appsecurityapi;
 	
-	String basePath="entidad";
+	String basePath="persona";
 	
 	public Persona findByEntidadRolId(Long entidadRolId) {
 		return getObjectFromGetRequest(appsecurityapi+"/"+basePath+"/findPersonaByEntidadRolId?entidadRolId="+entidadRolId, Persona.class);

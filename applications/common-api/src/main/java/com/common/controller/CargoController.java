@@ -5,9 +5,8 @@ package com.common.controller;
 
 import com.DataTablesInput;
 import com.DataTablesOutput;
-import com.common.domain.Area;
+import com.Utils;
 import com.common.domain.Cargo;
-import com.common.domain.Componente;
 import com.common.enums.EnableIndicator;
 import com.common.facade.RecurrsosHumanosFacade;
 import org.apache.log4j.Logger;
@@ -17,6 +16,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 

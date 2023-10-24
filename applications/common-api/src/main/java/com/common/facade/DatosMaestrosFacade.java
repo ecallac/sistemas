@@ -52,6 +52,12 @@ public class DatosMaestrosFacade {
 	@Autowired
 	DatabaseService databaseService;
 
+	@Autowired
+	PersonaService personaService;
+
+	@Autowired
+	OrganizacionService organizacionService;
+
 	public List<Table> findDatabaseTables(String catalog) throws Exception {
 		return databaseService.findTables(catalog);
 	}
@@ -94,21 +100,60 @@ public class DatosMaestrosFacade {
 	
 	public Persona findPersonaByEntidadId(Long entidadRolId) {
 		EntidadRol entidadRol = entidadRolService.findById(entidadRolId);
-		return entidadService.findPersonaByEntidadId(entidadRol.getEntidad().getId());
+		return personaService.findPersonaByEntidadId(entidadRol.getEntidad().getId());
+	}
+	public List<Persona> findByNombreOApellidoONumeroDocumento(String termino){
+		return personaService.findByNombreOApellidoONumeroDocumento(termino);
+	}
+	public Persona findPersonaById(Long personaId) {
+		return personaService.findById(personaId);
+	}
+	@Transactional(readOnly = false,rollbackFor=Exception.class)
+	public void savePersona(Persona persona) {
+		personaService.save(persona);
+	}
+	@Transactional(readOnly = false,rollbackFor=Exception.class)
+	public void savePersona(List<Persona> personaList) {
+		for (Persona persona: personaList) {
+			personaService.save(persona);
+		}
+	}
+	public DataTablesOutput<Persona> findPersonaDataTablesList(DataTablesInput<Persona> dataTablesInput){
+		return personaService.findDataTablesList(dataTablesInput);
 	}
 	
 	public Organizacion findOrganizacionByEntidadId(Long entidadRolId) {
 		EntidadRol entidadRol = entidadRolService.findById(entidadRolId);
-		return entidadService.findOrganizacionByEntidadId(entidadRol.getEntidad().getId());
+		return organizacionService.findOrganizacionByEntidadId(entidadRol.getEntidad().getId());
 	}
-	
-	public List<Persona> findByNombreOApellidoONumeroDocumento(String termino){
-		return entidadService.findByNombreOApellidoONumeroDocumento(termino);
+	public List<Organizacion> findByRazonSocialONumeroIdentificacion(String termino){
+		return organizacionService.findByRazonSocialONumeroIdentificacion(termino);
+	}
+	public Organizacion findOrganizacionById(Long organizacionId) {
+		return organizacionService.findById(organizacionId);
 	}
 	@Transactional(readOnly = false,rollbackFor=Exception.class)
-	public void savePersona(Persona persona) {
+	public void saveOrganizacion(Organizacion organizacion) {
+		organizacionService.save(organizacion);
+	}
+	@Transactional(readOnly = false,rollbackFor=Exception.class)
+	public void saveOrganizacion(List<Organizacion> organizacionList) {
+		for (Organizacion organizacion: organizacionList){
+			organizacionService.save(organizacion);
+		}
+	}
+	public DataTablesOutput<Organizacion> findOrganizacionDataTablesList(DataTablesInput<Organizacion> dataTablesInput){
+		return organizacionService.findDataTablesList(dataTablesInput);
+	}
+	@Transactional(readOnly = false,rollbackFor=Exception.class)
+	public void saveEntidadPersona(Persona persona) {
 		entidadService.savePersona(persona);
 	}
+	@Transactional(readOnly = false,rollbackFor=Exception.class)
+	public void saveEntidadOrganizacion(Organizacion organizacion) {
+		entidadService.saveOrganizacion(organizacion);
+	}
+
 	@Transactional(readOnly = false,rollbackFor=Exception.class)
 	public void saveEntidadRol(EntidadRol entidadRol) {
 		entidadRol.setEntidad(entidadService.findById(entidadRol.getEntidad().getId()));

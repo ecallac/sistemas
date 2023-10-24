@@ -25,5 +25,7 @@ public class Organizacion extends BaseEntity {
 	private String razonsocial;
 	private Entidad entidad;
 	private List<Persona> personas;
-
+	private String logo;
+	private String url;
+	private String status;
 }

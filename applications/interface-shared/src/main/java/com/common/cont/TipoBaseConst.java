@@ -1,0 +1,19 @@
+package com.common.cont;
+
+public enum TipoBaseConst {
+    TIPOBASE_CATEGORIA_TYPE_PERMISSION("TYPE_PERMISSION"),
+    TIPOBASE_CATEGORIA_USER_STATUS("TYPE_STATUS"),
+    TIPOBASE_CATEGORIA_TYPE_PERSONA_DOCUMENTO("TYPE_PERSONA_DOCUMENTO"),
+    TIPOBASE_CATEGORIA_TYPE_PERSONA_ESTADO_CIVIL("TYPE_PERSONA_ESTADO_CIVIL"),
+    TIPOBASE_CODIGO_ER_USUARIO("ER_USUARIO"),
+    TIPOBASE_CODIGO_PERSONA("E_PERSONA"),
+    TIPOBASE_CODIGO_ORGANIZACION("E_ORGANIZACION");
+    private String code;
+
+    private TipoBaseConst(String code) {
+        this.code = code;
+    }
+    public String getCode() {
+        return code;
+    }
+}

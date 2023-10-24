@@ -97,10 +97,10 @@
 
 
 <!-- calendario -->
-<%-- <script src="<c:url value='/resources/js/bootstrap-datepicker.js' />"></script> --%>
-<%-- <script src="<c:url value='/resources/js/locales/bootstrap-datepicker.es.js' />" charset="UTF-8"></script> --%>
+ <script src="<c:url value='/resources/js/bootstrap-datepicker.js' />"></script>
+ <script src="<c:url value='/resources/js/locales/bootstrap-datepicker.es.js' />" charset="UTF-8"></script>
 
-<%-- <link href="<c:url value='/resources/css/datepicker.css' />" rel="stylesheet" type="text/css"> --%>
+ <link href="<c:url value='/resources/css/datepicker.css' />" rel="stylesheet" type="text/css">
 
 
 
@@ -122,3 +122,7 @@
 
 <script src="<c:url value='/resources/js/dataTables.checkboxes.min.js' />"></script>
 <link href="<c:url value='/resources/css/dataTables.checkboxes.css' />"  rel="stylesheet"></link>
+
+<%--<script src=?https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js?></script>--%>
+<%--<script src="<c:url value='/resources/js/daterangepicker.js' />"></script>--%>
+<%--<link href="<c:url value='/resources/css/daterangepicker.css' />"  rel="stylesheet"></link>--%>

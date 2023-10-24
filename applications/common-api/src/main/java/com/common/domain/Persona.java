@@ -30,13 +30,19 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 public class Persona extends BaseEntity {
 	@Column(name = "tipo_documento_identificaion")
 	private String tipoDocumentoIdentificaion;
+	@Searchable
 	private String numeroidentificacion;
+	@Searchable
 	private String nombres;
+	@Searchable
 	private String apellidos;
 	@Column(name = "tipo_estado_civil")
 	private String tipoEstadoCivil;
+	@Searchable
 	private String sexo;
+	@Searchable
 	private Date fechanacimiento;
+	@Searchable
 	private String email;
 	@OneToOne(cascade = CascadeType.ALL,fetch=FetchType.EAGER)
 	@JoinColumn(name = "entidad_id")
@@ -45,8 +51,16 @@ public class Persona extends BaseEntity {
 	@ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER, mappedBy = "personas")
 	@Fetch(value = FetchMode.SELECT)
 	private List<Organizacion> organizacions;
+	private String status;
 
-	
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
 	public List<Organizacion> getOrganizacions() {
 		return organizacions;
 	}

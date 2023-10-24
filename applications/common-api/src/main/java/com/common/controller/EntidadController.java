@@ -5,6 +5,9 @@ package com.common.controller;
 
 import java.util.List;
 
+import com.DataTablesInput;
+import com.DataTablesOutput;
+import com.common.domain.Area;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -32,43 +35,8 @@ public class EntidadController {
     
     @Autowired
     DatosMaestrosFacade datosMaestrosFacade;
-    
-    @RequestMapping(value = "/findPersonaByEntidadRolId", method = {RequestMethod.GET})
-    public ResponseEntity<?> findPersonaByEntidadRolId(@RequestParam(value = "entidadRolId", required = true) Long entidadRolId) {
-    	Persona entity = datosMaestrosFacade.findPersonaByEntidadId(entidadRolId);
-		if (entity==null) {
-			return new ResponseEntity(HttpStatus.NO_CONTENT);
-        }
-        return new ResponseEntity(entity,HttpStatus.OK);
-    }
-    
-    @RequestMapping(value = "/findOrganizationByEntidadRolId", method = {RequestMethod.GET})
-    public ResponseEntity<?> findOrganizationByEntidadRolId(@RequestParam(value = "entidadRolId", required = true) Long entidadRolId) {
-    	Organizacion entity = datosMaestrosFacade.findOrganizacionByEntidadId(entidadRolId);
-		if (entity==null) {
-			return new ResponseEntity(HttpStatus.NO_CONTENT);
-        }
-        return new ResponseEntity(entity,HttpStatus.OK);
-    }
-    
-    @RequestMapping(value = "/findPersonaByTermino", method = {RequestMethod.GET})
-    public ResponseEntity<?> findPersonaByTermino(@RequestParam(value = "termino", required = true) String termino) {
-    	List<Persona> list = datosMaestrosFacade.findByNombreOApellidoONumeroDocumento(termino);
-		if (CollectionUtils.isEmpty(list)) {
-			return new ResponseEntity(HttpStatus.NO_CONTENT);
-        }
-        return new ResponseEntity(list,HttpStatus.OK);
-    }
-    
-    @RequestMapping(value = "/savePersona", method = {RequestMethod.POST})
-    public ResponseEntity<?> save(@RequestBody Persona bean) {
-    	try {
-    		datosMaestrosFacade.savePersona(bean);
-    		return new ResponseEntity(bean,HttpStatus.OK);
-		} catch (Exception e) {
-            logger.error(e.getMessage(),e);
-            e.printStackTrace();
-            return new ResponseEntity(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-    }
+
+
+
+
 }

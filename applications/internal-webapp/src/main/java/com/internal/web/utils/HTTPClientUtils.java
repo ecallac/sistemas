@@ -17,6 +17,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 import org.apache.log4j.Logger;
+import org.springframework.http.MediaType;
 
 /**
  * @author efrain
@@ -25,7 +26,7 @@ import org.apache.log4j.Logger;
 public class HTTPClientUtils {
 	private static Logger logger = Logger.getLogger(HTTPClientUtils.class);
 	public static String sendGetRequest(String url,String contentType) throws Exception {
-		HttpUriRequest request = new HttpGet(url);
+		HttpUriRequest request = new HttpGet(url.replace(" ","%20"));
 		request.addHeader("accept", contentType);
 		RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(10000).build();
 		logger.info("Connecting GET to : "+url + " with content type : "+contentType);

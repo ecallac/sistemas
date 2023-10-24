@@ -28,4 +28,5 @@ public class InternalUtils {
         dataTablesInput.setColumnName((String) parameterMap.get("columns["+(String) parameterMap.get("order[0][column]")+"][data]"));
         return dataTablesInput;
     }
+
 }

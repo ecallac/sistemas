@@ -6,6 +6,11 @@ package com.common.service;
 import java.util.Date;
 import java.util.List;
 
+import com.DataTablesInput;
+import com.DataTablesOutput;
+import com.common.domain.Area;
+import com.common.repository.OrganizacionRepository;
+import com.common.repository.PersonaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,21 +34,6 @@ public class EntidadServiceImpl implements EntidadService {
 	 * @see com.common.service.EntidadService#findPersonaByEntidadId(java.lang.Long)
 	 */
 	@Override
-	public Persona findPersonaByEntidadId(Long entidadId) {
-		// TODO Auto-generated method stub
-		return entidadRepository.findPersonaByEntidadId(entidadId);
-	}
-	@Override
-	public Organizacion findOrganizacionByEntidadId(Long entidadId) {
-		// TODO Auto-generated method stub
-		return entidadRepository.findOrganizacionByEntidadId(entidadId);
-	}
-	@Override
-	public List<Persona> findByNombreOApellidoONumeroDocumento(String termino) {
-		// TODO Auto-generated method stub
-		return entidadRepository.findByNombreOApellidoONumeroDocumento(termino);
-	}
-	@Override
 	public void savePersona(Persona persona) {
 		if (persona.getId()!=null){
 			
@@ -59,6 +49,24 @@ public class EntidadServiceImpl implements EntidadService {
         	entidad.setDateCreated(new Date());
         	entidadRepository.save(entidad);
         }
+	}
+
+	@Override
+	public void saveOrganizacion(Organizacion organizacion) {
+		if (organizacion.getId()!=null){
+
+//			Organizacion enrityFromDb = findById(organizacion.getId());
+//			organizacion.setVersion(enrityFromDb.getVersion()+1);
+//            enrityFromDb = (Organizacion) BeanParser.parseBetweenObjects(organizacion, enrityFromDb);
+//            enrityFromDb.setDateUpdated(new Date());
+//            entidadRepository.save(enrityFromDb);
+		}else{
+			organizacion.setDateCreated(new Date());
+			Entidad entidad = organizacion.getEntidad();
+			entidad.setOrganizacion(organizacion);
+			entidad.setDateCreated(new Date());
+			entidadRepository.save(entidad);
+		}
 	}
 	@Override
 	public List<Entidad> findList() {

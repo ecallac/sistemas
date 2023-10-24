@@ -5,6 +5,7 @@ package com.internal.web.service.integration;
 
 import com.DataTablesInput;
 import com.DataTablesOutput;
+import com.common.Regla;
 import com.common.ReglaDetalle;
 import org.codehaus.jackson.type.TypeReference;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,5 +52,8 @@ public class ReglaDetalleIntegration extends ServiceIntegrationAbstract<ReglaDet
 	}
 	public DataTablesOutput findDataTables(DataTablesInput entity) throws Exception  {
 		return (DataTablesOutput) doPostRequestGeneral(api+"/"+basePath+"/findDataTables", entity,new TypeReference<DataTablesOutput<ReglaDetalle>>(){});
+	}
+	public List<ReglaDetalle> findActivos() throws Exception  {
+		return getObjectListFromGetRequest(api+"/"+basePath+"/findActivos",new TypeReference<List<ReglaDetalle>>(){});
 	}
 }

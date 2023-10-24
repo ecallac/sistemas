@@ -5,6 +5,7 @@ package com.internal.web.service.integration;
 
 import com.DataTablesInput;
 import com.DataTablesOutput;
+import com.common.Marca;
 import com.common.Regla;
 import org.codehaus.jackson.type.TypeReference;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,4 +42,8 @@ public class ReglaIntegration extends ServiceIntegrationAbstract<Regla> {
 	public Regla findByCodigo(String codigo) throws Exception  {
 		return getObjectFromGetRequest(api+"/"+basePath+"/findByCodigo?id="+codigo, Regla.class);
 	}
+	public List<Regla> findActivos() throws Exception  {
+		return getObjectListFromGetRequest(api+"/"+basePath+"/findActivos",new TypeReference<List<Regla>>(){});
+	}
+
 }

@@ -4,6 +4,7 @@
 package com.internal.web.controller;
 
 import com.*;
+import com.common.Marca;
 import com.common.Regla;
 import com.common.ReglaDetalle;
 import com.common.TipoBase;
@@ -13,6 +14,7 @@ import com.internal.web.service.integration.ReglaDetalleIntegration;
 import com.internal.web.service.integration.TipoBaseIntegration;
 import com.internal.web.utils.Constants;
 import com.internal.web.utils.InternalUtils;
+import com.internal.web.view.MarcaView;
 import com.internal.web.view.ReglaView;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -64,25 +66,6 @@ public class ReglaController {
 		return modelAndView;
 	}
 	
-//	@RequestMapping(value = "/enabledReglas", method = {RequestMethod.GET,RequestMethod.POST})
-//	public @ResponseBody Map<String, Object> initializeEnableReglas() {
-//		Map<String, Object> map = new HashMap<>();
-//		try {
-//			List<Regla> list = reglaIntegration.findActivos();
-//			if (list != null) {
-//				map.put("data", list);
-//			} else {
-//				map.put("data", new ArrayList<>());
-//			}
-//			map.put(Constants.STATUS, Constants.OK);
-//		}catch (Exception e){
-//			logger.error(e.getMessage(),e);
-//			map.put(Constants.STATUS, Constants.ERROR);
-//			map.put(Constants.MESSAGE, Utils.getErrorMessage(Constants.ERROR_MESSAGE_GET,e.getMessage()));
-//		}
-//		return map;
-//	}
-	
 	@RequestMapping(value = "/save", method = {RequestMethod.POST})
     public @ResponseBody  Map<String, Object> save(@RequestBody @Valid ReglaView view, BindingResult result, Principal principal) {
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -128,7 +111,7 @@ public class ReglaController {
 		try{
 			Regla bean = reglaIntegration.findById(view.getId());
 			ReglaView viewStored = (ReglaView)BeanParser.parseObjectToNewClass(bean, ReglaView.class, null);
-			map.put("reglaView", viewStored);
+			map.put("viewBean", viewStored);
 			map.put(Constants.STATUS, Constants.OK);
 		}catch (Exception e){
 			logger.error(e.getMessage(),e);
@@ -143,9 +126,13 @@ public class ReglaController {
         Map<String, Object> map = new HashMap<String, Object>();
 
 		try{
-			Regla bean = (Regla) BeanParser.parseObjectToNewClass(view, Regla.class, null);
-			bean.setUpdatedBy(principal.getName());
-			reglaIntegration.save(bean);
+			if (view.getIds()!=null){
+				reglaIntegration.save(castViewBeanToBaseList(view,principal));
+			}else {
+				Regla bean = (Regla) BeanParser.parseObjectToNewClass(view, Regla.class, null);
+				bean.setUpdatedBy(principal.getName());
+				reglaIntegration.save(bean);
+			}
 			map.put(Constants.STATUS, Constants.OK);
 			map.put(Constants.MESSAGE, Utils.getSuccessMessage(Constants.SUCCESS_MESSAGE));
 
@@ -156,8 +143,19 @@ public class ReglaController {
 		}
         return map;
     }
+	public List<Regla> castViewBeanToBaseList(ReglaView view, Principal principal){
+		List<Regla> list = new ArrayList<>();
+		for (int i = 0; i < view.getIds().length; i++) {
+			String id = view.getIds()[i];
+			Regla bean = (Regla) BeanParser.parseObjectToNewClass(view, Regla.class, null);
+			bean.setId(Long.valueOf(id));
+			bean.setUpdatedBy(principal.getName());
+			list.add(bean);
+		}
+		return list;
+	}
 	@RequestMapping(value = "/verifyCodigo", method = {RequestMethod.POST,RequestMethod.GET})
-	public @ResponseBody  Map<String, Object> verifyNombre(@RequestParam(value = "codigo",required = true) String codigo) {
+	public @ResponseBody  Map<String, Object> verifyCodigo(@RequestParam(value = "codigo",required = true) String codigo) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		try{
 			Regla bean = reglaIntegration.findByCodigo(codigo);
@@ -186,7 +184,7 @@ public class ReglaController {
 			bean.setActivo((String) parameterMap.get("activo"));
 			dataTablesInput.setObject(bean);
 
-			DataTablesOutput<Regla> dataTablesOutput = tipoBaseIntegration.findDataTables(dataTablesInput);
+			DataTablesOutput<Regla> dataTablesOutput = reglaIntegration.findDataTables(dataTablesInput);
 			if (dataTablesOutput != null) {
 				map.put("data", castReglaToReglaViewList(dataTablesOutput.getData()));
 				map.put("draw", dataTablesOutput.getDraw());

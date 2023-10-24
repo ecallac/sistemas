@@ -73,22 +73,6 @@
     <script type="text/javascript">
         var sessionContexPath = "<%=request.getContextPath() %>";
 
-        $(document).ready(function(){
-            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-                return new bootstrap.Tooltip(tooltipTriggerEl)
-            });
-
-            //$('nav').stalker();
-            //setTheme('');
-//         var menu_btn = document.querySelector("#menu-btn");
-//         var sidebar = document.querySelector("#sidebar");
-//         var container = document.querySelector(".main");
-
-//         $("#menu-btn").click(function() {
-//         	$("#sidebar").animate({width: 'toggle'}, "slow");
-//           });
-        });
         function setTheme(theme){
             if (theme !=null && theme!=""){
                 //guardar tema y cargar a session
@@ -115,14 +99,6 @@
             sidebar.setAttribute('data-theme', theme);
         }
 
-        $(document).ready(function(){
-            getIp();
-
-            $('.modal-dialog').draggable({
-                handle: ".modal-header"
-            });
-        });
-
         function getIp(){
             $.getJSON("https://api.ipify.org?format=json",
                 function(data) {
@@ -145,6 +121,31 @@
             ajaxPost(ajaxUrl,formData,successFunction);
         }
 
+        $(document).ready(function(){
+            getIp();
+            onlyText();
+            onlyInteger();
+            onlyDecimal();
+
+            $('.datePicker').datepicker({
+                format: 'yyyy/mm/dd',
+                //todayBtn: 'linked',
+                autoclose: true,
+                language: 'es',
+                todayHighlight: false
+            });
+
+            $('.modal-dialog').draggable({
+                handle: ".modal-header"
+            });
+
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl)
+            });
+
+
+        });
 
     </script>
 </head>

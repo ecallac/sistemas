@@ -42,5 +42,17 @@
     <definition name="tipoBase" extends="template">
         <put-attribute name="body" value="/WEB-INF/jsp/internal/tipoBase.jsp" />
     </definition>
+    <definition name="regla" extends="template">
+        <put-attribute name="body" value="/WEB-INF/jsp/internal/regla.jsp" />
+    </definition>
+    <definition name="reglaDetalle" extends="template">
+        <put-attribute name="body" value="/WEB-INF/jsp/internal/reglaDetalle.jsp" />
+    </definition>
+    <definition name="persona" extends="template">
+        <put-attribute name="body" value="/WEB-INF/jsp/internal/persona.jsp" />
+    </definition>
+    <definition name="organizacion" extends="template">
+        <put-attribute name="body" value="/WEB-INF/jsp/internal/organizacion.jsp" />
+    </definition>
   
 </tiles-definitions>

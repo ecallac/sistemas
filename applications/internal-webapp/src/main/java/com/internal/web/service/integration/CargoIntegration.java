@@ -5,12 +5,14 @@ package com.internal.web.service.integration;
 
 import com.DataTablesInput;
 import com.DataTablesOutput;
+import com.common.Area;
 import com.common.Cargo;
 import org.codehaus.jackson.type.TypeReference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 
@@ -43,6 +45,9 @@ public class CargoIntegration extends ServiceIntegrationAbstract<Cargo> {
 	}
 	public List<Cargo> save(List<Cargo> entity) throws Exception  {
 		return (List<Cargo>) doPostRequestGeneral(api+"/"+basePath+"/saveList", entity,new TypeReference<List<Cargo>>(){});
+	}
+	public Cargo findByNombre(String nombre) throws Exception  {
+		return getObjectFromGetRequest(api+"/"+basePath+"/findByNombre?nombre="+ nombre, Cargo.class);
 	}
 	public DataTablesOutput findDataTables(DataTablesInput entity) throws Exception  {
 		return (DataTablesOutput) doPostRequestGeneral(api+"/"+basePath+"/findDataTables", entity,new TypeReference<DataTablesOutput<Cargo>>(){});
