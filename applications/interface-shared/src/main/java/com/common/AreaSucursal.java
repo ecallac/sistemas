@@ -17,13 +17,9 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class Direccion extends BaseEntity {
-	private String direccionexacta;
-	private String codigopostal;
-	private Entidad entidad;
-	private Ubigeo ubigeo;
-	private String esprincipal;
+public class AreaSucursal extends BaseEntity {
+	private Sucursal sucursal;
+	private Area area;
+	private Empleado responsable;
 	private String estado;
-	private String referencia;
-
 }

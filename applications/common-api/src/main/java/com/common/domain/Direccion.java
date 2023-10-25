@@ -31,6 +31,7 @@ public class Direccion extends BaseEntity {
 	private Ubigeo ubigeo;
 	private String esprincipal;
 	private String estado;
+	private String referencia;
 	public String getDireccionexacta() {
 		return direccionexacta;
 	}
@@ -67,11 +68,25 @@ public class Direccion extends BaseEntity {
 	public void setEstado(String estado) {
 		this.estado = estado;
 	}
+
+	public String getReferencia() {
+		return referencia;
+	}
+
+	public void setReferencia(String referencia) {
+		this.referencia = referencia;
+	}
+
 	@Override
 	public String toString() {
-		return "Direccion [direccionexacta=" + direccionexacta + ", codigopostal=" + codigopostal + ", entidad="
-				+ entidad + ", ubigeo=" + ubigeo + ", esprincipal=" + esprincipal
-				+ ", estado=" + estado + "]";
+		return "Direccion{" +
+				"direccionexacta='" + direccionexacta + '\'' +
+				", codigopostal='" + codigopostal + '\'' +
+				", entidad=" + entidad +
+				", ubigeo=" + ubigeo +
+				", esprincipal='" + esprincipal + '\'' +
+				", estado='" + estado + '\'' +
+				", referencia='" + referencia + '\'' +
+				'}';
 	}
-	
 }
