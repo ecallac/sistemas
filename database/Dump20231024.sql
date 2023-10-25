@@ -332,7 +332,7 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-10-24 17:44:14
+-- Dump completed on 2023-10-24 23:50:06
 -- MySQL dump 10.13  Distrib 8.0.34, for Win64 (x86_64)
 --
 -- Host: localhost    Database: common
@@ -381,6 +381,42 @@ LOCK TABLES `area` WRITE;
 /*!40000 ALTER TABLE `area` DISABLE KEYS */;
 INSERT INTO `area` VALUES (1,'Administracion','ENABLED',2,'2023-08-29 15:42:38','2023-08-30 22:29:38','ecalla','ecalla',12),(2,'Gerencia','ENABLED',NULL,'2023-08-29 23:07:39',NULL,'ecalla',NULL,0),(3,'Ventas','ENABLED',2,'2023-08-30 22:30:29',NULL,'ecalla',NULL,0);
 /*!40000 ALTER TABLE `area` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `areasucursal`
+--
+
+DROP TABLE IF EXISTS `areasucursal`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `areasucursal` (
+  `sucursal_id` int NOT NULL,
+  `area_id` int NOT NULL,
+  `responsable_id` int NOT NULL,
+  `estado` varchar(45) DEFAULT NULL,
+  `datecreated` datetime DEFAULT NULL,
+  `dateupdated` datetime DEFAULT NULL,
+  `createdby` varchar(45) DEFAULT NULL,
+  `updatedby` varchar(45) DEFAULT NULL,
+  `version` int DEFAULT NULL,
+  PRIMARY KEY (`sucursal_id`,`area_id`),
+  KEY `fk_sucursal_has_area_area1_idx` (`area_id`),
+  KEY `fk_sucursal_has_area_sucursal1_idx` (`sucursal_id`),
+  KEY `fk_areasucursal_empleado1_idx` (`responsable_id`),
+  CONSTRAINT `fk_areasucursal_empleado1` FOREIGN KEY (`responsable_id`) REFERENCES `empleado` (`id`),
+  CONSTRAINT `fk_sucursal_has_area_area1` FOREIGN KEY (`area_id`) REFERENCES `area` (`id`),
+  CONSTRAINT `fk_sucursal_has_area_sucursal1` FOREIGN KEY (`sucursal_id`) REFERENCES `sucursal` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `areasucursal`
+--
+
+LOCK TABLES `areasucursal` WRITE;
+/*!40000 ALTER TABLE `areasucursal` DISABLE KEYS */;
+/*!40000 ALTER TABLE `areasucursal` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -436,6 +472,7 @@ CREATE TABLE `categoria` (
   `createdby` varchar(45) DEFAULT NULL,
   `updatedby` varchar(45) DEFAULT NULL,
   `version` int DEFAULT NULL,
+  `status` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_categoria_categoria1_idx` (`categoria_padre_id`),
   CONSTRAINT `fk_categoria_categoria1` FOREIGN KEY (`categoria_padre_id`) REFERENCES `categoria` (`id`)
@@ -503,6 +540,7 @@ CREATE TABLE `direccion` (
   `createdby` varchar(45) DEFAULT NULL,
   `updatedby` varchar(45) DEFAULT NULL,
   `version` int DEFAULT NULL,
+  `referencia` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_direccion_entidad_idx` (`entidad_id`),
   KEY `fk_direccion_ubigeo_idx` (`ubigeo_id`),
@@ -518,6 +556,48 @@ CREATE TABLE `direccion` (
 LOCK TABLES `direccion` WRITE;
 /*!40000 ALTER TABLE `direccion` DISABLE KEYS */;
 /*!40000 ALTER TABLE `direccion` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `empleado`
+--
+
+DROP TABLE IF EXISTS `empleado`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `empleado` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `persona_id` int NOT NULL,
+  `codigo` varchar(45) DEFAULT NULL,
+  `fechaingreso` datetime DEFAULT NULL,
+  `tipo_titulo` varchar(45) DEFAULT NULL,
+  `apreciacion` int DEFAULT NULL,
+  `cargofamiliar` varchar(45) DEFAULT NULL COMMENT 'si tiene a su cargo una familia',
+  `datecreated` datetime DEFAULT NULL,
+  `dateupdated` datetime DEFAULT NULL,
+  `createdby` varchar(45) DEFAULT NULL,
+  `updatedby` varchar(45) DEFAULT NULL,
+  `version` int DEFAULT NULL,
+  `estado` varchar(45) DEFAULT NULL,
+  `reporta_id` int DEFAULT NULL,
+  `supervisorausencias_id` int DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_empleado_persona1_idx` (`persona_id`),
+  KEY `fk_empleado_empleado1_idx` (`reporta_id`),
+  KEY `fk_empleado_empleado2_idx` (`supervisorausencias_id`),
+  CONSTRAINT `fk_empleado_empleado1` FOREIGN KEY (`reporta_id`) REFERENCES `empleado` (`id`),
+  CONSTRAINT `fk_empleado_empleado2` FOREIGN KEY (`supervisorausencias_id`) REFERENCES `empleado` (`id`),
+  CONSTRAINT `fk_empleado_persona1` FOREIGN KEY (`persona_id`) REFERENCES `persona` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `empleado`
+--
+
+LOCK TABLES `empleado` WRITE;
+/*!40000 ALTER TABLE `empleado` DISABLE KEYS */;
+/*!40000 ALTER TABLE `empleado` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -753,6 +833,58 @@ LOCK TABLES `personaorganizacion` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `producto`
+--
+
+DROP TABLE IF EXISTS `producto`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `producto` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `categoria_id` int NOT NULL,
+  `marca_id` int NOT NULL,
+  `laboratorio_id` int NOT NULL,
+  `tipo_producto` varchar(45) DEFAULT NULL,
+  `tipo_presentacion` varchar(45) DEFAULT NULL,
+  `tipo_unidadmedida` varchar(45) DEFAULT NULL,
+  `nombre` varchar(100) DEFAULT NULL,
+  `descripcion` varchar(225) DEFAULT NULL,
+  `uso` varchar(225) DEFAULT NULL,
+  `generico` varchar(45) DEFAULT NULL,
+  `puedevenderse` varchar(45) DEFAULT NULL,
+  `puedecomprarse` varchar(45) DEFAULT NULL,
+  `puedetransferirse` varchar(45) DEFAULT NULL,
+  `referenciainterna` varchar(45) DEFAULT NULL,
+  `codigobarras` varchar(45) DEFAULT NULL,
+  `peso` decimal(3,2) DEFAULT NULL,
+  `volumen` varchar(45) DEFAULT NULL,
+  `stockinicial` int DEFAULT NULL,
+  `fraccioninicial` int DEFAULT NULL,
+  `datecreated` datetime DEFAULT NULL,
+  `dateupdated` datetime DEFAULT NULL,
+  `createdby` varchar(45) DEFAULT NULL,
+  `updatedby` varchar(45) DEFAULT NULL,
+  `version` int DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_producto_categoria1_idx` (`categoria_id`),
+  KEY `fk_producto_marca1_idx` (`marca_id`),
+  KEY `fk_producto_organizacion1_idx` (`laboratorio_id`),
+  CONSTRAINT `fk_producto_categoria1` FOREIGN KEY (`categoria_id`) REFERENCES `categoria` (`id`),
+  CONSTRAINT `fk_producto_marca1` FOREIGN KEY (`marca_id`) REFERENCES `marca` (`id`),
+  CONSTRAINT `fk_producto_organizacion1` FOREIGN KEY (`laboratorio_id`) REFERENCES `organizacion` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `producto`
+--
+
+LOCK TABLES `producto` WRITE;
+/*!40000 ALTER TABLE `producto` DISABLE KEYS */;
+/*!40000 ALTER TABLE `producto` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `regla`
 --
 
@@ -972,4 +1104,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-10-24 17:44:14
+-- Dump completed on 2023-10-24 23:50:06
