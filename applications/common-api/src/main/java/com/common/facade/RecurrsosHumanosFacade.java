@@ -21,9 +21,13 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class RecurrsosHumanosFacade {
 	@Autowired
+	DatosMaestrosFacade datosMaestrosFacade;
+	@Autowired
 	AreaService areaService;
 	@Autowired
 	CargoService cargoService;
+	@Autowired
+	SucursalService sucursalService;
 
 	public List<Area> findAreaList() {
 		return areaService.findList();
@@ -43,12 +47,8 @@ public class RecurrsosHumanosFacade {
 	}
 	@Transactional(readOnly = false,rollbackFor=Exception.class)
 	public void saveArea(List<Area> areaList) {
-		for (Area area :
-				areaList) {
-			if (area.getParentArea()!=null){
-				area.setParentArea(areaService.findById(area.getParentArea().getId()));
-			}
-			areaService.save(area);
+		for (Area area : areaList) {
+			saveArea(area);
 		}
 
 	}
@@ -79,12 +79,8 @@ public class RecurrsosHumanosFacade {
 	}
 	@Transactional(readOnly = false,rollbackFor=Exception.class)
 	public void saveCargo(List<Cargo> cargoList) {
-		for (Cargo cargo :
-				cargoList) {
-			if (cargo.getParentCargo()!=null){
-				cargo.setParentCargo(cargoService.findById(cargo.getParentCargo().getId()));
-			}
-			cargoService.save(cargo);
+		for (Cargo cargo : cargoList) {
+			saveCargo(cargo);
 		}
 
 	}
@@ -96,5 +92,36 @@ public class RecurrsosHumanosFacade {
 	}
 	public DataTablesOutput findCargoDataTablesList(DataTablesInput<Cargo> bean) {
 		return cargoService.findDataTablesList(bean);
+	}
+
+
+	public List<Sucursal> findSucursalList() {
+		return sucursalService.findList();
+	}
+	public Sucursal findSucursalById(Long id){
+		return sucursalService.findById(id);
+	}
+	@Transactional(readOnly = false,rollbackFor=Exception.class)
+	public void saveSucursal(Sucursal sucursal) {
+		if (sucursal.getOrganizacion()!=null){
+			sucursal.setOrganizacion(datosMaestrosFacade.findOrganizacionById(sucursal.getOrganizacion().getId()));
+		}
+		sucursalService.save(sucursal);
+	}
+	@Transactional(readOnly = false,rollbackFor=Exception.class)
+	public void saveSucursal(List<Sucursal> sucursalList) {
+		for (Sucursal sucursal : sucursalList) {
+			saveSucursal(sucursal);
+		}
+
+	}
+	public List<Sucursal> findSucursalByEstado(String estado) {
+		return sucursalService.findByEstado(estado);
+	}
+	public Sucursal findSucursalByNombre(String nombre) {
+		return sucursalService.findFirstByNombre(nombre);
+	}
+	public DataTablesOutput findSucursalDataTablesList(DataTablesInput<Sucursal> bean) {
+		return sucursalService.findDataTablesList(bean);
 	}
 }

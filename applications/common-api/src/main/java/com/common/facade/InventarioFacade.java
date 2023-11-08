@@ -5,10 +5,8 @@ package com.common.facade;
 
 import com.DataTablesInput;
 import com.DataTablesOutput;
-import com.common.domain.Cargo;
-import com.common.domain.Marca;
-import com.common.domain.Componente;
-import com.common.domain.TipoBase;
+import com.common.domain.*;
+import com.common.service.CategoriaService;
 import com.common.service.MarcaService;
 import com.common.service.ComponenteService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +30,8 @@ public class InventarioFacade {
 	MarcaService marcaService;
 	@Autowired
 	ComponenteService componenteService;
+	@Autowired
+	CategoriaService categoriaService;
 
 	public List<Marca> findMarcaList() {
 		return marcaService.findList();
@@ -87,5 +87,38 @@ public class InventarioFacade {
 	public DataTablesOutput findComponenteDataTablesList(DataTablesInput<Componente> dataTablesInput) {
 		DataTablesOutput dataTablesOutput = componenteService.findDataTablesList(dataTablesInput);
 		return dataTablesOutput;
+	}
+
+	public List<Categoria> findCategoriaList() {
+		return categoriaService.findList();
+	}
+	public List<Categoria> findCategoriaByParentCategoriaId(Long parentCategoriaId){
+		return categoriaService.findByParentCategoriaId(parentCategoriaId);
+	}
+	public Categoria findCategoriaById(Long id){
+		return categoriaService.findById(id);
+	}
+	@Transactional(readOnly = false,rollbackFor=Exception.class)
+	public void saveCategoria(Categoria categoria) {
+		if (categoria.getCategoriapadre()!=null){
+			categoria.setCategoriapadre(categoriaService.findById(categoria.getCategoriapadre().getId()));
+		}
+		categoriaService.save(categoria);
+	}
+	@Transactional(readOnly = false,rollbackFor=Exception.class)
+	public void saveCategoria(List<Categoria> categoriaList) {
+		for (Categoria categoria : categoriaList) {
+			saveCategoria(categoria);
+		}
+
+	}
+	public List<Categoria> findCategoriaByStatus(String status) {
+		return categoriaService.findByStatus(status);
+	}
+	public Categoria findCategoriaByNombre(String nombre) {
+		return categoriaService.findByNombre(nombre);
+	}
+	public DataTablesOutput findCategoriaDataTablesList(DataTablesInput<Categoria> bean) {
+		return categoriaService.findDataTablesList(bean);
 	}
 }
