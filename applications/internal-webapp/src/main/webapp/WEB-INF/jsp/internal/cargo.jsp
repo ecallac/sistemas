@@ -145,6 +145,7 @@
 			}
 			createTableAjax(tableId,fileTitle,ajaxUrl,formData,jsonColumns,jsonColumnDefs,columnsExport,exportColumnCustom);
 			populateSelect(controllerName,'enabledCargos','parentCargoId');
+			populateSelect(controllerName,'enabledCargos','parentCargoIdSearch');
 		}
 
 		function search(){

@@ -5,6 +5,7 @@ package com.internal.web.service.integration;
 
 import com.DataTablesInput;
 import com.DataTablesOutput;
+import com.common.Cargo;
 import com.common.Organizacion;
 import org.codehaus.jackson.type.TypeReference;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,5 +48,8 @@ public class OrganizacionIntegration extends ServiceIntegrationAbstract<Organiza
 	}
 	public Organizacion saveEntidad(Organizacion organizacion)  throws Exception {
 		return setObjectToPostRequest(api+"/"+basePath+"/saveOrganizacion", organizacion,Organizacion.class);
+	}
+	public List<Organizacion> findActivos()  throws Exception {
+		return getObjectListFromGetRequest(api+"/"+basePath+"/findActivos",new TypeReference<List<Organizacion>>(){});
 	}
 }

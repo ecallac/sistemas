@@ -7,7 +7,7 @@ import java.util.List;
 
 import com.DataTablesInput;
 import com.DataTablesOutput;
-import com.common.domain.Area;
+import com.common.domain.*;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,8 +19,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.common.domain.Organizacion;
-import com.common.domain.Persona;
 import com.common.facade.DatosMaestrosFacade;
 
 /**
@@ -36,7 +34,14 @@ public class EntidadController {
     @Autowired
     DatosMaestrosFacade datosMaestrosFacade;
 
-
+    @RequestMapping(value = "/findById", method = {RequestMethod.GET})
+    public ResponseEntity<?> findById(@RequestParam(value = "id", required = true) Long id) {
+        Entidad entity = datosMaestrosFacade.findEntidadById(id);
+        if (entity==null) {
+            return new ResponseEntity(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity(entity,HttpStatus.OK);
+    }
 
 
 }

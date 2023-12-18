@@ -4,24 +4,24 @@
 package com.internal.web.controller;
 
 import com.*;
-import com.common.*;
-import com.common.cont.TipoBaseConst;
+import com.common.Area;
+import com.common.Categoria;
+import com.common.ReglaDetalle;
+import com.common.TipoBase;
 import com.internal.web.service.LoginService;
-import com.internal.web.service.integration.OrganizacionIntegration;
+import com.internal.web.service.integration.CategoriaIntegration;
 import com.internal.web.service.integration.ReglaDetalleIntegration;
 import com.internal.web.service.integration.TipoBaseIntegration;
 import com.internal.web.utils.Constants;
 import com.internal.web.utils.InternalUtils;
-import com.internal.web.view.OrganizacionView;
+import com.internal.web.view.CategoriaView;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -39,18 +39,18 @@ import java.util.stream.Collectors;
  *
  */
 @Controller
-@RequestMapping("/"+ OrganizacionController.NAME)
-public class OrganizacionController {
-	public static final String NAME="organizacion";
+@RequestMapping("/"+ CategoriaController.NAME)
+public class CategoriaController {
+	public static final String NAME="categoria";
 	private Logger logger = Logger.getLogger(this.getClass());
 	@Autowired
 	LoginService loginService;
 	@Autowired
-	OrganizacionIntegration organizacionIntegration;
-	@Autowired
-	TipoBaseIntegration tipoBaseIntegration;
+	CategoriaIntegration categoriaIntegration;
 	@Autowired
 	ReglaDetalleIntegration reglaDetalleIntegration;
+	@Autowired
+	TipoBaseIntegration tipoBaseIntegration;
 	
 	@RequestMapping(value={"","/"}, method={RequestMethod.GET,RequestMethod.POST})
 	public ModelAndView list(HttpSession session,Principal principal){
@@ -61,14 +61,15 @@ public class OrganizacionController {
 		}catch (Exception e){
 			logger.error(e.getMessage(),e);
 		}
-		modelAndView.setViewName("organizacion");
+		modelAndView.setViewName(CategoriaController.NAME);
 		return modelAndView;
 	}
-	@RequestMapping(value = "/enabledOrganizacions", method = {RequestMethod.GET,RequestMethod.POST})
-	public @ResponseBody Map<String, Object> initializeEnableOrganizacions() {
+	
+	@RequestMapping(value = "/enabledCategorias", method = {RequestMethod.GET,RequestMethod.POST})
+	public @ResponseBody Map<String, Object> initializeEnableCategorias() {
 		Map<String, Object> map = new HashMap<>();
 		try{
-			List<Organizacion> list = organizacionIntegration.findActivos();
+			List<Categoria> list = categoriaIntegration.findActivos();
 			if (list != null) {
 				map.put("data", list);
 			} else {
@@ -82,8 +83,28 @@ public class OrganizacionController {
 		}
 		return map;
 	}
+	
+  @RequestMapping(value = "/list", method = {RequestMethod.GET,RequestMethod.POST})
+  public @ResponseBody Map<String, Object> getAll() {
+      Map<String, Object> map = new HashMap<String, Object>();
+	  try{
+		  List<Categoria> list = categoriaIntegration.findList();
+		  if (list != null) {
+			  map.put("data", list);
+		  } else {
+			  map.put("data", new ArrayList<Categoria>());
+		  }
+		  map.put(Constants.STATUS, Constants.OK);
+	  }catch (Exception e){
+		  logger.error(e.getMessage(),e);
+		  map.put(Constants.STATUS, Constants.ERROR);
+		  map.put(Constants.MESSAGE, Utils.getErrorMessage(Constants.ERROR_MESSAGE_GET,e.getMessage()));
+	  }
+      return map;
+  }
+	
 	@RequestMapping(value = "/save", method = {RequestMethod.POST})
-    public @ResponseBody  Map<String, Object> save(@RequestBody @Valid OrganizacionView view, BindingResult result, Principal principal) {
+    public @ResponseBody  Map<String, Object> save(@RequestBody @Valid CategoriaView view, BindingResult result, Principal principal) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		if(result.hasErrors()){
 	         
@@ -98,23 +119,19 @@ public class OrganizacionController {
 	         map.put("messages", errors);
 	         return map;
 	      }
+        
 
 		try{
-
-			Organizacion bean = (Organizacion) BeanParser.parseObjectToNewClass(view, Organizacion.class, null);
+			Categoria bean = (Categoria) BeanParser.parseObjectToNewClass(view, Categoria.class, null);
+			if (StringUtils.isNotBlank(view.getCategoriapadreId())) {
+				bean.setCategoriapadre((Categoria)BeanParser.parseObjectToNewClass(view.getCategoriapadre(), Categoria.class, null));
+			}
 			if (bean.getId()==null) {
 				bean.setCreatedBy(principal.getName());
-				TipoBase tipoBase = tipoBaseIntegration.findByCodigo(TipoBaseConst.TIPOBASE_CODIGO_ORGANIZACION.getCode());
-				Entidad entidad = new Entidad();
-				entidad.setCreatedBy(principal.getName());
-				entidad.setTipoEntidad(tipoBase.getCodigo());
-				bean.setEntidad(entidad);
-				organizacionIntegration.saveEntidad(bean);
 			} else {
 				bean.setUpdatedBy(principal.getName());
-				organizacionIntegration.save(bean);
 			}
-
+			categoriaIntegration.save(bean);
 
 			map.put(Constants.STATUS, Constants.OK);
 			map.put(Constants.MESSAGE, Utils.getSuccessMessage(Constants.SUCCESS_MESSAGE));
@@ -130,12 +147,13 @@ public class OrganizacionController {
     }
 	
 	@RequestMapping(value = "/load", method = {RequestMethod.POST})
-    public @ResponseBody  Map<String, Object> load(@RequestBody OrganizacionView view) {
+    public @ResponseBody  Map<String, Object> load(@RequestBody CategoriaView view) {
         Map<String, Object> map = new HashMap<String, Object>();
 
 		try{
-			Organizacion bean = organizacionIntegration.findById(view.getId());
-			OrganizacionView viewStored = (OrganizacionView)BeanParser.parseObjectToNewClass(bean, OrganizacionView.class, null);
+			Categoria bean = categoriaIntegration.findById(view.getId());
+			CategoriaView viewStored = (CategoriaView)BeanParser.parseObjectToNewClass(bean, CategoriaView.class, null);
+			viewStored.setCategoriapadre((CategoriaView)BeanParser.parseObjectToNewClass(bean.getCategoriapadre(), CategoriaView.class, null));
 			map.put("viewBean", viewStored);
 			map.put(Constants.STATUS, Constants.OK);
 		}catch (Exception e){
@@ -147,18 +165,18 @@ public class OrganizacionController {
     }
 	
 	@RequestMapping(value = "/enableDisable", method = {RequestMethod.POST})
-    public @ResponseBody  Map<String, Object> enableDisable(@RequestBody OrganizacionView view,Principal principal) {
+    public @ResponseBody  Map<String, Object> enableDisable(@RequestBody CategoriaView view,Principal principal) {
         Map<String, Object> map = new HashMap<String, Object>();
 
 		try{
 			if (view.getIds()!=null){
-				organizacionIntegration.save(castViewBeanToBaseList(view,principal));
-			}else{
-				Organizacion bean = (Organizacion) BeanParser.parseObjectToNewClass(view, Organizacion.class, null);
-				bean.setUpdatedBy(principal.getName());
-				organizacionIntegration.save(bean);
-			}
+				categoriaIntegration.save(castViewBeanToBaseList(view,principal));
+			}else {
 
+			}
+			Categoria bean = (Categoria) BeanParser.parseObjectToNewClass(view, Categoria.class, null);
+			bean.setUpdatedBy(principal.getName());
+			categoriaIntegration.save(bean);
 			map.put(Constants.STATUS, Constants.OK);
 			map.put(Constants.MESSAGE, Utils.getSuccessMessage(Constants.SUCCESS_MESSAGE));
 
@@ -169,36 +187,61 @@ public class OrganizacionController {
 		}
         return map;
     }
-	public List<Organizacion> castViewBeanToBaseList(OrganizacionView view, Principal principal){
-		List<Organizacion> list = new ArrayList<>();
+	public List<Categoria> castViewBeanToBaseList(CategoriaView view, Principal principal){
+		List<Categoria> list = new ArrayList<>();
 		for (int i = 0; i < view.getIds().length; i++) {
 			String id = view.getIds()[i];
-			Organizacion bean = (Organizacion) BeanParser.parseObjectToNewClass(view, Organizacion.class, null);
+			Categoria bean = (Categoria) BeanParser.parseObjectToNewClass(view, Categoria.class, null);
 			bean.setId(Long.valueOf(id));
 			bean.setUpdatedBy(principal.getName());
 			list.add(bean);
 		}
 		return list;
 	}
+	@RequestMapping(value = "/verifyNombre", method = {RequestMethod.POST,RequestMethod.GET})
+	public @ResponseBody  Map<String, Object> verifyNombre(@RequestParam(value = "nombre",required = true) String nombre) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		try{
+			Categoria bean = categoriaIntegration.findByNombre(nombre);
+			if (bean==null){
+				map.put(Constants.STATUS, Constants.OK);
+			}else{
+				map.put(Constants.STATUS, Constants.ERROR);
+				map.put(Constants.MESSAGE, Constants.ERROR_MESSAGE_EXIST);
+			}
+
+		}catch (Exception e){
+			logger.error(e.getMessage(),e);
+			map.put(Constants.STATUS, Constants.ERROR);
+			map.put(Constants.MESSAGE, Utils.getErrorMessage(Constants.ERROR_MESSAGE_GET,e.getMessage()));
+		}
+		return map;
+	}
+
 	@RequestMapping(value = "/findByPage", method = {RequestMethod.POST,RequestMethod.GET})
 	public @ResponseBody  Map<String, Object> findByPage(HttpServletRequest request) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		try{
 			Map<String, Object> parameterMap = InternalUtils.getParameterMap(request);
-			DataTablesInput<Organizacion> dataTablesInput = InternalUtils.createDataTablesInput(parameterMap);
-			Organizacion bean = new Organizacion();
+			DataTablesInput<Categoria> dataTablesInput = InternalUtils.createDataTablesInput(parameterMap);
+			Categoria bean = new Categoria();
 			bean.setStatus((String) parameterMap.get("status"));
-			bean.setTipoOrganizacion((String) parameterMap.get("tipoOrganizacion"));
+			Categoria parent = new Categoria();
+			String parentId = (String) parameterMap.get("categoriapadreId");
+			if (StringUtils.isNotBlank(parentId)){
+				parent.setId(Long.valueOf(parentId));
+			}
+			bean.setCategoriapadre(parent);
 			dataTablesInput.setObject(bean);
 
-			DataTablesOutput<Organizacion> dataTablesOutput = organizacionIntegration.findDataTables(dataTablesInput);
+			DataTablesOutput<Categoria> dataTablesOutput = categoriaIntegration.findDataTables(dataTablesInput);
 			if (dataTablesOutput != null) {
-				map.put("data", castOrganizacionToOrganizacionViewList(dataTablesOutput.getData()));
-				map.put("draw", dataTablesInput.getDraw());
+				map.put("data", castCategoriaToCategoriaViewList(dataTablesOutput.getData()));
+				map.put("draw", dataTablesOutput.getDraw());
 				map.put("recordsTotal", dataTablesOutput.getRecordsTotal());
 				map.put("recordsFiltered", dataTablesOutput.getRecordsFiltered());
 			} else {
-				map.put("data", new ArrayList<Organizacion>());
+				map.put("data", new ArrayList<Area>());
 			}
 
 			map.put(Constants.STATUS, Constants.OK);
@@ -211,15 +254,17 @@ public class OrganizacionController {
 		}
 		return map;
 	}
-
-	public List<OrganizacionView> castOrganizacionToOrganizacionViewList(List<Organizacion> list) throws Exception {
+	public List<CategoriaView> castCategoriaToCategoriaViewList(List<Categoria> list) throws Exception {
 		Map<String, ReglaDetalle> reglaDetalleMap = reglaDetalleIntegration.getReglasMap(reglaDetalleIntegration.findByCodigo(GeneralConstant.SWITH_LABEL_TYPE.getCode()));
 		Map<String, TipoBase> tipoBaseMap = tipoBaseIntegration.findAllMap();
 		return list.stream().map(bean -> {
-			OrganizacionView view =(OrganizacionView)BeanParser.parseObjectToNewClass(bean,OrganizacionView.class,null);
-			view.setTipoOrganizacionDescripcion(tipoBaseMap.containsKey(view.getTipoOrganizacion())?tipoBaseMap.get(view.getTipoOrganizacion()).getDescripcion():null);
+			CategoriaView view =(CategoriaView)BeanParser.parseObjectToNewClass(bean,CategoriaView.class,null);
 			view.setStatusDescripcion(tipoBaseMap.containsKey(view.getStatus())?tipoBaseMap.get(view.getStatus()).getDescripcion():null);
+			view.setTipocategoria(tipoBaseMap.containsKey(view.getTipocategoria())?tipoBaseMap.get(view.getTipocategoria()).getDescripcion():null);
+			view.setTipoestrategiaretiro(tipoBaseMap.containsKey(view.getTipoestrategiaretiro())?tipoBaseMap.get(view.getTipoestrategiaretiro()).getDescripcion():null);
 			view.setStatusType(reglaDetalleMap.containsKey(view.getStatus())?reglaDetalleMap.get(view.getStatus()).getValorcadena():null);
+			CategoriaView parentView = (CategoriaView) BeanParser.parseObjectToNewClass(bean.getCategoriapadre(),CategoriaView.class,null);
+			view.setCategoriapadre(parentView);
 			return view;
 		}).collect(Collectors.toList());
 	}

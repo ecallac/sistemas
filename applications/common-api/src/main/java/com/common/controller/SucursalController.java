@@ -42,8 +42,8 @@ public class SucursalController {
     }
 
     @RequestMapping(value = "/findActivos", method = {RequestMethod.GET})
-    public ResponseEntity<?> findByActivos() {
-        List<Sucursal> list = recurrsosHumanosFacade.findSucursalByEstado(EnableIndicator.ENABLED.getCode());
+    public ResponseEntity<?> findByActivos(@RequestParam(value = "organizacionId", required = true) Long organizacionId) {
+        List<Sucursal> list = recurrsosHumanosFacade.findSucursalByEstadoAndOrganizacionId(EnableIndicator.ENABLED.getCode(),organizacionId);
         if (CollectionUtils.isEmpty(list)) {
             return new ResponseEntity(new ArrayList<Sucursal>(),HttpStatus.NO_CONTENT);
         }

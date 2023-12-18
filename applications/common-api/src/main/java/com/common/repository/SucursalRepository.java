@@ -17,5 +17,5 @@ import java.util.List;
 public interface SucursalRepository extends JpaRepository<Sucursal, Long>,CommonRepositoryCustom<Sucursal>{
 
 	Sucursal findFirstByNombre(String nombre);
-	List<Sucursal> findByEstado(String estado);
+	List<Sucursal> findByEstadoAndOrganizacionIdOrderByNombreAsc(String estado,Long organizacionId);
 }

@@ -60,7 +60,7 @@ public class UbigeoServiceImpl implements UbigeoService {
 	}
 
 	@Override
-	public List<Ubigeo> findByParentUbigeoId(Long parentUbigeoId) {
-		return ubigeoRepository.findByParentUbigeoId(parentUbigeoId);
+	public List<Ubigeo> findByParentUbigeoIdAndEstado(Long parentUbigeoId,String estado) {
+		return ubigeoRepository.findByParentUbigeoIdAndEstadoOrderByDescripcionAsc(parentUbigeoId,estado);
 	}
 }

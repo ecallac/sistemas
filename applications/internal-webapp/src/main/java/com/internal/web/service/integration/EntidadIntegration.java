@@ -5,6 +5,8 @@ package com.internal.web.service.integration;
 
 import com.DataTablesInput;
 import com.DataTablesOutput;
+import com.common.Area;
+import com.common.Entidad;
 import com.common.Organizacion;
 import com.common.Persona;
 import org.codehaus.jackson.type.TypeReference;
@@ -20,7 +22,7 @@ import java.util.List;
  *
  */
 @Service
-public class EntidadIntegration extends ServiceIntegrationAbstract<Persona> {
+public class EntidadIntegration extends ServiceIntegrationAbstract<Entidad> {
 
 	@Autowired
 	@Value("${app.common.api}")
@@ -28,5 +30,7 @@ public class EntidadIntegration extends ServiceIntegrationAbstract<Persona> {
 	
 	String basePath="entidad";
 
-
+	public Entidad findById(Long id) throws Exception  {
+		return getObjectFromGetRequest(api+"/"+basePath+"/findById?id="+id, Entidad.class);
+	}
 }

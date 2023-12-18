@@ -69,4 +69,9 @@ public class DireccionServiceImpl implements DireccionService {
 		return direccionRepository.findByEntidadId(entidadId);
 	}
 
+	@Override
+	public List<Direccion> findByEstadoAndEntidadId(String estado, Long entidadId) {
+		return direccionRepository.findByEstadoAndEntidadIdOrderByDireccionexactaAsc(estado,entidadId);
+	}
+
 }

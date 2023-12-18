@@ -15,5 +15,5 @@ import java.util.List;
  */
 @Repository
 public interface UbigeoRepository extends JpaRepository<Ubigeo, Long>{
-	List<Ubigeo> findByParentUbigeoId(Long parentUbigeoId);
+	List<Ubigeo> findByParentUbigeoIdAndEstadoOrderByDescripcionAsc(Long parentUbigeoId,String estado);
 }

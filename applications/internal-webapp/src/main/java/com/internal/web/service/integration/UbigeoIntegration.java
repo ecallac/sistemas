@@ -28,7 +28,7 @@ public class UbigeoIntegration extends ServiceIntegrationAbstract<Ubigeo> {
 		return getObjectFromGetRequest(api+"/"+basePath+"/findById?id="+id, Ubigeo.class);
 	}
 	public List<Ubigeo> findByParentUbigeoId(Long parentUbigeoId)  throws Exception {
-		return getObjectListFromGetRequest(api+"/"+basePath+"/findByParentUbigeoId?parentUbigeoId="+parentUbigeoId,new TypeReference<List<Ubigeo>>(){});
+		return getObjectListFromGetRequest(api+"/"+basePath+"/findByParentUbigeoId?parentUbigeoId="+(parentUbigeoId==null?"":parentUbigeoId),new TypeReference<List<Ubigeo>>(){});
 	}
 	public Ubigeo save(Ubigeo ubigeo)  throws Exception {
 		return setObjectToPostRequest(api+"/"+basePath+"/save", ubigeo,Ubigeo.class);

@@ -5,7 +5,9 @@ package com.common.controller;
 
 import com.DataTablesInput;
 import com.DataTablesOutput;
+import com.common.domain.Categoria;
 import com.common.domain.Organizacion;
+import com.common.enums.EnableIndicator;
 import com.common.facade.DatosMaestrosFacade;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -37,7 +40,14 @@ public class OrganizacionController {
         }
         return new ResponseEntity(entity,HttpStatus.OK);
     }
-
+    @RequestMapping(value = "/findActivos", method = {RequestMethod.GET})
+    public ResponseEntity<?> findByActivos() {
+        List<Organizacion> list = datosMaestrosFacade.findOrganizacionByStatus(EnableIndicator.ENABLED.getCode());
+        if (CollectionUtils.isEmpty(list)) {
+            return new ResponseEntity(new ArrayList<Categoria>(),HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity(list,HttpStatus.OK);
+    }
     @RequestMapping(value = "/save", method = {RequestMethod.POST})
     public ResponseEntity<?> save(@RequestBody Organizacion bean) {
         try {

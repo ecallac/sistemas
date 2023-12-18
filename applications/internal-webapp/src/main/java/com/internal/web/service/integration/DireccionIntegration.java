@@ -30,6 +30,9 @@ public class DireccionIntegration extends ServiceIntegrationAbstract<Direccion> 
 	public List<Direccion> findByEntidadId(Long entidadId)  throws Exception {
 		return getObjectListFromGetRequest(api+"/"+basePath+"/findByEntidadId?entidadId="+entidadId,new TypeReference<List<Direccion>>(){});
 	}
+	public List<Direccion> findEnabledByEntidadId(Long entidadId)  throws Exception {
+		return getObjectListFromGetRequest(api+"/"+basePath+"/findEnabledByEntidadId?entidadId="+entidadId,new TypeReference<List<Direccion>>(){});
+	}
 	public Direccion save(Direccion direccion)  throws Exception {
 		return setObjectToPostRequest(api+"/"+basePath+"/save", direccion,Direccion.class);
 	}

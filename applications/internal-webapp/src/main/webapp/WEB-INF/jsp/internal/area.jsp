@@ -139,6 +139,7 @@
 			}
 			createTableAjax(tableId,fileTitle,ajaxUrl,formData,jsonColumns,jsonColumnDefs,columnsExport,exportColumnCustom);
 			populateSelect(controllerName,'enabledAreas','parentAreaId');
+			populateSelect(controllerName,'enabledAreas','parentAreaIdSearch');
 		}
 
 		function search(){

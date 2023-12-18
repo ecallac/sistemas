@@ -141,6 +141,7 @@
 						return "<td>"+
 								makeButton("Edit","edit("+row.id+")","data-bs-toggle='modal' data-bs-target='#Form'",imgEdit)+
 								value+
+								makeButton("Administrar Sucursales","managesucursales("+row.id+")","",imgList)+
 								"</td>" ;
 
 					}
@@ -210,7 +211,9 @@
 			});
 		});
 
-
+		function managesucursales(id){
+			window.location.href = contexPath+"/sucursal?organizacionId="+id;
+		}
 	</script>
 	<style type="text/css">
 

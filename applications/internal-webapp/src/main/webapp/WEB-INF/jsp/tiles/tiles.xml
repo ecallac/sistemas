@@ -30,9 +30,6 @@
     <definition name="cargo" extends="template">
         <put-attribute name="body" value="/WEB-INF/jsp/internal/cargo.jsp" />
     </definition>
-    <definition name="sucursal" extends="template">
-        <put-attribute name="body" value="/WEB-INF/jsp/internal/sucursal.jsp" />
-    </definition>
     <definition name="marca" extends="template">
         <put-attribute name="body" value="/WEB-INF/jsp/internal/marca.jsp" />
     </definition>
@@ -53,6 +50,18 @@
     </definition>
     <definition name="organizacion" extends="template">
         <put-attribute name="body" value="/WEB-INF/jsp/internal/organizacion.jsp" />
+    </definition>
+    <definition name="categoria" extends="template">
+        <put-attribute name="body" value="/WEB-INF/jsp/internal/categoria.jsp" />
+    </definition>
+    <definition name="sucursal" extends="template">
+        <put-attribute name="body" value="/WEB-INF/jsp/internal/sucursal.jsp" />
+    </definition>
+    <definition name="direccion" extends="template">
+        <put-attribute name="body" value="/WEB-INF/jsp/internal/direccion.jsp" />
+    </definition>
+    <definition name="empleado" extends="template">
+        <put-attribute name="body" value="/WEB-INF/jsp/internal/empleado.jsp" />
     </definition>
   
 </tiles-definitions>

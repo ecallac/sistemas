@@ -4,6 +4,7 @@
 package com.common.controller;
 
 import com.common.domain.Ubigeo;
+import com.common.enums.EnableIndicator;
 import com.common.facade.DatosMaestrosFacade;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,8 +29,8 @@ public class UbigeoController {
     DatosMaestrosFacade datosMaestrosFacade;
     
     @RequestMapping(value = "/findByParentUbigeoId", method = {RequestMethod.GET})
-    public ResponseEntity<?> findByParentUbigeoId(@RequestParam(value = "parentUbigeoId", required = true) Long parentUbigeoId) {
-    	List<Ubigeo> list = datosMaestrosFacade.findUbigeoByParentUbigeoId(parentUbigeoId);
+    public ResponseEntity<?> findByParentUbigeoId(@RequestParam(value = "parentUbigeoId", required = false) Long parentUbigeoId) {
+    	List<Ubigeo> list = datosMaestrosFacade.findUbigeoByParentUbigeoIdAndEstado(parentUbigeoId, EnableIndicator.ENABLED.getCode());
 		if (CollectionUtils.isEmpty(list)) {
         	return new ResponseEntity(HttpStatus.NO_CONTENT);
         }

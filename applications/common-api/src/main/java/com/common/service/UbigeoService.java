@@ -13,6 +13,6 @@ import java.util.List;
  */
 public interface UbigeoService extends BaseService<Ubigeo> {
 
-    List<Ubigeo> findByParentUbigeoId(Long parentUbigeoId);
+    List<Ubigeo> findByParentUbigeoIdAndEstado(Long parentUbigeoId,String estado);
 
 }

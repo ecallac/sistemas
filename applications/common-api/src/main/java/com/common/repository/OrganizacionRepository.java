@@ -3,10 +3,7 @@
  */
 package com.common.repository;
 
-import com.common.domain.Area;
-import com.common.domain.Entidad;
-import com.common.domain.Organizacion;
-import com.common.domain.Persona;
+import com.common.domain.*;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -24,4 +21,5 @@ public interface OrganizacionRepository extends JpaRepository<Organizacion, Long
 	Organizacion findOrganizacionByEntidadId(@Param("entidadId")Long entidadId);
 	@Query("select rp from Organizacion rp WHERE rp.razonsocial like :termino% or rp.numeroidentificacion like :termino%")
 	List<Organizacion> findByRazonSocialONumeroIdentificacion(@Param("termino")String termino);
+	List<Organizacion> findByStatus(String status);
 }

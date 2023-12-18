@@ -19,4 +19,5 @@ public interface OrganizacionService extends BaseService<Organizacion>{
 	Organizacion findOrganizacionByEntidadId(Long entidadId);
 	List<Organizacion> findByRazonSocialONumeroIdentificacion(String termino);
 	DataTablesOutput<Organizacion> findDataTablesList(DataTablesInput<Organizacion> dataTablesInput);
+	List<Organizacion> findByStatus(String status);
 }

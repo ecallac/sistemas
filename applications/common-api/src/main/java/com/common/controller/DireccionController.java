@@ -4,6 +4,7 @@
 package com.common.controller;
 
 import com.common.domain.Direccion;
+import com.common.enums.EnableIndicator;
 import com.common.facade.DatosMaestrosFacade;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,15 @@ public class DireccionController {
     	List<Direccion> list = datosMaestrosFacade.findDireccionByEntidadId(entidadId);
 		if (CollectionUtils.isEmpty(list)) {
         	return new ResponseEntity(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity(list,HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/findEnabledByEntidadId", method = {RequestMethod.GET})
+    public ResponseEntity<?> findEnabledByEntidadId(@RequestParam(value = "entidadId", required = true) Long entidadId) {
+        List<Direccion> list = datosMaestrosFacade.findDireccionByEstadoAndEntidadId(EnableIndicator.ENABLED.getCode(),entidadId);
+        if (CollectionUtils.isEmpty(list)) {
+            return new ResponseEntity(HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity(list,HttpStatus.OK);
     }

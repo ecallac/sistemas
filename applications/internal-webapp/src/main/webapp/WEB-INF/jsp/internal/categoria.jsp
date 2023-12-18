@@ -1,4 +1,4 @@
-<%@ page import="com.internal.web.controller.ReglaDetalleController" %>
+<%@ page import="com.internal.web.controller.CategoriaController" %>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1" isELIgnored="false" session="true"%>
 <%@ taglib prefix ="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
@@ -18,19 +18,18 @@
 
 
 		var contexPath = "<%=request.getContextPath() %>";
-		var controllerName = "<%=ReglaDetalleController.NAME %>";
+		var controllerName = "<%=CategoriaController.NAME %>";
 		var sEnabled="ENABLED";
 		var sDisabled="DISABLED";
 
 		function save(){
 			var formData= {
 				id: parseInt($("#id").val()),
-				condicion: $('#condicion').val(),
-				valornumero: $('#valornumero').val(),
-				valorcadena: $('#valorcadena').val(),
-				valorfecha: $('#valorfecha').val(),
-				activo: $('#activo').val(),
-				reglaId: $('#reglaId').val(),
+				nombre: $('#nombre').val(),
+				status: $('#status').val(),
+				tipocategoria: $('#tipocategoria').val(),
+				tipoestrategiaretiro: $('#tipoestrategiaretiro').val(),
+				categoriapadreId: $('#categoriapadreId').val()
 			}
 			saveCRUD(controllerName,formData,"Form");
 		}
@@ -38,35 +37,40 @@
 		function edit(idVal){
 			var formData= {
 				id: idVal
+
 			}
 			editCRUD(controllerName,formData);
 		}
 		function setFormFieldsFromServiceResponse(response){
 			$("#id").val(response.viewBean.id);
-			$('#condicion').val(response.viewBean.condicion);
-			$('#valornumero').val(response.viewBean.valornumero);
-			$('#valorcadena').val(response.viewBean.valorcadena);
-			$('#valorfecha').val(response.viewBean.valorfecha);
-			$('#activo').val(response.viewBean.activo).change();
+			$("#nombre").val(response.viewBean.nombre);
+			$('#status').val(response.viewBean.status).change();
+			$("#tipocategoria").val(response.viewBean.tipocategoria).change();
+			$("#tipoestrategiaretiro").val(response.viewBean.tipoestrategiaretiro).change();
+			$("#categoriapadreId").val(response.viewBean.categoriapadre.id).change();
 		}
 
-		function enableAndDisable(idVal,activo){
+		function enableAndDisable(idVal,status){
 			var formData= {
 				id: idVal,
-				activo:activo
+				status:status
 			}
 			enableAndDisableCRUD(controllerName,formData);
 		}
 
-		function enableAndDisableList(activo){
+		function enableAndDisableList(status){
 			var rowIds= datatableCheckboxSelectedRowList();
 			if (rowIds.length>0){
 				var formData= {
 					ids: rowIds,
-					activo:activo
+					status:status
 				}
 				enableAndDisableCRUD(controllerName,formData);
 			}
+		}
+
+		function verifyNombre(object){
+			verifyField(controllerName,'verifyNombre','nombre',object.id,object.value);
 		}
 
 		function enableDisableButtons(){
@@ -75,22 +79,26 @@
 		}
 
 		function load(){
-			var activo = $("#activoSearch").val();
-			var reglaId = "<%=request.getAttribute("reglaId") %>";
+			var status = $('#statusSearch').val();
+			var tipocategoria = $('#tipocategoriaSearch').val();
+			var tipoestrategiaretiro = $('#tipoestrategiaretiroSearch').val();
+			var categoriapadreId = $('#categoriapadreIdSearch').val();
 			var ajaxUrl = contexPath+'/'+controllerName+'/findByPage.json';
 			var formData= {
-				activo: activo,
-				reglaId: reglaId
+				status: status,
+				tipocategoria: tipocategoria,
+				tipoestrategiaretiro: tipoestrategiaretiro,
+				categoriapadreId: categoriapadreId
 			}
 			var tableId = "#table";
-			var fileTitle = "ReglaDetalle";
+			var fileTitle = "Categoria";
 			// var jsonData = response.data;
 			var jsonColumns = [
 				{ "data": "id" },
-				{ "data": "condicion"},
-				{ "data": "valornumero","defaultContent": ""},
-				{ "data": "valorcadena","defaultContent": ""},
-				{ "data": "valorfecha","defaultContent": ""}
+				{ "data": "nombre"},
+				{ "data": "tipocategoria"},
+				{ "data": "tipoestrategiaretiro"},
+				{ "data": "categoriapadre.nombre" ,"defaultContent": ""}
 			];
 			var columnsExport = [ 1,2,3,4,5];
 			var jsonColumnDefs = [
@@ -106,9 +114,9 @@
 					"targets": 5,
 					"render": function ( data, type, row ) {
 						if (type === "export"){
-							return row.activoDescripcion;
+							return row.statusDescripcion;
 						}else{
-							return "<td><span class='badge rounded-pill bg-"+row.activoType+"'>"+row.activoDescripcion+"</span></td>";
+							return "<td><span class='badge rounded-pill bg-"+row.statusType+"'>"+row.statusDescripcion+"</span></td>";
 						}
 					}
 				},
@@ -117,9 +125,9 @@
 					"targets": 6,
 					"render": function ( data, type, row ) {
 						var value = "";
-						if (row.activo===sEnabled){
+						if (row.status===sEnabled){
 							value = makeButton("Inactivar","enableAndDisable("+row.id+",sDisabled)","",imgEyeOff)
-						}else if (row.activo===sDisabled){
+						}else if (row.status===sDisabled){
 							value = makeButton("Activar","enableAndDisable("+row.id+",sEnabled)","",imgEye)
 						}
 						return "<td>"+
@@ -140,27 +148,8 @@
 				}
 			}
 			createTableAjax(tableId,fileTitle,ajaxUrl,formData,jsonColumns,jsonColumnDefs,columnsExport,exportColumnCustom);
-
-		}
-
-		function loadReglaValores(){
-			var formData= {
-				id: <%=request.getAttribute("reglaId") %>
-			}
-			$('.bindingError').remove();
-			var ajaxUrl = contexPath+'/regla/load.json';
-			var successFunction = function(response){
-				if(response.status=="OK"){
-					$("#lreglaId").val(response.viewBean.id);
-					$('#lcategoria').text(response.viewBean.categoria);
-					$('#lcodigo').text(response.viewBean.codigo);
-					$('#lnombre').text(response.viewBean.nombre);
-				}else{
-					showErrorMessage(response.message);
-				}
-			};
-
-			ajaxPost(ajaxUrl,formData,successFunction);
+			populateSelect(controllerName,'enabledCategorias','categoriapadreId');
+			populateSelect(controllerName,'enabledCategorias','categoriapadreIdSearch');
 		}
 
 		function search(){
@@ -170,24 +159,32 @@
 
 		function clearFields(){
 			$('.bindingError').remove();
+			$("#nombre").removeClass("is-invalid").removeClass("is-valid");
 			$("#id").val("");
-			$("#condicion").val("");
-			$("#valornumero").val("");
-			$("#valorcadena").val("");
-			$("#valorfecha").val("");
-			$('#activo').val("").change();
+			$("#nombre").val("");
+			$("#tipocategoria").val("").change();
+			$("#tipoestrategiaretiro").val("").change();
+			$('#status').val("").change();
+			$('#categoriapadreId').val("").change();
 		}
 
 		function clearFilter(){
-			$('#activoSearch').val("").change();
+			$('#statusSearch').val("").change();
+			$("#tipocategoriaSearch").val("").change();
+			$("#tipoestrategiaretiroSearch").val("").change();
+			$('#categoriapadreIdSearch').val("").change();
 		}
-
 		$(document).ready(function(){
-			loadReglaValores();
 			load();
-			populateSelectByCategoriaType('activo','TYPE_SWITCH');
-			populateSelectByCategoriaType('activoSearch','TYPE_SWITCH');
+			populateSelectByCategoriaType('status','TYPE_SWITCH');
+			populateSelectByCategoriaType('statusSearch','TYPE_SWITCH');
+			populateSelectByCategoriaType('tipocategoria','TYPE_CATEGORIA');
+			populateSelectByCategoriaType('tipocategoriaSearch','TYPE_CATEGORIA');
+			populateSelectByCategoriaType('tipoestrategiaretiro','TYPE_CATEGORIA_RETIRO');
+			populateSelectByCategoriaType('tipoestrategiaretiroSearch','TYPE_CATEGORIA_RETIRO');
 
+			populateSelect(controllerName,'enabledCategorias','categoriapadreId');
+			populateSelect(controllerName,'enabledCategorias','categoriapadreIdSearch');
 
 			$('.select').select2({
 				width: '100%',
@@ -212,6 +209,7 @@
 			});
 		});
 
+
 	</script>
 	<style type="text/css">
 
@@ -227,25 +225,13 @@
 
 
 
-<h1>Regla Detalle</h1>
+<h1>Categoria</h1>
 
 
 
 <div class="panel panel-default">
 	<!-- <div class="panel-heading">User List Display tag</div> -->
 	<div class="panel-body">
-
-		<div class="card flex-fill">
-			<div class="card-body">
-				<h5 class="h6 card-title">Regla</h5>
-				<div class="text-start">
-					<p class="text-muted"><input type="hidden" id="lreglaId"></p>
-					<p class="text-muted"><strong>Categoria :</strong><span class="ms-2" id="lcategoria"></span></p>
-					<p class="text-muted"><strong>Codigo :</strong> <span class="ms-2" id="lcodigo"></span></p>
-					<p class="text-muted"><strong>Nombre :</strong> <span class="ms-2" id="lnombre"></span></p>
-				</div>
-			</div>
-		</div>
 
 		<div class="card flex-fill">
 			<div class="card-header">
@@ -271,7 +257,7 @@
 			<div class="card-body">
 				<table id="table" align="center" class="table table-striped table-sm table-hover" style="width: 100%">
 					<thead>
-					<tr><th></th><th>Condicion</th><th>Numero</th><th>Cadena</th><th>Fecha</th><th>Estado</th><th>Acciones</th></tr>
+					<tr><th></th><th>Nombre</th><th>Tipo de Categoria</th><th>Tipo de estaregia de retiro</th><th>Parent</th><th>Estado</th><th>Acciones</th></tr>
 					</thead>
 				</table>
 			</div>
@@ -294,7 +280,7 @@
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h4 class="modal-title">ReglaDetalle</h4>
+				<h4 class="modal-title">Categoria</h4>
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
 			<div class="modal-body">
@@ -307,34 +293,40 @@
 
 
 					<form class="form-horizontal">
-						<div class="mb-3 row">
-							<label for="condicion" class="col-sm-3 col-form-label">Condicion</label>
+						<div class="mb-3 row" id="div-codigo">
+							<label for="nombre" class="col-sm-3 col-form-label">Nombre</label>
 							<div class="col-sm-7">
-								<input type="text" class="form-control" id="condicion" placeholder="Condicion">
+								<input type="text" class="form-control onlyText" id="nombre" placeholder="Nombre" onchange="verifyNombre(this);">
 							</div>
 						</div>
 						<div class="mb-3 row">
-							<label for="valornumero" class="col-sm-3 col-form-label">Numero</label>
+							<label for="tipocategoria" class="col-sm-3 col-form-label">Tipo de Categoria</label>
 							<div class="col-sm-7">
-								<input type="text" class="form-control onlyDecimal" id="valornumero" placeholder="Numero">
+								<select id="tipocategoria" class="form-control input-sm selectForm">
+									<option value="">-- Seleccionar --</option>
+								</select>
 							</div>
 						</div>
 						<div class="mb-3 row">
-							<label for="valorcadena" class="col-sm-3 col-form-label">Cadena</label>
+							<label for="tipoestrategiaretiro" class="col-sm-3 col-form-label">Tipo de Estrategia de Retiro</label>
 							<div class="col-sm-7">
-								<input type="text" class="form-control" id="valorcadena" placeholder="Cadena">
+								<select id="tipoestrategiaretiro" class="form-control input-sm selectForm">
+									<option value="">-- Seleccionar --</option>
+								</select>
 							</div>
 						</div>
 						<div class="mb-3 row">
-							<label for="valorfecha" class="col-sm-3 col-form-label">Fecha</label>
+							<label for="categoriapadreId" class="col-sm-3 col-form-label">Parent</label>
 							<div class="col-sm-7">
-								<input type="text" class="form-control datePicker" id="valorfecha" placeholder="Fecha" data-mask="0000/00/00">
+								<select id="categoriapadreId" class="form-control input-sm selectForm">
+									<option value="">-- Seleccionar --</option>
+								</select>
 							</div>
 						</div>
 						<div class="mb-3 row">
-							<label for="activo" class="col-sm-3 col-form-label">Estado</label>
+							<label for="status" class="col-sm-3 col-form-label">Estado</label>
 							<div class="col-sm-7">
-								<select id="activo" class="form-control input-sm selectForm">
+								<select id="status" class="form-control input-sm selectForm">
 									<option value="">-- Seleccionar --</option>
 								</select>
 							</div>
@@ -372,9 +364,33 @@
 
 					<form class="form-horizontal">
 						<div class="mb-3 row">
-							<label for="activoSearch" class="col-sm-3 col-form-label">Estado</label>
+							<label for="statusSearch" class="col-sm-3 col-form-label">Estado</label>
 							<div class="col-sm-7">
-								<select id="activoSearch" class="form-control input-sm selectFilter">
+								<select id="statusSearch" class="form-control input-sm selectFilter">
+									<option value="">-- Seleccionar --</option>
+								</select>
+							</div>
+						</div>
+						<div class="mb-3 row">
+							<label for="tipocategoriaSearch" class="col-sm-3 col-form-label">Tipo de Categoria</label>
+							<div class="col-sm-7">
+								<select id="tipocategoriaSearch" class="form-control input-sm selectFilter">
+									<option value="">-- Seleccionar --</option>
+								</select>
+							</div>
+						</div>
+						<div class="mb-3 row">
+							<label for="tipoestrategiaretiroSearch" class="col-sm-3 col-form-label">Tipo de Estrategia de Retir</label>
+							<div class="col-sm-7">
+								<select id="tipoestrategiaretiroSearch" class="form-control input-sm selectFilter">
+									<option value="">-- Seleccionar --</option>
+								</select>
+							</div>
+						</div>
+						<div class="mb-3 row">
+							<label for="categoriapadreIdSearch" class="col-sm-3 col-form-label">Parent</label>
+							<div class="col-sm-7">
+								<select id="categoriapadreIdSearch" class="form-control input-sm selectFilter">
 									<option value="">-- Seleccionar --</option>
 								</select>
 							</div>

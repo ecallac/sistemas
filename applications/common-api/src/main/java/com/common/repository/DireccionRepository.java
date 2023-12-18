@@ -17,4 +17,5 @@ import java.util.List;
 public interface DireccionRepository extends JpaRepository<Direccion, Long>{
 	List<Direccion> findByEntidadIdAndEsprincipal(Long entidadId,String esprincipal);
 	List<Direccion> findByEntidadId(Long entidadId);
+	List<Direccion> findByEstadoAndEntidadIdOrderByDireccionexactaAsc(String estado,Long entidadId);
 }

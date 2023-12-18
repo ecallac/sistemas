@@ -53,6 +53,11 @@ public class OrganizacionServiceImpl extends CommonServiceAbstract<Organizacion>
 	}
 
 	@Override
+	public List<Organizacion> findByStatus(String status) {
+		return organizacionRepository.findByStatus(status);
+	}
+
+	@Override
 	public List<Organizacion> findList() {
 		return null;
 	}

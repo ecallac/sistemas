@@ -483,8 +483,16 @@ function showSuccessMessage(message){
 		ajaxPostWithoutForm(ajaxUrl,successFunction);
 	}
 
-	function populateSelect(controller,serice,key){
-		var ajaxUrl = contexPath+'/'+controller+'/'+serice+'.json';
+
+
+
+
+
+
+
+
+	function populateSelect(controller,service,key){
+		var ajaxUrl = contexPath+'/'+controller+'/'+service;
 		var successFunction = function(response){
 			if(response.status=="OK"){
 				if(response.data.length>0){
@@ -501,6 +509,126 @@ function showSuccessMessage(message){
 		};
 		ajaxPostWithoutForm(ajaxUrl,successFunction);
 	}
+	// function populateSelectUsingEachFunction(controller,service,key,eachfunction){
+	// 	var ajaxUrl = contexPath+'/'+controller+'/'+service;
+	// 	var successFunction = function(response){
+	// 		if(response.status=="OK"){
+	// 			if(response.data.length>0){
+	// 				$('#'+key).empty();
+	// 				$('#'+key).append('<option value="">-- Seleccionar --</option>');
+	// 				$.each(response.data, eachfunction);
+	// 			}
+	// 		}else{
+	// 			showErrorMessage(response.message);
+	// 		}
+	// 	};
+	// 	ajaxPostWithoutForm(ajaxUrl,successFunction);
+	// }
+
+	// function populateSelectByParent(controller,service,key,parentField){
+	// 	var parentId = $('#'+parentField).val();
+	// 	if(parentId!=''){
+	// 		var ajaxUrl = contexPath+'/'+controller+'/'+service+'?parentId='+parentId;
+	// 		var successFunction = function(response){
+	// 			if(response.status=="OK"){
+	// 				if(response.data.length>0){
+	// 					$('#'+key).empty();
+	// 					$('#'+key).append('<option value="">-- Seleccionar --</option>');
+	// 					$.each(response.data, function(i, row) {
+	// 						$('#'+key).append('<option value="' + row.id + '">' + row.nombre + '</option>');
+	// 					});
+	// 				}
+	// 				if(response.entidadId!=null){
+	// 					$("#entidadId").val(response.entidadId);
+	// 				}
+	// 			}else{
+	// 				showErrorMessage(response.message);
+	// 			}
+	//
+	// 		};
+	// 		ajaxPostWithoutForm(ajaxUrl,successFunction);
+	// 	}else{
+	// 		$('#'+key).empty();
+	// 		$('#'+key).append('<option value="">-- Seleccionar --</option>');
+	// 	}
+	// }
+
+
+
+// var options = {
+// 	controller: 'tuControlador',
+// 	service: 'tuServicio',
+// 	key: 'tuKey',
+//  paramsAndValues: 'tuParametroyvaloradicional'
+// 	eachfunction: function (i, row) {
+// 		// tu lógica personalizada para el each
+// 	},
+// 	addResponseTask: function (response) {
+// 		// tu lógica personalizada para el response
+// 	}
+// };
+// populateSelectBox(options);
+
+/**
+ * Pobla un cuadro de selección (select box) mediante una solicitud AJAX.
+ * @param {Object} options - Objeto que contiene las opciones para la función.
+ * @param {string} options.controller - Nombre del controlador para la solicitud.
+ * @param {string} options.service - Nombre del servicio para la solicitud.
+ * @param {string} options.key - ID del cuadro de selección que se llenará.
+ * @param {string} [options.paramsAndValues] - Parámetros y valores adicionales para la URL de la solicitud.
+ * @param {function} [options.addEachfunction] - Función personalizada a aplicar a cada elemento de la respuesta.
+ * @param {function} [options.addResponseTask] - Función personalizada para ejecutarse como tarea adicional de la respuesta.
+ */
+function populateSelectBox(options) {
+	// Verifica si hay parámetros y valores adicionales
+	var localparamsAndValues = options.paramsAndValues || '';
+	var parameterSeparator = localparamsAndValues !== '' ? '?' : '';
+
+	// Construye la URL de la solicitud AJAX
+	var ajaxUrl = contexPath + '/' + options.controller + '/' + options.service + parameterSeparator + localparamsAndValues;
+
+	// Función de éxito que se ejecuta cuando la solicitud AJAX tiene éxito
+	var successFunction = function (response) {
+		if (response.status === "OK") {
+			$('#' + options.key).empty();
+			$('#' + options.key).append('<option value="">-- Seleccionar --</option>');
+			// Llena el cuadro de selección con las opciones recibidas
+			if (response.data.length > 0) {
+				// Aplica la función personalizada a cada elemento si está definida
+				if (typeof options.addEachfunction === 'function') {
+					$.each(response.data, options.addEachfunction);
+				} else {
+					// De lo contrario, agrega opciones predeterminadas al cuadro de selección
+					$.each(response.data, function (i, row) {
+						$('#' + options.key).append('<option value="' + row.id + '">' + row.nombre + '</option>');
+					});
+				}
+			}
+
+			// Actualiza el valor de entidadId si está presente en la respuesta
+			// if (response.entidadId !== null) {
+			// 	$("#entidadId").val(response.entidadId);
+			// }
+
+			if (typeof options.addResponseTask === 'function') {
+				options.addResponseTask(response);
+			}
+		} else {
+			// Muestra un mensaje de error en caso de que la respuesta no sea exitosa
+			showErrorMessage(response.message);
+		}
+	};
+
+	// Realiza la solicitud AJAX utilizando la URL y la función de éxito especificadas
+	ajaxPostWithoutForm(ajaxUrl, successFunction);
+}
+
+
+
+
+
+
+
 
 	function datatableEnableDisableButtons(arrayKey){
 		var cheked=false;

@@ -145,6 +145,9 @@ public class DatosMaestrosFacade {
 	public DataTablesOutput<Organizacion> findOrganizacionDataTablesList(DataTablesInput<Organizacion> dataTablesInput){
 		return organizacionService.findDataTablesList(dataTablesInput);
 	}
+	public List<Organizacion> findOrganizacionByStatus(String status) {
+		return organizacionService.findByStatus(status);
+	}
 	@Transactional(readOnly = false,rollbackFor=Exception.class)
 	public void saveEntidadPersona(Persona persona) {
 		entidadService.savePersona(persona);
@@ -226,8 +229,8 @@ public class DatosMaestrosFacade {
 		return reglaService.findByActivo(activo);
 	}
 
-	public List<Ubigeo> findUbigeoByParentUbigeoId(Long parentUbigeoId){
-		return ubigeoService.findByParentUbigeoId(parentUbigeoId);
+	public List<Ubigeo> findUbigeoByParentUbigeoIdAndEstado(Long parentUbigeoId,String estado){
+		return ubigeoService.findByParentUbigeoIdAndEstado(parentUbigeoId,estado);
 	}
 	public Ubigeo findUbigeoById(Long id){
 		return ubigeoService.findById(id);
@@ -240,12 +243,16 @@ public class DatosMaestrosFacade {
 	public List<Direccion> findDireccionByEntidadId(Long entidadId){
 		return direccionService.findByEntidadId(entidadId);
 	}
+	public List<Direccion> findDireccionByEstadoAndEntidadId(String estado,Long entidadId){
+		return direccionService.findByEstadoAndEntidadId(estado,entidadId);
+	}
 	public Direccion findDireccionById(Long id){
 		return direccionService.findById(id);
 	}
 	@Transactional(readOnly = false,rollbackFor=Exception.class)
 	public void saveDireccion(Direccion direccion) {
 		direccion.setUbigeo(ubigeoService.findById(direccion.getUbigeo().getId()));
+		direccion.setEntidad(entidadService.findById(direccion.getEntidad().getId()));
 		direccionService.save(direccion);
 	}
 	public EntidadRolAtributo findEntidadRolAtributoById(Long id){
@@ -258,5 +265,8 @@ public class DatosMaestrosFacade {
 	public void saveEntidadRolAtributo(EntidadRolAtributo entidadRolAtributo) {
 		entidadRolAtributo.setEntidadRol(entidadRolService.findById(entidadRolAtributo.getEntidadRol().getId()));
 		entidadRolAtributoService.save(entidadRolAtributo);
+	}
+	public Entidad findEntidadById(Long id) {
+		return entidadService.findById(id);
 	}
 }

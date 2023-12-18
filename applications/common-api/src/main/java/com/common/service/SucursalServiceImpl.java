@@ -68,8 +68,8 @@ public class SucursalServiceImpl extends CommonServiceAbstract<Sucursal> impleme
 	}
 
 	@Override
-	public List<Sucursal> findByEstado(String estado) {
-		return sucursalRepository.findByEstado(estado);
+	public List<Sucursal> findByEstadoAndOrganizacionId(String estado,Long organizacionId) {
+		return sucursalRepository.findByEstadoAndOrganizacionIdOrderByNombreAsc(estado,organizacionId);
 	}
 
 	/**

@@ -115,8 +115,8 @@ public class RecurrsosHumanosFacade {
 		}
 
 	}
-	public List<Sucursal> findSucursalByEstado(String estado) {
-		return sucursalService.findByEstado(estado);
+	public List<Sucursal> findSucursalByEstadoAndOrganizacionId(String estado,Long organizacionId) {
+		return sucursalService.findByEstadoAndOrganizacionId(estado,organizacionId);
 	}
 	public Sucursal findSucursalByNombre(String nombre) {
 		return sucursalService.findFirstByNombre(nombre);

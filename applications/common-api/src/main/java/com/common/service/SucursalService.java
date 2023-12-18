@@ -16,6 +16,6 @@ import java.util.List;
 public interface SucursalService extends BaseService<Sucursal> {
 
     Sucursal findFirstByNombre(String nombre);
-    List<Sucursal> findByEstado(String estado);
+    List<Sucursal> findByEstadoAndOrganizacionId(String estado,Long organizacionId);
     DataTablesOutput<Sucursal> findDataTablesList(DataTablesInput<Sucursal> dataTablesInput);
 }
