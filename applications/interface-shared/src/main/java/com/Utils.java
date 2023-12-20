@@ -161,14 +161,46 @@ public final class Utils {
 		return processMessage+" - "+ Utils.dateToString(new Date(), "yyyy-MM-dd HH:mm:ss");
 	}
 	public static List<String> getFieldsWithAnnotationFromEntity(Class entity, Class annotation){
-		List<String> list = new ArrayList<String>();
-		Field[] fields = entity.getDeclaredFields();
-		for (Field field:fields){
-			Annotation anotationtemp = field.getAnnotation(annotation);
-			if (anotationtemp!=null){
-				list.add(field.getName());
+//		List<String> list = new ArrayList<String>();
+//		Field[] fields = entity.getDeclaredFields();
+//		for (Field field:fields){
+//			Annotation anotationtemp = field.getAnnotation(annotation);
+//			if (anotationtemp!=null){
+//				list.add(field.getName());
+//			}
+//		}
+//		return list;
+
+		Map<String,Object> map = new HashMap<>();
+		try {
+			Field[] campos = entity.getDeclaredFields();
+			for (Field campo : campos) {
+				campo.setAccessible(true);
+				String nombreCampo = campo.getName();
+				Class<?> tipoCampo = campo.getType();
+				if (tipoCampo.getTypeName().contains("domain")){
+					Field personaField = entity.getDeclaredField(nombreCampo);
+					Field[] campos1 = tipoCampo.getDeclaredFields();
+					for (Field campo1 : campos1) {
+						campo1.setAccessible(true);
+						if (campo1.isAnnotationPresent(annotation)) {
+							map.put(nombreCampo+"."+campo1.getName(),null);
+						}
+					}
+				}
+				if (campo.isAnnotationPresent(annotation)) {
+					map.put(campo.getName(),null);
+				}
 			}
+		} catch (NoSuchFieldException e) {
+			e.printStackTrace();
 		}
+		List<String> list = new ArrayList<>();
+		for (Map.Entry<String, Object> entry : map.entrySet()) {
+			System.out.println("Field: " + entry.getKey());
+			list.add(entry.getKey());
+		}
+		list.sort((elemento1, elemento2) -> elemento1.compareTo(elemento2));
 		return list;
 	}
 }
