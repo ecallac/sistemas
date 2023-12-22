@@ -182,7 +182,16 @@
 		}
 
 		function clearDireccionFields(){
-
+			$('.bindingError').remove();
+			$("#pais").val("").change();
+			$("#departamento").val("").change();
+			$('#provincia').val("").change();
+			$('#ubigeoId').val("").change();
+			$('#direccionexacta').val("");
+			$('#codigopostal').val("");
+			$('#referencia').val("");
+			$('#esprincipal').val("").change();
+			$('#Destado').val("").change();
 		}
 
 		function populateDireccion(){
@@ -681,19 +690,19 @@
 						<div class="mb-3 row">
 							<label for="direccionexacta" class="col-sm-3 col-form-label">Direccion Exacta</label>
 							<div class="col-sm-7">
-								<input type="text" class="form-control onlyText" id="direccionexacta" placeholder="Direccion Exacta">
+								<input type="text" class="form-control" id="direccionexacta" placeholder="Direccion Exacta">
 							</div>
 						</div>
 						<div class="mb-3 row">
 							<label for="codigopostal" class="col-sm-3 col-form-label">Codigo Postal</label>
 							<div class="col-sm-7">
-								<input type="text" class="form-control onlyText" id="codigopostal" placeholder="Codigo Postal">
+								<input type="text" class="form-control" id="codigopostal" placeholder="Codigo Postal">
 							</div>
 						</div>
 						<div class="mb-3 row">
 							<label for="referencia" class="col-sm-3 col-form-label">Referencia</label>
 							<div class="col-sm-7">
-								<input type="text" class="form-control onlyText" id="referencia" placeholder="Referencia">
+								<input type="text" class="form-control" id="referencia" placeholder="Referencia">
 							</div>
 						</div>
 						<div class="mb-3 row">

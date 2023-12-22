@@ -28,6 +28,8 @@ public class RecurrsosHumanosFacade {
 	CargoService cargoService;
 	@Autowired
 	SucursalService sucursalService;
+	@Autowired
+	EmpleadoService empleadoService;
 
 	public List<Area> findAreaList() {
 		return areaService.findList();
@@ -113,7 +115,6 @@ public class RecurrsosHumanosFacade {
 		for (Sucursal sucursal : sucursalList) {
 			saveSucursal(sucursal);
 		}
-
 	}
 	public List<Sucursal> findSucursalByEstadoAndOrganizacionId(String estado,Long organizacionId) {
 		return sucursalService.findByEstadoAndOrganizacionId(estado,organizacionId);
@@ -123,5 +124,42 @@ public class RecurrsosHumanosFacade {
 	}
 	public DataTablesOutput findSucursalDataTablesList(DataTablesInput<Sucursal> bean) {
 		return sucursalService.findDataTablesList(bean);
+	}
+
+
+
+	public List<Empleado> findEmpleadoList() {
+		return empleadoService.findList();
+	}
+	public Empleado findEmpleadoById(Long id){
+		return empleadoService.findById(id);
+	}
+	@Transactional(readOnly = false,rollbackFor=Exception.class)
+	public void saveEmpleado(Empleado empleado) {
+		if (empleado.getPersona()!=null){
+			empleado.setPersona(datosMaestrosFacade.findPersonaById(empleado.getPersona().getId()));
+		}
+		if (empleado.getReporta()!=null){
+			empleado.setReporta(findEmpleadoById(empleado.getReporta().getId()));
+		}
+		if (empleado.getSupervisorausencias()!=null){
+			empleado.setSupervisorausencias(findEmpleadoById(empleado.getSupervisorausencias().getId()));
+		}
+		empleadoService.save(empleado);
+	}
+	@Transactional(readOnly = false,rollbackFor=Exception.class)
+	public void saveEmpleado(List<Empleado> empleadoList) {
+		for (Empleado empleado : empleadoList) {
+			saveEmpleado(empleado);
+		}
+	}
+	public List<Empleado> findEmpleadoByEstado(String estado) {
+		return empleadoService.findByEstado(estado);
+	}
+	public Empleado findFirstByCodigo(String codigo) {
+		return empleadoService.findFirstByCodigo(codigo);
+	}
+	public DataTablesOutput findEmpleadoDataTablesList(DataTablesInput<Empleado> bean) {
+		return empleadoService.findDataTablesList(bean);
 	}
 }

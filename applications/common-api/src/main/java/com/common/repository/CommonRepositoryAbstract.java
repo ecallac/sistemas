@@ -4,6 +4,7 @@ import com.Utils;
 import com.common.domain.Searchable;
 import com.common.domain.TipoBase;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,6 +17,7 @@ import java.util.function.LongSupplier;
 public abstract class CommonRepositoryAbstract<T> {
     @Autowired
     protected EntityManager entityManager;
+    private Logger logger = Logger.getLogger(this.getClass());
 
     public String getSortQuery(Pageable pageable) {
         String sort = "";
