@@ -15,8 +15,12 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.session.ConcurrentSessionControlAuthenticationStrategy;
+import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
 import org.springframework.web.context.request.RequestContextHolder;
 
 import com.internal.web.service.LoginService;
@@ -56,7 +60,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception{
 //		http.csrf().disable();
-		http.sessionManagement().maximumSessions(1);
+		http.sessionManagement().maximumSessions(1).sessionRegistry(sessionRegistry())
+				.expiredUrl("/login?expired");
 //		http.sessionManagement().invalidSessionUrl("/expiredSession.html");
 //		http.sessionManagement().sessionFixation().newSession();
 		
@@ -76,6 +81,16 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 					.usernameParameter("userName")
 					.passwordParameter("password")
 					.and().logout().logoutUrl("/j_spring_security_logout").logoutSuccessUrl("/login?logout");
+	}
+
+	@Bean
+	public SessionRegistry sessionRegistry() {
+		return new SessionRegistryImpl();
+	}
+
+	@Bean
+	public SessionAuthenticationStrategy sessionAuthenticationStrategy() {
+		return new ConcurrentSessionControlAuthenticationStrategy(sessionRegistry());
 	}
 	
 	@Override

@@ -52,8 +52,9 @@ public class SucursalController {
 	TipoBaseIntegration tipoBaseIntegration;
 	
 	@RequestMapping(value={"","/"}, method={RequestMethod.GET,RequestMethod.POST})
-	public ModelAndView list(HttpSession session,Principal principal){
+	public ModelAndView list(HttpSession session,Principal principal,@RequestParam(value = "organizacionId",required = true) Long organizacionId){
 		ModelAndView modelAndView = new ModelAndView();
+		session.setAttribute("orgId",organizacionId);
 		try{
 			loginService.addSessionObjects(session,principal);
 

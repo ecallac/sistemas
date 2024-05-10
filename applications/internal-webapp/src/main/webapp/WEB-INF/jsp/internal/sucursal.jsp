@@ -413,6 +413,16 @@
 				enableDisableButtons();
 
 			});
+
+			// Evento para ocultar el primer modal cuando se muestra el segundo
+			$('#direccionForm').on('show.bs.modal', function () {
+				$('#Form').css('z-index', 1040); // z-index del primer modal
+				$('#Form').modal('show');
+			});
+			// Evento para mostrar el primer modal cuando se oculta el segundo
+			$('#direccionForm').on('hidden.bs.modal', function () {
+				$('#Form').css('z-index', ''); // Restablecer z-index
+			});
 		});
 
 
@@ -482,7 +492,7 @@
 
 
 <!-- Modal -->
-<div class="modal fade" id="Form" tabindex="-1" aria-hidden="true">
+<div class="modal" id="Form" tabindex="-1">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -566,7 +576,7 @@
 </div>
 
 
-<div class="modal fade" id="Filter" tabindex="-1" aria-hidden="true">
+<div class="modal" id="Filter" tabindex="-1">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -634,7 +644,7 @@
 
 
 
-<div class="modal fade" id="direccionForm" tabindex="-1" aria-hidden="true">
+<div class="modal" id="direccionForm" tabindex="-1">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">

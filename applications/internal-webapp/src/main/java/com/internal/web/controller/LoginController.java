@@ -8,12 +8,17 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import com.Utils;
 import com.common.EntidadRolAtributo;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,17 +45,47 @@ public class LoginController {
 	LoginService loginService;
 	
 	@RequestMapping(value="/login", method={RequestMethod.GET,RequestMethod.POST})
-	public ModelAndView login(@RequestParam(value = "error",required = false) String error,@RequestParam(value = "logout",	required = false) String logout,HttpSession httpSession,Principal principal){
+	public ModelAndView login(
+			@RequestParam(value = "error",required = false) String error,
+			@RequestParam(value = "logout",	required = false) String logout,
+			@RequestParam(value = "expired",	required = false) String expired,
+			HttpSession httpSession, Principal principal, HttpServletRequest request){
 		ModelAndView modelAndView = new ModelAndView();
 		if (error != null) {
 			modelAndView.addObject("error", "Nombre de Usuario o clave es incorrecto!");
 		}
-		
+
 //		String sessionId = RequestContextHolder.currentRequestAttributes().getSessionId();
 		
 		
 		if (logout != null) {
-			modelAndView.addObject("message", "Desconectado de la p·gina con Èxito.");
+			modelAndView.addObject("message", "Se ha cerrado la sesion con exito.");
+			String sessionId = request.getSession().getId();
+			String httpsessionId = httpSession.getId();
+			Object details = SecurityContextHolder.getContext().getAuthentication().getDetails();
+			Object details1 = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			String username = SecurityContextHolder.getContext().getAuthentication().getName();
+			if (details instanceof WebAuthenticationDetails) {
+				WebAuthenticationDetails webDetails = (WebAuthenticationDetails) details;
+				String key = webDetails.getSessionId();
+				Date expirationTime = new Date();
+				// Hacer algo con la fecha y hora de expiraci√≥n
+				logger.info("session cerrada "+key + " a las " + Utils.dateToString(expirationTime,"yyyy-MM-dd"));
+				System.out.println("session cerrada "+key + " a las " + Utils.dateToString(expirationTime,"yyyy-MM-dd"));
+			}
+		}
+		if (expired != null) {
+			modelAndView.addObject("message", "La sesion a expirado");
+			Object details = SecurityContextHolder.getContext().getAuthentication().getDetails();
+			String username = SecurityContextHolder.getContext().getAuthentication().getName();
+			if (details instanceof WebAuthenticationDetails) {
+				WebAuthenticationDetails webDetails = (WebAuthenticationDetails) details;
+				String key = webDetails.getSessionId();
+				Date expirationTime = new Date();
+				// Hacer algo con la fecha y hora de expiraci√≥n
+				logger.info("session expirada "+key + " a las " + Utils.dateToString(expirationTime,"yyyy-MM-dd"));
+				System.out.println("session expirada "+key + " a las " + Utils.dateToString(expirationTime,"yyyy-MM-dd"));
+			}
 		}
 		modelAndView.setViewName("login");
 		return modelAndView;
