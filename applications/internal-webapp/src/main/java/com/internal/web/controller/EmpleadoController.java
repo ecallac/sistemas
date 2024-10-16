@@ -6,15 +6,13 @@ package com.internal.web.controller;
 import com.*;
 import com.common.*;
 import com.internal.web.service.LoginService;
-import com.internal.web.service.integration.OrganizacionIntegration;
-import com.internal.web.service.integration.SucursalIntegration;
+import com.internal.web.service.integration.EmpleadoIntegration;
 import com.internal.web.service.integration.ReglaDetalleIntegration;
 import com.internal.web.service.integration.TipoBaseIntegration;
 import com.internal.web.utils.Constants;
 import com.internal.web.utils.InternalUtils;
-import com.internal.web.view.DireccionView;
-import com.internal.web.view.OrganizacionView;
-import com.internal.web.view.SucursalView;
+import com.internal.web.view.EmpleadoView;
+import com.internal.web.view.PersonaView;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,44 +35,37 @@ import java.util.stream.Collectors;
  *
  */
 @Controller
-@RequestMapping("/"+ SucursalController.NAME)
-public class SucursalController {
-	public static final String NAME="sucursal";
+@RequestMapping("/"+ EmpleadoController.NAME)
+public class EmpleadoController {
+	public static final String NAME="empleado";
 	private Logger logger = Logger.getLogger(this.getClass());
 	@Autowired
 	LoginService loginService;
 	@Autowired
-	SucursalIntegration sucursalIntegration;
+	EmpleadoIntegration empleadoIntegration;
 	@Autowired
 	ReglaDetalleIntegration reglaDetalleIntegration;
 	@Autowired
 	TipoBaseIntegration tipoBaseIntegration;
-	@Autowired
-	OrganizacionIntegration organizacionIntegration;
 	
 	@RequestMapping(value={"","/"}, method={RequestMethod.GET,RequestMethod.POST})
-	public ModelAndView list(HttpSession session,Principal principal,@RequestParam(value = "organizacionId",required = false) Long organizacionId){
+	public ModelAndView list(HttpSession session,Principal principal){
 		ModelAndView modelAndView = new ModelAndView();
 		try{
-			session.setAttribute("orgId",organizacionId);
-			if (!ObjectUtils.isEmpty(organizacionId)){
-				Organizacion organizacion = organizacionIntegration.findById(organizacionId);
-				session.setAttribute("organizacionSelected", organizacion);
-			}
 			loginService.addSessionObjects(session,principal);
 
 		}catch (Exception e){
 			logger.error(e.getMessage(),e);
 		}
-		modelAndView.setViewName(SucursalController.NAME);
+		modelAndView.setViewName(EmpleadoController.NAME);
 		return modelAndView;
 	}
 	
-	@RequestMapping(value = "/enabledSucursals", method = {RequestMethod.GET,RequestMethod.POST})
-	public @ResponseBody Map<String, Object> initializeEnableSucursals(@RequestParam(value = "parentId",required = true) Long parentId) {
+	@RequestMapping(value = "/enabledEmpleados", method = {RequestMethod.GET,RequestMethod.POST})
+	public @ResponseBody Map<String, Object> initializeEnableEmpleados() {
 		Map<String, Object> map = new HashMap<>();
 		try{
-			List<Sucursal> list = sucursalIntegration.findActivos(parentId);
+			List<Empleado> list = empleadoIntegration.findActivos();
 			if (list != null) {
 				map.put("data", list);
 			} else {
@@ -93,11 +84,11 @@ public class SucursalController {
   public @ResponseBody Map<String, Object> getAll() {
       Map<String, Object> map = new HashMap<String, Object>();
 	  try{
-		  List<Sucursal> list = sucursalIntegration.findList();
+		  List<Empleado> list = empleadoIntegration.findList();
 		  if (list != null) {
 			  map.put("data", list);
 		  } else {
-			  map.put("data", new ArrayList<Sucursal>());
+			  map.put("data", new ArrayList<Empleado>());
 		  }
 		  map.put(Constants.STATUS, Constants.OK);
 	  }catch (Exception e){
@@ -109,7 +100,7 @@ public class SucursalController {
   }
 	
 	@RequestMapping(value = "/save", method = {RequestMethod.POST})
-    public @ResponseBody  Map<String, Object> save(@RequestBody @Valid SucursalView view, BindingResult result, Principal principal) {
+    public @ResponseBody  Map<String, Object> save(@RequestBody @Valid EmpleadoView empleadoView, BindingResult result, Principal principal) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		if(result.hasErrors()){
 	         
@@ -127,22 +118,22 @@ public class SucursalController {
         
 
 		try{
-			Sucursal bean = (Sucursal) BeanParser.parseObjectToNewClass(view, Sucursal.class, null);
-//			if (StringUtils.isNotBlank(sucursalView.getParentSucursalId())) {
-//				bean.setParentSucursal((Sucursal)BeanParser.parseObjectToNewClass(sucursalView.getParentSucursal(), Sucursal.class, null));
-//			}
-			if (bean.getId()==null) {
-				bean.setCreatedBy(principal.getName());
-			} else {
-				bean.setUpdatedBy(principal.getName());
+			Empleado empleado = (Empleado) BeanParser.parseObjectToNewClass(empleadoView, Empleado.class, null);
+			if (!ObjectUtils.isEmpty(empleadoView.getPersona())) {
+				empleado.setPersona((Persona) BeanParser.parseObjectToNewClass(empleadoView.getPersona(), Persona.class, null));
 			}
-			Organizacion organizacion = new Organizacion();
-			organizacion.setId(Long.valueOf(view.getOrganizacionId()));
-			bean.setOrganizacion(organizacion);
-			Direccion direccion = new Direccion();
-			direccion.setId(Long.valueOf(view.getDireccionId()));
-			bean.setDireccion(direccion);
-			sucursalIntegration.save(bean);
+			if (!ObjectUtils.isEmpty(empleadoView.getReporta())) {
+				empleado.setReporta((Empleado) BeanParser.parseObjectToNewClass(empleadoView.getReporta(), Empleado.class, null));
+			}
+			if (!ObjectUtils.isEmpty(empleadoView.getSupervisorausencias())) {
+				empleado.setSupervisorausencias((Empleado) BeanParser.parseObjectToNewClass(empleadoView.getSupervisorausencias(), Empleado.class, null));
+			}
+			if (empleado.getId()==null) {
+				empleado.setCreatedBy(principal.getName());
+			} else {
+				empleado.setUpdatedBy(principal.getName());
+			}
+			empleadoIntegration.save(empleado);
 
 			map.put(Constants.STATUS, Constants.OK);
 			map.put(Constants.MESSAGE, Utils.getSuccessMessage(Constants.SUCCESS_MESSAGE));
@@ -158,16 +149,16 @@ public class SucursalController {
     }
 	
 	@RequestMapping(value = "/load", method = {RequestMethod.POST})
-    public @ResponseBody  Map<String, Object> load(@RequestBody SucursalView sucursalView) {
+    public @ResponseBody  Map<String, Object> load(@RequestBody EmpleadoView empleadoView) {
         Map<String, Object> map = new HashMap<String, Object>();
 
 		try{
-			Sucursal bean = sucursalIntegration.findById(sucursalView.getId());
-			SucursalView sucursalViewStored = (SucursalView)BeanParser.parseObjectToNewClass(bean, SucursalView.class, null);
-//			sucursalViewStored.setParentSucursal((SucursalView)BeanParser.parseObjectToNewClass(bean.getParentSucursal(), SucursalView.class, null));
-			sucursalViewStored.setOrganizacionId(bean.getOrganizacion().getId().toString());
-			sucursalViewStored.setDireccionId(bean.getDireccion().getId().toString());
-			map.put("viewBean", sucursalViewStored);
+			Empleado empleado = empleadoIntegration.findById(empleadoView.getId());
+			EmpleadoView empleadoViewStored = (EmpleadoView)BeanParser.parseObjectToNewClass(empleado, EmpleadoView.class, null);
+			empleadoViewStored.setPersona((PersonaView) BeanParser.parseObjectToNewClass(empleado.getPersona(), PersonaView.class, null));
+			empleadoViewStored.setReporta((EmpleadoView)BeanParser.parseObjectToNewClass(empleado.getReporta(), EmpleadoView.class, null));
+			empleadoViewStored.setSupervisorausencias((EmpleadoView)BeanParser.parseObjectToNewClass(empleado.getSupervisorausencias(), EmpleadoView.class, null));
+			map.put("viewBean", empleadoViewStored);
 			map.put(Constants.STATUS, Constants.OK);
 		}catch (Exception e){
 			logger.error(e.getMessage(),e);
@@ -178,18 +169,18 @@ public class SucursalController {
     }
 	
 	@RequestMapping(value = "/enableDisable", method = {RequestMethod.POST})
-    public @ResponseBody  Map<String, Object> enableDisable(@RequestBody SucursalView view,Principal principal) {
+    public @ResponseBody  Map<String, Object> enableDisable(@RequestBody EmpleadoView view,Principal principal) {
         Map<String, Object> map = new HashMap<String, Object>();
 
 		try{
 			if (view.getIds()!=null){
-				sucursalIntegration.save(castViewBeanToBaseList(view,principal));
+				empleadoIntegration.save(castViewBeanToBaseList(view,principal));
 			}else {
 
 			}
-			Sucursal bean = (Sucursal) BeanParser.parseObjectToNewClass(view, Sucursal.class, null);
-			bean.setUpdatedBy(principal.getName());
-			sucursalIntegration.save(bean);
+			Empleado empleado = (Empleado) BeanParser.parseObjectToNewClass(view, Empleado.class, null);
+			empleado.setUpdatedBy(principal.getName());
+			empleadoIntegration.save(empleado);
 			map.put(Constants.STATUS, Constants.OK);
 			map.put(Constants.MESSAGE, Utils.getSuccessMessage(Constants.SUCCESS_MESSAGE));
 
@@ -200,22 +191,22 @@ public class SucursalController {
 		}
         return map;
     }
-	public List<Sucursal> castViewBeanToBaseList(SucursalView view, Principal principal){
-		List<Sucursal> list = new ArrayList<>();
+	public List<Empleado> castViewBeanToBaseList(EmpleadoView view, Principal principal){
+		List<Empleado> list = new ArrayList<>();
 		for (int i = 0; i < view.getIds().length; i++) {
 			String id = view.getIds()[i];
-			Sucursal bean = (Sucursal) BeanParser.parseObjectToNewClass(view, Sucursal.class, null);
+			Empleado bean = (Empleado) BeanParser.parseObjectToNewClass(view, Empleado.class, null);
 			bean.setId(Long.valueOf(id));
 			bean.setUpdatedBy(principal.getName());
 			list.add(bean);
 		}
 		return list;
 	}
-	@RequestMapping(value = "/verifyNombre", method = {RequestMethod.POST,RequestMethod.GET})
-	public @ResponseBody  Map<String, Object> verifyNombre(@RequestParam(value = "nombre",required = true) String nombre) {
+	@RequestMapping(value = "/verifyCodigo", method = {RequestMethod.POST,RequestMethod.GET})
+	public @ResponseBody  Map<String, Object> verifyCodigo(@RequestParam(value = "codigo",required = true) String codigo) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		try{
-			Sucursal bean = sucursalIntegration.findByNombre(nombre);
+			Empleado bean = empleadoIntegration.findByCodigo(codigo);
 			if (bean==null){
 				map.put(Constants.STATUS, Constants.OK);
 			}else{
@@ -236,26 +227,23 @@ public class SucursalController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		try{
 			Map<String, Object> parameterMap = InternalUtils.getParameterMap(request);
-			DataTablesInput<Sucursal> dataTablesInput = InternalUtils.createDataTablesInput(parameterMap);
-			Sucursal bean = new Sucursal();
+			DataTablesInput<Empleado> dataTablesInput = InternalUtils.createDataTablesInput(parameterMap);
+			Empleado bean = new Empleado();
 			bean.setEstado((String) parameterMap.get("estado"));
-			String orgId= (String) parameterMap.get("organizacionId");
-			if (!orgId.equalsIgnoreCase("")){
-				Organizacion organizacion = new Organizacion();
-				organizacion.setId(Long.valueOf(orgId));
-				bean.setOrganizacion(organizacion);
-			}
-//			Sucursal parent = new Sucursal();
-//			String parentId = (String) parameterMap.get("parentAreaId");
-//			if (StringUtils.isNotBlank(parentId)){
-//				parent.setId(Long.valueOf(parentId));
-//			}
-//			bean.setParentSucursal(parent);
+			Empleado reporta = new Empleado();
+			Optional.ofNullable((String) parameterMap.get("reportaId")).filter(StringUtils::isNotBlank)
+					.ifPresent(parentId -> reporta.setId(Long.valueOf((String) parentId)));
+			bean.setReporta(reporta);
+			Empleado supervisorausencias = new Empleado();
+			Optional.ofNullable((String) parameterMap.get("supervisorausenciasId")).filter(StringUtils::isNotBlank)
+					.ifPresent(parentId -> supervisorausencias.setId(Long.valueOf((String) parentId)));
+			bean.setSupervisorausencias(supervisorausencias);
+
 			dataTablesInput.setObject(bean);
 
-			DataTablesOutput<Sucursal> dataTablesOutput = sucursalIntegration.findDataTables(dataTablesInput);
+			DataTablesOutput<Empleado> dataTablesOutput = empleadoIntegration.findDataTables(dataTablesInput);
 			if (dataTablesOutput != null) {
-				map.put("data", castSucursalToSucursalViewList(dataTablesOutput.getData()));
+				map.put("data", castEmpleadoToEmpleadoViewList(dataTablesOutput.getData()));
 				map.put("draw", dataTablesOutput.getDraw());
 				map.put("recordsTotal", dataTablesOutput.getRecordsTotal());
 				map.put("recordsFiltered", dataTablesOutput.getRecordsFiltered());
@@ -273,19 +261,16 @@ public class SucursalController {
 		}
 		return map;
 	}
-	public List<SucursalView> castSucursalToSucursalViewList(List<Sucursal> list) throws Exception {
+	public List<EmpleadoView> castEmpleadoToEmpleadoViewList(List<Empleado> list) throws Exception {
 		Map<String, ReglaDetalle> reglaDetalleMap = reglaDetalleIntegration.getReglasMap(reglaDetalleIntegration.findByCodigo(GeneralConstant.SWITH_LABEL_TYPE.getCode()));
 		Map<String, TipoBase> tipoBaseMap = tipoBaseIntegration.findAllMap();
 		return list.stream().map(bean -> {
-			SucursalView view =(SucursalView)BeanParser.parseObjectToNewClass(bean,SucursalView.class,null);
+			EmpleadoView view =(EmpleadoView)BeanParser.parseObjectToNewClass(bean,EmpleadoView.class,null);
 			view.setEstadoDescripcion(tipoBaseMap.containsKey(view.getEstado())?tipoBaseMap.get(view.getEstado()).getDescripcion():null);
 			view.setEstadoType(reglaDetalleMap.containsKey(view.getEstado())?reglaDetalleMap.get(view.getEstado()).getValorcadena():null);
-			view.setTiposucursal(tipoBaseMap.containsKey(view.getTiposucursal())?tipoBaseMap.get(view.getTiposucursal()).getDescripcion():null);
-			OrganizacionView parentView = (OrganizacionView) BeanParser.parseObjectToNewClass(bean.getOrganizacion(),OrganizacionView.class,null);
-			view.setOrganizacion(parentView);
-			DireccionView direccionView = (DireccionView) BeanParser.parseObjectToNewClass(bean.getDireccion(),DireccionView.class,null);
-			direccionView.setUbicaionTotal(bean.getDireccion().getDireccionexacta()+ " " +bean.getDireccion().getUbigeo().getDescripcion()+ " " +bean.getDireccion().getUbigeo().getParentUbigeo().getDescripcion()+ " " +bean.getDireccion().getUbigeo().getParentUbigeo().getParentUbigeo().getDescripcion()+ " " +bean.getDireccion().getUbigeo().getParentUbigeo().getParentUbigeo().getParentUbigeo().getDescripcion());
-			view.setDireccion(direccionView);
+			view.setReporta((EmpleadoView) BeanParser.parseObjectToNewClass(bean.getReporta(),EmpleadoView.class,null));
+			view.setSupervisorausencias((EmpleadoView) BeanParser.parseObjectToNewClass(bean.getSupervisorausencias(),EmpleadoView.class,null));
+			view.setPersona((PersonaView) BeanParser.parseObjectToNewClass(bean.getPersona(), PersonaView.class,null));
 			return view;
 		}).collect(Collectors.toList());
 	}

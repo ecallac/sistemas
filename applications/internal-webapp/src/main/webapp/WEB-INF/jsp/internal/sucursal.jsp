@@ -19,8 +19,26 @@
 
 		var contexPath = "<%=request.getContextPath() %>";
 		var controllerName = "<%=SucursalController.NAME %>";
+		var parentOrganizationId = "<%=request.getSession().getAttribute("orgId") %>";
 		var sEnabled="ENABLED";
 		var sDisabled="DISABLED";
+
+		function getOrganizacionIdSearch(){
+			var localOrgId=$('#organizacionIdSearch').val();
+			if (parentOrganizationId!=="null"){
+				localOrgId=parentOrganizationId;
+			}
+			console.log("localOrgIdSearch "+localOrgId);
+			return localOrgId;
+		}
+		function getOrganizationId(){
+			var localOrgId=$('#organizacionId').val();
+			if (parentOrganizationId!=="null"){
+				localOrgId=parentOrganizationId;
+			}
+			console.log("localOrgId "+localOrgId);
+			return localOrgId;
+		}
 
 		function save(){
 			var formData= {
@@ -28,7 +46,7 @@
 				nombre: $('#nombre').val(),
 				nombrecorto: $('#nombrecorto').val(),
 				tiposucursal: $('#tiposucursal').val(),
-				organizacionId: $('#organizacionId').val(),
+				organizacionId: getOrganizationId(),
 				direccionId: $('#direccionId').val(),
 				estado: $('#estado').val()
 			}
@@ -44,7 +62,7 @@
 		}
 		function setFormFieldsFromServiceResponse(response){
 			$("#id").val(response.viewBean.id);
-			$('#nombre').val(response.viewBean.nombre),
+			$('#nombre').val(response.viewBean.nombre);
 			$("#nombrecorto").val(response.viewBean.nombrecorto);
 			$('#tiposucursal').val(response.viewBean.tiposucursal).change();
 			$('#organizacionId').val(response.viewBean.organizacionId).change();
@@ -82,9 +100,14 @@
 		}
 
 		function load(){
+			// var localOrgId=$("#organizacionIdSearch").val();
+			// if (parentOrganizationId!=="null"){
+			// 	localOrgId=parentOrganizationId;
+			// }
+			// console.log("localOrgId "+localOrgId);
 			var estado = $("#estadoSearch").val();
 			var tiposucursal = $("#tiposucursalSearch").val();
-			var organizacionId = $("#organizacionIdSearch").val();
+			var organizacionId = getOrganizacionIdSearch();
 			var direccionId = $("#direccionIdSearch").val();
 			var ajaxUrl = contexPath+'/'+controllerName+'/findByPage.json';
 			var formData= {
@@ -195,7 +218,7 @@
 		}
 
 		function populateDireccion(){
-			var parentId = $('#organizacionId').val();
+			var parentId = getOrganizationId();
 
 
 			// populateSelectByParent('direccion','enabledDireccions','direccionId','organizacionId');
@@ -231,7 +254,8 @@
 		}
 
 		function populateDireccionSearch(){
-			var parentId = $('#organizacionIdSearch').val();
+			// var parentId = $('#organizacionIdSearch').val();
+			var parentId = getOrganizacionIdSearch()
 			if(parentId!=''){
 				var options = {
 					controller: 'direccion',
@@ -335,7 +359,7 @@
 		}
 
 		$(document).ready(function(){
-			load();
+
 			populateSelectByCategoriaType('estado','TYPE_SWITCH');
 			populateSelectByCategoriaType('estadoSearch','TYPE_SWITCH');
 
@@ -361,6 +385,7 @@
 				}
 			};
 			populateSelectBox(optionsorganizacionId);
+
 			var optionsorganizacionIdSearch = {
 				controller: 'organizacion',
 				service: 'enabledOrganizacions',
@@ -423,6 +448,10 @@
 			$('#direccionForm').on('hidden.bs.modal', function () {
 				$('#Form').css('z-index', ''); // Restablecer z-index
 			});
+
+			load();
+			populateDireccion();
+			populateDireccionSearch();
 		});
 
 
@@ -529,6 +558,7 @@
 								</select>
 							</div>
 						</div>
+						<c:if test="${sessionScope.orgId == null}">
 						<div class="mb-3 row">
 							<label for="organizacionId" class="col-sm-3 col-form-label">Organizacion</label>
 							<div class="col-sm-7">
@@ -537,6 +567,15 @@
 								</select>
 							</div>
 						</div>
+						</c:if>
+						<c:if test="${sessionScope.orgId != null}">
+							<div class="mb-3 row">
+								<label for="OrgName" class="col-sm-3 col-form-label">Organizacion</label>
+								<div class="col-sm-7">
+									<span class="ms-2" id="OrgName"><c:out value="${sessionScope.organizacionSelected.razonsocial}"></c:out></span>
+								</div>
+							</div>
+						</c:if>
 						<div class="mb-3 row">
 							<label for="direccionId" class="col-sm-3 col-form-label">Direccion</label>
 							<div class="col-sm-7">
@@ -599,6 +638,7 @@
 								</select>
 							</div>
 						</div>
+						<c:if test="${sessionScope.orgId == null}">
 						<div class="mb-3 row">
 							<label for="organizacionIdSearch" class="col-sm-3 col-form-label">Organizacion</label>
 							<div class="col-sm-7">
@@ -607,6 +647,15 @@
 								</select>
 							</div>
 						</div>
+						</c:if>
+						<c:if test="${sessionScope.orgId != null}">
+							<div class="mb-3 row">
+								<label for="FOrgName" class="col-sm-3 col-form-label">Organizacion</label>
+								<div class="col-sm-7">
+									<span class="ms-2" id="FOrgName"><c:out value="${sessionScope.organizacionSelected.razonsocial}"></c:out></span>
+								</div>
+							</div>
+						</c:if>
 						<div class="mb-3 row">
 							<label for="direccionIdSearch" class="col-sm-3 col-form-label">Direccion</label>
 							<div class="col-sm-7">
