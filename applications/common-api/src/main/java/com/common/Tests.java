@@ -1,17 +1,32 @@
 package com.common;
 
-public class Tests {
-    public static void main(String args []){
-        String searchValue = "Gerente General + '";
-//        List<String> list = Utils.getFieldsWithAnnotationFromEntity(TipoBase.class,Searchable.class);
-//        list.replaceAll(l-> ("o."+l+" like '%"+searchValue+"%'"));
-//        String filter = StringUtils.join(list," or ");
-//        System.out.println(filter);
-        try {
-            System.out.println(searchValue.replace(" ","%20"));
-        }catch (Exception e){
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+public class Tests {
+    public static boolean formatDate(String dateStr, String format) {
+        try {
+            System.out.println("dateStr = " + dateStr + ", format = " + format);
+            DateFormat df = new SimpleDateFormat(format);
+            Date date = df.parse(dateStr);
+            System.out.println("date = " + date + ", format = " + format);
+
+            String val = df.format(date);
+            System.out.println("val = " + val + ", format = " + format);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
+
+        return false;
+    }
+
+    public static void main(String[] args) {
+        String dateStr = "2024-05-30T15:30:00+02:00";
+        String dateFormat = "yyyy-MM-dd'T'HH:mm:ssXXX";
+
+        System.out.println("Is valid date: " + Tests.formatDate(dateStr, dateFormat));
     }
 }
