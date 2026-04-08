@@ -215,7 +215,7 @@
 
 
 
-<h1>Cargo</h1>
+<h1>Empleado</h1>
 
 
 

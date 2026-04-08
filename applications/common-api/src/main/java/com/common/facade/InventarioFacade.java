@@ -9,6 +9,7 @@ import com.common.domain.*;
 import com.common.service.CategoriaService;
 import com.common.service.MarcaService;
 import com.common.service.ComponenteService;
+import com.common.service.ProductoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,6 +33,8 @@ public class InventarioFacade {
 	ComponenteService componenteService;
 	@Autowired
 	CategoriaService categoriaService;
+	@Autowired
+	ProductoService productoService;
 
 	public List<Marca> findMarcaList() {
 		return marcaService.findList();
@@ -120,5 +123,37 @@ public class InventarioFacade {
 	}
 	public DataTablesOutput findCategoriaDataTablesList(DataTablesInput<Categoria> bean) {
 		return categoriaService.findDataTablesList(bean);
+	}
+
+	public List<Producto> findProductoList() {
+		return productoService.findList();
+	}
+	public Producto findProductoById(Long id) {
+		return productoService.findById(id);
+	}
+	@Transactional(readOnly = false, rollbackFor = Exception.class)
+	public void saveProducto(Producto producto) {
+		if (producto.getCategoria() != null && producto.getCategoria().getId() != null) {
+			producto.setCategoria(categoriaService.findById(producto.getCategoria().getId()));
+		}
+		if (producto.getMarca() != null && producto.getMarca().getId() != null) {
+			producto.setMarca(marcaService.findById(producto.getMarca().getId()));
+		}
+		if (producto.getLaboratorio() != null && producto.getLaboratorio().getId() != null) {
+			producto.setLaboratorio(datosMaestrosFacade.findOrganizacionById(producto.getLaboratorio().getId()));
+		}
+		productoService.save(producto);
+	}
+	@Transactional(readOnly = false, rollbackFor = Exception.class)
+	public void saveProducto(List<Producto> productoList) {
+		for (Producto producto : productoList) {
+			saveProducto(producto);
+		}
+	}
+	public Producto findProductoByNombre(String nombre) {
+		return productoService.findByNombre(nombre);
+	}
+	public DataTablesOutput<Producto> findProductoDataTablesList(DataTablesInput<Producto> dataTablesInput) {
+		return productoService.findDataTablesList(dataTablesInput);
 	}
 }
