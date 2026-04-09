@@ -63,5 +63,8 @@
     <definition name="empleado" extends="template">
         <put-attribute name="body" value="/WEB-INF/jsp/internal/empleado.jsp" />
     </definition>
+    <definition name="producto" extends="template">
+        <put-attribute name="body" value="/WEB-INF/jsp/internal/producto.jsp" />
+    </definition>
   
 </tiles-definitions>
